@@ -4,6 +4,26 @@
 <context>
     <name>QObject</name>
     <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1880"/>
+        <source>Empty Phrase</source>
+        <translation>空短语</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1881"/>
+        <source>Phrase to search/explain/process is empty.</source>
+        <translation>要搜索/解释/处理的短语为空。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2019"/>
+        <source>Wingman Not Available</source>
+        <translation>AI 助手不可用</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2020"/>
+        <source>Wingman provider is either not configured or initialized - see MindForger Preferences (Wingman tab).</source>
+        <translation>AI 助手提供方未配置或未初始化 - 请查看 MindForger 首选项（AI 助手选项卡）。</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/orloj_presenter.cpp" line="192"/>
         <source>Save Note</source>
         <translation>保存笔记</translation>
@@ -53,26 +73,6 @@
         <location filename="../../../src/qt/orloj_presenter.cpp" line="227"/>
         <source>&amp;Save</source>
         <translation>保存(&amp;S)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1880"/>
-        <source>Empty Phrase</source>
-        <translation>空短语</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1881"/>
-        <source>Phrase to search/explain/process is empty.</source>
-        <translation>要搜索/解释/处理的短语为空。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2019"/>
-        <source>Wingman Not Available</source>
-        <translation>AI 助手不可用</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2020"/>
-        <source>Wingman provider is either not configured or initialized - see MindForger Preferences (Wingman tab).</source>
-        <translation>AI 助手提供方未配置或未初始化 - 请查看 MindForger 首选项（AI 助手选项卡）。</translation>
     </message>
 </context>
 <context>
@@ -146,11 +146,6 @@
 <context>
     <name>m8r::AddLibraryDialog</name>
     <message>
-        <location filename="../../../src/qt/dialogs/add_library_dialog.cpp" line="37"/>
-        <source>Directory</source>
-        <translation>目录</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/add_library_dialog.cpp" line="30"/>
         <source>Choose a directory (library) of PDF files to be indexed. MindForger
 will create new notebook for every library file. Such notebook can be
@@ -164,6 +159,11 @@ Choose new library source:</source>
 笔记。
 
 选择新的文档库来源：</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/add_library_dialog.cpp" line="37"/>
+        <source>Directory</source>
+        <translation>目录</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/add_library_dialog.cpp" line="39"/>
@@ -313,6 +313,11 @@ Choose new library source:</source>
         <translation>应用程序</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="43"/>
+        <source>Wingman</source>
+        <translation>AI 助手</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="44"/>
         <source>Viewer</source>
         <translation>查看器</translation>
@@ -328,25 +333,19 @@ Choose new library source:</source>
         <translation>Markdown</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="48"/>
-        <source>Navigator</source>
-        <translation>导航器</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="47"/>
         <source>Mind</source>
         <translation>心智</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="43"/>
-        <source>Wingman</source>
-        <translation>AI 助手</translation>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="48"/>
+        <source>Navigator</source>
+        <translation>导航器</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="66"/>
         <source>Adapt</source>
-        <translatorcomment>Preferences</translatorcomment>
-        <translation>首选项</translation>
+        <translation>调适</translation>
     </message>
 </context>
 <context>
@@ -397,6 +396,11 @@ Choose new library source:</source>
         <translation>极客术语</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="195"/>
+        <source>Startup</source>
+        <translation>启动</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="208"/>
         <source>Appearance</source>
         <translation>外观</translation>
@@ -405,11 +409,6 @@ Choose new library source:</source>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="215"/>
         <source>Controls</source>
         <translation>控制</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="195"/>
-        <source>Startup</source>
-        <translation>启动</translation>
     </message>
 </context>
 <context>
@@ -537,16 +536,6 @@ Choose new library source:</source>
 <context>
     <name>m8r::ConfigurationDialog::ViewerTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="318"/>
-        <source>HTML Viewer</source>
-        <translation>HTML 查看器</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="299"/>
-        <source>Viewer theme CSS</source>
-        <translation>查看器主题 CSS</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="277"/>
         <source>HTML zoom (100 is 100%, Ctrl + mouse wheel)</source>
         <translation>HTML 缩放（100 表示 100%，Ctrl + 鼠标滚轮）</translation>
@@ -577,9 +566,19 @@ Choose new library source:</source>
         <translation>图表支持</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="299"/>
+        <source>Viewer theme CSS</source>
+        <translation>查看器主题 CSS</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="307"/>
         <source>Find Custom CSS File</source>
         <translation>查找自定义 CSS 文件</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="318"/>
+        <source>HTML Viewer</source>
+        <translation>HTML 查看器</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="331"/>
@@ -734,24 +733,17 @@ Choose new library source:</source>
     <message>
         <location filename="../../../src/qt/widgets/edit_buttons_panel.cpp" line="42"/>
         <source>Remember</source>
-        <translation>保存</translation>
+        <translation>记住</translation>
     </message>
     <message>
         <location filename="../../../src/qt/widgets/edit_buttons_panel.cpp" line="49"/>
         <source>Remember and Leave</source>
-        <translation>保存并离开</translation>
+        <translation>记住并离开</translation>
     </message>
     <message>
         <location filename="../../../src/qt/widgets/edit_buttons_panel.cpp" line="56"/>
         <source>Cancel</source>
         <translation>取消</translation>
-    </message>
-</context>
-<context>
-    <name>m8r::EditNameAndButtonsPanel</name>
-    <message>
-        <source>Remember</source>
-        <translation type="obsolete">Save</translation>
     </message>
 </context>
 <context>
@@ -1050,11 +1042,6 @@ Choose new library source:</source>
         <translation>匹配：</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/fts_dialog.cpp" line="53"/>
-        <source>&amp;Exact</source>
-        <translation>精确(&amp;E)</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/fts_dialog.cpp" line="41"/>
         <location filename="../../../src/qt/dialogs/fts_dialog.cpp" line="54"/>
         <source>&amp;Ignore case</source>
@@ -1069,6 +1056,11 @@ Choose new library source:</source>
         <location filename="../../../src/qt/dialogs/fts_dialog.cpp" line="43"/>
         <source>&amp;Reverse</source>
         <translation>反向(&amp;R)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/fts_dialog.cpp" line="53"/>
+        <source>&amp;Exact</source>
+        <translation>精确(&amp;E)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/fts_dialog.cpp" line="55"/>
@@ -1258,7 +1250,7 @@ Choose new library source:</source>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="31"/>
         <source>&amp;Mind</source>
-        <translation>工作区(&amp;S)</translation>
+        <translation>心智(&amp;M)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="34"/>
@@ -1269,6 +1261,17 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_menu_view.cpp" line="35"/>
         <source>Mind hacking and debugging hook</source>
         <translation>心智黑客与调试钩子</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="41"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="53"/>
+        <source>&amp;Workspace</source>
+        <translation>工作区(&amp;W)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="43"/>
+        <source>Create a brand new MindForger workspace...</source>
+        <translation>创建全新的 MindForger 工作区...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="46"/>
@@ -1282,26 +1285,44 @@ Choose new library source:</source>
         <translation>创建全新的 Markdown 文件...</translation>
     </message>
     <message>
-        <source>Learn knowledge by loading a MindForger repository or a directory with Markdown files...</source>
-        <translation type="obsolete">Open MindForger repository or a directory with Markdown files...</translation>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="51"/>
+        <source>&amp;Learn</source>
+        <translation>学习(&amp;L)</translation>
     </message>
     <message>
-        <source>Learn knowledge by loading a Markdown or MindForger file...</source>
-        <translation type="obsolete">Open a Markdown or MindForger file...</translation>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="56"/>
+        <source>Learn knowledge by loading a MindForger workspace...</source>
+        <translation>通过加载 MindForger 工作区学习知识...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="60"/>
+        <source>&amp;Directory with Markdowns</source>
+        <translation>Markdown 文件目录(&amp;D)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="63"/>
+        <source>Learn knowledge by loading a directory with Markdown files...</source>
+        <translation>通过加载包含 Markdown 文件的目录学习知识...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="68"/>
+        <source>Learn knowledge by loading a Markdown file...</source>
+        <translation>通过加载 Markdown 文件学习知识...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="73"/>
         <source>&amp;Remind</source>
-        <translation>最近(&amp;R)</translation>
+        <translation>重温(&amp;R)</translation>
     </message>
     <message>
-        <source>Re-learn recently opened MindForger repositories, Markdown repositories or files</source>
-        <translation type="obsolete">Reopen recently opened MindForger repositories, Markdown repositories or files</translation>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="75"/>
+        <source>Re-learn recently opened MindForger workspaces, Markdown directories or files</source>
+        <translation>重新学习最近打开的 MindForger 工作区、Markdown 目录或文件</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="82"/>
         <source>Re&amp;member</source>
-        <translation>保存</translation>
+        <translation>记住(&amp;M)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="83"/>
@@ -1309,9 +1330,68 @@ Choose new library source:</source>
         <translation>将记忆中的所有内容持久化</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="87"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="553"/>
+        <source>&amp;Forget</source>
+        <translation>遗忘(&amp;F)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="88"/>
+        <source>Limbo vs erase memory...</source>
+        <translation>Limbo 还是彻底抹除记忆...</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="98"/>
         <source>&amp;Think</source>
         <translation>思考(&amp;T)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="100"/>
+        <source>Think to suggest matching, similar and associated Notes while searching, reading and writing</source>
+        <translation>在搜索、阅读和写作时思考并推荐匹配、相似和关联的笔记</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="103"/>
+        <source>&amp;Autolink</source>
+        <translation>自动链接(&amp;A)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="106"/>
+        <source>Automatically inject links to relevant Notebooks and Notes when browsing HTML preview</source>
+        <translation>浏览 HTML 预览时自动插入指向相关笔记本和笔记的链接</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="113"/>
+        <source>&amp;Semantic Search</source>
+        <translation>语义搜索(&amp;S)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="115"/>
+        <source>Use Wingman LLM to search for similar Notes (associations) using text embeddings...</source>
+        <translation>使用 AI 助手 LLM 通过文本嵌入搜索相似笔记（关联）...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="118"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="591"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="725"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="817"/>
+        <source>&amp;Wingman LLM</source>
+        <translation>AI 助手 LLM(&amp;W)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="120"/>
+        <source>Open Wingman dialog...</source>
+        <translation>打开 AI 助手对话框...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="122"/>
+        <source>&amp;Find on Web</source>
+        <translation>在网络上查找(&amp;F)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="124"/>
+        <source>Find Notebook or Note name; selected text or text under cursor on the web...</source>
+        <translation>在网络上查找笔记本或笔记名称、所选文本或光标下的文本...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="127"/>
@@ -1324,29 +1404,89 @@ Choose new library source:</source>
         <translation>不显示早于以下时间的笔记本和笔记...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="87"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="553"/>
-        <source>&amp;Forget</source>
-        <translation>弃用(&amp;D)</translation>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="131"/>
+        <source>Li&amp;brary</source>
+        <translation>文档库(&amp;B)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="88"/>
-        <source>Limbo vs erase memory...</source>
-        <translation>Limbo 还是彻底抹除记忆...</translation>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="134"/>
+        <source>&amp;New library</source>
+        <translation>新建文档库(&amp;N)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="136"/>
+        <source>Add path to the directory with documents (PDF, txt, HTML)...</source>
+        <translation>添加包含文档（PDF、txt、HTML）的目录路径...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="143"/>
+        <source>&amp;Update library</source>
+        <translation>更新文档库(&amp;U)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="146"/>
+        <source>Synchronize library source directory with MindForger notebook(s) which representlibrary resources...</source>
+        <translation>将文档库来源目录与表示文档库资源的 MindForger 笔记本同步...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="152"/>
+        <source>&amp;Find orphans</source>
+        <translation>查找孤立项(&amp;F)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="155"/>
+        <source>Find library Notebooks which reference non-existent documents...</source>
+        <translation>查找引用了不存在文档的文档库笔记本...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="159"/>
+        <source>Deprecate &amp;orphans</source>
+        <translation>弃用孤立项(&amp;O)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="162"/>
+        <source>Deprecate library Notebooks that has tag which indicates reference of non-existent document...</source>
+        <translation>弃用带有“引用不存在文档”标签的文档库笔记本...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="165"/>
+        <source>&amp;Delete library</source>
+        <translation>删除文档库(&amp;D)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="166"/>
+        <source>Delete all Notebooks representing the library resources...</source>
+        <translation>删除表示文档库资源的所有笔记本...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="179"/>
         <source>Retain</source>
-        <translation>保留(&amp;I)</translation>
+        <translation>保留</translation>
     </message>
     <message>
-        <source>&amp;Adapt</source>
-        <translation type="obsolete">&amp;Preferences</translation>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="181"/>
+        <source>Create backup archive of the current workspace and store it in home directory</source>
+        <translation>创建当前工作区的备份归档并存储到主目录</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="190"/>
+        <source>A&amp;dapt</source>
+        <translation>调适(&amp;D)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="192"/>
         <source>Adapt Mind by setting your preferences...</source>
         <translation>通过设置首选项来调适心智...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="195"/>
+        <source>&amp;CSV</source>
+        <translation>CSV(&amp;C)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="196"/>
+        <source>Export all Notebooks/Markdown files as a single CSV file</source>
+        <translation>将所有笔记本/Markdown 文件导出为单个 CSV 文件</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="199"/>
@@ -1371,7 +1511,7 @@ Choose new library source:</source>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="242"/>
         <source>Recall Note&amp;book by Name</source>
-        <translation>按名称查找笔记本(&amp;B)</translation>
+        <translation>按名称回想笔记本(&amp;B)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="244"/>
@@ -1381,7 +1521,7 @@ Choose new library source:</source>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="247"/>
         <source>Recall &amp;Note by Name</source>
-        <translation>按名称查找笔记(&amp;N)</translation>
+        <translation>按名称回想笔记(&amp;N)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="249"/>
@@ -1389,8 +1529,9 @@ Choose new library source:</source>
         <translation>按名称查找笔记</translation>
     </message>
     <message>
-        <source>Recall Notebook by T&amp;ags</source>
-        <translation type="obsolete">Find Notebook by T&amp;ags</translation>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="252"/>
+        <source>Recall Notebook by Ta&amp;gs</source>
+        <translation>按标签回想笔记本(&amp;G)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="254"/>
@@ -1398,8 +1539,9 @@ Choose new library source:</source>
         <translation>按标签查找笔记本</translation>
     </message>
     <message>
-        <source>Recall Note by &amp;Tags</source>
-        <translation type="obsolete">Find Note by &amp;Tags</translation>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="257"/>
+        <source>Recall Note by T&amp;ags</source>
+        <translation>按标签回想笔记(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="259"/>
@@ -1409,7 +1551,7 @@ Choose new library source:</source>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="263"/>
         <source>Recall Library &amp;Doc by Name</source>
-        <translation>按名称查找文档库文档(&amp;D)</translation>
+        <translation>按名称回想文档库文档(&amp;D)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="265"/>
@@ -1417,30 +1559,39 @@ Choose new library source:</source>
         <translation>按名称查找文档</translation>
     </message>
     <message>
-        <source>Recall &amp;Persons</source>
-        <translation type="obsolete">Find &amp;Persons</translation>
-    </message>
-    <message>
-        <source>Recall &amp;Locations</source>
-        <translation type="obsolete">Find &amp;Locations</translation>
-    </message>
-    <message>
-        <source>Recall Organizations</source>
-        <translation type="obsolete">Find Organizations</translation>
-    </message>
-    <message>
-        <source>Recall Other Entities</source>
-        <translation type="obsolete">Find Other Entities</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="268"/>
         <source>&amp;Recall</source>
-        <translation>查找(&amp;I)</translation>
+        <translation>回想(&amp;R)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="280"/>
+        <source>&amp;Home Notebook</source>
+        <translation>主页笔记本(&amp;H)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="282"/>
         <source>Open Home Notebook...</source>
         <translation>打开主页笔记本...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="284"/>
+        <source>Flashcard &amp;Decks</source>
+        <translation>闪卡组(&amp;D)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="286"/>
+        <source>Show list of flashcard decks...</source>
+        <translation>显示闪卡组列表...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="288"/>
+        <source>Organiz&amp;ers</source>
+        <translation>组织器(&amp;E)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="290"/>
+        <source>Open Eisenhower matrix and Kanban organizers...</source>
+        <translation>打开艾森豪威尔矩阵和看板组织器...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="292"/>
@@ -1461,6 +1612,16 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_menu_view.cpp" line="298"/>
         <source>Show tree of Notebooks...</source>
         <translation>显示笔记本树...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="301"/>
+        <source>&amp;Library Documents</source>
+        <translation>文档库文档(&amp;L)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="302"/>
+        <source>List Library documents...</source>
+        <translation>列出文档库文档...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="306"/>
@@ -1493,6 +1654,16 @@ Choose new library source:</source>
         <translation>打开记忆驻留...</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="318"/>
+        <source>&amp;CLI</source>
+        <translation>命令行(&amp;C)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="320"/>
+        <source>Activate command line interface...</source>
+        <translation>激活命令行界面...</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="323"/>
         <source>Ter&amp;minal</source>
         <translation>终端(&amp;M)</translation>
@@ -1523,9 +1694,24 @@ Choose new library source:</source>
         <translation>列出笔记本和笔记模板...</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="346"/>
+        <source>Li&amp;mbo</source>
+        <translation>Limbo(&amp;M)</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="347"/>
         <source>List forgotten Notebooks and Notes...</source>
         <translation>列出已遗忘的笔记本和笔记...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="351"/>
+        <source>Ho&amp;ist</source>
+        <translation>聚焦(&amp;I)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="356"/>
+        <source>Hoist/de-hoist Note to focus on Note being viewed or edited</source>
+        <translation>聚焦/取消聚焦笔记，以专注于正在查看或编辑的笔记</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="359"/>
@@ -1553,6 +1739,11 @@ Choose new library source:</source>
         <translation>视图(&amp;V)</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="400"/>
+        <source>Str&amp;etch edges</source>
+        <translation>拉伸边(&amp;E)</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="402"/>
         <source>Str&amp;etch edges	e | mouse wheel</source>
         <translation>拉伸边(&amp;E)	e | 鼠标滚轮</translation>
@@ -1561,6 +1752,11 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_menu_view.cpp" line="404"/>
         <source>Stretch knowledge graph edges</source>
         <translation>拉伸知识图谱的边</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="407"/>
+        <source>&amp;Sh&amp;rink edge</source>
+        <translation>收缩边(&amp;R)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="409"/>
@@ -1608,34 +1804,27 @@ Choose new library source:</source>
         <translation>导航(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="134"/>
-        <source>&amp;New library</source>
-        <translation>新建文档库(&amp;N)</translation>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="434"/>
+        <source>Flash&amp;cards</source>
+        <translation>闪卡(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="136"/>
-        <source>Add path to the directory with documents (PDF, txt, HTML)...</source>
-        <translation>添加包含文档（PDF、txt、HTML）的目录路径...</translation>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="439"/>
+        <source>&amp;Organizer</source>
+        <translation>组织器(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="143"/>
-        <source>&amp;Update library</source>
-        <translation>更新文档库(&amp;U)</translation>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="441"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="525"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="635"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="638"/>
+        <source>&amp;New</source>
+        <translation>新建(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="146"/>
-        <source>Synchronize library source directory with MindForger notebook(s) which representlibrary resources...</source>
-        <translation>将文档库来源目录与表示文档库资源的 MindForger 笔记本同步...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="165"/>
-        <source>&amp;Delete library</source>
-        <translation>删除文档库(&amp;D)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="166"/>
-        <source>Delete all Notebooks representing the library resources...</source>
-        <translation>删除表示文档库资源的所有笔记本...</translation>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="442"/>
+        <source>Create new Organizer to prioritize your knowledge in Eisenhower Matrix style</source>
+        <translation>新建组织器，以艾森豪威尔矩阵方式为知识排定优先级</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="448"/>
@@ -1648,9 +1837,45 @@ Choose new library source:</source>
         <translation>编辑(&amp;E)       Alt-Enter</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="454"/>
+        <source>Edit current Organizer - you can also double click view to open the editor</source>
+        <translation>编辑当前组织器 - 也可以双击视图打开编辑器</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="456"/>
+        <source>C&amp;lone</source>
+        <translation>克隆(&amp;L)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="457"/>
+        <source>Make copy of the current Organizer</source>
+        <translation>复制当前组织器</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="459"/>
+        <source>&amp;Delete</source>
+        <translation>删除(&amp;D)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="460"/>
+        <source>Delete Organizer without undo</source>
+        <translation>删除组织器（无法撤销）</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="466"/>
         <source>Move Notebook/Note to Previous Column/Quadrant       ⌘[</source>
         <translation>将笔记本/笔记移至上一列/象限       ⌘[</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="468"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="492"/>
+        <source>Move Notebook/Note to &amp;Previous Column/Quadrant	Ctrl+Left</source>
+        <translation>将笔记本/笔记移至上一列/象限(&amp;P)	Ctrl+Left</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="472"/>
+        <source>Move Notebook/Note to previous column or quadrant...</source>
+        <translation>将笔记本/笔记移至上一列或象限...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="478"/>
@@ -1658,14 +1883,166 @@ Choose new library source:</source>
         <translation>将笔记本/笔记移至下一列/象限              ⌘]</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="480"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="504"/>
+        <source>Move Notebook/Note to Ne&amp;xt Column/Quadrant	Ctrl+Right</source>
+        <translation>将笔记本/笔记移至下一列/象限(&amp;X)	Ctrl+Right</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="484"/>
+        <source>Move Notebook/Note to next column or quadrant...</source>
+        <translation>将笔记本/笔记移至下一列或象限...</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="490"/>
         <source>Focus to Previous Column/Quadrant                              ⇧⇥</source>
         <translation>焦点移至上一列/象限                              ⇧⇥</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="496"/>
+        <source>Move focus to previous column or quadrant...</source>
+        <translation>将焦点移至上一列或象限...</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="502"/>
         <source>Focus to Next Column/Quadrant                                        ⇥</source>
         <translation>焦点移至下一列/象限                                        ⇥</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="508"/>
+        <source>Move focus to next column or quadrant...</source>
+        <translation>将焦点移至下一列或象限...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="523"/>
+        <source>Note&amp;book</source>
+        <translation>笔记本(&amp;B)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="526"/>
+        <source>Create new Notebook to form new ideas, principles, combinations or applications</source>
+        <translation>新建笔记本，以形成新的想法、原则、组合或应用</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="533"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="536"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="643"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="768"/>
+        <source>&amp;Edit</source>
+        <translation>编辑(&amp;E)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="538"/>
+        <source>Edit current Notebook - you can also double click view to open the editor</source>
+        <translation>编辑当前笔记本 - 也可以双击视图打开编辑器</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="540"/>
+        <source>Make &amp;Home</source>
+        <translation>设为主页(&amp;H)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="541"/>
+        <source>Toggle tag indicating whether to use the current Notebook as home</source>
+        <translation>切换标签，指示是否将当前笔记本用作主页</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="543"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="708"/>
+        <source>Make &amp;Stencil</source>
+        <translation>设为模板(&amp;S)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="544"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="711"/>
+        <source>Copy the current Notebook as to Stencil</source>
+        <translation>将当前笔记本复制为模板</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="547"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="714"/>
+        <source>&amp;Clone</source>
+        <translation>克隆(&amp;C)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="548"/>
+        <source>Make copy of the current Notebook</source>
+        <translation>复制当前笔记本</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="550"/>
+        <source>E&amp;xamine</source>
+        <translation>测验(&amp;X)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="551"/>
+        <source>Turn Notebook to deck of flashcard and start active recall testing...</source>
+        <translation>将笔记本转换为闪卡组并开始主动回想测验...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="554"/>
+        <source>Forget Notebook and move it to Limbo</source>
+        <translation>遗忘笔记本并将其移至 Limbo</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="556"/>
+        <source>&amp;Promote</source>
+        <translation>提升(&amp;P)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="557"/>
+        <source>Promote Notebook</source>
+        <translation>提升笔记本</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="559"/>
+        <source>De&amp;mote</source>
+        <translation>降级(&amp;M)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="560"/>
+        <source>Demote Notebook</source>
+        <translation>降级笔记本</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="563"/>
+        <source>Move to &amp;First</source>
+        <translation>移至首位(&amp;F)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="565"/>
+        <source>Move the Notebook to be the first child of its parent</source>
+        <translation>将笔记本移为其父级的第一个子项</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="568"/>
+        <source>Move &amp;Up</source>
+        <translation>上移(&amp;U)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="569"/>
+        <source>Move the Notebook up</source>
+        <translation>上移笔记本</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="572"/>
+        <source>Move D&amp;own</source>
+        <translation>下移(&amp;O)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="573"/>
+        <source>Move the Notebook down</source>
+        <translation>下移笔记本</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="576"/>
+        <source>Move to &amp;Last</source>
+        <translation>移至末位(&amp;L)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="577"/>
+        <source>Move the Notebook to be the last child of its parent</source>
+        <translation>将笔记本移为其父级的最后一个子项</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="580"/>
@@ -1678,6 +2055,11 @@ Choose new library source:</source>
         <translation>将笔记本导出为 HTML 格式文件</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="586"/>
+        <source>&amp;Import</source>
+        <translation>导入(&amp;I)</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="587"/>
         <source>&amp;TWiki</source>
         <translation>TWiki(&amp;T)</translation>
@@ -1686,6 +2068,252 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_menu_view.cpp" line="588"/>
         <source>Import Notebook from an external TWiki file and restart MindForger</source>
         <translation>从外部 TWiki 文件导入笔记本并重启 MindForger</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="592"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="726"/>
+        <source>&amp;Summarize</source>
+        <translation>总结(&amp;S)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="593"/>
+        <source>Ask Wingman to summarize text of the Notebook...</source>
+        <translation>请 AI 助手总结笔记本的文本...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="595"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="821"/>
+        <source>&amp;Explain</source>
+        <translation>解释(&amp;E)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="596"/>
+        <source>Ask Wingman to explain the name of the Notebook...</source>
+        <translation>请 AI 助手解释笔记本的名称...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="598"/>
+        <source>&amp;Find Tasks</source>
+        <translation>查找任务(&amp;F)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="599"/>
+        <source>Ask Wingman to find tasks in the Notebook text...</source>
+        <translation>请 AI 助手在笔记本文本中查找任务...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="601"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="735"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="830"/>
+        <source>&amp;More prompts...</source>
+        <translation>更多提示词(&amp;M)...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="602"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="736"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="831"/>
+        <source>Open Wingman chat...</source>
+        <translation>打开 AI 助手聊天...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="632"/>
+        <source>&amp;Note</source>
+        <translation>笔记(&amp;N)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="640"/>
+        <source>Create new Note to form new ideas, principles, combinations and applications</source>
+        <translation>新建笔记，以形成新的想法、原则、组合和应用</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="646"/>
+        <source>&amp;Edit	Ctrl+E</source>
+        <translation>编辑(&amp;E)	Ctrl+E</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="648"/>
+        <source>Edit current Note - you can also double click view to open the editor</source>
+        <translation>编辑当前笔记 - 也可以双击视图打开编辑器</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="650"/>
+        <source>E&amp;xternal Editor Edit	Ctrl+X</source>
+        <translation>用外部编辑器编辑(&amp;X)	Ctrl+X</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="651"/>
+        <source>Edit current Note in an external editor - use Preferences to configure the editor</source>
+        <translation>在外部编辑器中编辑当前笔记 - 请在首选项中配置编辑器</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="653"/>
+        <source>Remember	Ctrl+S</source>
+        <translation>记住	Ctrl+S</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="654"/>
+        <source>Save Note being edited</source>
+        <translation>保存正在编辑的笔记</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="657"/>
+        <source>&amp;Forget	Ctrl+D</source>
+        <translation>遗忘(&amp;F)	Ctrl+D</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="659"/>
+        <source>&amp;Forget	Del</source>
+        <translation>遗忘(&amp;F)	Del</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="661"/>
+        <source>Forget Note</source>
+        <translation>遗忘笔记</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="664"/>
+        <source>Save and Leave	Ctrl+L</source>
+        <translation>保存并离开	Ctrl+L</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="666"/>
+        <source>Leave	Alt+Left</source>
+        <translation>离开	Alt+Left</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="668"/>
+        <source>Save leave editor of Note being changed</source>
+        <translation>保存并离开正在修改的笔记的编辑器</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="670"/>
+        <source>&amp;Promote	Ctrl+Left</source>
+        <translation>提升(&amp;P)	Ctrl+Left</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="671"/>
+        <source>Promote Note</source>
+        <translation>提升笔记</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="673"/>
+        <source>&amp;Demote	Ctrl+Right</source>
+        <translation>降级(&amp;D)	Ctrl+Right</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="674"/>
+        <source>Demote Note</source>
+        <translation>降级笔记</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="677"/>
+        <source>Move to F&amp;irst	Ctrl+Shift+Up</source>
+        <translation>移至首位(&amp;I)	Ctrl+Shift+Up</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="679"/>
+        <source>Move the Note to be the first child of its parent</source>
+        <translation>将笔记移为其父级的第一个子项</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="682"/>
+        <source>Move &amp;Up	Ctrl+Up</source>
+        <translation>上移(&amp;U)	Ctrl+Up</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="683"/>
+        <source>Move the Note up</source>
+        <translation>上移笔记</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="686"/>
+        <source>Move Dow&amp;n	Ctrl+Down</source>
+        <translation>下移(&amp;N)	Ctrl+Down</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="687"/>
+        <source>Move the Note down</source>
+        <translation>下移笔记</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="691"/>
+        <source>Move to &amp;Last	Ctrl+Shift+Down</source>
+        <translation>移至末位(&amp;L)	Ctrl+Shift+Down</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="693"/>
+        <source>Move the Note to be the last child of its parent</source>
+        <translation>将笔记移为其父级的最后一个子项</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="698"/>
+        <source>Move to Notebook	Ctrl+R</source>
+        <translation>移至笔记本	Ctrl+R</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="700"/>
+        <source>&amp;Move to Notebook</source>
+        <translation>移至笔记本(&amp;M)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="704"/>
+        <source>Move the current Note to another Notebook...</source>
+        <translation>将当前笔记移至另一个笔记本...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="715"/>
+        <source>Make a copy of the Note to this or other Notebook...</source>
+        <translation>将笔记复制到此笔记本或其他笔记本...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="717"/>
+        <source>E&amp;xport</source>
+        <translation>导出(&amp;X)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="718"/>
+        <source>Export Note to an external file in a supported format</source>
+        <translation>将笔记导出为受支持格式的外部文件</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="721"/>
+        <source>Import</source>
+        <translation>导入</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="722"/>
+        <source>Import Note from an external file in a supported format</source>
+        <translation>从受支持格式的外部文件导入笔记</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="727"/>
+        <source>Ask Wingman to summarize text of the Note...</source>
+        <translation>请 AI 助手总结笔记的文本...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="729"/>
+        <source>&amp;Find Grammar Errors</source>
+        <translation>查找语法错误(&amp;F)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="730"/>
+        <source>Ask Wingman to find grammar errors in the Note text...</source>
+        <translation>请 AI 助手在笔记文本中查找语法错误...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="732"/>
+        <source>&amp;Translate to English</source>
+        <translation>翻译为英语(&amp;T)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="733"/>
+        <source>Ask Wingman to translate the Note text to English...</source>
+        <translation>请 AI 助手将笔记文本翻译为英语...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="770"/>
+        <source>&amp;Find	Ctrl+Shift+F</source>
+        <translation>查找(&amp;F)	Ctrl+Shift+F</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="771"/>
@@ -1753,349 +2381,6 @@ Choose new library source:</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="533"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="536"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="643"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="768"/>
-        <source>&amp;Edit</source>
-        <translation>编辑(&amp;E)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="181"/>
-        <source>Create backup archive of the current workspace and store it in home directory</source>
-        <translation>创建当前工作区的备份归档并存储到主目录</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="257"/>
-        <source>Recall Note by T&amp;ags</source>
-        <translation>按标签查找笔记(&amp;A)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="284"/>
-        <source>Flashcard &amp;Decks</source>
-        <translation>闪卡组(&amp;D)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="286"/>
-        <source>Show list of flashcard decks...</source>
-        <translation>显示闪卡组列表...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="288"/>
-        <source>Organiz&amp;ers</source>
-        <translation>组织器(&amp;E)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="290"/>
-        <source>Open Eisenhower matrix and Kanban organizers...</source>
-        <translation>打开艾森豪威尔矩阵和看板组织器...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="301"/>
-        <source>&amp;Library Documents</source>
-        <translation>文档库文档(&amp;L)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="302"/>
-        <source>List Library documents...</source>
-        <translation>列出文档库文档...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="808"/>
-        <source>&amp;Wingman</source>
-        <translation>AI 助手(&amp;W)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1036"/>
-        <source>Emo&amp;jis</source>
-        <translation>表情符号(&amp;J)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1038"/>
-        <source>Open dialog with emoji characters to be copy/pasted to names, descriptions and text...</source>
-        <translation>打开表情符号对话框，可将字符复制/粘贴到名称、描述和文本中...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="346"/>
-        <source>Li&amp;mbo</source>
-        <translation>Limbo(&amp;M)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="113"/>
-        <source>&amp;Semantic Search</source>
-        <translation>语义搜索(&amp;S)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="115"/>
-        <source>Use Wingman LLM to search for similar Notes (associations) using text embeddings...</source>
-        <translation>使用 AI 助手 LLM 通过文本嵌入搜索相似笔记（关联）...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="118"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="591"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="725"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="817"/>
-        <source>&amp;Wingman LLM</source>
-        <translation>AI 助手 LLM(&amp;W)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="122"/>
-        <source>&amp;Find on Web</source>
-        <translation>在网络上查找(&amp;F)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="124"/>
-        <source>Find Notebook or Note name; selected text or text under cursor on the web...</source>
-        <translation>在网络上查找笔记本或笔记名称、所选文本或光标下的文本...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="131"/>
-        <source>Li&amp;brary</source>
-        <translation>文档库(&amp;B)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="152"/>
-        <source>&amp;Find orphans</source>
-        <translation>查找孤立项(&amp;F)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="155"/>
-        <source>Find library Notebooks which reference non-existent documents...</source>
-        <translation>查找引用了不存在文档的文档库笔记本...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="159"/>
-        <source>Deprecate &amp;orphans</source>
-        <translation>弃用孤立项(&amp;O)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="162"/>
-        <source>Deprecate library Notebooks that has tag which indicates reference of non-existent document...</source>
-        <translation>弃用带有“引用不存在文档”标签的文档库笔记本...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="318"/>
-        <source>&amp;CLI</source>
-        <translation>命令行(&amp;C)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="351"/>
-        <source>Ho&amp;ist</source>
-        <translation>聚焦(&amp;I)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="400"/>
-        <source>Str&amp;etch edges</source>
-        <translation>拉伸边(&amp;E)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="407"/>
-        <source>&amp;Sh&amp;rink edge</source>
-        <translation>收缩边(&amp;R)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="434"/>
-        <source>Flash&amp;cards</source>
-        <translation>闪卡(&amp;C)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="439"/>
-        <source>&amp;Organizer</source>
-        <translation>组织器(&amp;O)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="442"/>
-        <source>Create new Organizer to prioritize your knowledge in Eisenhower Matrix style</source>
-        <translation>新建组织器，以艾森豪威尔矩阵方式为知识排定优先级</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="454"/>
-        <source>Edit current Organizer - you can also double click view to open the editor</source>
-        <translation>编辑当前组织器 - 也可以双击视图打开编辑器</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="457"/>
-        <source>Make copy of the current Organizer</source>
-        <translation>复制当前组织器</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="459"/>
-        <source>&amp;Delete</source>
-        <translation>删除(&amp;D)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="460"/>
-        <source>Delete Organizer without undo</source>
-        <translation>删除组织器（无法撤销）</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="468"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="492"/>
-        <source>Move Notebook/Note to &amp;Previous Column/Quadrant	Ctrl+Left</source>
-        <translation>将笔记本/笔记移至上一列/象限(&amp;P)	Ctrl+Left</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="472"/>
-        <source>Move Notebook/Note to previous column or quadrant...</source>
-        <translation>将笔记本/笔记移至上一列或象限...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="480"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="504"/>
-        <source>Move Notebook/Note to Ne&amp;xt Column/Quadrant	Ctrl+Right</source>
-        <translation>将笔记本/笔记移至下一列/象限(&amp;X)	Ctrl+Right</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="484"/>
-        <source>Move Notebook/Note to next column or quadrant...</source>
-        <translation>将笔记本/笔记移至下一列或象限...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="523"/>
-        <source>Note&amp;book</source>
-        <translation>笔记本(&amp;B)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="550"/>
-        <source>E&amp;xamine</source>
-        <translation>测验(&amp;X)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="551"/>
-        <source>Turn Notebook to deck of flashcard and start active recall testing...</source>
-        <translation>将笔记本转换为闪卡组并开始主动回想测验...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="556"/>
-        <source>&amp;Promote</source>
-        <translation>提升(&amp;P)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="557"/>
-        <source>Promote Notebook</source>
-        <translation>提升笔记本</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="559"/>
-        <source>De&amp;mote</source>
-        <translation>降级(&amp;M)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="560"/>
-        <source>Demote Notebook</source>
-        <translation>降级笔记本</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="563"/>
-        <source>Move to &amp;First</source>
-        <translation>移至首位(&amp;F)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="565"/>
-        <source>Move the Notebook to be the first child of its parent</source>
-        <translation>将笔记本移为其父级的第一个子项</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="568"/>
-        <source>Move &amp;Up</source>
-        <translation>上移(&amp;U)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="569"/>
-        <source>Move the Notebook up</source>
-        <translation>上移笔记本</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="573"/>
-        <source>Move the Notebook down</source>
-        <translation>下移笔记本</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="576"/>
-        <source>Move to &amp;Last</source>
-        <translation>移至末位(&amp;L)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="577"/>
-        <source>Move the Notebook to be the last child of its parent</source>
-        <translation>将笔记本移为其父级的最后一个子项</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="650"/>
-        <source>E&amp;xternal Editor Edit	Ctrl+X</source>
-        <translation>用外部编辑器编辑(&amp;X)	Ctrl+X</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="651"/>
-        <source>Edit current Note in an external editor - use Preferences to configure the editor</source>
-        <translation>在外部编辑器中编辑当前笔记 - 请在首选项中配置编辑器</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="657"/>
-        <source>&amp;Forget	Ctrl+D</source>
-        <translation>遗忘(&amp;F)	Ctrl+D</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="664"/>
-        <source>Save and Leave	Ctrl+L</source>
-        <translation>保存并离开	Ctrl+L</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="677"/>
-        <source>Move to F&amp;irst	Ctrl+Shift+Up</source>
-        <translation>移至首位(&amp;I)	Ctrl+Shift+Up</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="679"/>
-        <source>Move the Note to be the first child of its parent</source>
-        <translation>将笔记移为其父级的第一个子项</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="682"/>
-        <source>Move &amp;Up	Ctrl+Up</source>
-        <translation>上移(&amp;U)	Ctrl+Up</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="683"/>
-        <source>Move the Note up</source>
-        <translation>上移笔记</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="687"/>
-        <source>Move the Note down</source>
-        <translation>下移笔记</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="691"/>
-        <source>Move to &amp;Last	Ctrl+Shift+Down</source>
-        <translation>移至末位(&amp;L)	Ctrl+Shift+Down</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="693"/>
-        <source>Move the Note to be the last child of its parent</source>
-        <translation>将笔记移为其父级的最后一个子项</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="698"/>
-        <source>Move to Notebook	Ctrl+R</source>
-        <translation>移至笔记本	Ctrl+R</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="700"/>
-        <source>&amp;Move to Notebook</source>
-        <translation>移至笔记本(&amp;M)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="704"/>
-        <source>Move the current Note to another Notebook...</source>
-        <translation>将当前笔记移至另一个笔记本...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="770"/>
-        <source>&amp;Find	Ctrl+Shift+F</source>
-        <translation>查找(&amp;F)	Ctrl+Shift+F</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="791"/>
         <source>&amp;Live Preview</source>
         <translation>实时预览(&amp;L)</translation>
@@ -2104,6 +2389,16 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_menu_view.cpp" line="794"/>
         <source>Toggle live HTML preview</source>
         <translation>切换实时 HTML 预览</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="796"/>
+        <source>W&amp;ord Wrap</source>
+        <translation>自动换行(&amp;O)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="797"/>
+        <source>Toggle word wrap mode</source>
+        <translation>切换自动换行模式</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="799"/>
@@ -2116,9 +2411,29 @@ Choose new library source:</source>
         <translation>将光标所在段落重排/填充为固定行宽</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="802"/>
+        <source>Swap Nam&amp;e/Description Focus</source>
+        <translation>切换名称/描述焦点(&amp;E)</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="803"/>
         <source>Swap focus of N title and description editors</source>
         <translation>在标题编辑器和描述编辑器之间切换焦点</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="805"/>
+        <source>E&amp;xtract</source>
+        <translation>提取(&amp;X)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="806"/>
+        <source>Create new Note from the text selected in the current Note...</source>
+        <translation>用当前笔记中选中的文本新建笔记...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="808"/>
+        <source>&amp;Wingman</source>
+        <translation>AI 助手(&amp;W)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="809"/>
@@ -2131,9 +2446,59 @@ Choose new library source:</source>
         <translation>补全链接	Ctrl+L</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="812"/>
+        <source>Complete word being written by finding link to Notebook or Note</source>
+        <translation>通过查找指向笔记本或笔记的链接来补全正在输入的单词</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="814"/>
+        <source>&amp;Spell Check</source>
+        <translation>拼写检查(&amp;S)</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="815"/>
         <source>Spell check Notebook or Note description</source>
         <translation>对笔记本或笔记描述进行拼写检查</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="818"/>
+        <source>&amp;Fix Grammar</source>
+        <translation>修正语法(&amp;F)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="819"/>
+        <source>Ask Wingman to fix grammar errors in the selected text / word under the cursor...</source>
+        <translation>请 AI 助手修正所选文本/光标下单词中的语法错误...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="822"/>
+        <source>Ask Wingman to explain the word under the cursor / selected text...</source>
+        <translation>请 AI 助手解释光标下的单词/所选文本...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="824"/>
+        <source>Finish &amp;Text</source>
+        <translation>续写文本(&amp;T)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="825"/>
+        <source>Ask Wingman to finish the text following the selected text / word under the cursor...</source>
+        <translation>请 AI 助手续写所选文本/光标下单词之后的文本...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="827"/>
+        <source>&amp;Rewrite Text</source>
+        <translation>改写文本(&amp;R)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="828"/>
+        <source>Ask Wingman to rewrite the text following the selected text / word under the cursor...</source>
+        <translation>请 AI 助手改写所选文本/光标下单词之后的文本...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="857"/>
+        <source>&amp;Format</source>
+        <translation>格式(&amp;F)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="859"/>
@@ -2176,6 +2541,16 @@ Choose new library source:</source>
         <translation>将文本设为数学公式（MathJax）</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="880"/>
+        <source>&amp;Keyboard</source>
+        <translation>键盘(&amp;K)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="881"/>
+        <source>Format text as keyboard input</source>
+        <translation>将文本设为键盘输入</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="883"/>
         <source>Comment</source>
         <translation>注释</translation>
@@ -2196,14 +2571,30 @@ Choose new library source:</source>
         <translation>无序列表(&amp;B)</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="890"/>
+        <source>Format block as bulleted list</source>
+        <translation>将块设为无序列表</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="893"/>
         <source>&amp;Numbered List</source>
         <translation>有序列表(&amp;N)</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="894"/>
+        <source>Format block as numbered list</source>
+        <translation>将块设为有序列表</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="897"/>
         <source>&amp;Task List</source>
         <translation>任务列表(&amp;T)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="898"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="905"/>
+        <source>Format block as task list</source>
+        <translation>将块设为任务列表</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="904"/>
@@ -2216,14 +2607,34 @@ Choose new library source:</source>
         <translation>块(&amp;O)</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="911"/>
+        <source>Block &amp;Quote</source>
+        <translation>引用块(&amp;Q)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="912"/>
+        <source>Format text block as blockquote</source>
+        <translation>将文本块设为引用块</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="915"/>
         <source>&amp;Code Block</source>
         <translation>代码块(&amp;C)</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="916"/>
+        <source>Format text block as source code</source>
+        <translation>将文本块设为源代码</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="919"/>
         <source>&amp;Math Block</source>
         <translation>数学公式块(&amp;M)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="920"/>
+        <source>Format text block as math (MathJax)</source>
+        <translation>将文本块设为数学公式（MathJax）</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="924"/>
@@ -2301,580 +2712,6 @@ Choose new library source:</source>
         <translation>插入 Mermaid 饼图框架</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="971"/>
-        <source>in&amp;tegrals</source>
-        <translation>多重积分(&amp;T)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="987"/>
-        <source>dot</source>
-        <translation>点</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="994"/>
-        <source>ca&amp;p</source>
-        <translation>交集(&amp;P)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="998"/>
-        <source>in</source>
-        <translation>属于</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1003"/>
-        <source>&amp;Strikethrough</source>
-        <translation>删除线(&amp;S)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1004"/>
-        <source>Format text as strikethrough</source>
-        <translation>将文本设为删除线</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1091"/>
-        <source>About &amp;Qt</source>
-        <translation>关于 Qt(&amp;Q)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="880"/>
-        <source>&amp;Keyboard</source>
-        <translation>键盘(&amp;K)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="881"/>
-        <source>Format text as keyboard input</source>
-        <translation>将文本设为键盘输入</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1076"/>
-        <source>Math cheatsheet</source>
-        <translation>数学公式速查表</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1077"/>
-        <source>Open MathJax quick reference</source>
-        <translation>打开 MathJax 快速参考</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1079"/>
-        <source>Math live preview</source>
-        <translation>数学公式实时预览</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1080"/>
-        <source>Open MathJax live demo</source>
-        <translation>打开 MathJax 在线演示</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1082"/>
-        <source>Mermaid dia&amp;grams documentation</source>
-        <translation>Mermaid 图表文档(&amp;G)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1083"/>
-        <source>Open Mermaid diagrams documentation</source>
-        <translation>打开 Mermaid 图表文档</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="890"/>
-        <source>Format block as bulleted list</source>
-        <translation>将块设为无序列表</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="894"/>
-        <source>Format block as numbered list</source>
-        <translation>将块设为有序列表</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="898"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="905"/>
-        <source>Format block as task list</source>
-        <translation>将块设为任务列表</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1007"/>
-        <source>T&amp;able of Contents</source>
-        <translation>目录(&amp;A)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1016"/>
-        <source>Insert current date and time</source>
-        <translation>插入当前日期和时间</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="916"/>
-        <source>Format text block as source code</source>
-        <translation>将文本块设为源代码</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="920"/>
-        <source>Format text block as math (MathJax)</source>
-        <translation>将文本块设为数学公式（MathJax）</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="911"/>
-        <source>Block &amp;Quote</source>
-        <translation>引用块(&amp;Q)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="912"/>
-        <source>Format text block as blockquote</source>
-        <translation>将文本块设为引用块</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1018"/>
-        <source>&amp;Link</source>
-        <translation>链接(&amp;L)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1019"/>
-        <source>Insert link to a document, image or file</source>
-        <translation>插入指向文档、图片或文件的链接</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1025"/>
-        <source>Insert image</source>
-        <translation>插入图片</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1030"/>
-        <source>Tabl&amp;es</source>
-        <translation>表格(&amp;E)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1033"/>
-        <source>&amp;Horizontal ruler</source>
-        <translation>水平分隔线(&amp;H)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1034"/>
-        <source>Horizontal ruler</source>
-        <translation>水平分隔线</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="857"/>
-        <source>&amp;Format</source>
-        <translation>格式(&amp;F)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="441"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="525"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="635"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="638"/>
-        <source>&amp;New</source>
-        <translation>新建(&amp;N)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="526"/>
-        <source>Create new Notebook to form new ideas, principles, combinations or applications</source>
-        <translation>新建笔记本，以形成新的想法、原则、组合或应用</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="538"/>
-        <source>Edit current Notebook - you can also double click view to open the editor</source>
-        <translation>编辑当前笔记本 - 也可以双击视图打开编辑器</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="540"/>
-        <source>Make &amp;Home</source>
-        <translation>设为主页(&amp;H)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="721"/>
-        <source>Import</source>
-        <translation>导入</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="543"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="708"/>
-        <source>Make &amp;Stencil</source>
-        <translation>设为模板(&amp;S)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="544"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="711"/>
-        <source>Copy the current Notebook as to Stencil</source>
-        <translation>将当前笔记本复制为模板</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="456"/>
-        <source>C&amp;lone</source>
-        <translation>克隆(&amp;L)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="548"/>
-        <source>Make copy of the current Notebook</source>
-        <translation>复制当前笔记本</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="554"/>
-        <source>Forget Notebook and move it to Limbo</source>
-        <translation>删除笔记本并将其移至 Limbo</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="717"/>
-        <source>E&amp;xport</source>
-        <translation>导出(&amp;X)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="659"/>
-        <source>&amp;Forget	Del</source>
-        <translation>删除	Del</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="661"/>
-        <source>Forget Note</source>
-        <translation>删除笔记</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="51"/>
-        <source>&amp;Learn</source>
-        <translation>打开(&amp;O)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="541"/>
-        <source>Toggle tag indicating whether to use the current Notebook as home</source>
-        <translation>切换标签，指示是否将当前笔记本用作主页</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="586"/>
-        <source>&amp;Import</source>
-        <translation>导入(&amp;I)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="100"/>
-        <source>Think to suggest matching, similar and associated Notes while searching, reading and writing</source>
-        <translation>在搜索、阅读和写作时思考并推荐匹配、相似和关联的笔记</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="103"/>
-        <source>&amp;Autolink</source>
-        <translation>自动链接(&amp;A)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="106"/>
-        <source>Automatically inject links to relevant Notebooks and Notes when browsing HTML preview</source>
-        <translation>浏览 HTML 预览时自动插入指向相关笔记本和笔记的链接</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="190"/>
-        <source>A&amp;dapt</source>
-        <translation>首选项(&amp;P)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="195"/>
-        <source>&amp;CSV</source>
-        <translation>CSV(&amp;C)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="196"/>
-        <source>Export all Notebooks/Markdown files as a single CSV file</source>
-        <translation>将所有笔记本/Markdown 文件导出为单个 CSV 文件</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="252"/>
-        <source>Recall Notebook by Ta&amp;gs</source>
-        <translation>按标签查找笔记本(&amp;G)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="280"/>
-        <source>&amp;Home Notebook</source>
-        <translation>主页笔记本(&amp;H)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="320"/>
-        <source>Activate command line interface...</source>
-        <translation>激活命令行界面...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="640"/>
-        <source>Create new Note to form new ideas, principles, combinations and applications</source>
-        <translation>新建笔记，以形成新的想法、原则、组合和应用</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="356"/>
-        <source>Hoist/de-hoist Note to focus on Note being viewed or edited</source>
-        <translation>聚焦/取消聚焦笔记，以专注于正在查看或编辑的笔记</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="646"/>
-        <source>&amp;Edit	Ctrl+E</source>
-        <translation>编辑(&amp;E)	Ctrl+E</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="648"/>
-        <source>Edit current Note - you can also double click view to open the editor</source>
-        <translation>编辑当前笔记 - 也可以双击视图打开编辑器</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="653"/>
-        <source>Remember	Ctrl+S</source>
-        <translation>保存	Ctrl+S</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="654"/>
-        <source>Save Note being edited</source>
-        <translation>保存正在编辑的笔记</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="666"/>
-        <source>Leave	Alt+Left</source>
-        <translation>离开	Alt+Left</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="668"/>
-        <source>Save leave editor of Note being changed</source>
-        <translation>保存并离开正在修改的笔记的编辑器</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="670"/>
-        <source>&amp;Promote	Ctrl+Left</source>
-        <translation>提升(&amp;P)	Ctrl+Left</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="671"/>
-        <source>Promote Note</source>
-        <translation>提升笔记</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="673"/>
-        <source>&amp;Demote	Ctrl+Right</source>
-        <translation>降级(&amp;D)	Ctrl+Right</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="674"/>
-        <source>Demote Note</source>
-        <translation>降级笔记</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="805"/>
-        <source>E&amp;xtract</source>
-        <translation>提取(&amp;X)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="806"/>
-        <source>Create new Note from the text selected in the current Note...</source>
-        <translation>用当前笔记中选中的文本新建笔记...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="547"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="714"/>
-        <source>&amp;Clone</source>
-        <translation>克隆(&amp;C)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="41"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="53"/>
-        <source>&amp;Workspace</source>
-        <translation>工作区(&amp;W)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="43"/>
-        <source>Create a brand new MindForger workspace...</source>
-        <translation>创建全新的 MindForger 工作区...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="56"/>
-        <source>Learn knowledge by loading a MindForger workspace...</source>
-        <translation>通过加载 MindForger 工作区学习知识...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="60"/>
-        <source>&amp;Directory with Markdowns</source>
-        <translation>Markdown 文件目录(&amp;D)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="63"/>
-        <source>Learn knowledge by loading a directory with Markdown files...</source>
-        <translation>通过加载包含 Markdown 文件的目录学习知识...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="68"/>
-        <source>Learn knowledge by loading a Markdown file...</source>
-        <translation>通过加载 Markdown 文件学习知识...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="75"/>
-        <source>Re-learn recently opened MindForger workspaces, Markdown directories or files</source>
-        <translation>重新学习最近打开的 MindForger 工作区、Markdown 目录或文件</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="715"/>
-        <source>Make a copy of the Note to this or other Notebook...</source>
-        <translation>将笔记复制到此笔记本或其他笔记本...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="718"/>
-        <source>Export Note to an external file in a supported format</source>
-        <translation>将笔记导出为受支持格式的外部文件</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="722"/>
-        <source>Import Note from an external file in a supported format</source>
-        <translation>从受支持格式的外部文件导入笔记</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="632"/>
-        <source>&amp;Note</source>
-        <translation>笔记(&amp;N)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="120"/>
-        <source>Open Wingman dialog...</source>
-        <translation>打开 AI 助手对话框...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="496"/>
-        <source>Move focus to previous column or quadrant...</source>
-        <translation>将焦点移至上一列或象限...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="508"/>
-        <source>Move focus to next column or quadrant...</source>
-        <translation>将焦点移至下一列或象限...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="572"/>
-        <source>Move D&amp;own</source>
-        <translation>下移(&amp;O)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="592"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="726"/>
-        <source>&amp;Summarize</source>
-        <translation>总结(&amp;S)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="593"/>
-        <source>Ask Wingman to summarize text of the Notebook...</source>
-        <translation>请 AI 助手总结笔记本的文本...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="595"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="821"/>
-        <source>&amp;Explain</source>
-        <translation>解释(&amp;E)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="596"/>
-        <source>Ask Wingman to explain the name of the Notebook...</source>
-        <translation>请 AI 助手解释笔记本的名称...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="598"/>
-        <source>&amp;Find Tasks</source>
-        <translation>查找任务(&amp;F)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="599"/>
-        <source>Ask Wingman to find tasks in the Notebook text...</source>
-        <translation>请 AI 助手在笔记本文本中查找任务...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="601"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="735"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="830"/>
-        <source>&amp;More prompts...</source>
-        <translation>更多提示词(&amp;M)...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="602"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="736"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="831"/>
-        <source>Open Wingman chat...</source>
-        <translation>打开 AI 助手聊天...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="686"/>
-        <source>Move Dow&amp;n	Ctrl+Down</source>
-        <translation>下移(&amp;N)	Ctrl+Down</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="727"/>
-        <source>Ask Wingman to summarize text of the Note...</source>
-        <translation>请 AI 助手总结笔记的文本...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="729"/>
-        <source>&amp;Find Grammar Errors</source>
-        <translation>查找语法错误(&amp;F)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="730"/>
-        <source>Ask Wingman to find grammar errors in the Note text...</source>
-        <translation>请 AI 助手在笔记文本中查找语法错误...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="732"/>
-        <source>&amp;Translate to English</source>
-        <translation>翻译为英语(&amp;T)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="733"/>
-        <source>Ask Wingman to translate the Note text to English...</source>
-        <translation>请 AI 助手将笔记文本翻译为英语...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="796"/>
-        <source>W&amp;ord Wrap</source>
-        <translation>自动换行(&amp;O)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="797"/>
-        <source>Toggle word wrap mode</source>
-        <translation>切换自动换行模式</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="802"/>
-        <source>Swap Nam&amp;e/Description Focus</source>
-        <translation>切换名称/描述焦点(&amp;E)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="812"/>
-        <source>Complete word being written by finding link to Notebook or Note</source>
-        <translation>通过查找指向笔记本或笔记的链接来补全正在输入的单词</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="814"/>
-        <source>&amp;Spell Check</source>
-        <translation>拼写检查(&amp;S)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="818"/>
-        <source>&amp;Fix Grammar</source>
-        <translation>修正语法(&amp;F)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="819"/>
-        <source>Ask Wingman to fix grammar errors in the selected text / word under the cursor...</source>
-        <translation>请 AI 助手修正所选文本/光标下单词中的语法错误...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="822"/>
-        <source>Ask Wingman to explain the word under the cursor / selected text...</source>
-        <translation>请 AI 助手解释光标下的单词/所选文本...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="824"/>
-        <source>Finish &amp;Text</source>
-        <translation>续写文本(&amp;T)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="825"/>
-        <source>Ask Wingman to finish the text following the selected text / word under the cursor...</source>
-        <translation>请 AI 助手续写所选文本/光标下单词之后的文本...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="827"/>
-        <source>&amp;Rewrite Text</source>
-        <translation>改写文本(&amp;R)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="828"/>
-        <source>Ask Wingman to rewrite the text following the selected text / word under the cursor...</source>
-        <translation>请 AI 助手改写所选文本/光标下单词之后的文本...</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="958"/>
         <source>MathJa&amp;x</source>
         <translation>MathJax(&amp;X)</translation>
@@ -2903,6 +2740,11 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_menu_view.cpp" line="969"/>
         <source>&amp;integral</source>
         <translation>积分(&amp;I)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="971"/>
+        <source>in&amp;tegrals</source>
+        <translation>多重积分(&amp;T)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="974"/>
@@ -2935,6 +2777,11 @@ Choose new library source:</source>
         <translation>尖号(&amp;H)</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="987"/>
+        <source>dot</source>
+        <translation>点</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="989"/>
         <source>&amp;overrightarrow</source>
         <translation>向量箭头(&amp;O)</translation>
@@ -2945,14 +2792,39 @@ Choose new library source:</source>
         <translation>并集(&amp;C)</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="994"/>
+        <source>ca&amp;p</source>
+        <translation>交集(&amp;P)</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="996"/>
         <source>&amp;empty set</source>
         <translation>空集(&amp;E)</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="998"/>
+        <source>in</source>
+        <translation>属于</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="1000"/>
         <source>&amp;not in</source>
         <translation>不属于(&amp;N)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1003"/>
+        <source>&amp;Strikethrough</source>
+        <translation>删除线(&amp;S)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1004"/>
+        <source>Format text as strikethrough</source>
+        <translation>将文本设为删除线</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1007"/>
+        <source>T&amp;able of Contents</source>
+        <translation>目录(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="1008"/>
@@ -2980,14 +2852,59 @@ Choose new library source:</source>
         <translation>时间戳(&amp;P)</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1016"/>
+        <source>Insert current date and time</source>
+        <translation>插入当前日期和时间</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1018"/>
+        <source>&amp;Link</source>
+        <translation>链接(&amp;L)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1019"/>
+        <source>Insert link to a document, image or file</source>
+        <translation>插入指向文档、图片或文件的链接</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="1024"/>
         <source>Ima&amp;ge</source>
         <translation>图片(&amp;G)</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1025"/>
+        <source>Insert image</source>
+        <translation>插入图片</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1030"/>
+        <source>Tabl&amp;es</source>
+        <translation>表格(&amp;E)</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="1031"/>
         <source>Insert table...</source>
         <translation>插入表格...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1033"/>
+        <source>&amp;Horizontal ruler</source>
+        <translation>水平分隔线(&amp;H)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1034"/>
+        <source>Horizontal ruler</source>
+        <translation>水平分隔线</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1036"/>
+        <source>Emo&amp;jis</source>
+        <translation>表情符号(&amp;J)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1038"/>
+        <source>Open dialog with emoji characters to be copy/pasted to names, descriptions and text...</source>
+        <translation>打开表情符号对话框，可将字符复制/粘贴到名称、描述和文本中...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="1066"/>
@@ -3025,6 +2942,36 @@ Choose new library source:</source>
         <translation>打开 Markdown 教程</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1076"/>
+        <source>Math cheatsheet</source>
+        <translation>数学公式速查表</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1077"/>
+        <source>Open MathJax quick reference</source>
+        <translation>打开 MathJax 快速参考</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1079"/>
+        <source>Math live preview</source>
+        <translation>数学公式实时预览</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1080"/>
+        <source>Open MathJax live demo</source>
+        <translation>打开 MathJax 在线演示</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1082"/>
+        <source>Mermaid dia&amp;grams documentation</source>
+        <translation>Mermaid 图表文档(&amp;G)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1083"/>
+        <source>Open Mermaid diagrams documentation</source>
+        <translation>打开 Mermaid 图表文档</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="1085"/>
         <source>Report &amp;Bug or Request Feature</source>
         <translation>报告缺陷或请求功能(&amp;B)</translation>
@@ -3043,6 +2990,11 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_menu_view.cpp" line="1089"/>
         <source>Check for MindForger updates</source>
         <translation>检查 MindForger 更新</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1091"/>
+        <source>About &amp;Qt</source>
+        <translation>关于 Qt(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="1092"/>
@@ -3126,14 +3078,61 @@ Choose new library source:</source>
 <context>
     <name>m8r::MainWindowPresenter</name>
     <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="84"/>
+        <source>Export Notebook to HTML</source>
+        <translation>将笔记本导出为 HTML</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="85"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="92"/>
+        <source>Export</source>
+        <translation>导出</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="91"/>
+        <source>Export Memory to CSV</source>
+        <translation>将记忆导出为 CSV</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="347"/>
+        <source>Cannot think - either Mind already dreaming or workspace too big</source>
+        <translation>无法思考 - 心智正在做梦，或工作区过大</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="413"/>
         <source>Hyperlink %1 clicked...</source>
         <translation>已单击超链接 %1...</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="418"/>
+        <source>Autolinked Notebooks and Notes</source>
+        <translation>自动链接的笔记本和笔记</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="466"/>
         <source>Link target not found for relative link %1</source>
         <translation>未找到相对链接 %1 的目标</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="544"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="556"/>
+        <source>New Workspace Error</source>
+        <translation>新建工作区错误</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="545"/>
+        <source>Specified workspace path already exists!</source>
+        <translation>指定的工作区路径已存在！</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="557"/>
+        <source>Failed to create empty workspace!</source>
+        <translation>创建空工作区失败！</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="569"/>
+        <source>ERROR: workspace created, but attempt to copy documentation and/or stencils failed</source>
+        <translation>错误：工作区已创建，但复制文档和/或模板失败</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="589"/>
@@ -3148,39 +3147,64 @@ Choose new library source:</source>
         <translation>指定的文件路径已存在！</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="621"/>
+        <source>Cannot think - either Mind already dreaming or repository has too many notes: %1 &gt; %2</source>
+        <translation>无法思考 - 心智正在做梦，或仓库中的笔记过多：%1 &gt; %2</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="645"/>
         <source>Cannot start sleeping - please wait until dreaming finishes and then try again</source>
         <translation>无法开始休眠 - 请等待做梦结束后再试</translation>
     </message>
     <message>
-        <source>Learn Directory or MindForger Repository</source>
-        <translation type="obsolete">Open Directory or MindForger Repository</translation>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="687"/>
+        <source>Semantic search disabled</source>
+        <translation>语义搜索已禁用</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="694"/>
+        <source>Semantic search activated</source>
+        <translation>语义搜索已激活</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="697"/>
+        <source>Semantic search cannot be activated - missing dependencies</source>
+        <translation>无法激活语义搜索 - 缺少依赖项</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="700"/>
+        <source>Semantic Search</source>
+        <translation>语义搜索</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="701"/>
+        <source>Semantic search cannot be activated - ollama Wingman must be configured.</source>
+        <translation>无法激活语义搜索 - 必须配置 ollama AI 助手。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="710"/>
+        <source>Refresh semantic search index ~ text embeddings of all (modified) Notes...</source>
+        <translation>刷新语义搜索索引 ~ 所有（已修改）笔记的文本嵌入...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="771"/>
+        <source>Learn Directory or MindForger Workspace</source>
+        <translation>学习目录或 MindForger 工作区</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="798"/>
         <source>Learn Markdown File</source>
-        <translation>打开 Markdown 文件</translation>
+        <translation>学习 Markdown 文件</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="828"/>
         <source>Learn</source>
-        <translation>打开</translation>
+        <translation>学习</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="84"/>
-        <source>Export Notebook to HTML</source>
-        <translation>将笔记本导出为 HTML</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="85"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="92"/>
-        <source>Export</source>
-        <translation>导出</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="418"/>
-        <source>Autolinked Notebooks and Notes</source>
-        <translation>自动链接的笔记本和笔记</translation>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="829"/>
+        <source>This is neither valid MindForger/Markdown workspace nor file.</source>
+        <translation>这既不是有效的 MindForger/Markdown 工作区，也不是有效的文件。</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="850"/>
@@ -3212,6 +3236,18 @@ Choose new library source:</source>
         <translation>未找到笔记本</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="947"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1040"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1109"/>
+        <source>Note </source>
+        <translation>笔记 </translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="950"/>
+        <source>Thing not found</source>
+        <translation>未找到内容</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="979"/>
         <source>Find Note by Tags in Notebook</source>
         <translation>在笔记本中按标签查找笔记</translation>
@@ -3221,23 +3257,6 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="994"/>
         <source>Find Note by Tags</source>
         <translation>按标签查找笔记</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="947"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1040"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1109"/>
-        <source>Note </source>
-        <translation>笔记 </translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="91"/>
-        <source>Export Memory to CSV</source>
-        <translation>将记忆导出为 CSV</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="950"/>
-        <source>Thing not found</source>
-        <translation>未找到内容</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="1042"/>
@@ -3276,9 +3295,19 @@ Choose new library source:</source>
         <translation>按名称查找笔记</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1164"/>
+        <source>Home Notebook not set - use menu &apos;Notebooks/Make Home&apos;</source>
+        <translation>未设置主页笔记本 - 请使用菜单“笔记本/设为主页”</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="1678"/>
         <source>image</source>
         <translation>图片</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1753"/>
+        <source>File copied to workspace path &apos;%1&apos;</source>
+        <translation>文件已复制到工作区路径 &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="1758"/>
@@ -3289,251 +3318,6 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="1787"/>
         <source>Saving pasted image data to file: &apos;%1&apos;</source>
         <translation>正在将粘贴的图片数据保存到文件：&apos;%1&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2328"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2342"/>
-        <source>Wingman Action Error</source>
-        <translation>AI 助手操作错误</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2298"/>
-        <source>Wingman&apos;s answer appended after selected text in the Note editor.</source>
-        <translation>AI 助手的回答已追加到笔记编辑器中所选文本之后。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2309"/>
-        <source>Unable to append after selected text with Wingman&apos;s answer in non-edit perspective.</source>
-        <translation>在非编辑视图中无法将 AI 助手的回答追加到所选文本之后。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2313"/>
-        <source>No answer from Wingman to append after selected text - run a prompt.</source>
-        <translation>没有可追加到所选文本之后的 AI 助手回答 - 请先运行提示词。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2323"/>
-        <source>Wingman&apos;s answer replaced selected text in Notebook header.</source>
-        <translation>AI 助手的回答已替换笔记本标题中的所选文本。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2329"/>
-        <source>Unable to replace Notebook header text - no text selected.</source>
-        <translation>无法替换笔记本标题文本 - 未选择文本。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2337"/>
-        <source>Wingman&apos;s answer replaced selected text in Note text.</source>
-        <translation>AI 助手的回答已替换笔记文本中的所选文本。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2343"/>
-        <source>Unable to replace Note text - no text selected.</source>
-        <translation>无法替换笔记文本 - 未选择文本。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2350"/>
-        <source>Unable to replace selected text with Wingman&apos;s answer in non-edit perspective.</source>
-        <translation>在非编辑视图中无法用 AI 助手的回答替换所选文本。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2354"/>
-        <source>No answer from Wingman to replace selected text - run a prompt.</source>
-        <translation>没有可替换所选文本的 AI 助手回答 - 请先运行提示词。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2426"/>
-        <source>Edit Notebook</source>
-        <translation>编辑笔记本</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2426"/>
-        <source>Please open an Notebook to edit.</source>
-        <translation>请打开要编辑的笔记本。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2499"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2687"/>
-        <source>New Note</source>
-        <translation>新建笔记</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2499"/>
-        <source>Failed to create new Note!</source>
-        <translation>创建新笔记失败！</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2512"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2515"/>
-        <source>Clone Notebook</source>
-        <translation>克隆笔记本</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2512"/>
-        <source>Failed to clone Notebook!</source>
-        <translation>克隆笔记本失败！</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2515"/>
-        <source>Please open and Notebook to be cloned.</source>
-        <translation>请打开要克隆的笔记本。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2529"/>
-        <source>Home tag toggled/removed - Notebook &apos;%1&apos; is no longer home</source>
-        <translation>已切换/移除主页标签 - 笔记本 &apos;%1&apos; 不再是主页</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2532"/>
-        <source>Notebook &apos;%1&apos; successfully marked as home</source>
-        <translation>已成功将笔记本 &apos;%1&apos; 标记为主页</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2537"/>
-        <source>Make Notebook home</source>
-        <translation>将笔记本设为主页</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2537"/>
-        <source>Notebook can be marked as home only when viewed.</source>
-        <translation>只有在查看笔记本时才能将其标记为主页。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2548"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2573"/>
-        <source>Forget Notebook</source>
-        <translation>弃用笔记本</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3460"/>
-        <source>Library already indexed - use &apos;Update library&apos; action to synchronize documents.</source>
-        <translation>文档库已建立索引 - 请使用“更新文档库”操作同步文档。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3468"/>
-        <source>Unable to index documents on library path - either memory directory doesn&apos;t exist or not in MindForger workspace mode.</source>
-        <translation>无法为文档库路径中的文档建立索引 - 记忆目录不存在，或当前不是 MindForger 工作区模式。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3505"/>
-        <source>Library synchronization</source>
-        <translation>文档库同步</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3506"/>
-        <source>There are no libraries - nothing to synchronize.</source>
-        <translation>没有文档库 - 无需同步。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3603"/>
-        <source>Library deletion</source>
-        <translation>文档库删除</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3604"/>
-        <source>There are no libraries - nothing to delete.</source>
-        <translation>没有文档库 - 无需删除。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3619"/>
-        <source>Delete Library</source>
-        <translation>删除文档库</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3620"/>
-        <source>Do you really want to delete Notebooks which represent the library documents?</source>
-        <translation>确定要删除表示文档库文档的笔记本吗？</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3945"/>
-        <source>Do you really want to forget &apos;</source>
-        <translation>确定要遗忘 &apos;</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2551"/>
-        <source>&apos; Notebook?</source>
-        <translation>&apos; 笔记本吗？</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="347"/>
-        <source>Cannot think - either Mind already dreaming or workspace too big</source>
-        <translation>无法思考 - 心智正在做梦，或工作区过大</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="544"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="556"/>
-        <source>New Workspace Error</source>
-        <translation>新建工作区错误</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="545"/>
-        <source>Specified workspace path already exists!</source>
-        <translation>指定的工作区路径已存在！</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="557"/>
-        <source>Failed to create empty workspace!</source>
-        <translation>创建空工作区失败！</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="569"/>
-        <source>ERROR: workspace created, but attempt to copy documentation and/or stencils failed</source>
-        <translation>错误：工作区已创建，但复制文档和/或模板失败</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="621"/>
-        <source>Cannot think - either Mind already dreaming or repository has too many notes: %1 &gt; %2</source>
-        <translation>无法思考 - 心智正在做梦，或仓库中的笔记过多：%1 &gt; %2</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="687"/>
-        <source>Semantic search disabled</source>
-        <translation>语义搜索已禁用</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="694"/>
-        <source>Semantic search activated</source>
-        <translation>语义搜索已激活</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="697"/>
-        <source>Semantic search cannot be activated - missing dependencies</source>
-        <translation>无法激活语义搜索 - 缺少依赖项</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="700"/>
-        <source>Semantic Search</source>
-        <translation>语义搜索</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="701"/>
-        <source>Semantic search cannot be activated - ollama Wingman must be configured.</source>
-        <translation>无法激活语义搜索 - 必须配置 ollama AI 助手。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="710"/>
-        <source>Refresh semantic search index ~ text embeddings of all (modified) Notes...</source>
-        <translation>刷新语义搜索索引 ~ 所有（已修改）笔记的文本嵌入...</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="771"/>
-        <source>Learn Directory or MindForger Workspace</source>
-        <translation>学习目录或 MindForger 工作区</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="829"/>
-        <source>This is neither valid MindForger/Markdown workspace nor file.</source>
-        <translation>这既不是有效的 MindForger/Markdown 工作区，也不是有效的文件。</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1164"/>
-        <source>Home Notebook not set - use menu &apos;Notebooks/Make Home&apos;</source>
-        <translation>未设置主页笔记本 - 请使用菜单“笔记本/设为主页”</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1753"/>
-        <source>File copied to workspace path &apos;%1&apos;</source>
-        <translation>文件已复制到工作区路径 &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="1846"/>
@@ -3586,9 +3370,70 @@ Choose new library source:</source>
         <translation>AI 助手的回答已追加到笔记本标题中光标之后。</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2298"/>
+        <source>Wingman&apos;s answer appended after selected text in the Note editor.</source>
+        <translation>AI 助手的回答已追加到笔记编辑器中所选文本之后。</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2302"/>
         <source>Wingman&apos;s answer appended after the cursor in the Note editor.</source>
         <translation>AI 助手的回答已追加到笔记编辑器中光标之后。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2309"/>
+        <source>Unable to append after selected text with Wingman&apos;s answer in non-edit perspective.</source>
+        <translation>在非编辑视图中无法将 AI 助手的回答追加到所选文本之后。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2313"/>
+        <source>No answer from Wingman to append after selected text - run a prompt.</source>
+        <translation>没有可追加到所选文本之后的 AI 助手回答 - 请先运行提示词。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2323"/>
+        <source>Wingman&apos;s answer replaced selected text in Notebook header.</source>
+        <translation>AI 助手的回答已替换笔记本标题中的所选文本。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2328"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2342"/>
+        <source>Wingman Action Error</source>
+        <translation>AI 助手操作错误</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2329"/>
+        <source>Unable to replace Notebook header text - no text selected.</source>
+        <translation>无法替换笔记本标题文本 - 未选择文本。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2337"/>
+        <source>Wingman&apos;s answer replaced selected text in Note text.</source>
+        <translation>AI 助手的回答已替换笔记文本中的所选文本。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2343"/>
+        <source>Unable to replace Note text - no text selected.</source>
+        <translation>无法替换笔记文本 - 未选择文本。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2350"/>
+        <source>Unable to replace selected text with Wingman&apos;s answer in non-edit perspective.</source>
+        <translation>在非编辑视图中无法用 AI 助手的回答替换所选文本。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2354"/>
+        <source>No answer from Wingman to replace selected text - run a prompt.</source>
+        <translation>没有可替换所选文本的 AI 助手回答 - 请先运行提示词。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2426"/>
+        <source>Edit Notebook</source>
+        <translation>编辑笔记本</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2426"/>
+        <source>Please open an Notebook to edit.</source>
+        <translation>请打开要编辑的笔记本。</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2439"/>
@@ -3603,9 +3448,67 @@ Choose new library source:</source>
 &apos;%1&apos; </translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2499"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2687"/>
+        <source>New Note</source>
+        <translation>新建笔记</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2499"/>
+        <source>Failed to create new Note!</source>
+        <translation>创建新笔记失败！</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2512"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2515"/>
+        <source>Clone Notebook</source>
+        <translation>克隆笔记本</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2512"/>
+        <source>Failed to clone Notebook!</source>
+        <translation>克隆笔记本失败！</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2515"/>
+        <source>Please open and Notebook to be cloned.</source>
+        <translation>请打开要克隆的笔记本。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2529"/>
+        <source>Home tag toggled/removed - Notebook &apos;%1&apos; is no longer home</source>
+        <translation>已切换/移除主页标签 - 笔记本 &apos;%1&apos; 不再是主页</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2532"/>
+        <source>Notebook &apos;%1&apos; successfully marked as home</source>
+        <translation>已成功将笔记本 &apos;%1&apos; 标记为主页</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2537"/>
+        <source>Make Notebook home</source>
+        <translation>将笔记本设为主页</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2537"/>
+        <source>Notebook can be marked as home only when viewed.</source>
+        <translation>只有在查看笔记本时才能将其标记为主页。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2548"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2573"/>
+        <source>Forget Notebook</source>
+        <translation>遗忘笔记本</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2549"/>
         <source>Do you really want to deprecate &apos;</source>
         <translation>确定要弃用 &apos;</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2551"/>
+        <source>&apos; Notebook?</source>
+        <translation>&apos; 笔记本吗？</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2573"/>
@@ -3690,12 +3593,12 @@ Choose new library source:</source>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2950"/>
         <source>Forget Note</source>
-        <translation>删除笔记</translation>
+        <translation>遗忘笔记</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2950"/>
         <source>Please select a Note to forget.</source>
-        <translation>请选择要删除的笔记。</translation>
+        <translation>请选择要遗忘的笔记。</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2970"/>
@@ -3825,6 +3728,26 @@ Choose new library source:</source>
         <translation>文档库目录不存在！</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3460"/>
+        <source>Library already indexed - use &apos;Update library&apos; action to synchronize documents.</source>
+        <translation>文档库已建立索引 - 请使用“更新文档库”操作同步文档。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3468"/>
+        <source>Unable to index documents on library path - either memory directory doesn&apos;t exist or not in MindForger workspace mode.</source>
+        <translation>无法为文档库路径中的文档建立索引 - 记忆目录不存在，或当前不是 MindForger 工作区模式。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3505"/>
+        <source>Library synchronization</source>
+        <translation>文档库同步</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3506"/>
+        <source>There are no libraries - nothing to synchronize.</source>
+        <translation>没有文档库 - 无需同步。</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="3537"/>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="3547"/>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="3569"/>
@@ -3853,6 +3776,26 @@ Choose new library source:</source>
         <translation>未找到带有文档库孤立项标签的笔记本。</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3603"/>
+        <source>Library deletion</source>
+        <translation>文档库删除</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3604"/>
+        <source>There are no libraries - nothing to delete.</source>
+        <translation>没有文档库 - 无需删除。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3619"/>
+        <source>Delete Library</source>
+        <translation>删除文档库</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3620"/>
+        <source>Do you really want to delete Notebooks which represent the library documents?</source>
+        <translation>确定要删除表示文档库文档的笔记本吗？</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="3760"/>
         <source>Organizer Update Error</source>
         <translation>组织器更新错误</translation>
@@ -3876,6 +3819,11 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="3944"/>
         <source>Forget Organizer</source>
         <translation>遗忘组织器</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3945"/>
+        <source>Do you really want to forget &apos;</source>
+        <translation>确定要遗忘 &apos;</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="3946"/>
@@ -3919,6 +3867,16 @@ Choose new library source:</source>
 <context>
     <name>m8r::NewFileDialog</name>
     <message>
+        <location filename="../../../src/qt/dialogs/new_file_dialog.cpp" line="30"/>
+        <source>Create New Markdown File</source>
+        <translation>创建新的 Markdown 文件</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/new_file_dialog.cpp" line="34"/>
+        <source>File name:</source>
+        <translation>文件名：</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/dialogs/new_file_dialog.cpp" line="36"/>
         <source>Target directory:</source>
         <translation>目标目录：</translation>
@@ -3934,24 +3892,14 @@ Choose new library source:</source>
         <translation>查找目录</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/new_file_dialog.cpp" line="47"/>
-        <source>&amp;Cancel</source>
-        <translation>取消(&amp;C)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/new_file_dialog.cpp" line="30"/>
-        <source>Create New Markdown File</source>
-        <translation>创建新的 Markdown 文件</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/new_file_dialog.cpp" line="34"/>
-        <source>File name:</source>
-        <translation>文件名：</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/new_file_dialog.cpp" line="45"/>
         <source>New</source>
         <translation>新建</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/new_file_dialog.cpp" line="47"/>
+        <source>&amp;Cancel</source>
+        <translation>取消(&amp;C)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/new_file_dialog.cpp" line="89"/>
@@ -4239,9 +4187,19 @@ Choose new library source:</source>
         <translation>表情符号(&amp;E)</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="43"/>
+        <source>Position</source>
+        <translation>位置</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="46"/>
         <source>Edit or view after creation</source>
         <translation>创建后编辑或查看</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="49"/>
+        <source>Stencil</source>
+        <translation>模板</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="52"/>
@@ -4252,16 +4210,6 @@ Choose new library source:</source>
         <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="55"/>
         <source>Progress</source>
         <translation>进度</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="49"/>
-        <source>Stencil</source>
-        <translation>模板</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="43"/>
-        <source>Position</source>
-        <translation>位置</translation>
     </message>
 </context>
 <context>
@@ -5393,6 +5341,11 @@ Referenced documents will NOT be deleted.
         <translation>检索(&amp;L)</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/dialogs/run_tool_dialog.cpp" line="46"/>
+        <source>&amp;Cancel</source>
+        <translation>取消(&amp;C)</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/dialogs/run_tool_dialog.cpp" line="78"/>
         <source>Lookup Knowledge</source>
         <translation>检索知识</translation>
@@ -5441,11 +5394,6 @@ Referenced documents will NOT be deleted.
         <location filename="../../../src/qt/dialogs/run_tool_dialog.cpp" line="106"/>
         <source>Python documentation</source>
         <translation>Python 文档</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/run_tool_dialog.cpp" line="46"/>
-        <source>&amp;Cancel</source>
-        <translation>取消(&amp;C)</translation>
     </message>
 </context>
 <context>
@@ -5703,6 +5651,11 @@ notes. Feel free to deprecate such notebook(s) yourself.
         <translation>&lt;笔记本文本&gt;</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/dialogs/wingman_dialog.cpp" line="202"/>
+        <source>note</source>
+        <translation>笔记</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/dialogs/wingman_dialog.cpp" line="203"/>
         <source>&lt;Note text&gt;</source>
         <translation>&lt;笔记文本&gt;</translation>
@@ -5726,11 +5679,6 @@ notes. Feel free to deprecate such notebook(s) yourself.
         <location filename="../../../src/qt/dialogs/wingman_dialog.cpp" line="484"/>
         <source>Hide &amp;Context</source>
         <translation>隐藏上下文(&amp;C)</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/wingman_dialog.cpp" line="202"/>
-        <source>note</source>
-        <translation>笔记</translation>
     </message>
 </context>
 <context>

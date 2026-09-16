@@ -18,6 +18,9 @@
     * Fix: Preferences language label and "System default" option are now
       translated to Czech; language options are decorated with flag emoji
       (except on Windows where flag emoji are not rendered).
+    * Feature: Mandarin Chinese (simplified, zh_CN) localization - normal
+      (mindforger_zh_cn.ts/.qm) and nerd (mindforger_nerd_zh_cn.ts/.qm)
+      terminology, selectable in Preferences as "中文（简体）".
 
 2026-09-13  Martin Dvorak  <martin.dvorak@mindforger.com>
 

@@ -158,7 +158,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
 
     c.setConfigFilePath(box.configPath);
     c.setUiThemeName("CRAZYCOLORS");
-    c.setUiLocale("cs_CZ");
+    c.setUiLocale(m8r::UI_LOCALE_ZH_CN);
     m8r::TimeScope ts{1,2,33,4,55};
     c.setTimeScope(ts);
     c.setSaveReadsMetadata(false);
@@ -181,7 +181,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     // asserts
     std::unique_ptr<string> asString{m8r::fileToString(c.getConfigFilePath())};
     EXPECT_NE(std::string::npos, asString.get()->find("Theme: CRAZYCOLORS"));
-    EXPECT_NE(std::string::npos, asString.get()->find("Locale: cs_CZ"));
+    EXPECT_NE(std::string::npos, asString.get()->find("Locale: zh_CN"));
     EXPECT_NE(std::string::npos, asString.get()->find("Time scope: 1y2m33d4h55m"));
     EXPECT_NE(std::string::npos, asString.get()->find("Editor syntax highlighting: no"));
     EXPECT_NE(std::string::npos, asString.get()->find("Save reads metadata: no"));
@@ -207,7 +207,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     // asserts
     ASSERT_TRUE(loaded);
     EXPECT_EQ("CRAZYCOLORS", c.getUiThemeName());
-    EXPECT_EQ("cs_CZ", c.getUiLocale());
+    EXPECT_EQ("zh_CN", c.getUiLocale());
     c.getTimeScope().toString(timeScopeAsString);
     EXPECT_EQ("1y2m33d4h55m", timeScopeAsString);
     EXPECT_FALSE(c.isSaveReadsMetadata());
