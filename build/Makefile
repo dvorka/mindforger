@@ -514,18 +514,25 @@ distro-all: distro-all-clean $(MINDFORGER_RELEASE_DIR) distro-tarball distro-deb
 	@echo "Building all $(MINDFORGER_VERSION) distributions"
 
 
-.PHONY: statistic
-statistic: ## show source code statistic
-	cd make && ./statistic.sh
-
-
 .PHONY: doc-to-wiki
 doc-to-wiki: ## mindforger-documentation to mindforger.wiki
 	cd doc && ./mf-doc-to-wiki.py
 
 
+www-live: ## start the local web server for the www.mindforger.com
+	@echo "Starting local web server for www.mindforger.com..."
+	# GitHub repository: dvorka/my-webs
+	cd ../../../../webs/www.mindforger.com/www && python3 -m http.server 8000
+
+
 .PHONY: doc-api-reference
 api-reference: ## generate Doxygen source code documentation
 	cd doxygen && doxygen ./mindforger.cfg
+
+
+.PHONY: statistic
+statistic: ## show source code statistic
+	cd make && ./statistic.sh
+
 
 # eof
