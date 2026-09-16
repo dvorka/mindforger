@@ -90,9 +90,10 @@ string Note::getMangledName() const
 {
     string result = name;
     if(result.size()) {
-        // non-alpha or non-num to -
+        // ASCII non-alnum to - (non-ASCII UTF-8 bytes (>=0x80) ~ like CZ, are kept as-is)
         for(size_t i=0; i<result.size(); i++) {
-            if(!isalnum(result[i])) {
+            unsigned char c = static_cast<unsigned char>(result[i]);
+            if(c < 0x80 && !isalnum(c)) {
                 result[i] = '-';
             }
         }
@@ -107,8 +108,14 @@ string Note::getMangledName() const
             }
         }
         if(result.size()) {
-            // to lower case
-            std::transform(result.begin(), result.end(), result.begin(), ::tolower);
+            // lower case ASCII chars only - non-ASCII bytes left as is because
+            // lower casing non-ASCII chars would require Unicode-aware tables
+            for(size_t i=0; i<result.size(); i++) {
+                unsigned char c = static_cast<unsigned char>(result[i]);
+                if(c < 0x80) {
+                    result[i] = static_cast<char>(::tolower(c));
+                }
+            }
         }
     }
     return result;

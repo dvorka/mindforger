@@ -1,11 +1,14 @@
 2026-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v2.3.0 - Notebook shelves, Markdown export.
+    * Released v2.3.0 - Notebook shelves, Markdown export, non-ASCII links, source code
+      syntax highlighting.
     * Feature: Notebook shelves - single notebook tree was rewritten to custom notebook
       shelves - create as many named notebook shelves for notebooks you want to group
       as needed and add Notebooks to them explicitly.
     * Feature: Notebook/Export/Markdown - export a Notebook to a file in Markdown format.
-    * Enhancement: changed in-app diagram support from dropdown to checkbox.
+    * Enhancement: changed in-app diagram support configuration from dropdown to checkbox.
+    * Fix: navigation of links to Notebooks/Notes whose names contain non-ASCII
+      characters only (e.g. Korean, Chinese, Czech diacritics).
     * Fix: source code syntax highlighting no longer crashes MindForger thanks to
       the migration to Qt WebEngine + upgraded the offline highlight.js library
       to new version.

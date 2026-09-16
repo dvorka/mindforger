@@ -36,13 +36,15 @@ TEST(StringGearTestCase, StringToNcName)
     cout << s << " => " << r << endl;
     ASSERT_EQ("123-text-456", r);
 
-    // GIVEN
+    // GIVEN a name with non-ASCII (UTF-8) letters
+    // WHEN normalized to a NCName-like identifier
+    // THEN non-ASCII letters are kept as-is (see XML NCName spec, which
+    // permits Unicode letters) instead of being destroyed to '-' runs -
+    // https://github.com/dvorka/mindforger/issues/1501
     s.assign("čeština už je tu!");
-    // WHEN
     r = normalizeToNcName(s, '-');
-    // THEN
     cout << s << " => " << r << endl;
-    ASSERT_EQ("---e--tina-u---je-tu-", r);
+    ASSERT_EQ("čeština-už-je-tu-", r);
 
     // GIVEN
     s.assign("Compensation Letter 05012021 - Doe, John (Clifton, Tony).pdf");
@@ -51,6 +53,24 @@ TEST(StringGearTestCase, StringToNcName)
     // THEN
     cout << s << " => " << r << endl;
     ASSERT_EQ("Compensation-Letter-05012021---Doe--John--Clifton--Tony--pdf", r);
+
+    // GIVEN a name composed entirely of non-ASCII (Korean) letters
+    // WHEN normalized
+    // THEN it must NOT collapse to an empty string (issue #1501)
+    s.assign("기타");
+    r = normalizeToNcName(s, '-');
+    cout << s << " => " << r << endl;
+    ASSERT_EQ("기타", r);
+    ASSERT_FALSE(r.empty());
+
+    // GIVEN a name composed entirely of non-ASCII (Chinese) letters
+    // WHEN normalized
+    // THEN it must NOT collapse to an empty string (issue #1501)
+    s.assign("普通话");
+    r = normalizeToNcName(s, '-');
+    cout << s << " => " << r << endl;
+    ASSERT_EQ("普通话", r);
+    ASSERT_FALSE(r.empty());
 }
 
 TEST(StringGearTestCase, Split)
