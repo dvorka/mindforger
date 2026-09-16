@@ -18,6 +18,8 @@
 */
 #include "main_window_presenter.h"
 
+#include <set>
+
 #include <QShortcut>
 
 #include "kanban_column_presenter.h"
@@ -60,6 +62,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     wingmanDialog = new WingmanDialog{&view};
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
     newOrganizerDialog = new OrganizerNewDialog{mind->getOntology(), &view};
+    newNotebookTreeDialog = new NotebookTreeNewDialog{&view};
+    findOutlineForNotebookTreeDialog = new FindOutlineByNameDialog{&view};
     newOutlineDialog = new OutlineNewDialog{
         QString::fromStdString(config.getMemoryPath()), mind->getOntology(), &view};
     newNoteDialog = new NoteNewDialog{mind->remind().getOntology(), &view};
@@ -163,6 +167,11 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         findNoteByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
     QObject::connect(
         newOrganizerDialog, SIGNAL(createFinished()), this, SLOT(handleCreateOrganizer()));
+    QObject::connect(
+        newNotebookTreeDialog, SIGNAL(createFinished()), this, SLOT(handleCreateOrRenameNotebookTree()));
+    QObject::connect(
+        findOutlineForNotebookTreeDialog, SIGNAL(searchFinished()),
+        this, SLOT(handleNotebookTreeAddOutlineChoice()));
     QObject::connect(
         refactorNoteToOutlineDialog, SIGNAL(searchFinished()), this, SLOT(handleRefactorNoteToOutline()));
     QObject::connect(
@@ -292,7 +301,10 @@ void MainWindowPresenter::showInitialView()
                 if(!string{START_TO_OUTLINES}.compare(config.getStartupView())) {
                     orloj->showFacetOutlineList(mind->getOutlines());
                 } else if(!string{START_TO_OUTLINES_TREE}.compare(config.getStartupView())) {
-                    orloj->showFacetOutlinesMap(mind->outlinesMapGet());
+                    // no single implicit tree anymore - open the Notebook Trees list
+                    orloj->showFacetNotebookTreeList(
+                        config.getRepositoryConfiguration().getNotebookTrees()
+                    );
                 } else if(!string{START_TO_TAGS}.compare(config.getStartupView())) {
                     orloj->showFacetTagCloud();
                 } else if(!string{START_TO_RECENT}.compare(config.getStartupView())) {
@@ -1185,13 +1197,15 @@ void MainWindowPresenter::doActionViewOutlines()
     }
 }
 
-void MainWindowPresenter::doActionViewOutlinesMap()
+void MainWindowPresenter::doActionViewNotebookTrees()
 {
     if(config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER
          &&
        config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY)
     {
-        orloj->showFacetOutlinesMap(mind->outlinesMapGet());
+        orloj->showFacetNotebookTreeList(
+            config.getRepositoryConfiguration().getNotebookTrees()
+        );
     }
 }
 
@@ -3130,7 +3144,7 @@ void MainWindowPresenter::doActionNoteFirst()
         mind->noteFirst(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
             if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
-                mind->outlinesMapRemember();
+                mind->notebookTreeRemember(note->getOutline());
             } else {
                 mind->remind().remember(note->getOutline());
             }
@@ -3166,7 +3180,7 @@ void MainWindowPresenter::doActionNoteUp()
         mind->noteUp(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
             if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
-                mind->outlinesMapRemember();
+                mind->notebookTreeRemember(note->getOutline());
             } else {
                 mind->remind().remember(note->getOutline());
             }
@@ -3202,7 +3216,7 @@ void MainWindowPresenter::doActionNoteDown()
         mind->noteDown(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
             if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
-                mind->outlinesMapRemember();
+                mind->notebookTreeRemember(note->getOutline());
             } else {
                 mind->remind().remember(note->getOutline());
             }
@@ -3238,7 +3252,7 @@ void MainWindowPresenter::doActionNoteLast()
         mind->noteLast(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
             if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
-                mind->outlinesMapRemember();
+                mind->notebookTreeRemember(note->getOutline());
             } else {
                 mind->remind().remember(note->getOutline());
             }
@@ -3274,7 +3288,7 @@ void MainWindowPresenter::doActionNotePromote()
         mind->notePromote(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
             if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
-                mind->outlinesMapRemember();
+                mind->notebookTreeRemember(note->getOutline());
             } else {
                 mind->remind().remember(note->getOutline());
             }
@@ -3308,7 +3322,7 @@ void MainWindowPresenter::doActionNoteDemote()
         mind->noteDemote(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
             if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
-                mind->outlinesMapRemember();
+                mind->notebookTreeRemember(note->getOutline());
             } else {
                 mind->remind().remember(note->getOutline());
             }
@@ -4000,6 +4014,146 @@ void MainWindowPresenter::doActionOrganizerForget()
     }
 }
 
+void MainWindowPresenter::doActionNotebookTreeNew()
+{
+    newNotebookTreeDialog->show();
+}
+
+void MainWindowPresenter::handleCreateOrRenameNotebookTree()
+{
+    NotebookTree* editingTree = newNotebookTreeDialog->getNotebookTreeToEdit();
+    NotebookTree* t = editingTree;
+
+    if(t) {
+        // rename
+        t->setName(newNotebookTreeDialog->getNotebookTreeName().toStdString());
+
+        // keep the underlying tree Outline's own name in sync too
+        Outline* tree = mind->notebookTreeGet(t->getKey());
+        tree->setName(t->getName());
+        mind->notebookTreeRemember(tree);
+    } else {
+        // create
+        set<string> keys{};
+        for(NotebookTree* existing:config.getRepositoryConfiguration().getNotebookTrees()) {
+            keys.insert(existing->getKey());
+        }
+        string key = NotebookTree::createNotebookTreeKey(
+            keys, config.getMindPath(), FILE_PATH_SEPARATOR);
+
+        t = new NotebookTree(
+            newNotebookTreeDialog->getNotebookTreeName().toStdString(), key);
+        config.getRepositoryConfiguration().addNotebookTree(t);
+
+        Outline* tree = mind->notebookTreeNew(key, t->getName());
+        mind->notebookTreeRemember(tree);
+    }
+
+    // move created/renamed tree to the top of the Notebook Trees
+    config.getRepositoryConfiguration().touchNotebookTree(t);
+    getConfigRepresentation()->save(config);
+
+    newNotebookTreeDialog->hide();
+
+    if(!editingTree) {
+        // brand new tree: back to the list so the user can open it
+        orloj->showFacetNotebookTreeList(
+            config.getRepositoryConfiguration().getNotebookTrees());
+    } else {
+        // renamed tree: stay in its detail view
+        orloj->setCurrentNotebookTree(t);
+        orloj->showFacetOutlinesMap(mind->notebookTreeGet(t->getKey()));
+    }
+}
+
+void MainWindowPresenter::doActionNotebookTreeRename()
+{
+    // available only when a Notebook tree is opened
+    NotebookTree* t = orloj->getCurrentNotebookTree();
+    if(t) {
+        newNotebookTreeDialog->show(t);
+    }
+}
+
+void MainWindowPresenter::doActionNotebookTreeDelete()
+{
+    // available only when a Notebook tree is opened
+    NotebookTree* t = orloj->getCurrentNotebookTree();
+    if(t) {
+        QMessageBox::StandardButton choice;
+        choice = QMessageBox::question(
+            &view,
+            tr("Delete Notebook Tree"),
+            tr("Do you really want to delete '")
+                + QString::fromStdString(t->getName())
+                + tr("' Notebook tree? Notebooks organized in it will NOT be deleted.")
+        );
+        if(choice == QMessageBox::Yes) {
+            // move the tree's own backing file to Limbo (like outlineForget())
+            // BEFORE the registry entry (which owns t) is deleted below -
+            // otherwise its file would be left orphaned in mind/
+            mind->notebookTreeForget(t->getKey());
+
+            config.getRepositoryConfiguration().removeNotebookTree(t);
+            getConfigRepresentation()->save(config);
+
+            orloj->setCurrentNotebookTree(nullptr);
+            orloj->showFacetNotebookTreeList(
+                config.getRepositoryConfiguration().getNotebookTrees());
+        } // else do nothing
+    }
+}
+
+void MainWindowPresenter::doActionNotebookTreeAddOutline()
+{
+    // available only when a Notebook tree is opened
+    NotebookTree* t = orloj->getCurrentNotebookTree();
+    if(t) {
+        vector<Outline*> os{mind->getOutlines()};
+        Outline::sortByRead(os);
+        vector<Thing*> es{os.begin(), os.end()};
+
+        findOutlineForNotebookTreeDialog->show(es);
+    }
+}
+
+void MainWindowPresenter::handleNotebookTreeAddOutlineChoice()
+{
+    NotebookTree* t = orloj->getCurrentNotebookTree();
+    if(t && findOutlineForNotebookTreeDialog->getChoice()) {
+        Outline* o = (Outline*)findOutlineForNotebookTreeDialog->getChoice();
+        Outline* tree = mind->notebookTreeGet(t->getKey());
+
+        mind->notebookTreeAddOutline(tree, o);
+        mind->notebookTreeRemember(tree);
+
+        orloj->getOutlinesMap()->refresh(tree);
+
+        statusBar->showInfo(
+            QString(tr("Notebook '%1' added to tree '%2'"))
+                .arg(o->getName().c_str())
+                .arg(t->getName().c_str())
+        );
+    }
+}
+
+void MainWindowPresenter::doActionNotebookTreeRemoveEntry()
+{
+    // available only when a Notebook tree is opened
+    NotebookTree* t = orloj->getCurrentNotebookTree();
+    if(t) {
+        Note* note = orloj->getOutlinesMap()->getCurrentNote();
+        if(note) {
+            Outline* tree = mind->notebookTreeGet(t->getKey());
+            tree->forgetNote(note);
+
+            mind->notebookTreeRemember(tree);
+            orloj->getOutlinesMap()->refresh(tree);
+
+            statusBar->showInfo(tr("Entry removed from Notebook tree (Notebook itself was NOT deleted)"));
+        }
+    }
+}
 
 void MainWindowPresenter::doActionViewLimbo()
 {

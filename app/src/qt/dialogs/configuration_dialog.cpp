@@ -129,15 +129,15 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
 
     startupLabel = new QLabel(tr("Show the following view on application start")+":", this);
     startupCombo = new QComboBox{this};
-    startupCombo->addItem(QString{START_TO_OUTLINES});
-    startupCombo->addItem(QString{START_TO_OUTLINES_TREE});
-    startupCombo->addItem(QString{START_TO_TAGS});
-    startupCombo->addItem(QString{START_TO_RECENT});
+    startupCombo->addItem(tr("Notebooks"), QString{START_TO_OUTLINES});
+    startupCombo->addItem(tr("Notebook Shelves"), QString{START_TO_OUTLINES_TREE});
+    startupCombo->addItem(tr("Tags"), QString{START_TO_TAGS});
+    startupCombo->addItem(tr("Recent"), QString{START_TO_RECENT});
 #ifdef MF_BUG
     // must be fixed as it currently crashes
-    startupCombo->addItem(QString{START_TO_EISENHOWER_MATRIX});
+    startupCombo->addItem(tr("Eisenhower Matrix"), QString{START_TO_EISENHOWER_MATRIX});
 #endif
-    startupCombo->addItem(QString{START_TO_HOME_OUTLINE});
+    startupCombo->addItem(tr("Home Notebook"), QString{START_TO_HOME_OUTLINE});
 
     appFontSizeLabel = new QLabel(
         tr("Application font size - 0 is system (<font color='#ff0000'>requires restart</font>)")+":", this);
@@ -197,7 +197,7 @@ ConfigurationDialog::AppTab::~AppTab()
 
 void ConfigurationDialog::AppTab::refresh()
 {
-    int i = startupCombo->findText(QString::fromStdString(config.getStartupView()));
+    int i = startupCombo->findData(QString::fromStdString(config.getStartupView()));
     if(i>=0) {
         startupCombo->setCurrentIndex(i);
     }
@@ -213,7 +213,7 @@ void ConfigurationDialog::AppTab::refresh()
 
 void ConfigurationDialog::AppTab::save()
 {
-    config.setStartupView(startupCombo->itemText(startupCombo->currentIndex()).toStdString());
+    config.setStartupView(startupCombo->itemData(startupCombo->currentIndex()).toString().toStdString());
     config.setUiThemeName(themeCombo->itemText(themeCombo->currentIndex()).toStdString());
     config.setUiShowToolbar(showToolbarCheck->isChecked());
     config.setUiAppFontSize(appFontSizeSpin->value());
