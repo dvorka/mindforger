@@ -109,11 +109,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindAutolink->setVisible(false);
 #endif
 
+#ifdef MF_WIP
     // if Wingman is not configured and/or capable, then dialog with error message is shown (unable to detect it here)
     actionMindSemanticSearch = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Semantic Search"), mainWindow);
     actionMindSemanticSearch->setCheckable(true);
     actionMindSemanticSearch->setStatusTip(tr("Use Wingman LLM to search for similar Notes (associations) using text embeddings..."));
-    actionMindSemanticSearch->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
+    actionMindSemanticSearch->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_M));
+#endif
 
     actionMindWingman = new QAction(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman LLM"), mainWindow);
     actionMindWingman->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Slash));
@@ -211,7 +213,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addSeparator();
     menuMind->addAction(actionMindThink);
     menuMind->addAction(actionMindAutolink);
+#ifdef MF_WIP
     menuMind->addAction(actionMindSemanticSearch);
+#endif
     menuMind->addAction(actionMindWingman);
     menuMind->addAction(actionMindTool);
     menuMind->addAction(actionMindScope);
@@ -293,9 +297,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
     actionViewOutlines->setStatusTip(tr("Show list of Notebooks..."));
 
-    actionViewOutlinesMap = new QAction(QIcon(":/menu-icons/dashboard.svg"), tr("Note&books Tree"), mainWindow);
-    actionViewOutlinesMap->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
-    actionViewOutlinesMap->setStatusTip(tr("Show tree of Notebooks..."));
+    actionViewNotebookTrees = new QAction(QIcon(":/menu-icons/bookshelf.svg"), tr("Notebook &Shelves"), mainWindow);
+    actionViewNotebookTrees->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
+    actionViewNotebookTrees->setStatusTip(tr("Show list of Notebook trees..."));
 
 #ifdef MF_WIP
     actionViewLibraryDocs = new QAction(QIcon(":/menu-icons/copy.svg"), tr("&Library Documents"), mainWindow);
@@ -372,7 +376,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewDecks);
 #endif
     menuView->addAction(actionViewOrganizers);
-    menuView->addAction(actionViewOutlinesMap);
+    menuView->addAction(actionViewNotebookTrees);
     menuView->addAction(actionViewOutlines);
 #ifdef MF_WIP
     menuView->addAction(actionViewLibraryDocs);
@@ -518,6 +522,31 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuOrganizer->addAction(actionOrganizerMovePrevious);
     menuOrganizer->addAction(actionOrganizerMoveNext);
 
+    // menu: notebook tree
+    menuNotebookTree = qMenuBar->addMenu(tr("She&lf"));
+
+    actionNotebookTreeNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
+    actionNotebookTreeNew->setStatusTip(tr("Create a new Notebook tree to organize your Notebooks"));
+
+    actionNotebookTreeRename = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Rename"), mainWindow);
+    actionNotebookTreeRename->setStatusTip(tr("Rename current Notebook tree"));
+
+    actionNotebookTreeDelete = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Delete"), mainWindow);
+    actionNotebookTreeDelete->setStatusTip(tr("Delete Notebook tree without undo"));
+
+    actionNotebookTreeAddOutline = new QAction(QIcon(":/menu-icons/notebook-add.svg"), tr("&Add Notebook..."), mainWindow);
+    actionNotebookTreeAddOutline->setStatusTip(tr("Add a Notebook to the current Notebook tree"));
+
+    actionNotebookTreeRemoveOutline = new QAction(QIcon(":/menu-icons/delete.svg"), tr("Remove fro&m Shelf"), mainWindow);
+    actionNotebookTreeRemoveOutline->setStatusTip(tr("Remove selected entry from the current Notebook tree (Notebook itself is NOT deleted)"));
+
+    menuNotebookTree->addAction(actionNotebookTreeNew);
+    menuNotebookTree->addAction(actionNotebookTreeRename);
+    menuNotebookTree->addAction(actionNotebookTreeDelete);
+    menuNotebookTree->addSeparator();
+    menuNotebookTree->addAction(actionNotebookTreeAddOutline);
+    menuNotebookTree->addAction(actionNotebookTreeRemoveOutline);
+
     // menu: Outline
 
     menuOutline = qMenuBar->addMenu(tr("Note&book"));
@@ -579,9 +608,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     submenuOutlineExport = menuOutline->addMenu(QIcon(":/menu-icons/export.svg"), "E&xport");
     actionOutlineHtmlExport = new QAction(tr("&HTML"), mainWindow);
     actionOutlineHtmlExport->setStatusTip(tr("Export Notebook to a file in HTML format"));
-    // TODO Markdown
+    actionOutlineMarkdownExport = new QAction(tr("&Markdown"), mainWindow);
+    actionOutlineMarkdownExport->setStatusTip(tr("Export Notebook to a file in Markdown format"));
     // TODO Markdown with meta (status: Markdown with MindForger metadata
     submenuOutlineExport->addAction(actionOutlineHtmlExport);
+    submenuOutlineExport->addAction(actionOutlineMarkdownExport);
 
     submenuOutlineImport = menuOutline->addMenu(QIcon(":/menu-icons/import.svg"), tr("&Import"));
     actionOutlineTWikiImport= new QAction(tr("&TWiki"), mainWindow);
@@ -1149,7 +1180,7 @@ void MainMenuView::showAllMenuItems()
     menuView->setEnabled(true);
     actionViewHome->setEnabled(true);
     actionViewOrganizers->setEnabled(true);
-    actionViewOutlinesMap->setEnabled(true);
+    actionViewNotebookTrees->setEnabled(true);
     actionViewOutlines->setEnabled(true);
     actionViewTags->setEnabled(true);
     actionViewNavigator->setEnabled(true);
@@ -1176,6 +1207,13 @@ void MainMenuView::showAllMenuItems()
     actionOrganizerFocusNext->setEnabled(true);
     actionOrganizerMovePrevious->setEnabled(true);
     actionOrganizerMoveNext->setEnabled(true);
+
+    menuNotebookTree->setEnabled(true);
+    actionNotebookTreeNew->setEnabled(true);
+    actionNotebookTreeRename->setEnabled(true);
+    actionNotebookTreeDelete->setEnabled(true);
+    actionNotebookTreeAddOutline->setEnabled(true);
+    actionNotebookTreeRemoveOutline->setEnabled(true);
 
     menuNavigator->setEnabled(true);
     actionViewOrganizers->setEnabled(true);
@@ -1244,7 +1282,7 @@ void MainMenuView::showModeAwareFacet(bool repositoryMode, bool mfMode)
 
         actionViewHome->setEnabled(false);
         actionViewOrganizers->setEnabled(false);
-        actionViewOutlinesMap->setEnabled(false);
+        actionViewNotebookTrees->setEnabled(false);
 #ifdef MF_WIP
         actionViewLibraryDocs->setEnabled(false);
 #endif
@@ -1281,6 +1319,7 @@ void MainMenuView::showFacetOrganizerList(bool repositoryMode, bool mfMode)
 
     submenuMindLibrary->setEnabled(false);
     menuNavigator->setEnabled(false);
+    menuNotebookTree->setEnabled(false);
     menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
     menuEdit->setEnabled(false);
@@ -1296,6 +1335,28 @@ void MainMenuView::showFacetOrganizerView(bool repositoryMode, bool mfMode)
 
     submenuMindLibrary->setEnabled(false);
     menuNavigator->setEnabled(false);
+    menuNotebookTree->setEnabled(false);
+    menuOutline->setEnabled(false);
+    menuNote->setEnabled(false);
+    menuEdit->setEnabled(false);
+    menuFormat->setEnabled(false);
+    submenuOutlineExport->setEnabled(false);
+
+    showModeAwareFacet(repositoryMode, mfMode);
+}
+
+void MainMenuView::showFacetNotebookTreeList(bool repositoryMode, bool mfMode)
+{
+    showAllMenuItems();
+
+    actionNotebookTreeRename->setEnabled(false);
+    actionNotebookTreeDelete->setEnabled(false);
+    actionNotebookTreeAddOutline->setEnabled(false);
+    actionNotebookTreeRemoveOutline->setEnabled(false);
+
+    submenuMindLibrary->setEnabled(false);
+    menuNavigator->setEnabled(false);
+    menuOrganizer->setEnabled(false);
     menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
     menuEdit->setEnabled(false);
@@ -1311,6 +1372,7 @@ void MainMenuView::showFacetOutlineList(bool repositoryMode, bool mfMode)
 
     menuNavigator->setEnabled(false);
     menuOrganizer->setEnabled(false);
+    menuNotebookTree->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
     menuNote->setEnabled(false);
@@ -1351,6 +1413,7 @@ void MainMenuView::showFacetOutlineView(bool repositoryMode, bool mfMode)
     submenuMindLibrary->setEnabled(false);
     menuNavigator->setEnabled(false);
     menuOrganizer->setEnabled(false);
+    menuNotebookTree->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
 
@@ -1383,6 +1446,13 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode, bool mfMode)
     actionOrganizerFocusNext->setEnabled(false);
     actionOrganizerMovePrevious->setEnabled(false);
     actionOrganizerMoveNext->setEnabled(false);
+
+    menuNotebookTree->setEnabled(false);
+    actionNotebookTreeNew->setEnabled(false);
+    actionNotebookTreeRename->setEnabled(false);
+    actionNotebookTreeDelete->setEnabled(false);
+    actionNotebookTreeAddOutline->setEnabled(false);
+    actionNotebookTreeRemoveOutline->setEnabled(false);
 
     menuFind->setEnabled(false);
     actionFindOutlineByName->setEnabled(false);
@@ -1457,6 +1527,7 @@ void MainMenuView::showFacetNavigator()
 #endif
 
     menuOrganizer->setEnabled(false);
+    menuNotebookTree->setEnabled(false);
     menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
     menuEdit->setEnabled(false);

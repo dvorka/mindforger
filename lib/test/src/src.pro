@@ -145,8 +145,10 @@ SOURCES += \
     ./mind/note_test.cpp \
     ./mindforger_lib_unit_tests.cpp \
     ./mind/organizer_test.cpp \
+    ./mind/notebook_tree_test.cpp \
     ./mind/outline_test.cpp \
-    ./mind/filesystem_information_test.cpp
+    ./mind/filesystem_information_test.cpp \
+    ./csv/csv_test.cpp
 
 HEADERS += \
     ./test_gear.h

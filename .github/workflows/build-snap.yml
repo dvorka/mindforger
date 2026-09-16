@@ -17,9 +17,8 @@ jobs:
           submodules: recursive
 
       - name: Prepare classic-confinement snapcraft.yaml
-        # build/snap/snapcraft.yaml is the STRICT (Snap Store) manifest; the
-        # downloadable GitHub Release build is the CLASSIC variant derived from it -
-        # mirrors what 'make dist-snap-classic' does for a local build
+        # build/snap/snapcraft.yaml is the STRICT (Snap Store) manifest,
+        # BUT the downloadable GitHub Release build is the CLASSIC confinement variant
         run: |
           cp -vf build/snap/snapcraft.yaml snapcraft.yaml
           build/snap/apply-classic.sh snapcraft.yaml

@@ -56,6 +56,7 @@ Configuration::Configuration()
       autolinkingCaseInsensitive{},
       semanticSearch{DEFAULT_SEMANTIC_SEARCH},
       md2HtmlOptions{},
+      htmlRenderingWebEngineBackend{true},
       distributorSleepInterval{DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL},
       markdownQuoteSections{},
       recentIncludeOs{DEFAULT_RECENT_INCLUDE_OS},

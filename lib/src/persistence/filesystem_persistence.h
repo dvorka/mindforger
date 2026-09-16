@@ -72,6 +72,7 @@ public:
     bool isWriteable(const std::string& outlineKey);
     virtual void save(Outline* outline);
     virtual void saveAsHtml(Outline* o, const std::string& fileName);
+    virtual void saveAsMarkdown(Outline* o, const std::string& fileName);
 };
 
 }

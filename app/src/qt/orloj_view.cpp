@@ -43,6 +43,9 @@ OrlojView::OrlojView(QWidget* parent)
     outlinesMap = new OutlinesMapView(this);
     addWidget(outlinesMap);
 
+    notebookTreesTable = new NotebookTreesTableView(this);
+    addWidget(notebookTreesTable);
+
     recentNotesTable = new RecentNotesTableView(this);
     addWidget(recentNotesTable);
 
@@ -130,6 +133,12 @@ void OrlojView::showFacetOutlines()
 void OrlojView::showFacetOutlinesMap()
 {
     QSet<QWidget*> v; v << outlinesMap;
+    hideChildren(v);
+}
+
+void OrlojView::showFacetNotebookTrees()
+{
+    QSet<QWidget*> v; v << notebookTreesTable;
     hideChildren(v);
 }
 

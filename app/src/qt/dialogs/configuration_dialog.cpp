@@ -175,15 +175,15 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
 
     startupLabel = new QLabel(tr("Show the following view on application start")+":", this);
     startupCombo = new QComboBox{this};
-    startupCombo->addItem(QString{START_TO_OUTLINES});
-    startupCombo->addItem(QString{START_TO_OUTLINES_TREE});
-    startupCombo->addItem(QString{START_TO_TAGS});
-    startupCombo->addItem(QString{START_TO_RECENT});
+    startupCombo->addItem(tr("Notebooks"), QString{START_TO_OUTLINES});
+    startupCombo->addItem(tr("Notebook Shelves"), QString{START_TO_OUTLINES_TREE});
+    startupCombo->addItem(tr("Tags"), QString{START_TO_TAGS});
+    startupCombo->addItem(tr("Recent"), QString{START_TO_RECENT});
 #ifdef MF_BUG
     // must be fixed as it currently crashes
-    startupCombo->addItem(QString{START_TO_EISENHOWER_MATRIX});
+    startupCombo->addItem(tr("Eisenhower Matrix"), QString{START_TO_EISENHOWER_MATRIX});
 #endif
-    startupCombo->addItem(QString{START_TO_HOME_OUTLINE});
+    startupCombo->addItem(tr("Home Notebook"), QString{START_TO_HOME_OUTLINE});
 
     appFontSizeLabel = new QLabel(
         tr("Application font size - 0 is system (<font color='#ff0000'>requires restart</font>)")+":", this);
@@ -247,7 +247,7 @@ ConfigurationDialog::AppTab::~AppTab()
 
 void ConfigurationDialog::AppTab::refresh()
 {
-    int i = startupCombo->findText(QString::fromStdString(config.getStartupView()));
+    int i = startupCombo->findData(QString::fromStdString(config.getStartupView()));
     if(i>=0) {
         startupCombo->setCurrentIndex(i);
     }
@@ -267,7 +267,7 @@ void ConfigurationDialog::AppTab::refresh()
 
 void ConfigurationDialog::AppTab::save()
 {
-    config.setStartupView(startupCombo->itemText(startupCombo->currentIndex()).toStdString());
+    config.setStartupView(startupCombo->itemData(startupCombo->currentIndex()).toString().toStdString());
     config.setUiThemeName(themeCombo->itemText(themeCombo->currentIndex()).toStdString());
     config.setUiLocale(localeCombo->currentData().toString().toStdString());
     config.setUiShowToolbar(showToolbarCheck->isChecked());
@@ -290,6 +290,11 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget* parent)
 
     srcCodeHighlightSupportCheck = new QCheckBox{
         tr("source code syntax highlighting support"), this};
+#ifndef MF_QT_WEB_ENGINE
+    // legacy Qt WebKit's JS engine cannot safely run the ES2015+ highlight.js bundle
+    // -> keep the option hidden
+    srcCodeHighlightSupportCheck->setVisible(false);
+#endif
 
     mathSupportLabel = new QLabel(tr("Math support")+":", this);
     mathSupportCombo = new QComboBox{this};
@@ -300,10 +305,8 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget* parent)
     doubleClickViewerToEditCheck = new QCheckBox{
         tr("double click HTML preview to edit"), this};
 
-    diagramSupportLabel = new QLabel(tr("Diagram support")+":", this);
-    diagramSupportCombo = new QComboBox{this};
-    diagramSupportCombo->addItem(QString{"disable"});
-    diagramSupportCombo->addItem(QString{"offline JavaScript lib"});
+    diagramSupportCheck = new QCheckBox{
+        tr("diagram support"), this};
 
     htmlCssThemeLabel = new QLabel(tr("Viewer theme CSS")+":", this);
     htmlCssThemeCombo = new QComboBox{this};
@@ -329,10 +332,9 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget* parent)
     viewerLayout->addWidget(doubleClickViewerToEditCheck);
     viewerLayout->addWidget(fullOPreviewCheck);
     viewerLayout->addWidget(srcCodeHighlightSupportCheck);
+    viewerLayout->addWidget(diagramSupportCheck);
     viewerLayout->addWidget(mathSupportLabel);
     viewerLayout->addWidget(mathSupportCombo);
-    viewerLayout->addWidget(diagramSupportLabel);
-    viewerLayout->addWidget(diagramSupportCombo);
     viewerLayout->addWidget(zoomLabel);
     viewerLayout->addWidget(zoomSpin);
     viewerGroup->setLayout(viewerLayout);
@@ -362,8 +364,7 @@ ConfigurationDialog::ViewerTab::~ViewerTab()
     delete mathSupportLabel;
     delete mathSupportCombo;
     delete fullOPreviewCheck;
-    delete diagramSupportLabel;
-    delete diagramSupportCombo;
+    delete diagramSupportCheck;
     delete doubleClickViewerToEditCheck;
 }
 
@@ -379,18 +380,14 @@ void ConfigurationDialog::ViewerTab::refresh()
     }
 
     zoomSpin->setValue(config.getUiHtmlZoom());
-    // BUG: there is a bug @ Ubuntu 24.04 and newer that crashes MF if src highlight is on >
-    //   before it is fixed, this settting must be reset & disabled
-    srcCodeHighlightSupportCheck->setChecked(false);
-    srcCodeHighlightSupportCheck->setVisible(false);
-    //srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
+    srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
     mathSupportCombo->setCurrentIndex(config.getUiEnableMathInMd());
     fullOPreviewCheck->setChecked(config.isUiFullOPreview());
-    // no "online" option in the combo (index 0 = disable, index 1 = offline) - any
-    // legacy ONLINE setting is migrated to OFFLINE on config load, but map it
-    // defensively here too in case it is ever set in-memory without a reload
-    diagramSupportCombo->setCurrentIndex(
-        config.getUiEnableDiagramsInMd() == Configuration::JavaScriptLibSupport::NO ? 0 : 1
+    // no "online" option (checked = offline Mermaid support) - any legacy ONLINE
+    // setting is migrated to OFFLINE on config load, but map it defensively here
+    // too in case it is ever set in-memory without a reload
+    diagramSupportCheck->setChecked(
+        config.getUiEnableDiagramsInMd() != Configuration::JavaScriptLibSupport::NO
     );
     doubleClickViewerToEditCheck->setChecked(config.isUiDoubleClickNoteViewToEdit());
 }
@@ -415,11 +412,11 @@ void ConfigurationDialog::ViewerTab::save()
         static_cast<Configuration::MathJsLibSupport>(mathSupportCombo->currentIndex())
     );
     config.setUiFullOPreview(fullOPreviewCheck->isChecked());
-    // combo index 0 = disable, index 1 = offline (no "online" option)
+    // unchecked = disable, checked = offline (no "online" option)
     config.setUiEnableDiagramsInMd(
-        diagramSupportCombo->currentIndex() == 0
-            ? Configuration::JavaScriptLibSupport::NO
-            : Configuration::JavaScriptLibSupport::OFFLINE
+        diagramSupportCheck->isChecked()
+            ? Configuration::JavaScriptLibSupport::OFFLINE
+            : Configuration::JavaScriptLibSupport::NO
     );
     config.setUiDoubleClickNoteViewToEdit(doubleClickViewerToEditCheck->isChecked());
 }

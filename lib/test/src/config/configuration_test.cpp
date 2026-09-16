@@ -381,3 +381,21 @@ TEST(ConfigurationTestCase, DiagramSupportOnlineMigratesToOffline)
     c.setConfigFilePath(backupConfigPath);
     c.setUiEnableDiagramsInMd(backupDiagram);
 }
+
+TEST(ConfigurationTestCase, HtmlRenderingWebEngineBackendCanBeToggled)
+{
+    // GIVEN: a configuration instance
+    m8r::Configuration& c = m8r::Configuration::getInstance();
+    bool backup = c.isHtmlRenderingWebEngineBackend();
+
+    // WHEN: the legacy Qt WebKit (mfwebkit) build is simulated
+    c.setHtmlRenderingWebEngineBackend(false);
+
+    // THEN: the flag reflects the legacy backend so that callers (e.g.
+    // HtmlOutlineRepresentation) can skip injecting the ES2015+ highlight.js
+    // bundle that the legacy WebKit JS engine cannot safely run
+    EXPECT_FALSE(c.isHtmlRenderingWebEngineBackend());
+
+    // cleanup
+    c.setHtmlRenderingWebEngineBackend(backup);
+}

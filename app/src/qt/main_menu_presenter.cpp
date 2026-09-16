@@ -45,9 +45,11 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(
         view->actionMindAutolink, SIGNAL(triggered()),
         mwp, SLOT(doActionMindToggleAutolink()));
+#ifdef MF_WIP
     QObject::connect(
         view->actionMindSemanticSearch, SIGNAL(triggered()),
         mwp, SLOT(doActionMindToggleSemanticSearch()));
+#endif
     QObject::connect(
         view->actionMindLearnDirectory, SIGNAL(triggered()),
         mwp, SLOT(doActionMindLearnRepository()));
@@ -102,7 +104,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionViewHome, SIGNAL(triggered()), mwp, SLOT(doActionViewHome()));
     QObject::connect(view->actionViewOrganizers, SIGNAL(triggered()), mwp, SLOT(doActionViewOrganizers()));
     QObject::connect(view->actionViewOutlines, SIGNAL(triggered()), mwp, SLOT(doActionViewOutlines()));
-    QObject::connect(view->actionViewOutlinesMap, SIGNAL(triggered()), mwp, SLOT(doActionViewOutlinesMap()));
+    QObject::connect(view->actionViewNotebookTrees, SIGNAL(triggered()), mwp, SLOT(doActionViewNotebookTrees()));
     QObject::connect(view->actionViewTags, SIGNAL(triggered()), mwp, SLOT(doActionViewTagCloud()));
     QObject::connect(view->actionViewNavigator, SIGNAL(triggered()), mwp, SLOT(doActionViewKnowledgeGraphNavigator()));
     QObject::connect(view->actionViewCli, SIGNAL(triggered()), mwp, SLOT(doActionCli()));
@@ -142,6 +144,23 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         view->actionOrganizerFocusNext, SIGNAL(triggered()),
         mwp, SLOT(doActionOrganizerFocusToNextVisibleQuadrant()));
 
+    // menu: Notebook Tree
+    QObject::connect(
+        view->actionNotebookTreeNew, SIGNAL(triggered()),
+        mwp, SLOT(doActionNotebookTreeNew()));
+    QObject::connect(
+        view->actionNotebookTreeRename, SIGNAL(triggered()),
+        mwp, SLOT(doActionNotebookTreeRename()));
+    QObject::connect(
+        view->actionNotebookTreeDelete, SIGNAL(triggered()),
+        mwp, SLOT(doActionNotebookTreeDelete()));
+    QObject::connect(
+        view->actionNotebookTreeAddOutline, SIGNAL(triggered()),
+        mwp, SLOT(doActionNotebookTreeAddOutline()));
+    QObject::connect(
+        view->actionNotebookTreeRemoveOutline, SIGNAL(triggered()),
+        mwp, SLOT(doActionNotebookTreeRemoveEntry()));
+
     // menu: Outline
     QObject::connect(
         view->actionOutlineNew, SIGNAL(triggered()),
@@ -179,6 +198,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(
         view->actionOutlineHtmlExport, SIGNAL(triggered()),
         mwp, SLOT(doActionOutlineHtmlExport()));
+    QObject::connect(
+        view->actionOutlineMarkdownExport, SIGNAL(triggered()),
+        mwp, SLOT(doActionOutlineMarkdownExport()));
     QObject::connect(
         view->actionOutlineTWikiImport, SIGNAL(triggered()),
         mwp, SLOT(doActionOutlineTWikiImport()));
@@ -402,6 +424,14 @@ void MainMenuPresenter::showFacetNavigator()
 void MainMenuPresenter::showFacetOutlinesMap()
 {
     view->showFacetOutlinesMap(
+        config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY,
+        config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER
+    );
+}
+
+void MainMenuPresenter::showFacetNotebookTreeList()
+{
+    view->showFacetNotebookTreeList(
         config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY,
         config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER
     );

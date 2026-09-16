@@ -101,15 +101,29 @@ void FilesystemPersistence::save(Outline* outline)
     string* text = mdRepresentation.to(outline);
     if(text!=nullptr) {
         MF_DEBUG("Saving O: " << outline->getKey() << endl);
+
+        // self-heal: an O's missing parent directory
+        string directory{}, file{};
+        pathToDirectoryAndFile(outline->getKey(), directory, file);
+        if(directory.size() && !isDirectoryOrFileExists(directory.c_str())) {
+            createDirectory(directory);
+        }
+
         ofstream out(outline->getKey());
         MF_DEBUG("  O opened: " << boolalpha << out.is_open() << endl);
-        out << *text;
-        MF_DEBUG("  O written: " << &out << endl);
-        out.close();
-        MF_DEBUG("O saved: " << &out << endl);
-        delete text;
+        if(out.is_open()) {
+            out << *text;
+            MF_DEBUG("  O written: " << &out << endl);
+            out.close();
+            MF_DEBUG("O saved: " << &out << endl);
 
-        outline->clearDirty();
+            outline->clearDirty();
+        } else {
+            cerr
+                << "Error: unable to save O '" << outline->getKey()
+                << "' - file cannot be opened for writing" << endl;
+        }
+        delete text;
     }
 }
 
@@ -128,6 +142,17 @@ void FilesystemPersistence::saveAsHtml(Outline* outline, const string& fileName)
     out << *text;
     out.close();
     delete text;
+}
+
+void FilesystemPersistence::saveAsMarkdown(Outline* outline, const string& fileName)
+{
+    string* text = mdRepresentation.to(outline);
+    if(text!=nullptr) {
+        ofstream out(fileName);
+        out << *text;
+        out.close();
+        delete text;
+    }
 }
 
 } // m8r namespace

@@ -23,6 +23,7 @@
 #include <vector>
 
 #include "../model/organizer.h"
+#include "../model/notebook_tree.h"
 
 namespace m8r {
 
@@ -50,6 +51,8 @@ class RepositoryConfiguration {
 private:
     // organizers
     std::vector<Organizer*> organizers;
+    // notebook trees
+    std::vector<NotebookTree*> notebookTrees;
 
 public:
     explicit RepositoryConfiguration();
@@ -64,11 +67,39 @@ public:
     /*
      * organizers
      */
-    void clearOrganizers() { this->organizers.clear(); }
+
+    void clearOrganizers() {
+        for(auto& o:this->organizers) {
+            delete o;
+        }
+        this->organizers.clear();
+    }
     void addOrganizer(Organizer* organizer);
     void removeOrganizer(Organizer* organizer);
     std::vector<Organizer*> getOrganizers() const { return this->organizers; }
     void sortOrganizers();
+
+    /*
+     * notebook trees
+     */
+
+    void clearNotebookTrees() {
+        for(auto& t:this->notebookTrees) {
+            delete t;
+        }
+        this->notebookTrees.clear();
+    }
+    void addNotebookTree(NotebookTree* notebookTree);
+    void removeNotebookTree(NotebookTree* notebookTree);
+    std::vector<NotebookTree*> getNotebookTrees() const { return this->notebookTrees; }
+
+    /**
+     * @brief Move an ALREADY REGISTERED Notebook tree to the front of
+     * the list.
+     *
+     * Notebook Trees are simply listed in this registry's order.
+     */
+    void touchNotebookTree(NotebookTree* notebookTree);
 };
 
 } // namespace

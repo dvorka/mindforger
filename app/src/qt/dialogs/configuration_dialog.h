@@ -175,8 +175,7 @@ private:
     QComboBox* mathSupportCombo;
     QCheckBox* fullOPreviewCheck;
     QCheckBox* doubleClickViewerToEditCheck;
-    QLabel* diagramSupportLabel;
-    QComboBox* diagramSupportCombo;
+    QCheckBox* diagramSupportCheck;
     QCheckBox* srcCodeHighlightSupportCheck;
 
 public:
