@@ -147,8 +147,8 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     localeLabel = new QLabel(
         tr("Language (<font color='#ff0000'>requires restart</font>)")+":", this);
     localeCombo = new QComboBox{this};
-    // flags: globe, US, CZ and CN regional indicators; names: Cestina with
-    // diacritics and Chinese (simplified) in Chinese characters
+    // flags: globe, US, CZ, CN and IN regional indicators; names: Cestina with
+    // diacritics, Chinese (simplified) in Chinese characters and Hindi in Devanagari
     localeCombo->addItem(
         localeComboLabel(u8"\U0001F310", tr("System default")),
         QString{UI_LOCALE_SYSTEM});
@@ -163,6 +163,11 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
             u8"\U0001F1E8\U0001F1F3",
             QString::fromUtf8(u8"\u4E2D\u6587\uFF08\u7B80\u4F53\uFF09")),
         QString{UI_LOCALE_ZH_CN});
+    localeCombo->addItem(
+        localeComboLabel(
+            u8"\U0001F1EE\U0001F1F3",
+            QString::fromUtf8(u8"\u0939\u093F\u0928\u094D\u0926\u0940")),
+        QString{UI_LOCALE_HI_IN});
 
     startupLabel = new QLabel(tr("Show the following view on application start")+":", this);
     startupCombo = new QComboBox{this};

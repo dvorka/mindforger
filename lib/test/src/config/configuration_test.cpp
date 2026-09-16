@@ -278,6 +278,43 @@ TEST(ConfigurationTestCase, MathSupportSaveAndLoad)
     c.setUiEnableMathInMd(backupMath);
 }
 
+TEST(ConfigurationTestCase, UiLocaleSaveAndLoad)
+{
+    // GIVEN
+    string configPath{"/tmp/cfg-ui-locale-save-and-load.md"};
+    m8r::MarkdownConfigurationRepresentation configRepresentation{};
+    m8r::Configuration& c = m8r::Configuration::getInstance();
+    string backupConfigPath = c.getConfigFilePath();
+    string backupLocale = c.getUiLocale();
+    c.setConfigFilePath(configPath);
+    vector<string> locales{
+        m8r::UI_LOCALE_SYSTEM,
+        m8r::UI_LOCALE_EN_US,
+        m8r::UI_LOCALE_CS_CZ,
+        m8r::UI_LOCALE_ZH_CN,
+        m8r::UI_LOCALE_HI_IN
+    };
+
+    for(const string& locale:locales) {
+        // WHEN: locale is selected, saved and reloaded
+        c.setUiLocale(locale);
+        configRepresentation.save(c);
+        std::unique_ptr<string> asString{m8r::fileToString(c.getConfigFilePath())};
+        c.setUiLocale("");
+        bool loaded = configRepresentation.load(c);
+
+        // THEN
+        cout << "Locale '" << locale << "' saved and loaded as '" << c.getUiLocale() << "'" << endl;
+        EXPECT_NE(std::string::npos, asString.get()->find("Locale: " + locale));
+        ASSERT_TRUE(loaded);
+        EXPECT_EQ(locale, c.getUiLocale());
+    }
+
+    // cleanup
+    c.setConfigFilePath(backupConfigPath);
+    c.setUiLocale(backupLocale);
+}
+
 TEST(ConfigurationTestCase, MathSupportBackwardCompatibleYes)
 {
     // GIVEN: a config file written in the deprecated boolean "yes"/"no" format

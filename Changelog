@@ -21,6 +21,9 @@
     * Feature: Mandarin Chinese (simplified, zh_CN) localization - normal
       (mindforger_zh_cn.ts/.qm) and nerd (mindforger_nerd_zh_cn.ts/.qm)
       terminology, selectable in Preferences as "中文（简体）".
+    * Feature: Hindi (hi_IN) localization - normal (mindforger_hi.ts/.qm)
+      and nerd (mindforger_nerd_hi.ts/.qm) terminology, selectable
+      in Preferences as "हिन्दी".
 
 2026-09-13  Martin Dvorak  <martin.dvorak@mindforger.com>
 
