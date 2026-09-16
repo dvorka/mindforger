@@ -40,6 +40,12 @@ void RepositoryConfiguration::clear()
         delete o;
     }
     organizers.clear();
+
+    // notebook trees
+    for(auto& t:notebookTrees) {
+        delete t;
+    }
+    notebookTrees.clear();
 }
 
 void RepositoryConfiguration::addOrganizer(Organizer* organizer)
@@ -68,6 +74,39 @@ void RepositoryConfiguration::sortOrganizers()
         organizers.end(),
         [](Organizer* a, Organizer* b){ return a->modified > b->modified; }
     );
+}
+
+void RepositoryConfiguration::addNotebookTree(NotebookTree* notebookTree)
+{
+    this->notebookTrees.push_back(notebookTree);
+}
+
+void RepositoryConfiguration::removeNotebookTree(NotebookTree* notebookTree)
+{
+    this->notebookTrees.erase(
+        std::remove(
+            this->notebookTrees.begin(),
+            this->notebookTrees.end(),
+            notebookTree
+        ),
+        this->notebookTrees.end()
+    );
+
+    delete notebookTree;
+}
+
+void RepositoryConfiguration::touchNotebookTree(NotebookTree* notebookTree)
+{
+    this->notebookTrees.erase(
+        std::remove(
+            this->notebookTrees.begin(),
+            this->notebookTrees.end(),
+            notebookTree
+        ),
+        this->notebookTrees.end()
+    );
+
+    this->notebookTrees.insert(this->notebookTrees.begin(), notebookTree);
 }
 
 } // m8r namespace

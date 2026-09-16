@@ -20,6 +20,7 @@
 #define M8R_MIND_H_
 
 #include <inttypes.h>
+#include <map>
 #include <memory>
 #include <mutex>
 #include <regex>
@@ -158,17 +159,21 @@ private:
     MindStatistics* stats;
 
     /**
-     * Outline map is an Outline used to organize Outlines into the tree.
-     * Notes in the Outline map:
+     * Notebook trees: user defined, named Outlines used to organize
+     * other Outlines into a tree. Notes in a Notebook tree:
      *
      * - has exactly one link which points to the Outline they represent
      * - Outline link is *relative* on the filesystem and absolute (resolved) in runtime
+     *
+     * Unlike the (removed) singleton Outline map, there can be any number
+     * of Notebook trees - each is cached here keyed by its file path (which
+     * is also its NotebookTree registry key, see RepositoryConfiguration).
      */
-    Outline* outlinesMap;
+    std::map<std::string, Outline*> notebookTreeCache;
 
     std::string outlineMapKey2Relative(const std::string& outlineKey) const;
     std::string outlineMapKey2Absolute(const std::string& outlineKey) const;
-    void outlinesMapSynchronize(Outline* outlinesMap);
+    void notebookTreeRemoveStaleEntries(Outline* notebookTree);
 
     /**
      * Atomic mind state changes and asynchronous computations synchronization
@@ -566,25 +571,45 @@ public:
     bool outlineForget(std::string outlineKey);
 
     /*
-     * OUTLINE MAP (TREE)
+     * NOTEBOOK TREES
      */
 
     /**
-     * @brief Create new O map (tree).
+     * @brief Create a new, empty Notebook tree.
      */
-    Outline* outlinesMapNew(std::string outlineKey);
+    Outline* notebookTreeNew(const std::string& treeKey, const std::string& name);
     /**
-     * @brief Load Os map (tree).
+     * @brief Load a Notebook tree from its file.
      */
-    Outline* outlinesMapLearn(std::string outlineKey);
+    Outline* notebookTreeLearn(const std::string& treeKey);
     /**
-     * @brief Load or create Os map (tree).
+     * @brief Get (from cache) or load a Notebook tree.
      */
-    Outline* outlinesMapGet();
+    Outline* notebookTreeGet(const std::string& treeKey);
     /**
-     * @brief Save Os map (tree).
+     * @brief Save a Notebook tree.
      */
-    Outline* outlinesMapRemember();
+    Outline* notebookTreeRemember(Outline* notebookTree);
+    /**
+     * @brief Add an Outline to a Notebook tree (user driven action).
+     */
+    void notebookTreeAddOutline(Outline* notebookTree, Outline* outlineToAdd);
+    /**
+     * @brief Remove an Outline from EVERY registered Notebook tree.
+     *
+     * Called whenever an Outline is forgotten/deleted so that no
+     * Notebook tree keeps a dangling reference to it.
+     */
+    void notebookTreeRemoveOutlineFromAll(const std::string& outlineKey);
+    /**
+     * @brief Move a Notebook tree's backing file to limbo and drop it
+     * from the cache.
+     *
+     * Mirrors outlineForget() - the tree's own file is never left
+     * orphaned in mind/ (nor its stale Outline instance kept cached)
+     * when the tree is deleted; the Notebooks it organized are untouched.
+     */
+    bool notebookTreeForget(const std::string& treeKey);
 
     /*
      * NOTE MGMT

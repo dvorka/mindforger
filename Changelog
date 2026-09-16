@@ -1,6 +1,9 @@
 2026-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v2.3.0 - Source code syntax highlighting.
+    * Released v2.3.0 - Notebook shelves, Markdown export.
+    * Feature: Notebook shelves - single notebook tree was rewritten to custom notebook
+      shelves - create as many named notebook shelves for notebooks you want to group
+      as needed and add Notebooks to them explicitly.
     * Feature: Notebook/Export/Markdown - export a Notebook to a file in Markdown format.
     * Enhancement: changed in-app diagram support from dropdown to checkbox.
     * Fix: source code syntax highlighting no longer crashes MindForger thanks to

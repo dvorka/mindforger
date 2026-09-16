@@ -5040,7 +5040,7 @@ Choose new library source:</source>
     <name>m8r::OutlinesMapModel</name>
     <message>
         <location filename="../../../src/qt/outlines_map_model.cpp" line="42"/>
-        <source>Notebooks Tree</source>
+        <source>Notebooks Shelf</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
