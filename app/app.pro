@@ -473,7 +473,6 @@ win32 {
 # L10n
 #./resources/qt/translations/mindforger_de.ts
 #./resources/qt/translations/mindforger_fr.ts
-#./resources/qt/translations/mindforger_es.ts
 TRANSLATIONS = \
     ./resources/qt/translations/mindforger_nerd_en.ts \
     ./resources/qt/translations/mindforger_nerd_cs.ts \
@@ -481,6 +480,8 @@ TRANSLATIONS = \
     ./resources/qt/translations/mindforger_cs.ts \
     ./resources/qt/translations/mindforger_nerd_hi.ts \
     ./resources/qt/translations/mindforger_hi.ts \
+    ./resources/qt/translations/mindforger_nerd_es.ts \
+    ./resources/qt/translations/mindforger_es.ts \
     ./resources/qt/translations/mindforger_nerd_zh_cn.ts \
     ./resources/qt/translations/mindforger_zh_cn.ts
 

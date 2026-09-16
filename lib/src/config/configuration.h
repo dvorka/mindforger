@@ -97,6 +97,7 @@ constexpr const auto UI_LOCALE_EN_US = "en_US";
 constexpr const auto UI_LOCALE_CS_CZ = "cs_CZ";
 constexpr const auto UI_LOCALE_ZH_CN = "zh_CN";
 constexpr const auto UI_LOCALE_HI_IN = "hi_IN";
+constexpr const auto UI_LOCALE_ES_ES = "es_ES";
 
 constexpr const auto START_TO_OUTLINES_TREE = "outlines tree";
 constexpr const auto START_TO_OUTLINES = "outlines";

@@ -24,6 +24,9 @@
     * Feature: Hindi (hi_IN) localization - normal (mindforger_hi.ts/.qm)
       and nerd (mindforger_nerd_hi.ts/.qm) terminology, selectable
       in Preferences as "हिन्दी".
+    * Feature: Spanish (es_ES) localization - normal (mindforger_es.ts/.qm)
+      and nerd (mindforger_nerd_es.ts/.qm) terminology, selectable
+      in Preferences as "Español".
 
 2026-09-13  Martin Dvorak  <martin.dvorak@mindforger.com>
 

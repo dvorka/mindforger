@@ -292,7 +292,8 @@ TEST(ConfigurationTestCase, UiLocaleSaveAndLoad)
         m8r::UI_LOCALE_EN_US,
         m8r::UI_LOCALE_CS_CZ,
         m8r::UI_LOCALE_ZH_CN,
-        m8r::UI_LOCALE_HI_IN
+        m8r::UI_LOCALE_HI_IN,
+        m8r::UI_LOCALE_ES_ES
     };
 
     for(const string& locale:locales) {
