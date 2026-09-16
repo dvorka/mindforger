@@ -1,4 +1,4 @@
-# Non-ASCII links notebook <!-- Metadata: type: Outline; created: 2021-10-28 20:27:08; reads: 275; read: 2026-09-16 07:21:13; revision: 271; modified: 2026-09-16 07:21:13; importance: 0/5; urgency: 0/5; -->
+# Non-ASCII links notebook <!-- Metadata: type: Outline; created: 2026-09-16 07:24:06; reads: 5; read: 2026-09-16 07:24:27; revision: 5; modified: 2026-09-16 07:24:27; importance: 0/5; urgency: 0/5; -->
 Testing extensions:
 
 * http://www.autolink.com
@@ -10,7 +10,7 @@ Text ~~extensions~~.
  . | . | .
  . | . | .
  . | . | .
-# 🐞 non-ASCII links <!-- Metadata: type: Note; created: 2026-09-16 06:50:15; reads: 45; read: 2026-09-16 07:20:45; revision: 18; modified: 2026-09-16 07:20:43; -->
+# 🐞 non-ASCII links <!-- Metadata: type: Note; created: 2026-09-16 07:24:06; reads: 3; read: 2026-09-16 07:24:20; revision: 1; modified: 2026-09-16 07:24:06; -->
 🐞 repro:
 
 [普通话](Trainer.md) ... no characters other than l18n/unicode
@@ -23,21 +23,21 @@ OK w/ an ASCII prefix/suffix:
 * [Český příklad](#esk---p----klad)
 
 
-## Český příklad <!-- Metadata: type: Note; created: 2026-09-16 07:01:40; reads: 22; read: 2026-09-16 07:20:00; revision: 2; modified: 2026-09-16 07:01:41; -->
+## Český příklad
 
-## 普通话 <!-- Metadata: type: Note; tags: repro; created: 2026-09-16 07:08:13; reads: 11; read: 2026-09-16 07:19:59; revision: 3; modified: 2026-09-16 07:08:48; -->
+## 普通话
 
-## 普通话, 简体, 粵語, 繁體, 中文 link target <!-- Metadata: type: Note; created: 2026-09-16 06:57:39; reads: 28; read: 2026-09-16 07:19:59; revision: 3; modified: 2026-09-16 06:57:47; -->
+## 普通话, 简体, 粵語, 繁體, 中文 link target
 
-# Tags <!-- Metadata: type: Note; created: 2026-05-04 20:38:08; reads: 20; read: 2026-09-16 07:19:58; revision: 2; modified: 2026-05-04 20:38:08; -->
+# Tags <!-- Metadata: type: Note; created: 2026-09-16 07:24:06; reads: 3; read: 2026-09-16 07:24:21; revision: 1; modified: 2026-09-16 07:24:06; -->
 
-## TODO <!-- Metadata: type: Note; tags: todo; created: 2026-05-04 20:38:31; reads: 22; read: 2026-09-16 07:19:58; revision: 2; modified: 2026-05-04 20:38:31; -->
+## TODO <!-- Metadata: type: Note; created: 2026-09-16 07:24:06; reads: 5; read: 2026-09-16 07:24:27; revision: 2; modified: 2026-09-16 07:24:27; -->
 
-## WIP <!-- Metadata: type: Note; tags: wip; created: 2026-05-04 20:38:22; reads: 23; read: 2026-09-16 07:19:58; revision: 3; modified: 2026-05-04 20:38:37; -->
+## WIP <!-- Metadata: type: Note; created: 2026-09-16 07:24:06; reads: 4; read: 2026-09-16 07:24:23; revision: 2; modified: 2026-09-16 07:24:23; -->
 
-## Done <!-- Metadata: type: Note; tags: done; created: 2026-05-04 20:38:16; reads: 23; read: 2026-09-16 07:19:58; revision: 4; modified: 2026-05-04 20:38:20; -->
+## Done <!-- Metadata: type: Note; created: 2026-09-16 07:24:06; reads: 1; read: 2026-09-16 07:24:06; revision: 1; modified: 2026-09-16 07:24:06; -->
 
-## ... <!-- Metadata: type: Note; created: 2026-05-04 20:38:40; reads: 18; read: 2026-09-16 07:19:56; revision: 2; modified: 2026-05-04 20:38:41; -->
+## ... <!-- Metadata: type: Note; created: 2026-09-16 07:24:06; reads: 1; read: 2026-09-16 07:24:06; revision: 1; modified: 2026-09-16 07:24:06; -->
 
 ## P0 <!-- Metadata: type: Note; tags: p0; created: 2026-05-04 20:38:48; reads: 20; read: 2026-09-16 07:19:56; revision: 2; modified: 2026-05-04 20:38:48; -->
 
