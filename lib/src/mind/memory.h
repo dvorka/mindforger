@@ -158,13 +158,26 @@ public:
     void exportToMarkdown(Outline* outline, const std::string& fileName);
 
     /**
-     * @brief Export memory to CSV.
+     * @brief Export memory to CSV (blocking).
+     * @return `true` on success.
      */
-    void exportToCsv(
+    bool exportToCsv(
         const std::string& fileName,
         std::map<const Tag*,int>& tagsCardinality,
         int oheTagEncodingCardinality,
         ProgressCallbackCtx* callbackCtx = nullptr
+    );
+
+    /**
+     * @brief Create incremental export of memory to CSV.
+     *
+     * Use it to export memory step by step e.g. from UI event loop
+     * with progress and cancellation. Caller owns the returned instance.
+     */
+    CsvOutlinesExport* createCsvExport(
+        const std::string& fileName,
+        const std::map<const Tag*,int>& tagsCardinality,
+        int oheTagEncodingCardinality
     );
 
     /**

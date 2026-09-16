@@ -191,6 +191,9 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(
         exportMemoryToCsvDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindCsvExport()));
     QObject::connect(
+        exportMemoryToCsvDialog, SIGNAL(signalExportFinished(bool, QString)),
+        this, SLOT(handleMindCsvExportFinished(bool, QString)));
+    QObject::connect(
         orloj->getNoteEdit()->getView()->getNoteEditor(), SIGNAL(signalDnDropUrl(QString)),
         this, SLOT(doActionFormatLinkOrImage(QString))
     );
@@ -2662,30 +2665,40 @@ void MainWindowPresenter::doActionMindCsvExport()
 
 void MainWindowPresenter::handleMindCsvExport()
 {
-    if(isDirectoryOrFileExists(newFileDialog->getFilePath().toStdString().c_str())) {
+    if(exportMemoryToCsvDialog->isExportRunning()) {
+        return;
+    }
+
+    string filePath = exportMemoryToCsvDialog->getFilePath().toStdString();
+    if(isDirectoryOrFileExists(filePath.c_str())) {
         QMessageBox::critical(
-            &view,
+            exportMemoryToCsvDialog,
             tr("Export Error"),
             tr("Specified file path already exists!")
         );
-    } else {
-        StatusBarProgressCallbackCtx callbackCtx{statusBar};
-        map<const Tag*,int> tagsCardinality{};
-        mind->getTagsCardinality(tagsCardinality);
-        mind->remind().exportToCsv(
-            exportMemoryToCsvDialog->getFilePath().toStdString(),
+        return;
+    }
+
+    map<const Tag*,int> tagsCardinality{};
+    mind->getTagsCardinality(tagsCardinality);
+    // dialog takes ownership and runs the export w/o blocking UI event loop
+    exportMemoryToCsvDialog->runExport(
+        mind->remind().createCsvExport(
+            filePath,
             tagsCardinality,
             exportMemoryToCsvDialog->isOheTags()
             ?exportMemoryToCsvDialog->getOheTagsCardinality()
-            :-1,
-            &callbackCtx
-            //[](float progress){ cout << "Export progress: " << progress << endl; }
-        );
-        statusBar->showInfo(
-            "Export to CSV file '"
-            + exportMemoryToCsvDialog->getFilePath().toStdString()
-            + "' successfully finished"
-        );
+            :-1
+        )
+    );
+}
+
+void MainWindowPresenter::handleMindCsvExportFinished(bool success, QString message)
+{
+    if(success) {
+        statusBar->showInfo(message);
+    } else {
+        statusBar->showError(message);
     }
 }
 

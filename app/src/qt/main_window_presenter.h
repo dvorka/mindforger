@@ -218,6 +218,7 @@ public slots:
     void doActionMindSnapshot();
     void doActionMindCsvExport();
     void handleMindCsvExport();
+    void handleMindCsvExportFinished(bool success, QString message);
     void doActionExit();
     // recall
     void doActionFts();
