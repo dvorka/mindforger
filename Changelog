@@ -10,9 +10,9 @@
       English, Czech, Spanish or other available translation instead of following
       the OS locale.
     * Feature: Czech (cs_CZ) localization.
-    * Feature: Mandarin Chinese (simplified, zh_CN) localization.
-    * Feature: Hindi (hi_IN) localization.
-    * Feature: Spanish (es_ES) localization.
+    * Feature: Mandarin Chinese (simplified, zh_CN) localization (LLM - not reviewed by native speaker).
+    * Feature: Hindi (hi_IN) localization (LLM - not reviewed by native speaker)..
+    * Feature: Spanish (es_ES) localization (LLM - not reviewed by native speaker)..
     * Enhancement: changed in-app diagram support configuration from dropdown to checkbox.
     * Enhancement: CSV export no longer freezes UI on big repo and/or slow(er) HW as
       export newly runs in the modal dialog w/ progress bar and it can be cancelled.
