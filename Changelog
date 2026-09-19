@@ -6,6 +6,13 @@
       shelves - create as many named notebook shelves for notebooks you want to group
       as needed and add Notebooks to them explicitly.
     * Feature: Notebook/Export/Markdown - export a Notebook to a file in Markdown format.
+    * Feature: Preferences now let you pick the UI language - System default,
+      English, Czech, Spanish or other available translation instead of following
+      the OS locale.
+    * Feature: Czech (cs_CZ) localization.
+    * Feature: Mandarin Chinese (simplified, zh_CN) localization (LLM - not reviewed by native speaker).
+    * Feature: Hindi (hi_IN) localization (LLM - not reviewed by native speaker)..
+    * Feature: Spanish (es_ES) localization (LLM - not reviewed by native speaker)..
     * Feature: Edit/Sort Lines - sorts the selected lines - or the lines of the block
       under the cursor - alphabetically.
     * Enhancement: changed in-app diagram support configuration from dropdown to checkbox.
@@ -18,6 +25,8 @@
     * Fix: source code syntax highlighting no longer crashes MindForger thanks to
       the migration to Qt WebEngine + upgraded the offline highlight.js library
       to new version.
+    * <build: l10n of all languages can be updated, checked and compiled by a single
+      non-interactive 'make l10n' build target.
     * Cleanup: hid not-yet-ready Workspace/Semantic Search menu item from production builds.
 
 2026-09-13  Martin Dvorak  <martin.dvorak@mindforger.com>

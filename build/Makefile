@@ -33,7 +33,7 @@ MF_MAKER_WORKING_DIR := $(MINDFORGER_RELEASE_BASE_DIR)/maker-at-work
 
 # class name like My_Class_Name used by C++ class generators
 CLASS_NAME := "New_Class"
-# l10n language: en, cs
+# l10n language: cs, en, es, hi, zh_cn
 MF_LANG := "en"
 # Ubuntu distro: trusty xenial bionic focal jammy kinetic
 DISTRO := "bionic"
@@ -88,7 +88,7 @@ help: ## make targets help
 	@echo "|_|  |_|_|_| |_|\\__,_|_|  \\___/|_|  \\__, |\\___|_|   $(MINDFORGER_VERSION)"
 	@echo "                                     |___/            "
 	@echo "MindForger Swiss knife:"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
+	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
 	| sort \
 	| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
@@ -222,12 +222,17 @@ else
 	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/bug-copy-image
 endif
 
+
 run-gdb: clean build-dev ## run MindForger using gdb
 ifeq ($(UNAME), Darwin)
 	cd ../app/mindforger.app/Contents/MacOS && ./mindforger /Users/dvorka/mf-devel/mf-copy
 else
 	cd ../app && pwd && gdb --args ./mindforger /home/dvorka/mf-devel/library-trainer
 endif
+
+
+run-production: build-rc ## run MindForger on the production knowledge base
+	cd ../app && pwd && ./mindforger /home/dvorka/mf
 
 
 #
@@ -263,9 +268,32 @@ install-dev-local: ../deps/cmark-gfm/build ../Makefile ../lib/tests/Makefile cle
 #
 
 
-.PHONY: localization
-localization: ## update and release localization strings: MF_LANG=en
+.PHONY: l10n-update
+l10n-update: ## update l10n strings of ALL languages from the source code (.ts)
+	cd make && ./l10n-update-strings.sh
+
+
+.PHONY: l10n-check
+l10n-check: ## check that l10n strings of ALL languages are in sync (.ts)
+	cd make && ./l10n-check-strings.py
+
+
+.PHONY: l10n-release
+l10n-release: ## compile l10n strings of ALL languages to binary catalogs (.qm)
+	cd make && ./l10n-release-strings.sh
+
+
+.PHONY: l10n
+l10n: l10n-update l10n-check l10n-release ## update, check and compile l10n of ALL languages
+
+
+.PHONY: l10n-edit
+l10n-edit: ## edit l10n strings of ONE language in Qt Linguist: MF_LANG=en
 	cd make && ./l10n-update-strings.sh && ./l10n-edit-and-release.sh $(MF_LANG)
+
+
+.PHONY: localization
+localization: l10n-edit ## DEPRECATED alias of l10n-edit - use l10n or l10n-edit instead
 
 
 .PHONY: releng-rel-version
