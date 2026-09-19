@@ -19,8 +19,9 @@ This directory contains the tooling used to generate and submit those manifests:
 | `generate-from-release.ps1` | Looks up the Windows installer on a GitHub release, downloads it, hashes it, and writes the three manifest YAML files |
 | `sha256-from-url.ps1` | Prints just the SHA256 of a published installer (no manifest generation) |
 | `submit-pr.ps1` | Copies generated manifests into a local `winget-pkgs` fork, commits, pushes, and opens the PR |
+| `resolve-release-asset.ps1` | Shared helper that resolves the installer asset of a release - dot-sourced by the two scripts above so both always pick the same binary |
 
-All three scripts are driven through `make` targets defined in `build/Makefile`
+The scripts are driven through `make` targets defined in `build/Makefile`
 (see the `winget` section there) and **must run on Windows** - `winget validate`
 and `winget install` are Windows-only, and the scripts are PowerShell.
 
@@ -31,7 +32,7 @@ and `winget install` are Windows-only, and the scripts are PowerShell.
 | **Package identifier** | `MindForger.MindForger` |
 | **Publisher** | Martin Dvorak |
 | **Publisher URL** | https://www.mindforger.com |
-| **License** | GPL-2.0-only |
+| **License** | GPL-2.0-or-later |
 | **AppId (Inno Setup)** | `{A1A3DAE4-FD5C-4600-B75D-D8895AA99693}` - from `build/windows/installer/mindforger-setup.iss`; must stay unchanged across releases |
 
 Generated manifests are written to
@@ -60,8 +61,16 @@ release is the PR opened against `winget-pkgs`).
    ```
 
 3. **Install prerequisites** (one-time):
+
+   The winget CLI itself needs no installation - it ships with Windows 10 1809+
+   and Windows 11 as part of App Installer. Verify it is on the `PATH`:
    ```
-   winget install Microsoft.Winget.Client    # winget CLI (for local validation)
+   winget --version
+   ```
+   If it is missing, install **App Installer** from the Microsoft Store (the
+   winget package id is `Microsoft.AppInstaller`, which is of no help until
+   winget runs). Then install the `gh` CLI used to open the PR:
+   ```
    winget install GitHub.cli                 # gh CLI (for PR submission)
    gh auth login                             # authenticate gh
    ```
@@ -124,9 +133,16 @@ hand, renamed to `windows-installer-mindforger-<version>[-<commit>][-<suffix>].e
 
 Because the filename is not predictable from the version alone,
 `generate-from-release.ps1` queries the GitHub Releases API for the release
-tagged `<version>` and picks the first asset matching
+tagged `<version>` and looks for an asset matching
 `windows-installer-mindforger-*.exe`, rather than constructing the download URL
-directly. Make sure that asset is uploaded to the release **before** running
+directly. **Exactly one** asset must match: none means the installer has not
+been uploaded yet, and several (a rebuild, another architecture) is ambiguous
+and would publish the URL and SHA256 of the wrong binary - both cases abort the
+script. The asset name is also checked against the release tag, and a mismatch
+is reported as a warning, because the upload is manual and the two can drift
+apart (release `2.0.0` carries `windows-installer-mindforger-2.0.1-...exe`).
+
+Make sure that asset is uploaded to the release **before** running
 `make distro-winget-from-release`.
 
 ### Overall flow

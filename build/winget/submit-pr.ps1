@@ -40,6 +40,22 @@ param (
 
 $ErrorActionPreference = "Stop"
 
+function Invoke-Git {
+    # run git and fail loudly - a failing native command does not raise a
+    # PowerShell exception, so an unchecked failure would let the script carry
+    # on against a stale or wrong repository state (and 'git reset --hard' then
+    # discards whatever happens to be checked out)
+    param (
+        [Parameter(Mandatory = $true, ValueFromRemainingArguments = $true)]
+        [string[]]$Arguments
+    )
+
+    & git @Arguments
+    if ($LASTEXITCODE -ne 0) {
+        throw "git $($Arguments -join ' ') failed (exit $LASTEXITCODE)"
+    }
+}
+
 if (-not $WingetPkgsDir) {
     Write-Error "winget-pkgs directory not specified.`nPass -WingetPkgsDir or set the WINGET_PKGS_DIR environment variable."
 }
@@ -74,16 +90,23 @@ Write-Host ""
 
 Push-Location $WingetPkgsDir
 try {
+    # refuse to touch a dirty fork - the sync below is destructive
+    $Dirty = git status --porcelain
+    if ($LASTEXITCODE -ne 0) { throw "git status failed (exit $LASTEXITCODE)" }
+    if ($Dirty) {
+        throw "'$WingetPkgsDir' has uncommitted changes.`nCommit, stash or discard them first - syncing the fork resets master with 'git reset --hard'."
+    }
+
     # sync fork master with upstream (microsoft/winget-pkgs)
     Write-Host "Syncing fork master with upstream..." -ForegroundColor Yellow
-    git fetch https://github.com/microsoft/winget-pkgs.git master
-    git checkout master
-    git reset --hard FETCH_HEAD
+    Invoke-Git fetch https://github.com/microsoft/winget-pkgs.git master
+    Invoke-Git checkout master
+    Invoke-Git reset --hard FETCH_HEAD
 
     # create fresh branch
     Write-Host "Creating branch $BranchName..." -ForegroundColor Yellow
-    if (git branch --list $BranchName) { git branch -D $BranchName }
-    git checkout -b $BranchName
+    if (git branch --list $BranchName) { Invoke-Git branch -D $BranchName }
+    Invoke-Git checkout -b $BranchName
 
     # copy manifests
     New-Item -ItemType Directory -Force -Path $ManifestDst | Out-Null
@@ -91,22 +114,20 @@ try {
     Write-Host "Manifests copied to $ManifestDst" -ForegroundColor Green
 
     # stage
-    git add "manifests\m\MindForger\MindForger\$Version"
-    if ($LASTEXITCODE -ne 0) { throw "git add failed (exit $LASTEXITCODE)" }
+    Invoke-Git add "manifests\m\MindForger\MindForger\$Version"
 
     # commit - try with GPG signature, fall back to unsigned
     Write-Host "Committing..." -ForegroundColor Yellow
+    # signing is best effort, so this one call is deliberately not Invoke-Git
     git commit -S -m $CommitMsg 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0) {
         Write-Host "GPG-signed commit failed; committing without signature..." -ForegroundColor Yellow
-        git commit -m $CommitMsg
-        if ($LASTEXITCODE -ne 0) { throw "git commit failed (exit $LASTEXITCODE)" }
+        Invoke-Git commit -m $CommitMsg
     }
 
     # push branch to fork
     Write-Host "Pushing branch to fork..." -ForegroundColor Yellow
-    git push origin $BranchName --force-with-lease
-    if ($LASTEXITCODE -ne 0) { throw "git push failed (exit $LASTEXITCODE)" }
+    Invoke-Git push origin $BranchName --force-with-lease
 
     # open PR against microsoft/winget-pkgs
     Write-Host "Opening PR against microsoft/winget-pkgs..." -ForegroundColor Yellow

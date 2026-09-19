@@ -30,16 +30,17 @@ param (
 
 $ErrorActionPreference = "Stop"
 
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+. (Join-Path $ScriptDir "resolve-release-asset.ps1")
+
 $GithubOrg  = "dvorka"
 $GithubRepo = "mindforger"
 
-$ReleaseApiUrl = "https://api.github.com/repos/$GithubOrg/$GithubRepo/releases/tags/$Version"
-$Release = Invoke-RestMethod -Uri $ReleaseApiUrl -Headers @{ "User-Agent" = "mindforger-winget-script" }
-
-$Asset = $Release.assets | Where-Object { $_.name -match '^windows-installer-mindforger-.*\.exe$' } | Select-Object -First 1
-if (-not $Asset) {
-    Write-Error "No windows-installer-mindforger-*.exe asset found on release $Version.`nCheck https://github.com/$GithubOrg/$GithubRepo/releases/tag/$Version"
-}
+# same asset lookup as generate-from-release.ps1 - so that the hash printed here
+# and the hash written to the manifest can never come from different binaries
+$Asset = Resolve-MindForgerReleaseAsset `
+    -Version $Version -GithubOrg $GithubOrg -GithubRepo $GithubRepo
 
 $Url = $Asset.browser_download_url
 $TmpFile = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), $Asset.name)

@@ -19,10 +19,8 @@
 # it, compute its SHA256, and generate the three winget manifest YAML files ready
 # for submission to microsoft/winget-pkgs.
 #
-# The installer asset name is not fixed across releases (it carries a short git
-# commit hash, and sometimes a Qt version suffix, e.g.
-# "windows-installer-mindforger-2.1.0-ff388a4.exe"), so the asset is looked up via
-# the GitHub Releases API instead of being guessed from the version alone.
+# The asset is looked up via the GitHub Releases API instead of being guessed
+# from the version alone - see resolve-release-asset.ps1 for why.
 #
 # Usage:
 #   powershell.exe -NoProfile -ExecutionPolicy Bypass `
@@ -34,6 +32,11 @@ param (
 )
 
 $ErrorActionPreference = "Stop"
+
+$ScriptDir   = Split-Path -Parent $MyInvocation.MyCommand.Path
+$ProjectRoot = Resolve-Path (Join-Path $ScriptDir "..\..")
+
+. (Join-Path $ScriptDir "resolve-release-asset.ps1")
 
 $GithubOrg  = "dvorka"
 $GithubRepo = "mindforger"
@@ -49,17 +52,10 @@ $SchemaBaseUrl   = "https://aka.ms/winget-manifest"
 
 # -- Step 1: find the Windows installer asset on the GitHub release ------------
 
-Write-Host "Looking up release $Version on GitHub..." -ForegroundColor Cyan
-$ReleaseApiUrl = "https://api.github.com/repos/$GithubOrg/$GithubRepo/releases/tags/$Version"
-$Release = Invoke-RestMethod -Uri $ReleaseApiUrl -Headers @{ "User-Agent" = "mindforger-winget-script" }
-
-$Asset = $Release.assets | Where-Object { $_.name -match '^windows-installer-mindforger-.*\.exe$' } | Select-Object -First 1
-if (-not $Asset) {
-    Write-Error "No windows-installer-mindforger-*.exe asset found on release $Version.`nCheck https://github.com/$GithubOrg/$GithubRepo/releases/tag/$Version"
-}
+$Asset = Resolve-MindForgerReleaseAsset `
+    -Version $Version -GithubOrg $GithubOrg -GithubRepo $GithubRepo
 $InstallerName = $Asset.name
 $InstallerUrl  = $Asset.browser_download_url
-Write-Host "Found asset: $InstallerName" -ForegroundColor Green
 
 # -- Step 2: download and hash --------------------------------------------------
 
@@ -72,9 +68,7 @@ Write-Host "SHA256: $Sha256" -ForegroundColor Green
 
 # -- Step 3: prepare output directory ------------------------------------------
 
-$ScriptDir   = Split-Path -Parent $MyInvocation.MyCommand.Path
-$ProjectRoot = Resolve-Path (Join-Path $ScriptDir "..\..")
-$OutDir      = Join-Path $ProjectRoot "distro\winget\manifests\m\MindForger\MindForger\$Version"
+$OutDir = Join-Path $ProjectRoot "distro\winget\manifests\m\MindForger\MindForger\$Version"
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
 # UTF-8 without BOM - winget rejects files with a BOM
@@ -128,7 +122,7 @@ PublisherSupportUrl: https://github.com/$GithubOrg/$GithubRepo/issues
 Author: Martin Dvorak
 PackageName: MindForger
 PackageUrl: https://www.mindforger.com
-License: GPL-2.0-only
+License: GPL-2.0-or-later
 LicenseUrl: https://github.com/$GithubOrg/$GithubRepo/blob/master/LICENSE
 ShortDescription: MindForger Thinking Notebook and Markdown IDE
 Description: |-
