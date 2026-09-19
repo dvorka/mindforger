@@ -2551,12 +2551,12 @@ Choose new library source:</source>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="833"/>
         <source>Sort Li&amp;nes</source>
-        <translation type="unfinished"></translation>
+        <translation>पंक्तियाँ क्रमबद्ध करें(&amp;N)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="834"/>
         <source>Sort the selected lines/lines of the block under the cursor alphabetically</source>
-        <translation type="unfinished"></translation>
+        <translation>चयनित पंक्तियों/कर्सर वाले खंड की पंक्तियों को वर्णानुक्रम में क्रमबद्ध करें</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="836"/>

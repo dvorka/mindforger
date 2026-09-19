@@ -2551,12 +2551,12 @@ Elija la nueva fuente de la biblioteca:</translation>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="833"/>
         <source>Sort Li&amp;nes</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ordenar líneas</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="834"/>
         <source>Sort the selected lines/lines of the block under the cursor alphabetically</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordenar alfabéticamente las líneas seleccionadas/las líneas del bloque bajo el cursor</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="836"/>

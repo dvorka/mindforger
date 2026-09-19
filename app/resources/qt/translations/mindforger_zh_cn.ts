@@ -2249,12 +2249,12 @@ Choose new library source:</source>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="833"/>
         <source>Sort Li&amp;nes</source>
-        <translation type="unfinished"></translation>
+        <translation>行排序(&amp;N)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="834"/>
         <source>Sort the selected lines/lines of the block under the cursor alphabetically</source>
-        <translation type="unfinished"></translation>
+        <translation>将选中的行/光标所在块的行按字母顺序排序</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="837"/>
