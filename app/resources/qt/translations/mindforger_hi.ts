@@ -3293,8 +3293,8 @@ Choose new library source:</source>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="645"/>
-        <source>Cannot think - either Mind already dreaming or repository has too many notes: %1 &gt; %2</source>
-        <translation>सोच नहीं सकते - या तो मन पहले से स्वप्न देख रहा है या रिपॉज़िटरी में बहुत अधिक नोट हैं: %1 &gt; %2</translation>
+        <source>Cannot think - either Mind already dreaming or workspace has too many notes: %1 &gt; %2</source>
+        <translation>सोच नहीं सकते - या तो मन पहले से स्वप्न देख रहा है या वर्कस्पेस में बहुत अधिक नोट हैं: %1 &gt; %2</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="669"/>

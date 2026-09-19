@@ -3293,8 +3293,8 @@ Elija la nueva fuente de la biblioteca:</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="645"/>
-        <source>Cannot think - either Mind already dreaming or repository has too many notes: %1 &gt; %2</source>
-        <translation>No se puede pensar - la mente ya está soñando o el repositorio tiene demasiadas notas: %1 &gt; %2</translation>
+        <source>Cannot think - either Mind already dreaming or workspace has too many notes: %1 &gt; %2</source>
+        <translation>No se puede pensar - la mente ya está soñando o el espacio de trabajo tiene demasiadas notas: %1 &gt; %2</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="669"/>

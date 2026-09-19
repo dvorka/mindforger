@@ -3579,8 +3579,8 @@ Vyberte nový zdroj knihovny:</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="645"/>
-        <source>Cannot think - either Mind already dreaming or repository has too many notes: %1 &gt; %2</source>
-        <translation>Nelze přemýšlet – mysl již sní, nebo má úložiště příliš mnoho poznámek: %1 &gt; %2</translation>
+        <source>Cannot think - either Mind already dreaming or workspace has too many notes: %1 &gt; %2</source>
+        <translation>Nelze přemýšlet – mysl již sní, nebo má prostor příliš mnoho poznámek: %1 &gt; %2</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="711"/>

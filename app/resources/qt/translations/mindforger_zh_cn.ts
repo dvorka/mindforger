@@ -3627,8 +3627,8 @@ Choose new library source:</source>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="645"/>
-        <source>Cannot think - either Mind already dreaming or repository has too many notes: %1 &gt; %2</source>
-        <translation>无法思考 - 心智正在做梦，或仓库中的笔记过多：%1 &gt; %2</translation>
+        <source>Cannot think - either Mind already dreaming or workspace has too many notes: %1 &gt; %2</source>
+        <translation>无法思考 - 心智正在做梦，或工作区中的笔记过多：%1 &gt; %2</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="711"/>

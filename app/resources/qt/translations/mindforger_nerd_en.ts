@@ -3549,7 +3549,7 @@ Choose new library source:</source>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="645"/>
-        <source>Cannot think - either Mind already dreaming or repository has too many notes: %1 &gt; %2</source>
+        <source>Cannot think - either Mind already dreaming or workspace has too many notes: %1 &gt; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

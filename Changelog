@@ -23,6 +23,8 @@
     * Fix: source code syntax highlighting no longer crashes MindForger thanks to
       the migration to Qt WebEngine + upgraded the offline highlight.js library
       to new version.
+    * <build: l10n of all languages can be updated, checked and compiled by a single
+      non-interactive 'make l10n' build target.
     * Cleanup: hid not-yet-ready Workspace/Semantic Search menu item from production builds.
 
 2026-09-13  Martin Dvorak  <martin.dvorak@mindforger.com>

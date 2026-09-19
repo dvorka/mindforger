@@ -17,25 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-# Hints:
-# - nerd English is OOTB ~ strings in the source code
-# - cn ... user friendly Chinese translation
-# - cs ... user friendly Czech translation
-# - en ... user friendly English translation
-# - hi ... user friendly Hindi translation
-# - sp ... user friendly Spanish translation
+# Compile .ts files of ALL languages (see TRANSLATIONS in app/app.pro) to .qm
+# binary catalogs which are bundled to the binary by app/mf-resources.qrc.
+# This script is NOT interactive - it neither opens Qt Linguist, nor it asks.
 
-MF_LANG="cs"
+set -e
 
-if [[ "${1}" ]]
-then
-    MF_LANG="${1}"
-fi
-
-echo "Running Qt Linguist for language: ${MF_LANG} (options: cs, en, es, hi, zh_cn)"
-
-# edit ONE language in Qt Linguist, then compile ALL languages to .qm catalogs
-pushd . && cd ../../app/resources/qt/translations && linguist mindforger_${MF_LANG}.ts && popd \
-&& ./l10n-release-strings.sh
+cd ../../app && lrelease app.pro
 
 # eof
