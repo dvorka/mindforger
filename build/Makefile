@@ -222,12 +222,17 @@ else
 	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/bug-copy-image
 endif
 
+
 run-gdb: clean build-dev ## run MindForger using gdb
 ifeq ($(UNAME), Darwin)
 	cd ../app/mindforger.app/Contents/MacOS && ./mindforger /Users/dvorka/mf-devel/mf-copy
 else
 	cd ../app && pwd && gdb --args ./mindforger /home/dvorka/mf-devel/library-trainer
 endif
+
+
+run-production: build-rc ## run MindForger on the production knowledge base
+	cd ../app && pwd && ./mindforger /home/dvorka/mf
 
 
 #

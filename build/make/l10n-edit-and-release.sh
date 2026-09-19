@@ -19,10 +19,13 @@
 
 # Hints:
 # - nerd English is OOTB ~ strings in the source code
-# - en ... user friendly English translation
+# - cn ... user friendly Chinese translation
 # - cs ... user friendly Czech translation
+# - en ... user friendly English translation
+# - hi ... user friendly Hindi translation
+# - sp ... user friendly Spanish translation
 
-MF_LANG="en"
+MF_LANG="cs"
 
 if [[ "${1}" ]]
 then
@@ -31,6 +34,6 @@ fi
 
 echo "Running Qt Linquist for language: ${MF_LANG} (options: en, cs)"
 
-pushd . && cd ../../app/resources/qt/translations && linguist mindforger_en.ts && popd && lrelease ../../app/app.pro
+pushd . && cd ../../app/resources/qt/translations && linguist mindforger_${MF_LANG}.ts && popd && lrelease ../../app/app.pro
 
 # eof

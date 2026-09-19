@@ -382,77 +382,77 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Jazyk (&lt;font color=&apos;#ff0000&apos;&gt;vyžaduje restart&lt;/font&gt;)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="154"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="151"/>
         <source>System default</source>
         <translation>Podle systému</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="176"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="173"/>
         <source>Show the following view on application start</source>
         <translation>Zobrazit při spuštění aplikace následující pohled</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="178"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="175"/>
         <source>Notebooks</source>
         <translation>Zápisníky</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="179"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="176"/>
         <source>Notebook Shelves</source>
         <translation>Police zápisníků</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="180"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="177"/>
         <source>Tags</source>
         <translation>Štítky</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="181"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="178"/>
         <source>Recent</source>
         <translation>Nedávné</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="184"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="181"/>
         <source>Eisenhower Matrix</source>
         <translation>Eisenhowerova matice</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="186"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="183"/>
         <source>Home Notebook</source>
         <translation>Domovský zápisník</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="189"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="186"/>
         <source>Application font size - 0 is system (&lt;font color=&apos;#ff0000&apos;&gt;requires restart&lt;/font&gt;)</source>
         <translation>Velikost písma aplikace – 0 znamená systémovou (&lt;font color=&apos;#ff0000&apos;&gt;vyžaduje restart&lt;/font&gt;)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="194"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="191"/>
         <source>show toolbar</source>
         <translation>zobrazit panel nástrojů</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="197"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="194"/>
         <source>I don&apos;t need buttons - I know all keyboard shortcuts!</source>
         <translation>Nepotřebuji tlačítka – znám všechny klávesové zkratky!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="198"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="195"/>
         <source>nerd terminology</source>
         <translation>nerd terminologie</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="217"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="214"/>
         <source>Appearance</source>
         <translation>Vzhled</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="224"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="221"/>
         <source>Controls</source>
         <translation>Ovládání</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="204"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="201"/>
         <source>Startup</source>
         <translation>Spuštění</translation>
     </message>
@@ -460,47 +460,47 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::ConfigurationDialog::EditorTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="467"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="464"/>
         <source>Editor key binding</source>
         <translation>Klávesové ovládání editoru</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="472"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="469"/>
         <source>Editor font</source>
         <translation>Písmo editoru</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="477"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="474"/>
         <source>Spell check dictionaries &lt;a href=&apos;https://github.com/dvorka/mindforger/wiki/Installation#spell-check&apos;&gt;configuration documentation&lt;/a&gt;</source>
         <translation>Slovníky kontroly pravopisu – &lt;a href=&apos;https://github.com/dvorka/mindforger/wiki/Installation#spell-check&apos;&gt;dokumentace konfigurace&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="486"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="483"/>
         <source>live spell check</source>
         <translation>průběžná kontrola pravopisu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="502"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="499"/>
         <source>TABs as SPACEs</source>
         <translation>TABy jako MEZERY</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="503"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="500"/>
         <source>autosave Note on editor close</source>
         <translation>automaticky uložit poznámku při zavření editoru</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="505"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="502"/>
         <source>TAB width</source>
         <translation>šířka TABu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="510"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="507"/>
         <source>External editor command</source>
         <translation>Příkaz externího editoru</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="529"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="526"/>
         <source>Editor</source>
         <translation>Editor</translation>
     </message>
@@ -508,37 +508,37 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::ConfigurationDialog::MarkdownTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="635"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="632"/>
         <source>syntax highlighting</source>
         <translation>zvýrazňování syntaxe</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="639"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="636"/>
         <source>autocomplete text</source>
         <translation>automatické doplňování textu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="643"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="640"/>
         <source>autocomplete lists, blocks and {([`_ characters</source>
         <translation>automaticky doplňovat seznamy, bloky a znaky {([`_</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="648"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="645"/>
         <source>SPACE-based # in section escaping (HTML otherwise)</source>
         <translation>Escapování # v sekcích pomocí MEZERY (jinak HTML)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="656"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="653"/>
         <source>Rendering</source>
         <translation>Vykreslování</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="662"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="659"/>
         <source>Autocompletion</source>
         <translation>Automatické doplňování</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="667"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="664"/>
         <source>Escaping</source>
         <translation>Escapování</translation>
     </message>
@@ -546,22 +546,22 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::ConfigurationDialog::MindTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="709"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="706"/>
         <source>save reads metadata</source>
         <translation>ukládat metadata čtení</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="711"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="708"/>
         <source>Async refresh interval (1 - 10.000ms)</source>
         <translation>Interval asynchronní obnovy (1 – 10 000 ms)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="719"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="716"/>
         <source>Persistence</source>
         <translation>Perzistence</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="725"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="722"/>
         <source>Notifications</source>
         <translation>Oznámení</translation>
     </message>
@@ -569,12 +569,12 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::ConfigurationDialog::NavigatorTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="761"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="758"/>
         <source>Max graph nodes (150 by default)</source>
         <translation>Max. počet uzlů grafu (výchozí 150)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="770"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="767"/>
         <source>Knowledge Graph Navigator</source>
         <translation>Navigátor grafu znalostí</translation>
     </message>
@@ -582,42 +582,42 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::ConfigurationDialog::ViewerTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="330"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="327"/>
         <source>HTML Viewer</source>
         <translation>HTML prohlížeč</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="311"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="308"/>
         <source>Viewer theme CSS</source>
         <translation>CSS motiv prohlížeče</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="286"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="283"/>
         <source>HTML zoom (100 is 100%, Ctrl + mouse wheel)</source>
         <translation>Přiblížení HTML (100 = 100 %, Ctrl + kolečko myši)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="292"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="289"/>
         <source>source code syntax highlighting support</source>
         <translation>podpora zvýrazňování syntaxe zdrojového kódu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="299"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="296"/>
         <source>Math support</source>
         <translation>Podpora matematiky</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="304"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="301"/>
         <source>whole notebook preview</source>
         <translation>náhled celého zápisníku</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="306"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="303"/>
         <source>double click HTML preview to edit</source>
         <translation>dvojklik na HTML náhled pro úpravu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="309"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="306"/>
         <source>diagram support</source>
         <translation>podpora diagramů</translation>
     </message>
@@ -626,17 +626,17 @@ Vyberte nový zdroj knihovny:</translation>
         <translation type="vanished">Podpora diagramů</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="319"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="316"/>
         <source>Find Custom CSS File</source>
         <translation>Najít vlastní soubor CSS</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="342"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="339"/>
         <source>HTML Viewer CSS</source>
         <translation>CSS HTML prohlížeče</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="431"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="428"/>
         <source>Choose CSS File</source>
         <translation>Vybrat soubor CSS</translation>
     </message>
@@ -644,126 +644,126 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::ConfigurationDialog::WingmanTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="804"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="801"/>
         <source>Wingman LLMs</source>
         <translation>LLM modely AI parťáka</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="806"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="803"/>
         <source>Use LLM:</source>
         <translation>Použít LLM:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="809"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="806"/>
         <source>&amp;Add LLM </source>
         <translation>&amp;Přidat LLM </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="820"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="817"/>
         <source>Selected LLM details</source>
         <translation>Podrobnosti vybraného LLM</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="822"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="819"/>
         <source>Provider type:</source>
         <translation>Typ poskytovatele:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="825"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="822"/>
         <source>Model:</source>
         <translation>Model:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="828"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="825"/>
         <source>Status:</source>
         <translation>Stav:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="831"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="828"/>
         <source>Your data privacy:</source>
         <translation>Soukromí vašich dat:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="834"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="831"/>
         <source>Edit</source>
         <translation>Upravit</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="835"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="832"/>
         <source>Test Connection</source>
         <translation>Otestovat připojení</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="836"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="833"/>
         <source>Remove</source>
         <translation>Odebrat</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1032"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1029"/>
         <source>Remove Provider</source>
         <translation>Odebrat poskytovatele</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1033"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1030"/>
         <source>Are you sure you want to remove this LLM provider configuration?</source>
         <translation>Opravdu chcete odebrat tuto konfiguraci poskytovatele LLM?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1111"/>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1164"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1108"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1161"/>
         <source>configured</source>
         <translation>nakonfigurováno</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1115"/>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1123"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1112"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1120"/>
         <source>Connection Test</source>
         <translation>Test připojení</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1116"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1113"/>
         <source>Provider configuration is valid.</source>
         <translation>Konfigurace poskytovatele je platná.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1119"/>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1167"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1116"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1164"/>
         <source>Not validated</source>
         <translation>Neověřeno</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1124"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1121"/>
         <source>Provider configuration test failed: %1</source>
         <translation>Test konfigurace poskytovatele selhal: %1</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1146"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1143"/>
         <source>OpenAI</source>
         <translation>OpenAI</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1147"/>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1155"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1144"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1152"/>
         <source>will be shared w/ 3rd party</source>
         <translation>bude sdíleno s třetí stranou</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1150"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1147"/>
         <source>ollama</source>
         <translation>ollama</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1151"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1148"/>
         <source>will not be shared w/ 3rd party</source>
         <translation>nebude sdíleno s třetí stranou</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1154"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1151"/>
         <source>OpenRouter</source>
         <translation>OpenRouter</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1158"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1155"/>
         <source>Unknown</source>
         <translation>Neznámé</translation>
     </message>
@@ -1333,6 +1333,7 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Hák pro hackování a ladění mysli</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="40"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="445"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="528"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="554"/>
@@ -1340,6 +1341,11 @@ Vyberte nový zdroj knihovny:</translation>
         <location filename="../../../src/qt/main_menu_view.cpp" line="669"/>
         <source>&amp;New</source>
         <translation>&amp;Nový</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="196"/>
+        <source>&amp;Export</source>
+        <translation>E&amp;xport</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="51"/>

@@ -374,77 +374,77 @@ Choose new library source:</source>
         <translation>भाषा (&lt;font color=&apos;#ff0000&apos;&gt;पुनः आरंभ आवश्यक&lt;/font&gt;)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="154"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="151"/>
         <source>System default</source>
         <translation>सिस्टम डिफ़ॉल्ट</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="176"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="173"/>
         <source>Show the following view on application start</source>
         <translation>एप्लिकेशन शुरू होने पर यह दृश्य दिखाएँ</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="178"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="175"/>
         <source>Notebooks</source>
         <translation>नोटबुक</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="179"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="176"/>
         <source>Notebook Shelves</source>
         <translation>नोटबुक शेल्फ़</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="180"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="177"/>
         <source>Tags</source>
         <translation>टैग</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="181"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="178"/>
         <source>Recent</source>
         <translation>हाल के</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="184"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="181"/>
         <source>Eisenhower Matrix</source>
         <translation>आइज़नहावर मैट्रिक्स</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="186"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="183"/>
         <source>Home Notebook</source>
         <translation>होम नोटबुक</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="189"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="186"/>
         <source>Application font size - 0 is system (&lt;font color=&apos;#ff0000&apos;&gt;requires restart&lt;/font&gt;)</source>
         <translation>एप्लिकेशन फ़ॉन्ट आकार - 0 का अर्थ सिस्टम (&lt;font color=&apos;#ff0000&apos;&gt;पुनः आरंभ आवश्यक&lt;/font&gt;)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="194"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="191"/>
         <source>show toolbar</source>
         <translation>टूलबार दिखाएँ</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="197"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="194"/>
         <source>I don&apos;t need buttons - I know all keyboard shortcuts!</source>
         <translation>मुझे बटनों की ज़रूरत नहीं - मुझे सभी कीबोर्ड शॉर्टकट पता हैं!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="198"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="195"/>
         <source>nerd terminology</source>
         <translation>नर्ड शब्दावली</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="204"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="201"/>
         <source>Startup</source>
         <translation>आरंभ</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="217"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="214"/>
         <source>Appearance</source>
         <translation>रूप-रंग</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="224"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="221"/>
         <source>Controls</source>
         <translation>नियंत्रण</translation>
     </message>
@@ -452,47 +452,47 @@ Choose new library source:</source>
 <context>
     <name>m8r::ConfigurationDialog::EditorTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="467"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="464"/>
         <source>Editor key binding</source>
         <translation>संपादक कुंजी बाइंडिंग</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="472"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="469"/>
         <source>Editor font</source>
         <translation>संपादक फ़ॉन्ट</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="477"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="474"/>
         <source>Spell check dictionaries &lt;a href=&apos;https://github.com/dvorka/mindforger/wiki/Installation#spell-check&apos;&gt;configuration documentation&lt;/a&gt;</source>
         <translation>वर्तनी जाँच शब्दकोश &lt;a href=&apos;https://github.com/dvorka/mindforger/wiki/Installation#spell-check&apos;&gt;कॉन्फ़िगरेशन दस्तावेज़&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="486"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="483"/>
         <source>live spell check</source>
         <translation>लाइव वर्तनी जाँच</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="502"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="499"/>
         <source>TABs as SPACEs</source>
         <translation>TAB की जगह SPACE</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="503"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="500"/>
         <source>autosave Note on editor close</source>
         <translation>संपादक बंद करने पर नोट स्वतः सहेजें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="505"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="502"/>
         <source>TAB width</source>
         <translation>TAB चौड़ाई</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="510"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="507"/>
         <source>External editor command</source>
         <translation>बाहरी संपादक आदेश</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="529"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="526"/>
         <source>Editor</source>
         <translation>संपादक</translation>
     </message>
@@ -500,37 +500,37 @@ Choose new library source:</source>
 <context>
     <name>m8r::ConfigurationDialog::MarkdownTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="635"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="632"/>
         <source>syntax highlighting</source>
         <translation>सिंटैक्स हाइलाइटिंग</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="639"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="636"/>
         <source>autocomplete text</source>
         <translation>पाठ स्वतः पूर्ण करें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="643"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="640"/>
         <source>autocomplete lists, blocks and {([`_ characters</source>
         <translation>सूचियाँ, ब्लॉक और {([`_ वर्ण स्वतः पूर्ण करें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="648"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="645"/>
         <source>SPACE-based # in section escaping (HTML otherwise)</source>
         <translation>सेक्शन में # को SPACE से एस्केप करें (अन्यथा HTML)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="656"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="653"/>
         <source>Rendering</source>
         <translation>रेंडरिंग</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="662"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="659"/>
         <source>Autocompletion</source>
         <translation>स्वतः पूर्णता</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="667"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="664"/>
         <source>Escaping</source>
         <translation>एस्केपिंग</translation>
     </message>
@@ -538,22 +538,22 @@ Choose new library source:</source>
 <context>
     <name>m8r::ConfigurationDialog::MindTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="709"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="706"/>
         <source>save reads metadata</source>
         <translation>पढ़ने का मेटाडेटा सहेजें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="711"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="708"/>
         <source>Async refresh interval (1 - 10.000ms)</source>
         <translation>असिंक्रोनस रीफ़्रेश अंतराल (1 - 10.000ms)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="719"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="716"/>
         <source>Persistence</source>
         <translation>स्थायित्व</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="725"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="722"/>
         <source>Notifications</source>
         <translation>सूचनाएँ</translation>
     </message>
@@ -561,12 +561,12 @@ Choose new library source:</source>
 <context>
     <name>m8r::ConfigurationDialog::NavigatorTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="761"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="758"/>
         <source>Max graph nodes (150 by default)</source>
         <translation>अधिकतम ग्राफ़ नोड (डिफ़ॉल्ट 150)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="770"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="767"/>
         <source>Knowledge Graph Navigator</source>
         <translation>ज्ञान ग्राफ़ नेविगेटर</translation>
     </message>
@@ -574,32 +574,32 @@ Choose new library source:</source>
 <context>
     <name>m8r::ConfigurationDialog::ViewerTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="286"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="283"/>
         <source>HTML zoom (100 is 100%, Ctrl + mouse wheel)</source>
         <translation>HTML ज़ूम (100 का अर्थ 100%, Ctrl + माउस व्हील)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="292"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="289"/>
         <source>source code syntax highlighting support</source>
         <translation>स्रोत कोड सिंटैक्स हाइलाइटिंग समर्थन</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="299"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="296"/>
         <source>Math support</source>
         <translation>गणित समर्थन</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="304"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="301"/>
         <source>whole notebook preview</source>
         <translation>पूरी नोटबुक का पूर्वावलोकन</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="306"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="303"/>
         <source>double click HTML preview to edit</source>
         <translation>संपादन के लिए HTML पूर्वावलोकन पर डबल क्लिक करें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="309"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="306"/>
         <source>diagram support</source>
         <translation>आरेख समर्थन</translation>
     </message>
@@ -608,27 +608,27 @@ Choose new library source:</source>
         <translation type="vanished">आरेख समर्थन</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="311"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="308"/>
         <source>Viewer theme CSS</source>
         <translation>व्यूअर थीम CSS</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="319"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="316"/>
         <source>Find Custom CSS File</source>
         <translation>कस्टम CSS फ़ाइल खोजें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="330"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="327"/>
         <source>HTML Viewer</source>
         <translation>HTML व्यूअर</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="342"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="339"/>
         <source>HTML Viewer CSS</source>
         <translation>HTML व्यूअर CSS</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="431"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="428"/>
         <source>Choose CSS File</source>
         <translation>CSS फ़ाइल चुनें</translation>
     </message>
@@ -636,126 +636,126 @@ Choose new library source:</source>
 <context>
     <name>m8r::ConfigurationDialog::WingmanTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="804"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="801"/>
         <source>Wingman LLMs</source>
         <translation>AI साथी LLM</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="806"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="803"/>
         <source>Use LLM:</source>
         <translation>LLM का उपयोग करें:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="809"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="806"/>
         <source>&amp;Add LLM </source>
         <translation>LLM जोड़ें(&amp;A) </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="820"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="817"/>
         <source>Selected LLM details</source>
         <translation>चयनित LLM का विवरण</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="822"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="819"/>
         <source>Provider type:</source>
         <translation>प्रदाता प्रकार:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="825"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="822"/>
         <source>Model:</source>
         <translation>मॉडल:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="828"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="825"/>
         <source>Status:</source>
         <translation>स्थिति:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="831"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="828"/>
         <source>Your data privacy:</source>
         <translation>आपके डेटा की गोपनीयता:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="834"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="831"/>
         <source>Edit</source>
         <translation>संपादित करें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="835"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="832"/>
         <source>Test Connection</source>
         <translation>कनेक्शन जाँचें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="836"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="833"/>
         <source>Remove</source>
         <translation>हटाएँ</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1032"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1029"/>
         <source>Remove Provider</source>
         <translation>प्रदाता हटाएँ</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1033"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1030"/>
         <source>Are you sure you want to remove this LLM provider configuration?</source>
         <translation>क्या आप वाकई इस LLM प्रदाता कॉन्फ़िगरेशन को हटाना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1111"/>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1164"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1108"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1161"/>
         <source>configured</source>
         <translation>कॉन्फ़िगर किया गया</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1115"/>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1123"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1112"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1120"/>
         <source>Connection Test</source>
         <translation>कनेक्शन जाँच</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1116"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1113"/>
         <source>Provider configuration is valid.</source>
         <translation>प्रदाता कॉन्फ़िगरेशन मान्य है।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1119"/>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1167"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1116"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1164"/>
         <source>Not validated</source>
         <translation>सत्यापित नहीं</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1124"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1121"/>
         <source>Provider configuration test failed: %1</source>
         <translation>प्रदाता कॉन्फ़िगरेशन जाँच विफल: %1</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1146"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1143"/>
         <source>OpenAI</source>
         <translation>OpenAI</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1147"/>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1155"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1144"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1152"/>
         <source>will be shared w/ 3rd party</source>
         <translation>तृतीय पक्ष के साथ साझा किया जाएगा</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1150"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1147"/>
         <source>ollama</source>
         <translation>ollama</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1151"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1148"/>
         <source>will not be shared w/ 3rd party</source>
         <translation>तृतीय पक्ष के साथ साझा नहीं किया जाएगा</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1154"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1151"/>
         <source>OpenRouter</source>
         <translation>OpenRouter</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1158"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1155"/>
         <source>Unknown</source>
         <translation>अज्ञात</translation>
     </message>
@@ -1889,6 +1889,7 @@ Choose new library source:</source>
         <translation>ऑर्गनाइज़र(&amp;O)</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="40"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="445"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="528"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="554"/>
@@ -1896,6 +1897,11 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_menu_view.cpp" line="669"/>
         <source>&amp;New</source>
         <translation>नया(&amp;N)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="196"/>
+        <source>&amp;Export</source>
+        <translation>निर्यात करें(&amp;E)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="446"/>

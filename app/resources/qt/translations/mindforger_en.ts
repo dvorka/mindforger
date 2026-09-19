@@ -362,77 +362,77 @@ Choose new library source:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="154"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="151"/>
         <source>System default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="176"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="173"/>
         <source>Show the following view on application start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="178"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="175"/>
         <source>Notebooks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="179"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="176"/>
         <source>Notebook Shelves</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="180"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="177"/>
         <source>Tags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="181"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="178"/>
         <source>Recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="184"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="181"/>
         <source>Eisenhower Matrix</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="186"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="183"/>
         <source>Home Notebook</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="189"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="186"/>
         <source>Application font size - 0 is system (&lt;font color=&apos;#ff0000&apos;&gt;requires restart&lt;/font&gt;)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="194"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="191"/>
         <source>show toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="197"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="194"/>
         <source>I don&apos;t need buttons - I know all keyboard shortcuts!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="198"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="195"/>
         <source>nerd terminology</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="217"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="214"/>
         <source>Appearance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="224"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="221"/>
         <source>Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="204"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="201"/>
         <source>Startup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -440,47 +440,47 @@ Choose new library source:</source>
 <context>
     <name>m8r::ConfigurationDialog::EditorTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="467"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="464"/>
         <source>Editor key binding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="472"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="469"/>
         <source>Editor font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="477"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="474"/>
         <source>Spell check dictionaries &lt;a href=&apos;https://github.com/dvorka/mindforger/wiki/Installation#spell-check&apos;&gt;configuration documentation&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="486"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="483"/>
         <source>live spell check</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="502"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="499"/>
         <source>TABs as SPACEs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="503"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="500"/>
         <source>autosave Note on editor close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="505"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="502"/>
         <source>TAB width</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="510"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="507"/>
         <source>External editor command</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="529"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="526"/>
         <source>Editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -488,37 +488,37 @@ Choose new library source:</source>
 <context>
     <name>m8r::ConfigurationDialog::MarkdownTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="635"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="632"/>
         <source>syntax highlighting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="639"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="636"/>
         <source>autocomplete text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="643"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="640"/>
         <source>autocomplete lists, blocks and {([`_ characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="648"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="645"/>
         <source>SPACE-based # in section escaping (HTML otherwise)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="656"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="653"/>
         <source>Rendering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="662"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="659"/>
         <source>Autocompletion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="667"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="664"/>
         <source>Escaping</source>
         <translation type="unfinished"></translation>
     </message>
@@ -526,22 +526,22 @@ Choose new library source:</source>
 <context>
     <name>m8r::ConfigurationDialog::MindTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="709"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="706"/>
         <source>save reads metadata</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="711"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="708"/>
         <source>Async refresh interval (1 - 10.000ms)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="719"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="716"/>
         <source>Persistence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="725"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="722"/>
         <source>Notifications</source>
         <translation type="unfinished"></translation>
     </message>
@@ -549,12 +549,12 @@ Choose new library source:</source>
 <context>
     <name>m8r::ConfigurationDialog::NavigatorTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="761"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="758"/>
         <source>Max graph nodes (150 by default)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="770"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="767"/>
         <source>Knowledge Graph Navigator</source>
         <translation type="unfinished"></translation>
     </message>
@@ -562,57 +562,57 @@ Choose new library source:</source>
 <context>
     <name>m8r::ConfigurationDialog::ViewerTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="330"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="327"/>
         <source>HTML Viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="311"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="308"/>
         <source>Viewer theme CSS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="286"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="283"/>
         <source>HTML zoom (100 is 100%, Ctrl + mouse wheel)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="292"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="289"/>
         <source>source code syntax highlighting support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="299"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="296"/>
         <source>Math support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="304"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="301"/>
         <source>whole notebook preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="306"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="303"/>
         <source>double click HTML preview to edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="309"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="306"/>
         <source>diagram support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="319"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="316"/>
         <source>Find Custom CSS File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="342"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="339"/>
         <source>HTML Viewer CSS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="431"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="428"/>
         <source>Choose CSS File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -620,126 +620,126 @@ Choose new library source:</source>
 <context>
     <name>m8r::ConfigurationDialog::WingmanTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="804"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="801"/>
         <source>Wingman LLMs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="806"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="803"/>
         <source>Use LLM:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="809"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="806"/>
         <source>&amp;Add LLM </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="820"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="817"/>
         <source>Selected LLM details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="822"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="819"/>
         <source>Provider type:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="825"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="822"/>
         <source>Model:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="828"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="825"/>
         <source>Status:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="831"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="828"/>
         <source>Your data privacy:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="834"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="831"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="835"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="832"/>
         <source>Test Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="836"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="833"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1032"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1029"/>
         <source>Remove Provider</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1033"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1030"/>
         <source>Are you sure you want to remove this LLM provider configuration?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1111"/>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1164"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1108"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1161"/>
         <source>configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1115"/>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1123"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1112"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1120"/>
         <source>Connection Test</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1116"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1113"/>
         <source>Provider configuration is valid.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1119"/>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1167"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1116"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1164"/>
         <source>Not validated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1124"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1121"/>
         <source>Provider configuration test failed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1146"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1143"/>
         <source>OpenAI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1147"/>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1155"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1144"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1152"/>
         <source>will be shared w/ 3rd party</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1150"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1147"/>
         <source>ollama</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1151"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1148"/>
         <source>will not be shared w/ 3rd party</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1154"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1151"/>
         <source>OpenRouter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1158"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1155"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1308,7 +1308,7 @@ Choose new library source:</source>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="31"/>
         <source>&amp;Mind</source>
-        <translation type="unfinished">Work&amp;space</translation>
+        <translation type="unfinished">&amp;Knowledge</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="34"/>
@@ -1911,6 +1911,11 @@ Choose new library source:</source>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="164"/>
         <source>Deprecate library Notebooks that has tag which indicates reference of non-existent document...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="196"/>
+        <source>&amp;Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2563,6 +2568,7 @@ Choose new library source:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="40"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="445"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="528"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="554"/>
