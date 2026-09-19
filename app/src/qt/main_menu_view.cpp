@@ -37,7 +37,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
 
     // new/devise... new Workspaces (MD repository)
-    submenuMindNew = menuMind->addMenu(QIcon(":/menu-icons/new.svg"), "&New");
+    submenuMindNew = menuMind->addMenu(QIcon(":/menu-icons/new.svg"), tr("&New"));
     actionMindNewRepository = new QAction(tr("&Workspace"), mainWindow);
     actionMindNewRepository->setStatusTip(
         tr("Create a brand new MindForger workspace...")
@@ -193,7 +193,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindPreferences->setShortcuts(QKeySequence::Preferences);
     actionMindPreferences->setStatusTip(tr("Adapt Mind by setting your preferences..."));
 
-    submenuMindExport = menuMind->addMenu(QIcon(":/menu-icons/export.svg"), "&Export");
+    submenuMindExport = menuMind->addMenu(QIcon(":/menu-icons/export.svg"), tr("&Export"));
     actionMindExportCsv = new QAction(tr("&CSV"), mainWindow);
     actionMindExportCsv->setStatusTip(tr("Export all Notebooks/Markdown files as a single CSV file"));
     submenuMindExport->addAction(actionMindExportCsv);

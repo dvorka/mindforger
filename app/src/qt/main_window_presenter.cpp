@@ -644,7 +644,7 @@ void MainWindowPresenter::doActionMindThink()
             statusBar->showError(
                 tr(
                     "Cannot think - either Mind already dreaming or "
-                    "repository has too many notes: %1 > %2")
+                    "workspace has too many notes: %1 > %2")
                     .arg(mind->remind().getNotesCount()).arg(config.getAsyncMindThreshold())
             );
         }
