@@ -210,7 +210,7 @@ bool Memory::learnOutlineTWiki(const string& twikiFileName, const string& outlin
     return twikiRepresentation.outline(File{twikiFileName}, File{outlineFileName});
 }
 
-Outline* Memory::learnOutlinesMap(const string& filePath)
+Outline* Memory::learnNotebookTree(const string& filePath)
 {
     return mdRepresentation.outline(File{filePath});
 }
@@ -270,19 +270,32 @@ void Memory::exportToMarkdown(Outline* outline, const string& fileName)
     persistence->saveAsMarkdown(outline, fileName);
 }
 
-void Memory::exportToCsv(
+bool Memory::exportToCsv(
         const string& fileName,
         map<const Tag*,int>& tagsCardinality,
         int oheTagEncodingCardinality,
         ProgressCallbackCtx* callbackCtx)
 {
-    csvRepresentation.to(
+    return csvRepresentation.to(
         outlines,
         tagsCardinality,
         fileName,
         oheTagEncodingCardinality,
         callbackCtx
     );
+}
+
+CsvOutlinesExport* Memory::createCsvExport(
+        const string& fileName,
+        const map<const Tag*,int>& tagsCardinality,
+        int oheTagEncodingCardinality)
+{
+    return new CsvOutlinesExport{
+        outlines,
+        tagsCardinality,
+        fileName,
+        oheTagEncodingCardinality
+    };
 }
 
 void Memory::forget(Outline* outline)

@@ -53,6 +53,7 @@ public:
     QMenu* menuFlashcards;
 #endif
     QMenu* menuOrganizer;
+    QMenu* menuNotebookTree;
     QMenu* menuOutline;
     QMenu* menuNote;
     QMenu* menuEdit;
@@ -111,7 +112,7 @@ public:
     QAction* actionViewDecks;
     QAction* actionViewOrganizers;
     QAction* actionViewOutlines;
-    QAction* actionViewOutlinesMap;
+    QAction* actionViewNotebookTrees;
 #ifdef MF_WIP
     QAction* actionViewLibraryDocs;
 #endif
@@ -139,6 +140,13 @@ public:
     QAction* actionOrganizerFocusNext;
     QAction* actionOrganizerMovePrevious;
     QAction* actionOrganizerMoveNext;
+
+    // menu: Notebook Tree
+    QAction* actionNotebookTreeNew;
+    QAction* actionNotebookTreeRename;
+    QAction* actionNotebookTreeDelete;
+    QAction* actionNotebookTreeAddOutline;
+    QAction* actionNotebookTreeRemoveOutline;
 
     // menu: Navigator
     QAction* actionNavigatorZoomIn;
@@ -208,6 +216,7 @@ public:
     QAction* actionEditLiveNotePreview;
     QAction* actionEditWordWrap;
     QAction* actionEditRewrapParagraph;
+    QAction* actionEditSortLines;
     QAction* actionEditNameDescFocusSwap;
     QAction* actionEditExtract;
     QAction* actionEditWingman;
@@ -304,6 +313,7 @@ public:
     void showFacetOrganizerList(bool repositoryMode=true, bool mfMode=true);
     void showFacetOrganizerView(bool repositoryMode=true, bool mfMode=true);
     void showFacetOutlinesMap(bool repositoryMode=true, bool mfMode=true);
+    void showFacetNotebookTreeList(bool repositoryMode=true, bool mfMode=true);
     void showFacetOutlineList(bool repositoryMode=true, bool mfMode=true);
     void showFacetOutlineView(bool repositoryMode=true, bool mfMode=true);
     void showFacetNoteEdit(bool repositoryMode=true, bool mfMode=true);

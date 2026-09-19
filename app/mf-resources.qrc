@@ -21,10 +21,15 @@
     </qresource>
     <qresource prefix="/translations">
         <file alias="mindforger_cs_CZ.qm">resources/qt/translations/mindforger_cs.qm</file>
+        <file alias="mindforger_hi_IN.qm">resources/qt/translations/mindforger_hi.qm</file>
+        <file alias="mindforger_es_ES.qm">resources/qt/translations/mindforger_es.qm</file>
         <file alias="mindforger_en_US.qm">resources/qt/translations/mindforger_en.qm</file>
         <file alias="mindforger_nerd_cs_CZ.qm">resources/qt/translations/mindforger_nerd_cs.qm</file>
+        <file alias="mindforger_nerd_hi_IN.qm">resources/qt/translations/mindforger_nerd_hi.qm</file>
+        <file alias="mindforger_nerd_es_ES.qm">resources/qt/translations/mindforger_nerd_es.qm</file>
         <file alias="mindforger_nerd_en_US.qm">resources/qt/translations/mindforger_nerd_en.qm</file>
-        <file alias="mindforger_zh_CN">resources/qt/translations/mindforger_zh_cn.ts</file>
+        <file alias="mindforger_nerd_zh_CN.qm">resources/qt/translations/mindforger_nerd_zh_cn.qm</file>
+        <file alias="mindforger_zh_CN.qm">resources/qt/translations/mindforger_zh_cn.qm</file>
     </qresource>
     <qresource prefix="/html-css">
         <file alias="dark.css">resources/qt/css/dark.css</file>
@@ -47,6 +52,8 @@
         <file alias="edit.svg">resources/menu-icons/light_document-edit.svg</file>
         <file alias="export.svg">resources/menu-icons/light_document-export.svg</file>
         <file alias="new.svg">resources/menu-icons/light_document-new.svg</file>
+        <file alias="notebook-add.svg">resources/menu-icons/light_document-new-add.svg</file>
+        <file alias="bookshelf.svg">resources/menu-icons/light_bookshelf.svg</file>
         <file alias="save.svg">resources/menu-icons/light_document-save.svg</file>
         <file alias="copy.svg">resources/menu-icons/light_edit-copy.svg</file>
         <file alias="delete.svg">resources/menu-icons/light_edit-delete.svg</file>
@@ -93,6 +100,7 @@
         <file alias="folder.svg">resources/menu-icons/light_folder.svg</file>
         <file alias="word-wrap.svg">resources/menu-icons/light_word_wrap.svg</file>
         <file alias="rewrap-paragraph.svg">resources/menu-icons/light_format_align_justify.svg</file>
+        <file alias="sort-lines.svg">resources/menu-icons/light_sort_by_alpha.svg</file>
         <file alias="terminal.svg">resources/menu-icons/light_terminal.svg</file>
         <file alias="about_qt.svg">resources/menu-icons/light_about_qt.svg</file>
         <file alias="cli.svg">resources/menu-icons/light_cli.svg</file>

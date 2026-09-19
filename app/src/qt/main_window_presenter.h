@@ -42,6 +42,7 @@
 #include "dialogs/run_tool_dialog.h"
 #include "dialogs/wingman_dialog.h"
 #include "dialogs/organizer_new_dialog.h"
+#include "dialogs/notebook_tree_new_dialog.h"
 #include "dialogs/outline_new_dialog.h"
 #include "dialogs/note_new_dialog.h"
 #include "dialogs/fts_dialog_presenter.h"
@@ -127,12 +128,14 @@ private:
     WingmanDialog* wingmanDialog;
     ScopeDialog* scopeDialog;
     OrganizerNewDialog* newOrganizerDialog;
+    NotebookTreeNewDialog* newNotebookTreeDialog;
     OutlineNewDialog* newOutlineDialog;
     NoteNewDialog* newNoteDialog;
     FtsDialog* ftsDialog;
     FtsDialogPresenter* ftsDialogPresenter;
     FindOutlineByNameDialog* findOutlineByNameDialog;
     FindOutlineByNameDialog* findThingByNameDialog;
+    FindOutlineByNameDialog* findOutlineForNotebookTreeDialog;
     FindNoteByNameDialog* findNoteByNameDialog;
     FindOutlineByTagDialog* findOutlineByTagDialog;
     FindNoteByTagDialog* findNoteByTagDialog;
@@ -215,6 +218,7 @@ public slots:
     void doActionMindSnapshot();
     void doActionMindCsvExport();
     void handleMindCsvExport();
+    void handleMindCsvExportFinished(bool success, QString message);
     void doActionExit();
     // recall
     void doActionFts();
@@ -237,7 +241,7 @@ public slots:
     void doActionViewTagCloud();
     bool doActionViewHome();
     void doActionViewOutlines();
-    void doActionViewOutlinesMap();
+    void doActionViewNotebookTrees();
     void doActionViewRecentNotes();
     void doActionViewKnowledgeGraphNavigator();
     void doActionCli();
@@ -264,6 +268,14 @@ public slots:
     void doActionOrganizerMoveNoteToNextVisibleQuadrant(Note* note);
     void doActionOrganizerMoveNoteToPreviousVisibleQuadrant(Note* note);
     void doActionOrganizerForget();
+    // notebook tree
+    void doActionNotebookTreeNew();
+    void handleCreateOrRenameNotebookTree();
+    void doActionNotebookTreeRename();
+    void doActionNotebookTreeDelete();
+    void doActionNotebookTreeAddOutline();
+    void handleNotebookTreeAddOutlineChoice();
+    void doActionNotebookTreeRemoveEntry();
     // navigator
     void doActionNavigatorShuffle();
     // format
@@ -375,6 +387,7 @@ public slots:
     void doActionEditFindAgain();
     void doActionEditWordWrapToggle();
     void doActionEditRewrapParagraph();
+    void doActionEditSortLines();
     void doActionEditPasteImageData(QImage image);
     void doActionRunToolDialogAnywhere();
     void doActionOpenRunToolDialog(QString& phrase, QString& toolId, bool showDialog=true);

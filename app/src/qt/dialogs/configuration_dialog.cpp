@@ -105,6 +105,23 @@ void ConfigurationDialog::saveSlot()
  * App tab
  */
 
+/**
+ * @brief Build language combo item label prefixed with the UTF-8 flag emoji.
+ *
+ * Non-ASCII characters are passed as escaped u8 literals to keep sources
+ * portable across compilers (MSVC does not assume UTF-8 sources).
+ */
+static QString localeComboLabel(const char* flag, const QString& name)
+{
+#ifdef _WIN32
+    // Windows emoji font does not render flags - they would be shown as letters
+    Q_UNUSED(flag);
+    return name;
+#else
+    return QString::fromUtf8(flag) + QStringLiteral(" ") + name;
+#endif
+}
+
 ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
@@ -127,17 +144,43 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     themeCombo->addItem(QString{UI_THEME_NATIVE_WITH_FIXED_FONT});
 #endif
 
+    localeLabel = new QLabel(
+        tr("Language (<font color='#ff0000'>requires restart</font>)")+":", this);
+    localeCombo = new QComboBox{this};
+    localeCombo->addItem(
+        localeComboLabel(u8"\U0001F310", tr("System default")),
+        QString{UI_LOCALE_SYSTEM});
+    localeCombo->addItem(
+        localeComboLabel(u8"\U0001F1E8\U0001F1FF", QString::fromUtf8(u8"\u010Ce\u0161tina")),
+        QString{UI_LOCALE_CS_CZ});
+    localeCombo->addItem(
+        localeComboLabel(
+            u8"\U0001F1E8\U0001F1F3",
+            QString::fromUtf8(u8"\u4E2D\u6587\uFF08\u7B80\u4F53\uFF09")),
+        QString{UI_LOCALE_ZH_CN});
+    localeCombo->addItem(
+        localeComboLabel(u8"\U0001F1FA\U0001F1F8", QStringLiteral("English")),
+        QString{UI_LOCALE_EN_US});
+    localeCombo->addItem(
+        localeComboLabel(u8"\U0001F1EA\U0001F1F8", QString::fromUtf8(u8"Espa\u00F1ol")),
+        QString{UI_LOCALE_ES_ES});
+    localeCombo->addItem(
+        localeComboLabel(
+            u8"\U0001F1EE\U0001F1F3",
+            QString::fromUtf8(u8"\u0939\u093F\u0928\u094D\u0926\u0940")),
+        QString{UI_LOCALE_HI_IN});
+
     startupLabel = new QLabel(tr("Show the following view on application start")+":", this);
     startupCombo = new QComboBox{this};
-    startupCombo->addItem(QString{START_TO_OUTLINES});
-    startupCombo->addItem(QString{START_TO_OUTLINES_TREE});
-    startupCombo->addItem(QString{START_TO_TAGS});
-    startupCombo->addItem(QString{START_TO_RECENT});
+    startupCombo->addItem(tr("Notebooks"), QString{START_TO_OUTLINES});
+    startupCombo->addItem(tr("Notebook Shelves"), QString{START_TO_OUTLINES_TREE});
+    startupCombo->addItem(tr("Tags"), QString{START_TO_TAGS});
+    startupCombo->addItem(tr("Recent"), QString{START_TO_RECENT});
 #ifdef MF_BUG
     // must be fixed as it currently crashes
-    startupCombo->addItem(QString{START_TO_EISENHOWER_MATRIX});
+    startupCombo->addItem(tr("Eisenhower Matrix"), QString{START_TO_EISENHOWER_MATRIX});
 #endif
-    startupCombo->addItem(QString{START_TO_HOME_OUTLINE});
+    startupCombo->addItem(tr("Home Notebook"), QString{START_TO_HOME_OUTLINE});
 
     appFontSizeLabel = new QLabel(
         tr("Application font size - 0 is system (<font color='#ff0000'>requires restart</font>)")+":", this);
@@ -161,6 +204,8 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     QVBoxLayout* appearanceLayout = new QVBoxLayout{this};
     appearanceLayout->addWidget(themeLabel);
     appearanceLayout->addWidget(themeCombo);
+    appearanceLayout->addWidget(localeLabel);
+    appearanceLayout->addWidget(localeCombo);
     appearanceLayout->addWidget(appFontSizeLabel);
     appearanceLayout->addWidget(appFontSizeSpin);
     appearanceLayout->addWidget(menuLabel);
@@ -188,6 +233,8 @@ ConfigurationDialog::AppTab::~AppTab()
 {
     delete themeLabel;
     delete themeCombo;
+    delete localeLabel;
+    delete localeCombo;
     delete appFontSizeLabel;
     delete appFontSizeSpin;
     delete startupLabel;
@@ -197,13 +244,17 @@ ConfigurationDialog::AppTab::~AppTab()
 
 void ConfigurationDialog::AppTab::refresh()
 {
-    int i = startupCombo->findText(QString::fromStdString(config.getStartupView()));
+    int i = startupCombo->findData(QString::fromStdString(config.getStartupView()));
     if(i>=0) {
         startupCombo->setCurrentIndex(i);
     }
     i = themeCombo->findText(QString::fromStdString(config.getUiThemeName()));
     if(i>=0) {
         themeCombo->setCurrentIndex(i);
+    }
+    i = localeCombo->findData(QString::fromStdString(config.getUiLocale()));
+    if(i>=0) {
+        localeCombo->setCurrentIndex(i);
     }
     showToolbarCheck->setChecked(config.isUiShowToolbar());
     appFontSizeSpin->setValue(config.getUiAppFontSize());
@@ -213,8 +264,9 @@ void ConfigurationDialog::AppTab::refresh()
 
 void ConfigurationDialog::AppTab::save()
 {
-    config.setStartupView(startupCombo->itemText(startupCombo->currentIndex()).toStdString());
+    config.setStartupView(startupCombo->itemData(startupCombo->currentIndex()).toString().toStdString());
     config.setUiThemeName(themeCombo->itemText(themeCombo->currentIndex()).toStdString());
+    config.setUiLocale(localeCombo->currentData().toString().toStdString());
     config.setUiShowToolbar(showToolbarCheck->isChecked());
     config.setUiAppFontSize(appFontSizeSpin->value());
     config.setUiExpertMode(uiExpertModeCheck->isChecked());
