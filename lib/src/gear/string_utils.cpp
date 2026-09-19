@@ -328,4 +328,27 @@ vector<string> rewrapParagraphLines(const vector<string>& lines, unsigned width)
     return result;
 }
 
+vector<string> sortLinesAlphabetically(const vector<string>& lines)
+{
+    vector<string> result{lines};
+
+    sort(
+        result.begin(),
+        result.end(),
+        [](const string& l, const string& r) {
+            string lowerL{}, lowerR{};
+            stringToLower(l, lowerL);
+            stringToLower(r, lowerR);
+            // case sensitive tie break makes the ordering of the lines which
+            // differ in the case only deterministic
+            if(lowerL == lowerR) {
+                return l < r;
+            }
+            return lowerL < lowerR;
+        }
+    );
+
+    return result;
+}
+
 } /* namespace */

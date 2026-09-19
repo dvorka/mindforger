@@ -216,6 +216,7 @@ public:
     QAction* actionEditLiveNotePreview;
     QAction* actionEditWordWrap;
     QAction* actionEditRewrapParagraph;
+    QAction* actionEditSortLines;
     QAction* actionEditNameDescFocusSwap;
     QAction* actionEditExtract;
     QAction* actionEditWingman;

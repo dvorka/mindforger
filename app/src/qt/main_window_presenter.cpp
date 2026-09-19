@@ -3399,6 +3399,20 @@ void MainWindowPresenter::doActionEditRewrapParagraph()
     editor->rewrapParagraph();
 }
 
+void MainWindowPresenter::doActionEditSortLines()
+{
+    NoteEditorView* editor{};
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        editor = orloj->getNoteEdit()->getView()->getNoteEditor();
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        editor = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor();
+    } else {
+        return;
+    }
+
+    editor->sortLines();
+}
+
 void MainWindowPresenter::doActionMindRemember()
 {
     mdConfigRepresentation->save(config);

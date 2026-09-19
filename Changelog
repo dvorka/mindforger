@@ -6,6 +6,8 @@
       shelves - create as many named notebook shelves for notebooks you want to group
       as needed and add Notebooks to them explicitly.
     * Feature: Notebook/Export/Markdown - export a Notebook to a file in Markdown format.
+    * Feature: Edit/Sort Lines - sorts the selected lines - or the lines of the block
+      under the cursor - alphabetically.
     * Enhancement: changed in-app diagram support configuration from dropdown to checkbox.
     * Enhancement: CSV export no longer freezes UI on big repo and/or slow(er) HW as
       export newly runs in the modal dialog w/ progress bar and it can be cancelled.

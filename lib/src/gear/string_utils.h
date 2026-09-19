@@ -207,6 +207,18 @@ bool isMarkdownParagraphBoundaryLine(const std::string& line);
  */
 std::vector<std::string> rewrapParagraphLines(const std::vector<std::string>& lines, unsigned width = 80);
 
+/**
+ * @brief Sort lines alphabetically.
+ *
+ * Lines are ordered case insensitively (ASCII case folding) w/ a case sensitive
+ * tie break which makes the sort deterministic and platform independent. Lines
+ * are compared as they are i.e. indentation and Markdown list bullets are kept
+ * and they are a part of the comparison.
+ *
+ * @param lines lines to be sorted
+ */
+std::vector<std::string> sortLinesAlphabetically(const std::vector<std::string>& lines);
+
 } /* namespace*/
 
 #endif /* M8R_STRING_UTILS_H_ */
