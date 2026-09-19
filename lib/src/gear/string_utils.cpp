@@ -260,6 +260,20 @@ static size_t utf8Length(const string& s)
     return length;
 }
 
+static string asciiToLower(const string& s)
+{
+    // fold A-Z only - unlike std::tolower() this neither depends on the global
+    // locale, nor it touches the bytes of non-ASCII UTF-8 characters
+
+    string lower{s};
+    for(char& c: lower) {
+        if(c>='A' && c<='Z') {
+            c += 'a'-'A';
+        }
+    }
+    return lower;
+}
+
 vector<string> rewrapParagraphLines(const vector<string>& lines, unsigned width)
 {
     // hard break (two trailing spaces or backslash) aware word ensuring
@@ -336,9 +350,7 @@ vector<string> sortLinesAlphabetically(const vector<string>& lines)
         result.begin(),
         result.end(),
         [](const string& l, const string& r) {
-            string lowerL{}, lowerR{};
-            stringToLower(l, lowerL);
-            stringToLower(r, lowerR);
+            const string lowerL{asciiToLower(l)}, lowerR{asciiToLower(r)};
             // case sensitive tie break makes the ordering of the lines which
             // differ in the case only deterministic
             if(lowerL == lowerR) {

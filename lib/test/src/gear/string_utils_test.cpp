@@ -421,6 +421,33 @@ TEST(StringGearTestCase, SortLinesAlphabeticallyIsDeterministic)
     ASSERT_EQ("mind", sorted[2]);
 }
 
+TEST(StringGearTestCase, SortLinesAlphabeticallyOrdersNonAsciiByUtf8Bytes)
+{
+    // GIVEN lines w/ non-ASCII letters - the A-Z only case folding orders them
+    // by their UTF-8 bytes i.e. deterministically, but not by Czech collation
+    vector<string> lines{
+        "Cukr",
+        "Čaj",
+        "Ananas",
+        "cukr",
+    };
+
+    // WHEN
+    vector<string> sorted = sortLinesAlphabetically(lines);
+
+    // THEN
+    for(const string& line: sorted) {
+        cout << "sorted '" << line << "'" << endl;
+    }
+    ASSERT_EQ(4u, sorted.size());
+    ASSERT_EQ("Ananas", sorted[0]);
+    ASSERT_EQ("Cukr", sorted[1]);
+    ASSERT_EQ("cukr", sorted[2]);
+    // non-ASCII letter is NOT folded, so it sorts past the ASCII ones - and it
+    // must survive the sort byte by byte
+    ASSERT_EQ("Čaj", sorted[3]);
+}
+
 TEST(StringGearTestCase, SortLinesAlphabeticallyEmpty)
 {
     // GIVEN
