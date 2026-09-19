@@ -346,3 +346,117 @@ TEST(StringGearTestCase, RewrapParagraphLinesHardBreakInLongParagraphStillWraps)
     // and the words after it must not appear on the same output line
     ASSERT_EQ(string::npos, rewrapped.back().find("tempor"));
 }
+
+TEST(StringGearTestCase, SortLinesAlphabetically)
+{
+    // GIVEN
+    vector<string> lines{
+        "banana",
+        "Apple",
+        "cherry",
+        "apple",
+    };
+
+    // WHEN
+    vector<string> sorted = sortLinesAlphabetically(lines);
+
+    // THEN
+    for(const string& line: sorted) {
+        cout << "sorted '" << line << "'" << endl;
+    }
+    ASSERT_EQ(4u, sorted.size());
+    // case insensitive ordering w/ case sensitive tie break
+    ASSERT_EQ("Apple", sorted[0]);
+    ASSERT_EQ("apple", sorted[1]);
+    ASSERT_EQ("banana", sorted[2]);
+    ASSERT_EQ("cherry", sorted[3]);
+}
+
+TEST(StringGearTestCase, SortLinesAlphabeticallyKeepsLinesIntact)
+{
+    // GIVEN Markdown list items w/ indentation and duplicates
+    vector<string> lines{
+        "- zebra",
+        "- ant",
+        "- ant",
+        "  - beetle",
+    };
+
+    // WHEN
+    vector<string> sorted = sortLinesAlphabetically(lines);
+
+    // THEN
+    for(const string& line: sorted) {
+        cout << "sorted '" << line << "'" << endl;
+    }
+    ASSERT_EQ(4u, sorted.size());
+    // indentation is a part of the compared line - indented items sort first
+    ASSERT_EQ("  - beetle", sorted[0]);
+    ASSERT_EQ("- ant", sorted[1]);
+    ASSERT_EQ("- ant", sorted[2]);
+    ASSERT_EQ("- zebra", sorted[3]);
+}
+
+TEST(StringGearTestCase, SortLinesAlphabeticallyIsDeterministic)
+{
+    // GIVEN lines which differ in the case only i.e. lines whose lower case keys are equal
+    vector<string> lines{
+        "mind",
+        "MIND",
+        "Mind",
+    };
+
+    // WHEN sorted twice - the 2nd time from a different initial order
+    vector<string> sorted = sortLinesAlphabetically(lines);
+    vector<string> reversed{lines.rbegin(), lines.rend()};
+    vector<string> sortedReversed = sortLinesAlphabetically(reversed);
+
+    // THEN both runs give the same result
+    for(const string& line: sorted) {
+        cout << "sorted '" << line << "'" << endl;
+    }
+    ASSERT_EQ(sorted, sortedReversed);
+    ASSERT_EQ("MIND", sorted[0]);
+    ASSERT_EQ("Mind", sorted[1]);
+    ASSERT_EQ("mind", sorted[2]);
+}
+
+TEST(StringGearTestCase, SortLinesAlphabeticallyOrdersNonAsciiByUtf8Bytes)
+{
+    // GIVEN lines w/ non-ASCII letters - the A-Z only case folding orders them
+    // by their UTF-8 bytes i.e. deterministically, but not by Czech collation
+    vector<string> lines{
+        "Cukr",
+        "Čaj",
+        "Ananas",
+        "cukr",
+    };
+
+    // WHEN
+    vector<string> sorted = sortLinesAlphabetically(lines);
+
+    // THEN
+    for(const string& line: sorted) {
+        cout << "sorted '" << line << "'" << endl;
+    }
+    ASSERT_EQ(4u, sorted.size());
+    ASSERT_EQ("Ananas", sorted[0]);
+    ASSERT_EQ("Cukr", sorted[1]);
+    ASSERT_EQ("cukr", sorted[2]);
+    // non-ASCII letter is NOT folded, so it sorts past the ASCII ones - and it
+    // must survive the sort byte by byte
+    ASSERT_EQ("Čaj", sorted[3]);
+}
+
+TEST(StringGearTestCase, SortLinesAlphabeticallyEmpty)
+{
+    // GIVEN
+    vector<string> lines{};
+
+    // WHEN
+    vector<string> sorted = sortLinesAlphabetically(lines);
+
+    // THEN
+    cout << "sorted[" << sorted.size() << "]" << endl;
+    ASSERT_TRUE(sorted.empty());
+}

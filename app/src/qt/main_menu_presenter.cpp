@@ -303,6 +303,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         view->actionEditRewrapParagraph, SIGNAL(triggered()),
         mwp, SLOT(doActionEditRewrapParagraph()));
     QObject::connect(
+        view->actionEditSortLines, SIGNAL(triggered()),
+        mwp, SLOT(doActionEditSortLines()));
+    QObject::connect(
         view->actionEditNameDescFocusSwap, SIGNAL(triggered()),
         mwp, SLOT(doActionNameDescFocusSwap()));
     QObject::connect(

@@ -830,6 +830,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditRewrapParagraph = new QAction(QIcon(":/menu-icons/rewrap-paragraph.svg"), tr("Rewr&ap Paragraph"), mainWindow);
     actionEditRewrapParagraph->setStatusTip(tr("Rewrap/fill the paragraph under the cursor to a fixed line width"));
 
+    actionEditSortLines = new QAction(QIcon(":/menu-icons/sort-lines.svg"), tr("Sort Li&nes"), mainWindow);
+    actionEditSortLines->setStatusTip(tr("Sort the selected lines/lines of the block under the cursor alphabetically"));
+
     actionEditNameDescFocusSwap = new QAction(QIcon(":/menu-icons/up.svg"), tr("Swap Nam&e/Description Focus"), mainWindow);
     actionEditNameDescFocusSwap->setStatusTip(tr("Swap focus of N title and description editors"));
 
@@ -875,6 +878,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuEdit->addAction(actionEditLiveNotePreview);
     menuEdit->addAction(actionEditWordWrap);
     menuEdit->addAction(actionEditRewrapParagraph);
+    menuEdit->addAction(actionEditSortLines);
     menuEdit->addAction(actionEditNameDescFocusSwap);
     menuEdit->addSeparator();
     menuEdit->addMenu(submenuEditWingman);

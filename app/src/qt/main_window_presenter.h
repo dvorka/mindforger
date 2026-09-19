@@ -387,6 +387,7 @@ public slots:
     void doActionEditFindAgain();
     void doActionEditWordWrapToggle();
     void doActionEditRewrapParagraph();
+    void doActionEditSortLines();
     void doActionEditPasteImageData(QImage image);
     void doActionRunToolDialogAnywhere();
     void doActionOpenRunToolDialog(QString& phrase, QString& toolId, bool showDialog=true);

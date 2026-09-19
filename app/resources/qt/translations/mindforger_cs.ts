@@ -1807,17 +1807,17 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Zobrazit dokumenty knihovny...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="839"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="842"/>
         <source>&amp;Wingman</source>
         <translation>AI pa&amp;rťák</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1067"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1071"/>
         <source>Emo&amp;jis</source>
         <translation>Emo&amp;ji</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1069"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1073"/>
         <source>Open dialog with emoji characters to be copy/pasted to names, descriptions and text...</source>
         <translation>Otevřít dialog se znaky emoji pro kopírování/vkládání do názvů, popisů a textu...</translation>
     </message>
@@ -1840,7 +1840,7 @@ Vyberte nový zdroj knihovny:</translation>
         <location filename="../../../src/qt/main_menu_view.cpp" line="120"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="622"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="756"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="848"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="851"/>
         <source>&amp;Wingman LLM</source>
         <translation>AI pa&amp;rťák</translation>
     </message>
@@ -2188,323 +2188,333 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Přeformátovat/zalomit odstavec pod kurzorem na pevnou šířku řádku</translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="833"/>
+        <source>Sort Li&amp;nes</source>
+        <translation>Seřa&amp;dit řádky</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="834"/>
+        <source>Sort the selected lines/lines of the block under the cursor alphabetically</source>
+        <translation>Seřadit abecedně vybrané řádky/řádky bloku pod kurzorem</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="837"/>
         <source>Swap focus of N title and description editors</source>
         <translation>Přepnout fokus mezi editorem názvu a popisu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="840"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="843"/>
         <source>Run an external tool to find, explain, process text under the cursor</source>
         <translation>Spustit externí nástroj pro hledání, vysvětlení nebo zpracování textu pod kurzorem</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="842"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="845"/>
         <source>Complete Link	Ctrl+L</source>
         <translation>Dokončit odkaz	Ctrl+L</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="846"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="849"/>
         <source>Spell check Notebook or Note description</source>
         <translation>Zkontrolovat pravopis popisu zápisníku nebo poznámky</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="890"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="894"/>
         <source>&amp;Bold</source>
         <translation>&amp;Tučné</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="891"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="895"/>
         <source>Format text as bold</source>
         <translation>Formátovat text tučně</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="896"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="900"/>
         <source>&amp;Italic</source>
         <translation>&amp;Kurzíva</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="897"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="901"/>
         <source>Format text as italic</source>
         <translation>Formátovat text kurzívou</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="902"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="906"/>
         <source>&amp;Code</source>
         <translation>&amp;Kód</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="903"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="907"/>
         <source>Format text as inlined source code</source>
         <translation>Formátovat text jako vložený zdrojový kód</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="914"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="918"/>
         <source>Comment</source>
         <translation>Komentář</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="915"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="919"/>
         <source>Add comment to hide text in rendered HTML</source>
         <translation>Přidat komentář pro skrytí textu ve vykresleném HTML</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="918"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="922"/>
         <source>Lis&amp;ts</source>
         <translation>Sezn&amp;amy</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="920"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="924"/>
         <source>&amp;Bulleted List</source>
         <translation>&amp;Odrážkový seznam</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="924"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="928"/>
         <source>&amp;Numbered List</source>
         <translation>&amp;Číslovaný seznam</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="928"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="932"/>
         <source>&amp;Task List</source>
         <translation>&amp;Úkolový seznam</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="935"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="939"/>
         <source>Task List &amp;Item</source>
         <translation>Položka ú&amp;kolového seznamu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="940"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="944"/>
         <source>Bl&amp;ocks</source>
         <translation>Blo&amp;ky</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="946"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="950"/>
         <source>&amp;Code Block</source>
         <translation>&amp;Blok kódu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="950"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="954"/>
         <source>&amp;Math Block</source>
         <translation>&amp;Blok matematiky</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="955"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="959"/>
         <source>&amp;Diagram Block</source>
         <translation>&amp;Blok diagramu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="956"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="960"/>
         <source>Format code block as diagram (Mermaid)</source>
         <translation>Formátovat blok kódu jako diagram (Mermaid)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="960"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="964"/>
         <source>Diagrams</source>
         <translation>Diagramy</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="964"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="968"/>
         <source>&amp;Flowchart</source>
         <translation>&amp;Vývojový diagram</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="965"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="969"/>
         <source>Insert flowchart Mermaid diagram skeleton</source>
         <translation>Vložit kostru vývojového diagramu Mermaid</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="968"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="972"/>
         <source>&amp;Sequence Diagram</source>
         <translation>&amp;Sekvenční diagram</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="969"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="973"/>
         <source>Insert sequence Mermaid diagram skeleton</source>
         <translation>Vložit kostru sekvenčního diagramu Mermaid</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="972"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="976"/>
         <source>&amp;Class Diagram</source>
         <translation>Diagram &amp;tříd</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="973"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="977"/>
         <source>Insert class Mermaid diagram skeleton</source>
         <translation>Vložit kostru diagramu tříd Mermaid</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="976"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="980"/>
         <source>St&amp;ate Diagram</source>
         <translation>Diagram s&amp;tavů</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="977"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="981"/>
         <source>Insert state Mermaid diagram skeleton</source>
         <translation>Vložit kostru diagramu stavů Mermaid</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="980"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="984"/>
         <source>&amp;Gantt Diagram</source>
         <translation>Ganttův &amp;diagram</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="981"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="985"/>
         <source>Insert Gantt Mermaid diagram skeleton</source>
         <translation>Vložit kostru Ganttova diagramu Mermaid</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="984"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="988"/>
         <source>&amp;Pie Diagram</source>
         <translation>Ko&amp;láčový graf</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="985"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="989"/>
         <source>Insert pie Mermaid chart skeleton</source>
         <translation>Vložit kostru koláčového grafu Mermaid</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1002"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1006"/>
         <source>in&amp;tegrals</source>
         <translation>in&amp;tegrály</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1018"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1022"/>
         <source>dot</source>
         <translation>tečka</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1025"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1029"/>
         <source>ca&amp;p</source>
         <translation>prů&amp;nik</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1029"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1033"/>
         <source>in</source>
         <translation>patří do</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1034"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1038"/>
         <source>&amp;Strikethrough</source>
         <translation>&amp;Přeškrtnuté</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1035"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1039"/>
         <source>Format text as strikethrough</source>
         <translation>Formátovat text jako přeškrtnutý</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1122"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1126"/>
         <source>About &amp;Qt</source>
         <translation>O &amp;Qt</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="911"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="915"/>
         <source>&amp;Keyboard</source>
         <translation>&amp;Klávesnice</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="912"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="916"/>
         <source>Format text as keyboard input</source>
         <translation>Formátovat text jako vstup z klávesnice</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1107"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1111"/>
         <source>Math cheatsheet</source>
         <translation>Přehled matematické syntaxe</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1108"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1112"/>
         <source>Open MathJax quick reference</source>
         <translation>Otevřít rychlou referenci MathJax</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1110"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1114"/>
         <source>Math live preview</source>
         <translation>Živý náhled matematiky</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1111"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1115"/>
         <source>Open MathJax live demo</source>
         <translation>Otevřít živé demo MathJax</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1113"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1117"/>
         <source>Mermaid dia&amp;grams documentation</source>
         <translation>Dokumentace dia&amp;gramů Mermaid</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1114"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1118"/>
         <source>Open Mermaid diagrams documentation</source>
         <translation>Otevřít dokumentaci diagramů Mermaid</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="921"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="925"/>
         <source>Format block as bulleted list</source>
         <translation>Formátovat blok jako odrážkový seznam</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="925"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="929"/>
         <source>Format block as numbered list</source>
         <translation>Formátovat blok jako číslovaný seznam</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="929"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="936"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="933"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="940"/>
         <source>Format block as task list</source>
         <translation>Formátovat blok jako úkolový seznam</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="947"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="951"/>
         <source>Format text block as source code</source>
         <translation>Formátovat blok textu jako zdrojový kód</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="942"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="946"/>
         <source>Block &amp;Quote</source>
         <translation>&amp;Citace</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="943"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="947"/>
         <source>Format text block as blockquote</source>
         <translation>Formátovat blok textu jako citaci</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1046"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1050"/>
         <source>Timestam&amp;p</source>
         <translation>Časové &amp;razítko</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1049"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1053"/>
         <source>&amp;Link</source>
         <translation>&amp;Odkaz</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1050"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1054"/>
         <source>Insert link to a document, image or file</source>
         <translation>Vložit odkaz na dokument, obrázek nebo soubor</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1056"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1060"/>
         <source>Insert image</source>
         <translation>Vložit obrázek</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1061"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1065"/>
         <source>Tabl&amp;es</source>
         <translation>Ta&amp;bulky</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1064"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1068"/>
         <source>&amp;Horizontal ruler</source>
         <translation>&amp;Vodorovná linka</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1065"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1069"/>
         <source>Horizontal ruler</source>
         <translation>Vodorovná linka</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="888"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="892"/>
         <source>&amp;Format</source>
         <translation>&amp;Formát</translation>
     </message>
@@ -2706,12 +2716,12 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Snížit úroveň poznámky</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="836"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="839"/>
         <source>E&amp;xtract</source>
         <translation>E&amp;xtrahovat</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="837"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="840"/>
         <source>Create new Note from the text selected in the current Note...</source>
         <translation>Vytvořit novou poznámku z textu vybraného v aktuální poznámce...</translation>
     </message>
@@ -2810,7 +2820,7 @@ Vyberte nový zdroj knihovny:</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="626"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="852"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="855"/>
         <source>&amp;Explain</source>
         <translation>&amp;Vysvětlit</translation>
     </message>
@@ -2832,14 +2842,14 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="632"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="766"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="861"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="864"/>
         <source>&amp;More prompts...</source>
         <translation>&amp;Další dotazy...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="633"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="767"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="862"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="865"/>
         <source>Open Wingman chat...</source>
         <translation>Otevřít chat s AI parťákem...</translation>
     </message>
@@ -2899,272 +2909,272 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Přepnout režim zalamování řádků</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="833"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="836"/>
         <source>Swap Nam&amp;e/Description Focus</source>
         <translation>Přepnout fokus &amp;název/popis</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="843"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="846"/>
         <source>Complete word being written by finding link to Notebook or Note</source>
         <translation>Doplnit psané slovo nalezením odkazu na zápisník nebo poznámku</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="845"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="848"/>
         <source>&amp;Spell Check</source>
         <translation>&amp;Kontrola pravopisu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="849"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="852"/>
         <source>&amp;Fix Grammar</source>
         <translation>&amp;Opravit gramatiku</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="850"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="853"/>
         <source>Ask Wingman to fix grammar errors in the selected text / word under the cursor...</source>
         <translation>Požádat AI parťáka o opravu gramatických chyb ve vybraném textu / slově pod kurzorem...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="853"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="856"/>
         <source>Ask Wingman to explain the word under the cursor / selected text...</source>
         <translation>Požádat AI parťáka o vysvětlení slova pod kurzorem / vybraného textu...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="855"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="858"/>
         <source>Finish &amp;Text</source>
         <translation>Dokončit &amp;text</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="856"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="859"/>
         <source>Ask Wingman to finish the text following the selected text / word under the cursor...</source>
         <translation>Požádat AI parťáka o dokončení textu navazujícího na vybraný text / slovo pod kurzorem...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="858"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="861"/>
         <source>&amp;Rewrite Text</source>
         <translation>Přepsat &amp;text</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="859"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="862"/>
         <source>Ask Wingman to rewrite the text following the selected text / word under the cursor...</source>
         <translation>Požádat AI parťáka o přepsání textu navazujícího na vybraný text / slovo pod kurzorem...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="908"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="912"/>
         <source>&amp;Math</source>
         <translation>&amp;Matematika</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="909"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="913"/>
         <source>Format text as math (MathJax)</source>
         <translation>Formátovat text jako matematiku (MathJax)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="989"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="993"/>
         <source>MathJa&amp;x</source>
         <translation>MathJa&amp;x</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="990"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="994"/>
         <source>&amp;text</source>
         <translation>&amp;text</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="993"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="997"/>
         <source>&amp;fraction</source>
         <translation>&amp;zlomek</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="995"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="999"/>
         <source>&amp;sum</source>
         <translation>&amp;suma</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="997"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1001"/>
         <source>s&amp;quare root</source>
         <translation>druhá &amp;odmocnina</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1000"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1004"/>
         <source>&amp;integral</source>
         <translation>&amp;integrál</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1005"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1009"/>
         <source>&amp;alpha</source>
         <translation>&amp;alfa</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1007"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1011"/>
         <source>&amp;beta</source>
         <translation>&amp;beta</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1009"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1013"/>
         <source>&amp;Gama</source>
         <translation>&amp;gama</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1011"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1015"/>
         <source>&amp;Delta</source>
         <translation>&amp;delta</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1014"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1018"/>
         <source>&amp;bar</source>
         <translation>&amp;pruh</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1016"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1020"/>
         <source>&amp;hat</source>
         <translation>&amp;stříška</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1020"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1024"/>
         <source>&amp;overrightarrow</source>
         <translation>ší&amp;pka nad</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1023"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1027"/>
         <source>&amp;cup</source>
         <translation>sj&amp;ednocení</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1027"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1031"/>
         <source>&amp;empty set</source>
         <translation>prázdná &amp;množina</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1031"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1035"/>
         <source>&amp;not in</source>
         <translation>&amp;nepatří do</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1038"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1042"/>
         <source>T&amp;able of Contents</source>
         <translation>O&amp;bsah</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1047"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1051"/>
         <source>Insert current date and time</source>
         <translation>Vložit aktuální datum a čas</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="951"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="955"/>
         <source>Format text block as math (MathJax)</source>
         <translation>Formátovat blok textu jako matematiku (MathJax)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1039"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1043"/>
         <source>With&amp;out tags</source>
         <translation>Bez &amp;štítků</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1040"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1044"/>
         <source>Insert Notebook&apos;s table of contents without tags</source>
         <translation>Vložit obsah zápisníku bez štítků</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1042"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1046"/>
         <source>&amp;With tags</source>
         <translation>&amp;Se štítky</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1043"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1047"/>
         <source>Insert Notebook&apos;s table of contents with tags</source>
         <translation>Vložit obsah zápisníku se štítky</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1055"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1059"/>
         <source>Ima&amp;ge</source>
         <translation>O&amp;brázek</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1062"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1066"/>
         <source>Insert table...</source>
         <translation>Vložit tabulku...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1097"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1101"/>
         <source>&amp;Documentation</source>
         <translation>&amp;Dokumentace</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1098"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1102"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1099"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1103"/>
         <source>Open MindForger documentation</source>
         <translation>Otevřít dokumentaci MindForger</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1101"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1105"/>
         <source>&amp;Web</source>
         <translation>&amp;Web</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1102"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1106"/>
         <source>Open MindForger web</source>
         <translation>Otevřít web MindForger</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1104"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1108"/>
         <source>&amp;Markdown tutorial</source>
         <translation>Tutoriál &amp;Markdown</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1105"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1109"/>
         <source>Open Markdown tutorial</source>
         <translation>Otevřít tutoriál Markdown</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1116"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1120"/>
         <source>Report &amp;Bug or Request Feature</source>
         <translation>Nahlásit &amp;chybu nebo navrhnout funkci</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1117"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1121"/>
         <source>Report bug or suggest an enhancement</source>
         <translation>Nahlásit chybu nebo navrhnout vylepšení</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1119"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1123"/>
         <source>&amp;Check for Updates</source>
         <translation>&amp;Zkontrolovat aktualizace</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1120"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1124"/>
         <source>Check for MindForger updates</source>
         <translation>Zkontrolovat aktualizace MindForger</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1123"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1127"/>
         <source>About Qt...</source>
         <translation>O Qt...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1125"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1129"/>
         <source>&amp;About MindForger</source>
         <translation>&amp;O aplikaci MindForger</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1126"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1130"/>
         <source>About MindForger...</source>
         <translation>O aplikaci MindForger...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1128"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1132"/>
         <source>&amp;Sponsor</source>
         <translation>&amp;Podpořit</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1129"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1133"/>
         <source>Sponsor MindForger...</source>
         <translation>Podpořit MindForger...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="1131"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="1135"/>
         <source>&amp;Help</source>
         <translation>Nápo&amp;věda</translation>
     </message>
@@ -3497,47 +3507,47 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Vyřadit zápisník</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3525"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3539"/>
         <source>Library already indexed - use &apos;Update library&apos; action to synchronize documents.</source>
         <translation>Knihovna je již indexována – k synchronizaci dokumentů použijte akci &apos;Aktualizovat knihovnu&apos;.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3533"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3547"/>
         <source>Unable to index documents on library path - either memory directory doesn&apos;t exist or not in MindForger workspace mode.</source>
         <translation>Nelze indexovat dokumenty na cestě knihovny – buď adresář paměti neexistuje, nebo nejste v režimu prostoru MindForger.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3570"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3584"/>
         <source>Library synchronization</source>
         <translation>Synchronizace knihovny</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3571"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3585"/>
         <source>There are no libraries - nothing to synchronize.</source>
         <translation>Nejsou žádné knihovny – není co synchronizovat.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3668"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3682"/>
         <source>Library deletion</source>
         <translation>Odstranění knihovny</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3669"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3683"/>
         <source>There are no libraries - nothing to delete.</source>
         <translation>Nejsou žádné knihovny – není co smazat.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3684"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3698"/>
         <source>Delete Library</source>
         <translation>Smazat knihovnu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3685"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3699"/>
         <source>Do you really want to delete Notebooks which represent the library documents?</source>
         <translation>Opravdu chcete smazat zápisníky reprezentující dokumenty knihovny?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4010"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4024"/>
         <source>Do you really want to forget &apos;</source>
         <translation>Opravdu chcete zapomenout &apos;</translation>
     </message>
@@ -3913,122 +3923,122 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Vyberte prosím poznámku ke snížení úrovně.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3503"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3524"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3532"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3517"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3538"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3546"/>
         <source>Add Library Error</source>
         <translation>Chyba přidání knihovny</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3504"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3518"/>
         <source>Library directory doesn&apos;t exist!</source>
         <translation>Adresář knihovny neexistuje!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3602"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3612"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3634"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3642"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3616"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3626"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3648"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3656"/>
         <source>Library Orphans</source>
         <translation>Sirotci knihovny</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3603"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3617"/>
         <source>Found %1 library Notebooks with orphaned documents. Notebooks were tagged with &apos;library-orphan-document&apos; tag. Use scopes to filter them out.</source>
         <translation>Nalezeno %1 zápisníků knihovny se sirotčími dokumenty. Zápisníky byly označeny štítkem &apos;library-orphan-document&apos;. Pro jejich filtrování použijte rozsahy.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3613"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3627"/>
         <source>No Notebooks with orphaned documents found.</source>
         <translation>Nebyly nalezeny žádné zápisníky se sirotčími dokumenty.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3635"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3649"/>
         <source>%1 Notebooks tagged as library orphans were deprecated.</source>
         <translation>%1 zápisníků označených jako sirotci knihovny bylo deaktivováno.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3643"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3657"/>
         <source>No Notebooks with library orphan tag found.</source>
         <translation>Nebyly nalezeny žádné zápisníky se štítkem sirotka knihovny.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3825"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3839"/>
         <source>Organizer Update Error</source>
         <translation>Chyba aktualizace organizátoru</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3826"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3840"/>
         <source>Eisenhower Matrix organizer is built-in and cannot be edited - please create or update a custom organizer.</source>
         <translation>Organizátor Eisenhowerovy matice je vestavěný a nelze jej upravovat – vytvořte nebo upravte vlastní organizátor.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3853"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3867"/>
         <source>Organizer Clone Error</source>
         <translation>Chyba klonování organizátoru</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3854"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3868"/>
         <source>Eisenhower Matrix organizer is built-in and cannot be cloned - please create or update a custom organizer.</source>
         <translation>Organizátor Eisenhowerovy matice je vestavěný a nelze jej klonovat – vytvořte nebo upravte vlastní organizátor.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4009"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4023"/>
         <source>Forget Organizer</source>
         <translation>Zapomenout organizátor</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4011"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4025"/>
         <source>&apos; Organizer?</source>
         <translation>&apos; organizátor?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4022"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4036"/>
         <source>Delete Organizer</source>
         <translation>Smazat organizátor</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4023"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4037"/>
         <source>Eisenhower Matrix is built-in and cannot be deleted - only custom organizers can.</source>
         <translation>Eisenhowerova matice je vestavěná a nelze ji smazat – smazat lze pouze vlastní organizátory.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4099"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4113"/>
         <source>Delete Notebook Tree</source>
         <translation>Smazat strom zápisníků</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4100"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4114"/>
         <source>Do you really want to delete &apos;</source>
         <translation>Opravdu chcete smazat strom zápisníků &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4102"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4116"/>
         <source>&apos; Notebook tree? Notebooks organized in it will NOT be deleted.</source>
         <translation>&apos;? Zápisníky v něm uspořádané NEBUDOU smazány.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4146"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4160"/>
         <source>Notebook &apos;%1&apos; added to tree &apos;%2&apos;</source>
         <translation>Zápisník &apos;%1&apos; přidán do stromu &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4166"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4180"/>
         <source>Entry removed from Notebook tree (Notebook itself was NOT deleted)</source>
         <translation>Položka odebrána ze stromu zápisníků (samotný zápisník NEBYL smazán)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4184"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4198"/>
         <source>View Limbo</source>
         <translation>Zobrazit Limbo</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4185"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4199"/>
         <source>Limbo directory with deleted Notebooks is available in the MindForger workspace, not if a Markdown is edited or a directory with markdowns is opened.</source>
         <translation>Adresář Limbo se smazanými zápisníky je dostupný v prostoru MindForger, nikoli při úpravě souboru Markdown nebo otevření adresáře se soubory Markdown.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4302"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4316"/>
         <source>About MindForger</source>
         <translation>O aplikaci MindForger</translation>
     </message>
@@ -4284,27 +4294,27 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Zkontrolovat pravopis...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="490"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="556"/>
         <source>Exit Editor</source>
         <translation>Ukončit editor</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="491"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="557"/>
         <source>Do you really want to exit editor without saving?</source>
         <translation>Opravdu chcete ukončit editor bez uložení?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="897"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="963"/>
         <source>Full-text Search Result</source>
         <translation>Výsledek fulltextového vyhledávání</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="898"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="964"/>
         <source>No matching text found.</source>
         <translation>Nebyl nalezen žádný odpovídající text.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1045"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1111"/>
         <source>No spelling suggestions found</source>
         <translation>Nebyly nalezeny žádné návrhy pravopisu</translation>
     </message>
