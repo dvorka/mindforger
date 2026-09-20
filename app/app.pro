@@ -90,8 +90,8 @@ DEPENDPATH += $$PWD/../lib/src
 
 # MindForger lib
 win32 {
-    CONFIG(release, debug|release): LIBS += -L$$PWD/../lib/release -lmindforger
-    else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/debug -lmindforger
+    CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../lib/release -lmindforger
+    else:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../lib/debug -lmindforger
 } else {
     # Linux and macOS
     # TODO split macOS
