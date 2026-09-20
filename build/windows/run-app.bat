@@ -20,18 +20,14 @@ rem This script copies nice and safe Outlines from personal repository
 rem to demo repository used for creation of screenshots and videos.
 @echo on
 
-cls
-cd ..\..
+setlocal
+call "%~dp0%\env.bat"
+echo on
+set "MF_APP=%MF_BASE%\app\release\mindforger.exe"
+if not exist "%MF_APP%" goto :err
+start "" "%MF_APP%"
+goto :end
+:err
+echo cannot find '%MF_APP%'
+:end
 
-rem Gather libraries...
-rem 5.12.1 @ CI:
-rem C:\Qt\5.12.1\msvc2017_64\bin\windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
-rem 5.15.2 @ VM:
-C:\Qt2024\5.15.2\msvc2019_64\bin\windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
-rem 5.15.2 @ CI:
-rem C:\Qt\5.15.2\msvc2019_64\bin\windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
-
-rem Build installer
-"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /Qp /DVcRedistPath="c:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.29.30133\vcredist_x64.exe" build\windows\installer\mindforger-setup.iss
-
-echo "Find installer in mindforger/app/release/installer/*.exe"
