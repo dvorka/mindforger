@@ -463,8 +463,8 @@ Elija la nueva fuente de la biblioteca:</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="474"/>
-        <source>Spell check dictionaries &lt;a href=&apos;https://github.com/dvorka/mindforger/wiki/Installation#spell-check&apos;&gt;configuration documentation&lt;/a&gt;</source>
-        <translation>Diccionarios de ortografía: &lt;a href=&apos;https://github.com/dvorka/mindforger/wiki/Installation#spell-check&apos;&gt;documentación de configuración&lt;/a&gt;</translation>
+        <source>Spell check dictionaries &lt;a href=&apos;https://www.mindforger.com/docs/installation.html#spell-check&apos;&gt;configuration documentation&lt;/a&gt;</source>
+        <translation>Diccionarios de ortografía: &lt;a href=&apos;https://www.mindforger.com/docs/installation.html#spell-check&apos;&gt;documentación de configuración&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="483"/>
