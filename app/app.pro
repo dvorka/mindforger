@@ -493,6 +493,25 @@ TRANSLATIONS = \
     ./resources/qt/translations/mindforger_nerd_zh_cn.ts \
     ./resources/qt/translations/mindforger_zh_cn.ts
 
+# compile .ts translation files to binary .qm catalogs on every build - the .qm
+# catalogs are generated files (they are NOT stored in the repository) and lrelease
+# is run whenever a catalog is missing or older than its .ts source
+#
+# an explicit extra compiler is used instead of Qt's CONFIG+=lrelease feature as
+# that feature requires Qt 5.13+, while MindForger is built w/ older Qt as well
+# (AppVeyor CI for Windows uses Qt 5.9)
+#
+# the catalogs MUST be generated next to mf-resources.qrc which refers to them using
+# paths relative to itself - catalogs generated to the build directory would break
+# shadow builds (Qt Creator, snapcraft qmake plugin, ...) as rcc would not find them
+qtPrepareTool(QMAKE_LRELEASE, lrelease)
+lrelease.name = lrelease
+lrelease.input = TRANSLATIONS
+lrelease.output = $$PWD/resources/qt/translations/${QMAKE_FILE_BASE}.qm
+lrelease.commands = $$QMAKE_LRELEASE ${QMAKE_FILE_IN} -qm ${QMAKE_FILE_OUT}
+lrelease.CONFIG += no_link target_predeps
+QMAKE_EXTRA_COMPILERS += lrelease
+
 RESOURCES += \
     ./mf-resources.qrc
 

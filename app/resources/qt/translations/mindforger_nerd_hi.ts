@@ -849,49 +849,87 @@ Choose new library source:</source>
 <context>
     <name>m8r::EmojisDialog</name>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="26"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="29"/>
         <source>Emojis</source>
         <translation>इमोजी</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="31"/>
         <source>Click a character to insert it to the currently edited name or description:</source>
-        <translation>वर्तमान में संपादित नाम या विवरण में डालने के लिए किसी वर्ण पर क्लिक करें:</translation>
+        <translation type="vanished">वर्तमान में संपादित नाम या विवरण में डालने के लिए किसी वर्ण पर क्लिक करें:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="48"/>
+        <source>&lt;b&gt;Enter&lt;/b&gt; inserts the first character, &lt;b&gt;Ctrl+1&lt;/b&gt; to &lt;b&gt;Ctrl+9&lt;/b&gt; the numbered ones, &lt;b&gt;arrows&lt;/b&gt; move the choice and &lt;b&gt;Esc&lt;/b&gt; closes the dialog.</source>
+        <translation type="vanished">&lt;b&gt;Enter&lt;/b&gt; पहला वर्ण डालता है, &lt;b&gt;Ctrl+1&lt;/b&gt; से &lt;b&gt;Ctrl+9&lt;/b&gt; क्रमांकित वर्ण डालते हैं, &lt;b&gt;तीर कुंजियाँ&lt;/b&gt; चयन बदलती हैं और &lt;b&gt;Esc&lt;/b&gt; संवाद बंद करता है।</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="34"/>
+        <source>Type to filter, insert with Enter or Ctrl+[number]:</source>
+        <translation>छाँटने के लिए टाइप करें, Enter या Ctrl+[संख्या] से डालें:</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="104"/>
         <source>Emoji</source>
         <translation>इमोजी</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="62"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="105"/>
         <source>Greek alphabet</source>
         <translation>ग्रीक वर्णमाला</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="71"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="106"/>
         <source>Math and statistics</source>
         <translation>गणित और सांख्यिकी</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="72"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="107"/>
         <source>Physics</source>
         <translation>भौतिकी</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="77"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="159"/>
+        <source>Insert &apos;%1&apos; - Ctrl+%2</source>
+        <translation>&apos;%1&apos; डालें - Ctrl+%2</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="59"/>
         <source>More special unicode characters: &lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;Unicode Table&lt;/a&gt;, &lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</source>
         <translation>और विशेष यूनिकोड वर्ण: &lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;यूनिकोड तालिका&lt;/a&gt;, &lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="86"/>
+        <source>Type to filter the characters and then insert the one you pick to the name or description which was edited last:</source>
+        <translation type="vanished">वर्णों को छाँटने के लिए टाइप करें और फिर चुने हुए वर्ण को अंतिम बार संपादित किए गए नाम या विवरण में डालें:</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="41"/>
+        <source>Emoji name or keyword like &apos;rocket&apos;</source>
+        <translation>इमोजी का नाम या &apos;rocket&apos; जैसा कीवर्ड</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Enter&lt;/b&gt; inserts the first character, &lt;b&gt;Alt+1&lt;/b&gt; to &lt;b&gt;Alt+9&lt;/b&gt; the numbered ones, &lt;b&gt;arrows&lt;/b&gt; move the choice and &lt;b&gt;Esc&lt;/b&gt; closes the dialog.</source>
+        <translation type="vanished">&lt;b&gt;Enter&lt;/b&gt; पहला वर्ण डालता है, &lt;b&gt;Alt+1&lt;/b&gt; से &lt;b&gt;Alt+9&lt;/b&gt; क्रमांकित वर्ण डालते हैं, &lt;b&gt;तीर कुंजियाँ&lt;/b&gt; चयन बदलती हैं और &lt;b&gt;Esc&lt;/b&gt; संवाद बंद करता है।</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="68"/>
         <source>&amp;Close</source>
         <translation>बंद करें(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="118"/>
+        <source>Insert &apos;%1&apos; - Alt+%2</source>
+        <translation type="vanished">&apos;%1&apos; डालें - Alt+%2</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="162"/>
+        <source>Insert &apos;%1&apos;</source>
+        <translation>&apos;%1&apos; डालें</translation>
+    </message>
+    <message>
+        <source>Characters: %1</source>
+        <translation type="vanished">वर्ण: %1</translation>
+    </message>
+    <message>
         <source>Click to insert &apos;%1&apos;</source>
-        <translation>&apos;%1&apos; डालने के लिए क्लिक करें</translation>
+        <translation type="vanished">&apos;%1&apos; डालने के लिए क्लिक करें</translation>
     </message>
 </context>
 <context>
@@ -1027,37 +1065,37 @@ Choose new library source:</source>
 <context>
     <name>m8r::FindOutlineByNameDialog</name>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="38"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="72"/>
         <source>&amp;Notebook name:</source>
         <translation>नोटबुक का नाम(&amp;N):</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="42"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="76"/>
         <source>&amp;ignore case</source>
         <translation>अक्षर-रूप अनदेखा करें(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="44"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="78"/>
         <source>&amp;keywords match</source>
         <translation>कीवर्ड मिलान(&amp;K)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="46"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="80"/>
         <source>&amp;current Notebook&apos;s Notes only</source>
         <translation>केवल वर्तमान नोटबुक के नोट(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="51"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="85"/>
         <source>&amp;Open Notebook</source>
         <translation>नोटबुक खोलें(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="55"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="89"/>
         <source>&amp;Cancel</source>
         <translation>रद्द करें(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="82"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="123"/>
         <source>Find Notebook by Name</source>
         <translation>नाम से नोटबुक खोजें</translation>
     </message>
@@ -4034,7 +4072,7 @@ Choose new library source:</source>
         <translation>हटाई गई नोटबुक वाली Limbo निर्देशिका MindForger वर्कस्पेस में उपलब्ध है, Markdown संपादित करते समय या Markdown निर्देशिका खोलने पर नहीं।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4316"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4320"/>
         <source>About MindForger</source>
         <translation>MindForger के बारे में</translation>
     </message>
