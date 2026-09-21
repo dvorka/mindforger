@@ -867,27 +867,27 @@ Choose new library source:</source>
         <translation>छाँटने के लिए टाइप करें, Enter या Ctrl+[संख्या] से डालें:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="108"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="103"/>
         <source>Emoji</source>
         <translation>इमोजी</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="109"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="104"/>
         <source>Greek alphabet</source>
         <translation>ग्रीक वर्णमाला</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="110"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="105"/>
         <source>Math and statistics</source>
         <translation>गणित और सांख्यिकी</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="111"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="106"/>
         <source>Physics</source>
         <translation>भौतिकी</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="163"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="158"/>
         <source>Insert &apos;%1&apos; - Ctrl+%2</source>
         <translation>&apos;%1&apos; डालें - Ctrl+%2</translation>
     </message>
@@ -919,7 +919,7 @@ Choose new library source:</source>
         <translation type="vanished">&apos;%1&apos; डालें - Alt+%2</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="166"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="161"/>
         <source>Insert &apos;%1&apos;</source>
         <translation>&apos;%1&apos; डालें</translation>
     </message>

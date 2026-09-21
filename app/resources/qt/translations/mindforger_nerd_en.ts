@@ -842,27 +842,27 @@ Choose new library source:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="108"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="103"/>
         <source>Emoji</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="109"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="104"/>
         <source>Greek alphabet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="110"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="105"/>
         <source>Math and statistics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="111"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="106"/>
         <source>Physics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="163"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="158"/>
         <source>Insert &apos;%1&apos; - Ctrl+%2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -882,7 +882,7 @@ Choose new library source:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="166"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="161"/>
         <source>Insert &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>

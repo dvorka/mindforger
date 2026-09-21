@@ -867,27 +867,27 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation>Escriba para filtrar, inserte con Entrar o Ctrl+[número]:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="108"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="103"/>
         <source>Emoji</source>
         <translation>Emoji</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="109"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="104"/>
         <source>Greek alphabet</source>
         <translation>Alfabeto griego</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="110"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="105"/>
         <source>Math and statistics</source>
         <translation>Matemáticas y estadística</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="111"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="106"/>
         <source>Physics</source>
         <translation>Física</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="163"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="158"/>
         <source>Insert &apos;%1&apos; - Ctrl+%2</source>
         <translation>Insertar &apos;%1&apos; - Ctrl+%2</translation>
     </message>
@@ -919,7 +919,7 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation type="vanished">Insertar &apos;%1&apos; - Alt+%2</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="166"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="161"/>
         <source>Insert &apos;%1&apos;</source>
         <translation>Insertar &apos;%1&apos;</translation>
     </message>
