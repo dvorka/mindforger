@@ -139,6 +139,7 @@ SOURCES += \
     ./gear/string_utils_test.cpp \
     ./gear/file_utils_test.cpp \
     ./gear/trie_test.cpp \
+    ./gear/grid_navigator_test.cpp \
     ./mind/fts_test.cpp \
     ./mind/memory_test.cpp \
     ./mind/mind_test.cpp \

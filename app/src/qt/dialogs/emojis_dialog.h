@@ -23,6 +23,7 @@
 
 #include <QtWidgets>
 
+#include "../../lib/src/gear/grid_navigator.h"
 #include "../../lib/src/representations/emoji.h"
 
 namespace m8r {
@@ -79,6 +80,7 @@ private:
     std::vector<Section> sections;
     QHash<QPushButton*, const Emoji*> buttonEmojis;
     std::vector<QPushButton*> matchingButtons;
+    GridNavigator navigator;
 
     void addSection(QBoxLayout* sectionsLayout, const EmojiSection& emojiSection);
     QString getSectionName(const EmojiSection& emojiSection) const;

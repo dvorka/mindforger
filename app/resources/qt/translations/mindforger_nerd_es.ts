@@ -849,7 +849,7 @@ Elija la nueva fuente de la biblioteca:</translation>
 <context>
     <name>m8r::EmojisDialog</name>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="28"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="29"/>
         <source>Emojis</source>
         <translation>Emojis</translation>
     </message>
@@ -862,37 +862,37 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation type="vanished">&lt;b&gt;Entrar&lt;/b&gt; inserta el primer carácter, &lt;b&gt;Ctrl+1&lt;/b&gt; a &lt;b&gt;Ctrl+9&lt;/b&gt; los numerados, las &lt;b&gt;flechas&lt;/b&gt; mueven la selección y &lt;b&gt;Esc&lt;/b&gt; cierra el diálogo.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="33"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="34"/>
         <source>Type to filter, insert with Enter or Ctrl+[number]:</source>
         <translation>Escriba para filtrar, inserte con Entrar o Ctrl+[número]:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="103"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="104"/>
         <source>Emoji</source>
         <translation>Emoji</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="104"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="105"/>
         <source>Greek alphabet</source>
         <translation>Alfabeto griego</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="105"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="106"/>
         <source>Math and statistics</source>
         <translation>Matemáticas y estadística</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="106"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="107"/>
         <source>Physics</source>
         <translation>Física</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="158"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="159"/>
         <source>Insert &apos;%1&apos; - Ctrl+%2</source>
         <translation>Insertar &apos;%1&apos; - Ctrl+%2</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="58"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="59"/>
         <source>More special unicode characters: &lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;Unicode Table&lt;/a&gt;, &lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</source>
         <translation>Más caracteres Unicode especiales: &lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;Tabla Unicode&lt;/a&gt;, &lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</translation>
     </message>
@@ -901,7 +901,7 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation type="vanished">Escriba para filtrar los caracteres y luego inserte el elegido en el nombre o la descripción editados por última vez:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="40"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="41"/>
         <source>Emoji name or keyword like &apos;rocket&apos;</source>
         <translation>Nombre de emoji o palabra clave como &apos;rocket&apos;</translation>
     </message>
@@ -910,7 +910,7 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation type="vanished">&lt;b&gt;Entrar&lt;/b&gt; inserta el primer carácter, &lt;b&gt;Alt+1&lt;/b&gt; a &lt;b&gt;Alt+9&lt;/b&gt; los numerados, las &lt;b&gt;flechas&lt;/b&gt; mueven la selección y &lt;b&gt;Esc&lt;/b&gt; cierra el diálogo.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="67"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="68"/>
         <source>&amp;Close</source>
         <translation>&amp;Cerrar</translation>
     </message>
@@ -919,7 +919,7 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation type="vanished">Insertar &apos;%1&apos; - Alt+%2</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="161"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="162"/>
         <source>Insert &apos;%1&apos;</source>
         <translation>Insertar &apos;%1&apos;</translation>
     </message>

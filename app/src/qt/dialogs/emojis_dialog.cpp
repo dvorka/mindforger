@@ -23,7 +23,8 @@
 namespace m8r {
 
 EmojisDialog::EmojisDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent),
+      navigator{COLUMNS}
 {
     setWindowTitle(tr("Emojis"));
 
@@ -168,6 +169,7 @@ void EmojisDialog::slotFilterChanged(const QString& filter)
         = Emojis::toSearchWords(filter.toStdString());
 
     matchingButtons.clear();
+    std::vector<int> sectionSizes{};
     for(Section& section:sections) {
         // drop the previous positions - matching buttons are re-added below
         while(QLayoutItem* item = section.gridLayout->takeAt(0)) {
@@ -197,7 +199,11 @@ void EmojisDialog::slotFilterChanged(const QString& filter)
         // an empty section would show up as a title with a gap below it
         section.title->setVisible(matches > 0);
         section.grid->setVisible(matches > 0);
+
+        sectionSizes.push_back(matches);
     }
+
+    navigator.setSections(sectionSizes);
 }
 
 void EmojisDialog::insertEmoji(QPushButton* button)
@@ -265,16 +271,17 @@ void EmojisDialog::keyPressEvent(QKeyEvent* event)
     const int focused = getFocusedButtonIndex();
     switch(event->key()) {
     case Qt::Key_Down:
-        focusButton(focused<0 ? 0 : focused+COLUMNS);
+        focusButton(focused<0 ? 0 : navigator.getItemBelow(focused));
         event->accept();
         return;
     case Qt::Key_Up:
         if(focused >= 0) {
-            if(focused < COLUMNS) {
+            const int above = navigator.getItemAbove(focused);
+            if(above == GridNavigator::NO_ITEM) {
                 // leaving the first row gets the focus back to the filter
                 filterEdit->setFocus();
             } else {
-                focusButton(focused-COLUMNS);
+                focusButton(above);
             }
             event->accept();
             return;

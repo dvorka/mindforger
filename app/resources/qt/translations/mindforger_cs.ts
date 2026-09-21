@@ -849,7 +849,7 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::EmojisDialog</name>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="28"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="29"/>
         <source>Emojis</source>
         <translation>Emoji</translation>
     </message>
@@ -862,37 +862,37 @@ Vyberte nový zdroj knihovny:</translation>
         <translation type="vanished">&lt;b&gt;Enter&lt;/b&gt; vloží první znak, &lt;b&gt;Ctrl+1&lt;/b&gt; až &lt;b&gt;Ctrl+9&lt;/b&gt; očíslované znaky, &lt;b&gt;šipky&lt;/b&gt; mění výběr a &lt;b&gt;Esc&lt;/b&gt; zavře dialog.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="33"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="34"/>
         <source>Type to filter, insert with Enter or Ctrl+[number]:</source>
         <translation>Pište pro filtrování, vložte klávesou Enter nebo Ctrl+[číslo]:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="103"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="104"/>
         <source>Emoji</source>
         <translation>Emoji</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="104"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="105"/>
         <source>Greek alphabet</source>
         <translation>Řecká abeceda</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="105"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="106"/>
         <source>Math and statistics</source>
         <translation>Matematika a statistika</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="106"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="107"/>
         <source>Physics</source>
         <translation>Fyzika</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="158"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="159"/>
         <source>Insert &apos;%1&apos; - Ctrl+%2</source>
         <translation>Vložit &apos;%1&apos; - Ctrl+%2</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="58"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="59"/>
         <source>More special unicode characters: &lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;Unicode Table&lt;/a&gt;, &lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</source>
         <translation>Další speciální znaky Unicode: &lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;Unicode Table&lt;/a&gt;, &lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</translation>
     </message>
@@ -901,7 +901,7 @@ Vyberte nový zdroj knihovny:</translation>
         <translation type="vanished">Pište pro filtrování znaků a poté vložte vybraný znak do naposledy upravovaného názvu nebo popisu:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="40"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="41"/>
         <source>Emoji name or keyword like &apos;rocket&apos;</source>
         <translation>Název emoji nebo klíčové slovo jako &apos;rocket&apos;</translation>
     </message>
@@ -910,7 +910,7 @@ Vyberte nový zdroj knihovny:</translation>
         <translation type="vanished">&lt;b&gt;Enter&lt;/b&gt; vloží první znak, &lt;b&gt;Alt+1&lt;/b&gt; až &lt;b&gt;Alt+9&lt;/b&gt; očíslované znaky, &lt;b&gt;šipky&lt;/b&gt; mění výběr a &lt;b&gt;Esc&lt;/b&gt; zavře dialog.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="67"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="68"/>
         <source>&amp;Close</source>
         <translation>&amp;Zavřít</translation>
     </message>
@@ -919,7 +919,7 @@ Vyberte nový zdroj knihovny:</translation>
         <translation type="vanished">Vložit &apos;%1&apos; - Alt+%2</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="161"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="162"/>
         <source>Insert &apos;%1&apos;</source>
         <translation>Vložit &apos;%1&apos;</translation>
     </message>

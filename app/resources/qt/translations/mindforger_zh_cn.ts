@@ -857,7 +857,7 @@ Choose new library source:</source>
 <context>
     <name>m8r::EmojisDialog</name>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="28"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="29"/>
         <source>Emojis</source>
         <translation>表情符号</translation>
     </message>
@@ -870,37 +870,37 @@ Choose new library source:</source>
         <translation type="vanished">&lt;b&gt;Enter&lt;/b&gt; 插入第一个字符，&lt;b&gt;Ctrl+1&lt;/b&gt; 至 &lt;b&gt;Ctrl+9&lt;/b&gt; 插入带编号的字符，&lt;b&gt;方向键&lt;/b&gt; 移动选择，&lt;b&gt;Esc&lt;/b&gt; 关闭对话框。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="33"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="34"/>
         <source>Type to filter, insert with Enter or Ctrl+[number]:</source>
         <translation>输入以筛选，用 Enter 或 Ctrl+[数字] 插入：</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="103"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="104"/>
         <source>Emoji</source>
         <translation>表情符号</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="104"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="105"/>
         <source>Greek alphabet</source>
         <translation>希腊字母</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="105"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="106"/>
         <source>Math and statistics</source>
         <translation>数学与统计</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="106"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="107"/>
         <source>Physics</source>
         <translation>物理</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="158"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="159"/>
         <source>Insert &apos;%1&apos; - Ctrl+%2</source>
         <translation>插入 &apos;%1&apos; - Ctrl+%2</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="58"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="59"/>
         <source>More special unicode characters: &lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;Unicode Table&lt;/a&gt;, &lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</source>
         <translation>更多特殊 Unicode 字符：&lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;Unicode 表&lt;/a&gt;，&lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</translation>
     </message>
@@ -909,7 +909,7 @@ Choose new library source:</source>
         <translation type="vanished">输入以筛选字符，然后将选中的字符插入到最后编辑的名称或描述中：</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="40"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="41"/>
         <source>Emoji name or keyword like &apos;rocket&apos;</source>
         <translation>表情符号名称或关键字，例如 &apos;rocket&apos;</translation>
     </message>
@@ -918,7 +918,7 @@ Choose new library source:</source>
         <translation type="vanished">&lt;b&gt;Enter&lt;/b&gt; 插入第一个字符，&lt;b&gt;Alt+1&lt;/b&gt; 至 &lt;b&gt;Alt+9&lt;/b&gt; 插入带编号的字符，&lt;b&gt;方向键&lt;/b&gt; 移动选择，&lt;b&gt;Esc&lt;/b&gt; 关闭对话框。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="67"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="68"/>
         <source>&amp;Close</source>
         <translation>关闭(&amp;C)</translation>
     </message>
@@ -927,7 +927,7 @@ Choose new library source:</source>
         <translation type="vanished">插入 &apos;%1&apos; - Alt+%2</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="161"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="162"/>
         <source>Insert &apos;%1&apos;</source>
         <translation>插入 &apos;%1&apos;</translation>
     </message>

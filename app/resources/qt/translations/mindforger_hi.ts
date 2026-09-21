@@ -849,7 +849,7 @@ Choose new library source:</source>
 <context>
     <name>m8r::EmojisDialog</name>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="28"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="29"/>
         <source>Emojis</source>
         <translation>इमोजी</translation>
     </message>
@@ -862,37 +862,37 @@ Choose new library source:</source>
         <translation type="vanished">&lt;b&gt;Enter&lt;/b&gt; पहला वर्ण डालता है, &lt;b&gt;Ctrl+1&lt;/b&gt; से &lt;b&gt;Ctrl+9&lt;/b&gt; क्रमांकित वर्ण डालते हैं, &lt;b&gt;तीर कुंजियाँ&lt;/b&gt; चयन बदलती हैं और &lt;b&gt;Esc&lt;/b&gt; संवाद बंद करता है।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="33"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="34"/>
         <source>Type to filter, insert with Enter or Ctrl+[number]:</source>
         <translation>छाँटने के लिए टाइप करें, Enter या Ctrl+[संख्या] से डालें:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="103"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="104"/>
         <source>Emoji</source>
         <translation>इमोजी</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="104"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="105"/>
         <source>Greek alphabet</source>
         <translation>ग्रीक वर्णमाला</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="105"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="106"/>
         <source>Math and statistics</source>
         <translation>गणित और सांख्यिकी</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="106"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="107"/>
         <source>Physics</source>
         <translation>भौतिकी</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="158"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="159"/>
         <source>Insert &apos;%1&apos; - Ctrl+%2</source>
         <translation>&apos;%1&apos; डालें - Ctrl+%2</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="58"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="59"/>
         <source>More special unicode characters: &lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;Unicode Table&lt;/a&gt;, &lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</source>
         <translation>और विशेष यूनिकोड वर्ण: &lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;यूनिकोड तालिका&lt;/a&gt;, &lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</translation>
     </message>
@@ -901,7 +901,7 @@ Choose new library source:</source>
         <translation type="vanished">वर्णों को छाँटने के लिए टाइप करें और फिर चुने हुए वर्ण को अंतिम बार संपादित किए गए नाम या विवरण में डालें:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="40"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="41"/>
         <source>Emoji name or keyword like &apos;rocket&apos;</source>
         <translation>इमोजी का नाम या &apos;rocket&apos; जैसा कीवर्ड</translation>
     </message>
@@ -910,7 +910,7 @@ Choose new library source:</source>
         <translation type="vanished">&lt;b&gt;Enter&lt;/b&gt; पहला वर्ण डालता है, &lt;b&gt;Alt+1&lt;/b&gt; से &lt;b&gt;Alt+9&lt;/b&gt; क्रमांकित वर्ण डालते हैं, &lt;b&gt;तीर कुंजियाँ&lt;/b&gt; चयन बदलती हैं और &lt;b&gt;Esc&lt;/b&gt; संवाद बंद करता है।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="67"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="68"/>
         <source>&amp;Close</source>
         <translation>बंद करें(&amp;C)</translation>
     </message>
@@ -919,7 +919,7 @@ Choose new library source:</source>
         <translation type="vanished">&apos;%1&apos; डालें - Alt+%2</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="161"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="162"/>
         <source>Insert &apos;%1&apos;</source>
         <translation>&apos;%1&apos; डालें</translation>
     </message>
