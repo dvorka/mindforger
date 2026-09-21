@@ -148,7 +148,8 @@ SOURCES += \
     ./mind/notebook_tree_test.cpp \
     ./mind/outline_test.cpp \
     ./mind/filesystem_information_test.cpp \
-    ./csv/csv_test.cpp
+    ./csv/csv_test.cpp \
+    ./emoji/emoji_test.cpp
 
 HEADERS += \
     ./test_gear.h

@@ -18,6 +18,8 @@
 */
 #include "emojis_dialog.h"
 
+#include "../../lib/src/representations/unicode.h"
+
 namespace m8r {
 
 EmojisDialog::EmojisDialog(QWidget* parent)
@@ -28,51 +30,29 @@ EmojisDialog::EmojisDialog(QWidget* parent)
     QVBoxLayout* mainLayout = new QVBoxLayout{this};
 
     QLabel* introLabel = new QLabel{
-        tr("Click a character to insert it to the currently edited "
-           "name or description:"),
+        tr("Type to filter, insert with Enter or Ctrl+[number]:"),
         this};
     introLabel->setWordWrap(true);
     mainLayout->addWidget(introLabel);
 
+    filterEdit = new QLineEdit{this};
+    filterEdit->setClearButtonEnabled(true);
+    filterEdit->setPlaceholderText(tr("Emoji name or keyword like 'rocket'"));
+    mainLayout->addWidget(filterEdit);
+
     QWidget* sectionsWidget = new QWidget{this};
     QVBoxLayout* sectionsLayout = new QVBoxLayout{sectionsWidget};
 
-    QScrollArea* scrollArea = new QScrollArea{this};
+    for(const EmojiSection& emojiSection:Emojis::getInstance().getSections()) {
+        addSection(sectionsLayout, emojiSection);
+    }
+
+    sectionsLayout->addStretch();
+
+    scrollArea = new QScrollArea{this};
     scrollArea->setWidget(sectionsWidget);
     scrollArea->setWidgetResizable(true);
     mainLayout->addWidget(scrollArea);
-
-    // IMPROVE load emojis from the main MF configuration file
-    addCharactersSection(
-        sectionsLayout,
-        tr("Emoji"),
-        {
-            "🎯", "🚀", "🌟", "🔧", "🐞", "🧪", "📚", "🔗", "⛑", "🚧", "👁️", "🗑",
-            "❗", "❌", "✔", "📌", "✂️", "📎", "📄", "📋", "📝", "📅", "📈", "🖼️",
-            "🟢", "🟠", "🔴", "🟡", "🔵", "🟣", "🔮", "♥", "💙", "💛", "💚", "🚫",
-            "⚙️", "🙂", "😃", "🥶", "🥰", "🐻", "🐸", "🤖", "💩", "👻", "🎉",
-            "💣", "☠️", "⚽",
-            "💪", "👍", "👎",  "🤞", "🤙", "👌", "🙏", "🤦", "🦑", "🐙", "👾", "🐉",
-            "🛠", "🔧", "🔨", "💎", "🛡", "💥", "🔥", "🧬", "🧙‍", "🧠", "🔋", "⦀",
-            "🛸", "📡", "🌊", "🎖", "🍔", "🥋", "💍", "🥔", "🎨", "🌻", "🌲",
-            "📣", "📢", "🧲", "🏁", "🚩", "💯"
-        },
-        11);
-    addCharactersSection(
-        sectionsLayout,
-        tr("Greek alphabet"),
-        {
-            "Α", "α", "Β", "β", "Γ", "γ", "Δ", "δ", "Ε", "ε",
-            "Ζ", "ζ", "Η", "η", "Θ", "θ", "Ι", "ι", "Κ", "κ",
-            "Λ", "λ", "Μ", "μ", "Ν", "ν", "Ξ", "ξ", "Ο", "ο",
-            "Π", "π", "Ρ", "ρ", "Σ", "σ", "ς", "Τ", "τ", "Υ", "υ",
-            "Φ", "φ", "Χ", "χ", "Ψ", "ψ", "Ω", "ω"
-        },
-        10);
-    addCharactersSection(sectionsLayout, tr("Math and statistics"), {"x̄"}, 12);
-    addCharactersSection(sectionsLayout, tr("Physics"), {"°"}, 12);
-
-    sectionsLayout->addStretch();
 
     QLabel* linksLabel = new QLabel{
         tr(
@@ -84,7 +64,10 @@ EmojisDialog::EmojisDialog(QWidget* parent)
     linksLabel->setWordWrap(true);
     mainLayout->addWidget(linksLabel);
 
-    QPushButton* closeButton = new QPushButton{tr("&Close"), this};
+    closeButton = new QPushButton{tr("&Close"), this};
+    // Enter must insert the chosen emoji > it must NOT close the dialog
+    closeButton->setAutoDefault(false);
+    closeButton->setDefault(false);
     connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
     QHBoxLayout* buttonsLayout = new QHBoxLayout{};
@@ -92,51 +75,259 @@ EmojisDialog::EmojisDialog(QWidget* parent)
     buttonsLayout->addWidget(closeButton);
     mainLayout->addLayout(buttonsLayout);
 
-    resize(500, 500);
+    for(int digit=1; digit<=SHORTCUTS; digit++) {
+        new QShortcut(
+            QKeySequence(Qt::CTRL+Qt::Key_0+digit),
+            this, SLOT(slotShortcutActivated()));
+        new QShortcut(
+            QKeySequence(Qt::ALT+Qt::Key_0+digit),
+            this, SLOT(slotShortcutActivated()));
+    }
+
+    connect(
+        filterEdit, SIGNAL(textChanged(QString)),
+        this, SLOT(slotFilterChanged(QString)));
+    slotFilterChanged("");
+
+    resize(560, 560);
 }
 
 EmojisDialog::~EmojisDialog()
 {
 }
 
-void EmojisDialog::addCharactersSection(
-    QBoxLayout* mainLayout,
-    const QString& title,
-    std::initializer_list<QString> characters,
-    int columns)
+QString EmojisDialog::getSectionName(const EmojiSection& emojiSection) const
 {
-    QLabel* titleLabel = new QLabel{QString{"<b>%1:</b>"}.arg(title), this};
-    mainLayout->addWidget(titleLabel);
+    // section names are translated here - lupdate must find the literals to add
+    const QHash<QString, QString> names{
+        {"Emoji", tr("Emoji")},
+        {"Greek alphabet", tr("Greek alphabet")},
+        {"Math and statistics", tr("Math and statistics")},
+        {"Physics", tr("Physics")}
+    };
 
-    QWidget* gridWidget = new QWidget{this};
-    QGridLayout* gridLayout = new QGridLayout{gridWidget};
-    gridLayout->setSpacing(2);
+    const QString name = QString::fromStdString(emojiSection.getName());
+    return names.value(name, name);
+}
 
-    int row{0}, col{0};
-    for(const QString& c : characters) {
-        QPushButton* button = new QPushButton{c, gridWidget};
-        button->setFixedSize(36, 32);
-        button->setToolTip(tr("Click to insert '%1'").arg(c));
+void EmojisDialog::addSection(
+    QBoxLayout* sectionsLayout,
+    const EmojiSection& emojiSection)
+{
+    Section section{};
+
+    section.title = new QLabel{
+        QString{"<b>%1:</b>"}.arg(getSectionName(emojiSection)), this};
+    sectionsLayout->addWidget(section.title);
+
+    section.grid = new QWidget{this};
+    section.gridLayout = new QGridLayout{section.grid};
+    section.gridLayout->setSpacing(2);
+
+    for(const Emoji& emoji:emojiSection.getEmojis()) {
+        QPushButton* button = new QPushButton{section.grid};
+        button->setFixedSize(40, 32);
+        // Enter is handled by the dialog - it must not trigger a random button
+        button->setAutoDefault(false);
+        button->setDefault(false);
         connect(
             button, SIGNAL(clicked()),
             this, SLOT(slotCharacterButtonClicked()));
-        gridLayout->addWidget(button, row, col);
 
-        if(++col >= columns) {
-            col = 0;
-            row++;
+        buttonEmojis.insert(button, &emoji);
+        section.buttons.push_back(button);
+    }
+
+    sectionsLayout->addWidget(section.grid);
+    sections.push_back(section);
+}
+
+void EmojisDialog::decorateButton(
+    QPushButton* button,
+    const Emoji& emoji,
+    int index)
+{
+    const QString character = QString::fromStdString(emoji.getCharacter());
+    const QString name = QString::fromStdString(emoji.getName());
+
+    if(index < SHORTCUTS) {
+        // subscript digit shows which Alt+<digit> shortcut inserts the emoji
+        button->setText(
+            character
+            + QChar{static_cast<ushort>(U_CODE_SUBSCRIPT_ONE + index)});
+        button->setToolTip(tr("Insert '%1' - Ctrl+%2").arg(name).arg(index+1));
+    } else {
+        button->setText(character);
+        button->setToolTip(tr("Insert '%1'").arg(name));
+    }
+}
+
+void EmojisDialog::slotFilterChanged(const QString& filter)
+{
+    const std::vector<std::string> words
+        = Emojis::toSearchWords(filter.toStdString());
+
+    matchingButtons.clear();
+    for(Section& section:sections) {
+        // drop the previous positions - matching buttons are re-added below
+        while(QLayoutItem* item = section.gridLayout->takeAt(0)) {
+            delete item;
+        }
+
+        int row{0}, col{0}, matches{0};
+        for(QPushButton* button:section.buttons) {
+            const Emoji* emoji = buttonEmojis.value(button, nullptr);
+            if(emoji && emoji->matches(words)) {
+                decorateButton(
+                    button, *emoji, static_cast<int>(matchingButtons.size()));
+                section.gridLayout->addWidget(button, row, col);
+                button->show();
+                matchingButtons.push_back(button);
+                matches++;
+
+                if(++col >= COLUMNS) {
+                    col = 0;
+                    row++;
+                }
+            } else {
+                button->hide();
+            }
+        }
+
+        // an empty section would show up as a title with a gap below it
+        section.title->setVisible(matches > 0);
+        section.grid->setVisible(matches > 0);
+    }
+}
+
+void EmojisDialog::insertEmoji(QPushButton* button)
+{
+    const Emoji* emoji = buttonEmojis.value(button, nullptr);
+    if(emoji) {
+        emit emojiSelected(QString::fromStdString(emoji->getCharacter()));
+    }
+}
+
+void EmojisDialog::insertMatchingEmoji(int index)
+{
+    if(index >= 0 && index < static_cast<int>(matchingButtons.size())) {
+        insertEmoji(matchingButtons[static_cast<size_t>(index)]);
+    }
+}
+
+void EmojisDialog::slotShortcutActivated()
+{
+    const QShortcut* shortcut = qobject_cast<QShortcut*>(sender());
+    if(!shortcut) {
+        return;
+    }
+
+    // the last char of the shortcut is the digit which is shown on the char to be inserted
+    const QString digit
+        = shortcut->key().toString(QKeySequence::PortableText).right(1);
+    insertMatchingEmoji(digit.toInt()-1);
+}
+
+int EmojisDialog::getFocusedButtonIndex() const
+{
+    const QWidget* focused = focusWidget();
+    for(size_t i=0; i<matchingButtons.size(); i++) {
+        if(matchingButtons[i] == focused) {
+            return static_cast<int>(i);
         }
     }
 
-    mainLayout->addWidget(gridWidget);
+    return -1;
+}
+
+void EmojisDialog::focusButton(int index)
+{
+    if(matchingButtons.empty()) {
+        return;
+    }
+
+    // moving beyond the first/last character stops at it
+    if(index < 0) {
+        index = 0;
+    }
+    if(index >= static_cast<int>(matchingButtons.size())) {
+        index = static_cast<int>(matchingButtons.size()) - 1;
+    }
+
+    QPushButton* button = matchingButtons[static_cast<size_t>(index)];
+    button->setFocus();
+    scrollArea->ensureWidgetVisible(button);
+}
+
+void EmojisDialog::keyPressEvent(QKeyEvent* event)
+{
+    // characters are navigated as a single list - Up/Down move by a grid row
+    const int focused = getFocusedButtonIndex();
+    switch(event->key()) {
+    case Qt::Key_Down:
+        focusButton(focused<0 ? 0 : focused+COLUMNS);
+        event->accept();
+        return;
+    case Qt::Key_Up:
+        if(focused >= 0) {
+            if(focused < COLUMNS) {
+                // leaving the first row gets the focus back to the filter
+                filterEdit->setFocus();
+            } else {
+                focusButton(focused-COLUMNS);
+            }
+            event->accept();
+            return;
+        }
+        break;
+    case Qt::Key_Left:
+        if(focused >= 0) {
+            focusButton(focused-1);
+            event->accept();
+            return;
+        }
+        break;
+    case Qt::Key_Right:
+        if(focused >= 0) {
+            focusButton(focused+1);
+            event->accept();
+            return;
+        }
+        break;
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
+        if(focused >= 0) {
+            // insert the chosen character
+            insertEmoji(matchingButtons[static_cast<size_t>(focused)]);
+        } else if(closeButton->hasFocus()) {
+            // Close button is not the default one - Enter must still close
+            close();
+        } else if(!matchingButtons.empty()) {
+            // insert the first character matching the filter
+            insertEmoji(matchingButtons[0]);
+        }
+        event->accept();
+        return;
+    default:
+        break;
+    }
+
+    QDialog::keyPressEvent(event);
+}
+
+void EmojisDialog::showEvent(QShowEvent* event)
+{
+    QDialog::showEvent(event);
+
+    // dialog always opens w/ the whole catalog and the keyboard in the filter
+    filterEdit->clear();
+    filterEdit->setFocus();
+    scrollArea->verticalScrollBar()->setValue(0);
 }
 
 void EmojisDialog::slotCharacterButtonClicked()
 {
-    QPushButton* button = qobject_cast<QPushButton*>(sender());
-    if(button) {
-        emit emojiSelected(button->text());
-    }
+    insertEmoji(qobject_cast<QPushButton*>(sender()));
 }
 
 } // namespace m8r

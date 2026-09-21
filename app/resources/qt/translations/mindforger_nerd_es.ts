@@ -849,49 +849,87 @@ Elija la nueva fuente de la biblioteca:</translation>
 <context>
     <name>m8r::EmojisDialog</name>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="26"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="28"/>
         <source>Emojis</source>
         <translation>Emojis</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="31"/>
         <source>Click a character to insert it to the currently edited name or description:</source>
-        <translation>Haga clic en un carácter para insertarlo en el nombre o la descripción que está editando:</translation>
+        <translation type="vanished">Haga clic en un carácter para insertarlo en el nombre o la descripción que está editando:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="48"/>
+        <source>&lt;b&gt;Enter&lt;/b&gt; inserts the first character, &lt;b&gt;Ctrl+1&lt;/b&gt; to &lt;b&gt;Ctrl+9&lt;/b&gt; the numbered ones, &lt;b&gt;arrows&lt;/b&gt; move the choice and &lt;b&gt;Esc&lt;/b&gt; closes the dialog.</source>
+        <translation type="vanished">&lt;b&gt;Entrar&lt;/b&gt; inserta el primer carácter, &lt;b&gt;Ctrl+1&lt;/b&gt; a &lt;b&gt;Ctrl+9&lt;/b&gt; los numerados, las &lt;b&gt;flechas&lt;/b&gt; mueven la selección y &lt;b&gt;Esc&lt;/b&gt; cierra el diálogo.</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="33"/>
+        <source>Type to filter, insert with Enter or Ctrl+[number]:</source>
+        <translation>Escriba para filtrar, inserte con Entrar o Ctrl+[número]:</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="108"/>
         <source>Emoji</source>
         <translation>Emoji</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="62"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="109"/>
         <source>Greek alphabet</source>
         <translation>Alfabeto griego</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="71"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="110"/>
         <source>Math and statistics</source>
         <translation>Matemáticas y estadística</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="72"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="111"/>
         <source>Physics</source>
         <translation>Física</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="77"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="163"/>
+        <source>Insert &apos;%1&apos; - Ctrl+%2</source>
+        <translation>Insertar &apos;%1&apos; - Ctrl+%2</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="58"/>
         <source>More special unicode characters: &lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;Unicode Table&lt;/a&gt;, &lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</source>
         <translation>Más caracteres Unicode especiales: &lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;Tabla Unicode&lt;/a&gt;, &lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="86"/>
+        <source>Type to filter the characters and then insert the one you pick to the name or description which was edited last:</source>
+        <translation type="vanished">Escriba para filtrar los caracteres y luego inserte el elegido en el nombre o la descripción editados por última vez:</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="40"/>
+        <source>Emoji name or keyword like &apos;rocket&apos;</source>
+        <translation>Nombre de emoji o palabra clave como &apos;rocket&apos;</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Enter&lt;/b&gt; inserts the first character, &lt;b&gt;Alt+1&lt;/b&gt; to &lt;b&gt;Alt+9&lt;/b&gt; the numbered ones, &lt;b&gt;arrows&lt;/b&gt; move the choice and &lt;b&gt;Esc&lt;/b&gt; closes the dialog.</source>
+        <translation type="vanished">&lt;b&gt;Entrar&lt;/b&gt; inserta el primer carácter, &lt;b&gt;Alt+1&lt;/b&gt; a &lt;b&gt;Alt+9&lt;/b&gt; los numerados, las &lt;b&gt;flechas&lt;/b&gt; mueven la selección y &lt;b&gt;Esc&lt;/b&gt; cierra el diálogo.</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="67"/>
         <source>&amp;Close</source>
         <translation>&amp;Cerrar</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="118"/>
+        <source>Insert &apos;%1&apos; - Alt+%2</source>
+        <translation type="vanished">Insertar &apos;%1&apos; - Alt+%2</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="166"/>
+        <source>Insert &apos;%1&apos;</source>
+        <translation>Insertar &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Characters: %1</source>
+        <translation type="vanished">Caracteres: %1</translation>
+    </message>
+    <message>
         <source>Click to insert &apos;%1&apos;</source>
-        <translation>Haga clic para insertar &apos;%1&apos;</translation>
+        <translation type="vanished">Haga clic para insertar &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -4034,7 +4072,7 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation>El directorio Limbo con los cuadernos eliminados está disponible en el espacio de trabajo de MindForger, no al editar un Markdown ni al abrir un directorio con Markdowns.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4316"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4320"/>
         <source>About MindForger</source>
         <translation>Acerca de MindForger</translation>
     </message>

@@ -164,7 +164,8 @@ SOURCES += \
     src/representations/markdown/cmark_gfm_markdown_transcoder.cpp \
     src/mind/ai/autolinking/autolinking_mind.cpp \
     src/mind/limbo.cpp \
-    src/representations/unicode.cpp
+    src/representations/unicode.cpp \
+    src/representations/emoji.cpp
 
 !mfnomd2html {
     SOURCES += \
@@ -249,6 +250,7 @@ HEADERS += \
     src/representations/markdown/markdown_document_representation.h \
     src/representations/markdown/markdown_repository_configuration_representation.h \
     src/representations/unicode.h \
+    src/representations/emoji.h \
     src/version.h \
     src/mind/ai/ai.h \
     src/mind/ai/nlp/markdown_tokenizer.h \
