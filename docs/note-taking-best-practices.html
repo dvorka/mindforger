@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Note Taking Best Practices - MindForger Documentation</title>
+    <meta name="description" content="This document describes my note taking best practices and conventions: Note naming conventions Overview of conventions which will make navigation..." />
+    <meta name="author" content="Martin.Dvorak@mindforger.com" />
+    <link rel="canonical" href="https://www.mindforger.com/docs/note-taking-best-practices.html" />
+    <link rel="alternate" type="application/rss+xml" title="MindForger Blog" href="rss.xml" />
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="assets/mind-forger.png" type="image/png" />
+    <meta name="theme-color" content="#008c00" />
+
+    <!-- BEGIN OPEN GRAPH -->
+    <meta property="og:site_name" content="MindForger Documentation" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Note Taking Best Practices - MindForger Documentation" />
+    <meta property="og:description" content="This document describes my note taking best practices and conventions: Note naming conventions Overview of conventions which will make navigation..." />
+    <meta property="og:url" content="https://www.mindforger.com/docs/note-taking-best-practices.html" />
+    <meta property="og:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Note Taking Best Practices - MindForger Documentation" />
+    <meta name="twitter:description" content="This document describes my note taking best practices and conventions: Note naming conventions Overview of conventions which will make navigation..." />
+    <meta name="twitter:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
+    <!-- END OPEN GRAPH -->
+
+    <!-- BEGIN STYLES -->
+    <link href="assets/tabler/css/tabler.min.css" rel="stylesheet" />
+    <link href="assets/tabler/css/tabler-props.min.css" rel="stylesheet" />
+    <link href="assets/tabler/css/tabler-themes.min.css" rel="stylesheet" />
+    <link href="assets/pygments.css" rel="stylesheet" />
+    <link href="assets/mindforger-docs.css" rel="stylesheet" />
+    
+    <!-- END STYLES -->
+
+    <!-- BEGIN THEME SCRIPT: light/dark theme, must run before the page renders -->
+    <script src="assets/tabler/js/tabler-theme.min.js"></script>
+    <!-- END THEME SCRIPT -->
+  </head>
+  <body>
+    <div class="page">
+      <!-- BEGIN NAVBAR -->
+      <div class="sticky-top">
+        <header class="navbar navbar-expand-md d-print-none">
+          <div class="container-xl">
+            <!-- BEGIN NAVBAR TOGGLER -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbar-menu" aria-controls="navbar-menu"
+                    aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- END NAVBAR TOGGLER -->
+            <!-- BEGIN NAVBAR LOGO -->
+            <div class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+              <a href="index.html" class="mf-brand">
+                <img src="assets/mind-forger.png" alt="MindForger" class="mf-brand-logo">
+                <span class="mf-brand-text">MindForger</span>
+              </a><span style="font-weight: normal;">Docs</span>
+            </div>
+            <!-- END NAVBAR LOGO -->
+            <div class="navbar-nav flex-row order-md-last">
+              <div class="d-none d-md-flex">
+                <div class="nav-item">
+                  <a href="?theme=dark" class="nav-link px-0 hide-theme-dark"
+                     title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /></svg></a>
+                  <a href="?theme=light" class="nav-link px-0 hide-theme-light"
+                     title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <header class="navbar-expand-md">
+          <div class="collapse navbar-collapse" id="navbar-menu">
+            <div class="navbar">
+              <div class="container-xl">
+                <div class="row flex-column flex-md-row flex-fill align-items-center">
+                  <div class="col">
+                    <!-- BEGIN NAVBAR MENU -->
+                    <ul class="navbar-nav" id="navbar-base">
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg></span>
+                          <span class="nav-link-title">Home</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="index.html">Documentation</a>
+<a class="dropdown-item" href="toc.html">Table of Contents</a>
+<a class="dropdown-item" href="history.html">Project History</a>
+<a class="dropdown-item" href="credits.html">Credits</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="about.html">About</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg></span>
+                          <span class="nav-link-title">User Documentation</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="assets/comics/index.html">Comics</a>
+<a class="dropdown-item" href="installation.html">Installation</a>
+<a class="dropdown-item" href="getting-started.html">Getting Started</a>
+<a class="dropdown-item" href="user-documentation.html">User Documentation</a>
+<a class="dropdown-item active" href="note-taking-best-practices.html">Note Taking Best Practices</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="faqs.html">FAQs</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M7 8l-4 4l4 4" /><path d="M17 8l4 4l-4 4" /><path d="M14 4l-4 16" /></svg></span>
+                          <span class="nav-link-title">Technical Documentation</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="developer-documentation.html">Developer Guide</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M12 17a3 3 0 0 0 -3 -3" /><path d="M15 17a6 6 0 0 0 -6 -6" /><path d="M9 17h.01" /></svg></span>
+                          <span class="nav-link-title">News</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="blog.html">Blog</a>
+<a class="dropdown-item" href="releases.html">Releases</a>
+<a class="dropdown-item" href="https://github.com/dvorka/mindforger/blob/master/Changelog" target="_blank" rel="noopener">Changelog</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="rss.xml" target="_blank" rel="noopener">RSS</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                    <!-- END NAVBAR MENU -->
+                  </div>
+                  <div class="col col-md-auto">
+                    <ul class="navbar-nav">
+                      <li class="nav-item">
+                        <a class="nav-link" href="https://www.mindforger.com" target="_blank">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M3.6 9h16.8" /><path d="M3.6 15h16.8" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" /></svg></span>
+                          <span class="nav-link-title">mindforger.com</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+      </div>
+      <!-- END NAVBAR -->
+      <div class="page-wrapper">
+        <!-- BEGIN PAGE HEADER -->
+        <div class="page-header d-print-none" aria-label="Page header">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                <div class="page-pretitle">User Documentation</div>
+                <h1 class="page-title">Note Taking Best Practices</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END PAGE HEADER -->
+
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="row">
+              <!-- BEGIN MAIN CONTENT -->
+              <div class="col-12 col-xl-9">
+                <div class="card mb-3"><div class="card-body">
+<p>This document describes my note taking <strong>best practices</strong> and <strong>conventions</strong>:</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="note-naming-conventions">Note naming conventions</h2>
+<p>Overview of conventions which will make navigation through the data faster.</p>
+<h3 id="abbrev--phrase---phrase-cz">ABBREV: phrase | phrase.cz</h3>
+<p>Convention:</p>
+<ul>
+<li><strong>synonyms</strong> for a phrase</li>
+</ul>
+<p>Example:</p>
+<ul>
+<li><code>Feature | Variable | Příznak</code></li>
+<li><code>ML: Machine Learning | Strojové učení</code></li>
+</ul>
+<h3 id="abbrev--expanded-abbreviation">ABBREV: expanded abbreviation</h3>
+<p>Convention:</p>
+<ul>
+<li>ABBREVIATION: Expanded abbreviation</li>
+<li>autolinking is aware of this convention in both <code>ABBREVATION</code> and <code>expanded abbreviation</code>
+  are considered to be links</li>
+</ul>
+<p>Example:</p>
+<ul>
+<li><code>NLTK: Natural Language ToolKit</code></li>
+</ul>
+<h3 id="phrase--gt--gt--gt">phrase &gt;&gt;&gt;</h3>
+<p>Convention:</p>
+<ul>
+<li><code>phrase &gt;&gt;&gt;</code> is <a href="...">Link</a> to the actual content
+  i.e. another Note or Notebook</li>
+</ul>
+<hr />
+<p>This is convention for link which can be easily distinguished
+in search and list.</p>
+<p>Example:</p>
+<ul>
+<li><code>Docker &gt;&gt;&gt;</code> is name of the Note which links to Docker where is actual content</li>
+<li><code>Docker</code> is the name of the Note with content.</li>
+</ul>
+<h3 id="phrase--description">[phrase] description</h3>
+<p>Convention:</p>
+<ul>
+<li>Use it whenever you do <strong>not</strong> want to be prefix interpreted as abbreviation.</li>
+<li>Useful when finding Notebook/Note by name to faster find out
+  the context in which is the term used.</li>
+<li>Hints:<ul>
+<li>It's like <code>[group] Subject</code> in newsgroup</li>
+</ul>
+</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li><code>[Docker] Tips and tricks</code></li>
+</ul>
+<h3 id="phrase--find-usage-for-this-convention">{phrase} find usage for this convention</h3>
+<p>Convention for which I don't have meaning yet - propose it for MindForger!</p>
+<h3 id="phrase--find-usage-for-this-convention-1">(phrase) find usage for this convention</h3>
+<p>Convention for which I don't have meaning yet - propose it for MindForger!</p>
+<h3 id="phrase">@phrase</h3>
+<p>Convention for which I don't have meaning yet - propose it for MindForger!</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="note-emoji-prefixes-convention">Note emoji prefixes convention</h2>
+<p>I use the following emojis as prefix of Note names:</p>
+<ul>
+<li>🎯🚀🧪🌟🔧🐞📄🗑👁️</li>
+</ul>
+<p>I use the following convention:</p>
+<ul>
+<li>goal: 🎯</li>
+<li>feature: 🚀</li>
+<li>enhancement: 🌟</li>
+<li>fix: 🔧</li>
+<li>bug: 🐞</li>
+<li>test: 🧪</li>
+<li>doc: 📄</li>
+</ul>
+<h3 id="goal">🎯 goal</h3>
+<h3 id="feature">🚀 feature</h3>
+<h3 id="test---experiment">🧪 test | experiment</h3>
+<h3 id="enhancement">🌟 enhancement</h3>
+<h3 id="fix">🔧 fix</h3>
+<h3 id="bug">🐞 bug</h3>
+<h3 id="doc">📄 doc</h3>
+<h3 id="removal">🗑 removal</h3>
+<h3 id="review">👁️review</h3>
+</div></div>
+              </div>
+              <!-- END MAIN CONTENT -->
+              <!-- BEGIN TABLE OF CONTENTS -->
+              <div class="col-3 d-none d-xl-block">
+                <div class="mf-toc sticky-top">
+              <div class="mf-toc-title">On this page</div>
+              <div class="nav nav-vertical" id="toc">
+                <a href="#note-naming-conventions" class="nav-link">Note naming conventions</a>
+<a href="#abbrev--phrase---phrase-cz" class="nav-link ms-3 small">ABBREV: phrase | phrase.cz</a>
+<a href="#abbrev--expanded-abbreviation" class="nav-link ms-3 small">ABBREV: expanded abbreviation</a>
+<a href="#phrase--gt--gt--gt" class="nav-link ms-3 small">phrase &gt;&gt;&gt;</a>
+<a href="#phrase--description" class="nav-link ms-3 small">[phrase] description</a>
+<a href="#phrase--find-usage-for-this-convention" class="nav-link ms-3 small">{phrase} find usage for this convention</a>
+<a href="#phrase--find-usage-for-this-convention-1" class="nav-link ms-3 small">(phrase) find usage for this convention</a>
+<a href="#phrase" class="nav-link ms-3 small">@phrase</a>
+<a href="#note-emoji-prefixes-convention" class="nav-link">Note emoji prefixes convention</a>
+<a href="#goal" class="nav-link ms-3 small">🎯 goal</a>
+<a href="#feature" class="nav-link ms-3 small">🚀 feature</a>
+<a href="#test---experiment" class="nav-link ms-3 small">🧪 test | experiment</a>
+<a href="#enhancement" class="nav-link ms-3 small">🌟 enhancement</a>
+<a href="#fix" class="nav-link ms-3 small">🔧 fix</a>
+<a href="#bug" class="nav-link ms-3 small">🐞 bug</a>
+<a href="#doc" class="nav-link ms-3 small">📄 doc</a>
+<a href="#removal" class="nav-link ms-3 small">🗑 removal</a>
+<a href="#review" class="nav-link ms-3 small">👁️review</a>
+              </div>
+            </div>
+              </div>
+              <!-- END TABLE OF CONTENTS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- BEGIN FOOTER -->
+        <footer class="footer footer-transparent d-print-none">
+          <div class="container-xl">
+            <ul class="list-inline list-inline-dots mb-0 text-center">
+              <li class="list-inline-item">Copyright &copy; 2018-2026 MindForger </li>
+              <li class="list-inline-item">Thinking Notebook</li>
+              <li class="list-inline-item">Doc made with <a href="https://www.mindforger.com" target="_blank">MindForger</a></li>
+              <li class="list-inline-item"><a href="https://github.com/dvorka/mindforger-documentation/edit/main/memory/NOTE_TAKING_BPS.md" target="_blank">Edit on GitHub</a></li>
+              <li class="list-inline-item"><a href="https://github.com/dvorka/mindforger-documentation/blob/main/memory/NOTE_TAKING_BPS.md" target="_blank">Source</a></li>
+              <li class="list-inline-item"><a href="rss.xml">RSS</a></li>
+            </ul>
+          </div>
+        </footer>
+        <!-- END FOOTER -->
+      </div>
+    </div>
+    <script src="assets/tabler/js/tabler.min.js" defer></script>
+    
+  </body>
+</html>

@@ -1,0 +1,1718 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>User documentation - MindForger Documentation</title>
+    <meta name="description" content="This document briefly describes key MindForger features." />
+    <meta name="author" content="Martin.Dvorak@mindforger.com" />
+    <link rel="canonical" href="https://www.mindforger.com/docs/user-documentation.html" />
+    <link rel="alternate" type="application/rss+xml" title="MindForger Blog" href="rss.xml" />
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="assets/mind-forger.png" type="image/png" />
+    <meta name="theme-color" content="#008c00" />
+
+    <!-- BEGIN OPEN GRAPH -->
+    <meta property="og:site_name" content="MindForger Documentation" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="User documentation - MindForger Documentation" />
+    <meta property="og:description" content="This document briefly describes key MindForger features." />
+    <meta property="og:url" content="https://www.mindforger.com/docs/user-documentation.html" />
+    <meta property="og:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="User documentation - MindForger Documentation" />
+    <meta name="twitter:description" content="This document briefly describes key MindForger features." />
+    <meta name="twitter:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
+    <!-- END OPEN GRAPH -->
+
+    <!-- BEGIN STYLES -->
+    <link href="assets/tabler/css/tabler.min.css" rel="stylesheet" />
+    <link href="assets/tabler/css/tabler-props.min.css" rel="stylesheet" />
+    <link href="assets/tabler/css/tabler-themes.min.css" rel="stylesheet" />
+    <link href="assets/pygments.css" rel="stylesheet" />
+    <link href="assets/mindforger-docs.css" rel="stylesheet" />
+    <link href="assets/katex/katex.min.css" rel="stylesheet" />
+    <!-- END STYLES -->
+
+    <!-- BEGIN THEME SCRIPT: light/dark theme, must run before the page renders -->
+    <script src="assets/tabler/js/tabler-theme.min.js"></script>
+    <!-- END THEME SCRIPT -->
+  </head>
+  <body>
+    <div class="page">
+      <!-- BEGIN NAVBAR -->
+      <div class="sticky-top">
+        <header class="navbar navbar-expand-md d-print-none">
+          <div class="container-xl">
+            <!-- BEGIN NAVBAR TOGGLER -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbar-menu" aria-controls="navbar-menu"
+                    aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- END NAVBAR TOGGLER -->
+            <!-- BEGIN NAVBAR LOGO -->
+            <div class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+              <a href="index.html" class="mf-brand">
+                <img src="assets/mind-forger.png" alt="MindForger" class="mf-brand-logo">
+                <span class="mf-brand-text">MindForger</span>
+              </a><span style="font-weight: normal;">Docs</span>
+            </div>
+            <!-- END NAVBAR LOGO -->
+            <div class="navbar-nav flex-row order-md-last">
+              <div class="d-none d-md-flex">
+                <div class="nav-item">
+                  <a href="?theme=dark" class="nav-link px-0 hide-theme-dark"
+                     title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /></svg></a>
+                  <a href="?theme=light" class="nav-link px-0 hide-theme-light"
+                     title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <header class="navbar-expand-md">
+          <div class="collapse navbar-collapse" id="navbar-menu">
+            <div class="navbar">
+              <div class="container-xl">
+                <div class="row flex-column flex-md-row flex-fill align-items-center">
+                  <div class="col">
+                    <!-- BEGIN NAVBAR MENU -->
+                    <ul class="navbar-nav" id="navbar-base">
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg></span>
+                          <span class="nav-link-title">Home</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="index.html">Documentation</a>
+<a class="dropdown-item" href="toc.html">Table of Contents</a>
+<a class="dropdown-item" href="history.html">Project History</a>
+<a class="dropdown-item" href="credits.html">Credits</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="about.html">About</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg></span>
+                          <span class="nav-link-title">User Documentation</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="assets/comics/index.html">Comics</a>
+<a class="dropdown-item" href="installation.html">Installation</a>
+<a class="dropdown-item" href="getting-started.html">Getting Started</a>
+<a class="dropdown-item active" href="user-documentation.html">User Documentation</a>
+<a class="dropdown-item" href="note-taking-best-practices.html">Note Taking Best Practices</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="faqs.html">FAQs</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M7 8l-4 4l4 4" /><path d="M17 8l4 4l-4 4" /><path d="M14 4l-4 16" /></svg></span>
+                          <span class="nav-link-title">Technical Documentation</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="developer-documentation.html">Developer Guide</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M12 17a3 3 0 0 0 -3 -3" /><path d="M15 17a6 6 0 0 0 -6 -6" /><path d="M9 17h.01" /></svg></span>
+                          <span class="nav-link-title">News</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="blog.html">Blog</a>
+<a class="dropdown-item" href="releases.html">Releases</a>
+<a class="dropdown-item" href="https://github.com/dvorka/mindforger/blob/master/Changelog" target="_blank" rel="noopener">Changelog</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="rss.xml" target="_blank" rel="noopener">RSS</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                    <!-- END NAVBAR MENU -->
+                  </div>
+                  <div class="col col-md-auto">
+                    <ul class="navbar-nav">
+                      <li class="nav-item">
+                        <a class="nav-link" href="https://www.mindforger.com" target="_blank">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M3.6 9h16.8" /><path d="M3.6 15h16.8" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" /></svg></span>
+                          <span class="nav-link-title">mindforger.com</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+      </div>
+      <!-- END NAVBAR -->
+      <div class="page-wrapper">
+        <!-- BEGIN PAGE HEADER -->
+        <div class="page-header d-print-none" aria-label="Page header">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                <div class="page-pretitle">User Documentation</div>
+                <h1 class="page-title">User documentation</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END PAGE HEADER -->
+
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="row">
+              <!-- BEGIN MAIN CONTENT -->
+              <div class="col-12 col-xl-9">
+                <div class="card mb-3"><div class="card-body">
+<p>This document <em>briefly</em> describes key MindForger features.</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="basics">Basics</h2>
+<p><img alt="desktop" src="GETTING_STARTED.basic-concepts-overview.png" / class="img-fluid rounded border my-2"></p>
+<p>MindForger uses the following terminology:</p>
+<ul>
+<li><a href="getting-started.html#workspace">Workspace</a></li>
+<li><a href="getting-started.html#notebook">Notebook</a></li>
+<li><a href="getting-started.html#note">Note</a></li>
+</ul>
+<p>In short:</p>
+<ul>
+<li>The MindForger <a href="getting-started.html#workspace">workspace</a> is analogous <strong>the desktop</strong> of an office desk.<ul>
+<li>The MindForger <a href="getting-started.html#notebook">notebook</a> analogous to <strong>a notepad</strong> on the desktop.<ul>
+<li>A MindForger <a href="getting-started.html#note">note</a> is analogous to <strong>a page with the note</strong> from a <strong>notepad</strong>.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>For more details see <a href="getting-started.html#basics">Basics</a> section in the <a href="getting-started.html">Getting Started</a> guide.</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="knowledge-manager">Knowledge manager</h2>
+<p>MindForger is <strong>knowledge management tool</strong> which means it is a software that helps you to organize, store, and access their knowledge effectively. With MindForger, you can create and maintain a <a href="getting-started.html#workspace">workspace</a> of your thoughts, ideas, notes, and any other kind of information they want to store.</p>
+<p>MindForger provides a range of <strong>features</strong> to assist in knowledge management. Youa can create <a href="#outliner">hierarchical outlines</a>, <a href="#knowledge-graph-navigator">mind maps</a>, and <a href="#tags">tags</a> to categorize and structure your knowledge. You can also create <a href="#auto-linking">links</a> between different pieces of information (<a href="getting-started.html#note">notes</a>), allowing for easy navigation and connections between related concepts.</p>
+<p>In addition to organizing information, MindForger also includes powerful <a href="getting-started.html#find-note">search functionality</a>. This allows you to quickly locate specific pieces of information within your knowledge workspace. Whether you are searching for a keyword, a specific note, or a particular tag, MindForger helps you to find what you need efficiently.</p>
+<p>Overall, MindForger assists you in <strong>organizing</strong>, <strong>accessing</strong>, and <strong>maximizing</strong> the value of your <strong>knowledge</strong>, ultimately promoting <strong>productivity</strong> and <strong>innovation</strong>.</p>
+<h3 id="create-notebook">Create Notebook</h3>
+<p>Create <strong>new</strong> <a href="#notebook">notebook</a> as follows:</p>
+<ol>
+<li>open menu <code>Notebook</code><ul>
+<li>💡 if <code>Notebook</code> menu is disabled, 
+  then open list of notebooks (menu <code>View</code> / <code>Notebooks</code>) or notebooks tree
+  (menu <code>View</code> / <code>Notebook Shelves</code>)</li>
+</ul>
+</li>
+<li>choose <code>New</code> menu item</li>
+<li><code>New Notebook</code> dialog is opened:
+   - type in notebook name 
+   - feel free modify notebook creation options and tags</li>
+<li>click <kbd>OK</kbd> to create the notebook</li>
+</ol>
+<h4 id="create-note">Create Note</h4>
+<p>Create <strong>new</strong> <a href="#note">note</a> as follows:</p>
+<ol>
+<li>open menu <code>Note</code><ul>
+<li>💡 if <code>Note</code> menu might is disabled, 
+  then open the <a href="#notebook">notebook</a> in which you want to add the note</li>
+</ul>
+</li>
+<li>choose <code>New</code> menu item</li>
+<li><code>New Note</code> dialog is opened:
+   - type in note name 
+   - feel free modify note creation options and tags</li>
+<li>click <kbd>OK</kbd> to create the note</li>
+</ol>
+<h4 id="edit-note">Edit Note</h4>
+<p>When you are viewing a <a href="#note">note</a>, you can edit it using one of the options below:</p>
+<ul>
+<li><strong>Double click</strong> the mouse preview.</li>
+<li>Use <kbd>Ctrl-e</kbd> keyboard shortcut (Linux/Win).</li>
+<li>Use <kbd>Alt-n e</kbd> keyboard shortcut (Linux/Win).</li>
+</ul>
+<p>Once you finish editing the <a href="#note">note</a> you can save it and preview using one of the options below:</p>
+<ul>
+<li>Use <kbd>Alt-⬅</kbd> keyboard shortcut.</li>
+<li>Click <kbd>Save &amp; Leave</kbd> button at the bottom of the editor.</li>
+</ul>
+<h3 id="open-notebook">Open Notebook</h3>
+<p><strong>Open</strong> <a href="#notebook">notebook</a> as follows:</p>
+<ol>
+<li>open list of notebooks (menu <code>View</code> / <code>Notebooks</code>)
+   or notebooks tree (menu <code>View</code> / <code>Notebook Shelves</code>)</li>
+<li>choose the notebook you want to open</li>
+<li>open the notebook using one of the following options:<ul>
+<li>hit <kbd>Enter</kbd> key</li>
+<li>double-click the notebook row in the list/tree</li>
+</ul>
+</li>
+</ol>
+<h3 id="outliner">Outliner</h3>
+<p><a href="https://www.youtube.com/watch?v=LUqavHfKhnc"><img alt="v" src="https://img.youtube.com/vi/LUqavHfKhnc/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<p>An <strong>outliner</strong> is a feature used in word processing, <strong>note-taking</strong>, and organizational software to help users outline and structure their ideas. Outlining actions in MindForger allow users to create <strong>hierarchies</strong> or levels of information by, making it easier to organize and navigate through a <a href="#notebook">Notebook</a>:</p>
+<ol>
+<li>open a <a href="#notebook">notebook</a></li>
+<li>choose and view a <a href="#note">note</a> in the note tree</li>
+<li>open menu <code>Note</code></li>
+<li>choose one of the <strong>outlining actions</strong><ul>
+<li><code>Promote</code><ul>
+<li>to move note one level <strong>up</strong> in hierarchy (depth)</li>
+</ul>
+</li>
+<li><code>Demote</code><ul>
+<li>to move note one level <strong>down</strong> in hierarchy (depth)</li>
+</ul>
+</li>
+<li><code>Move to first</code><ul>
+<li>move note to <strong>the first</strong> from the top on its level (depth)</li>
+</ul>
+</li>
+<li><code>Move up</code><ul>
+<li>move note one position <strong>up</strong> on its level (depth)</li>
+</ul>
+</li>
+<li><code>Move down</code><ul>
+<li>move note one position <strong>down</strong> on its level (depth)</li>
+</ul>
+</li>
+<li><code>Move to last</code><ul>
+<li>move note to <strong>the last</strong> from the top on its level (depth)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>Outlining is a powerful tool that allows you to organize your thoughts and make your remarks structured, comprehensible, and scalable.</p>
+<h4 id="promote-note">Promote note</h4>
+<p><strong>Promote</strong> note as follows:</p>
+<ol>
+<li>open a <a href="#notebook">notebook</a></li>
+<li>choose and view a <a href="#note">note</a> in the note tree</li>
+<li>open menu <code>Note</code></li>
+<li>choose one of the <strong>outlining actions</strong><ul>
+<li><code>Promote</code><ul>
+<li>to move note one level <strong>up</strong> in hierarchy (depth)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="demote-note">Demote note</h4>
+<p><strong>Promote</strong> note as follows:</p>
+<ol>
+<li>open a <a href="#notebook">notebook</a></li>
+<li>choose and view a <a href="#note">note</a> in the note tree</li>
+<li>open menu <code>Note</code></li>
+<li>choose one of the <strong>outlining actions</strong><ul>
+<li><code>Demote</code><ul>
+<li>to move note one level <strong>down</strong> in hierarchy (depth)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="move-to-first">Move to first</h4>
+<p><strong>Promote</strong> note as follows:</p>
+<ol>
+<li>open a <a href="#notebook">notebook</a></li>
+<li>choose and view a <a href="#note">note</a> in the note tree</li>
+<li>open menu <code>Note</code></li>
+<li>choose one of the <strong>outlining actions</strong><ul>
+<li><code>Move to first</code><ul>
+<li>move note to <strong>the first</strong> from the top on its level (depth)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="up">Up</h4>
+<p><strong>Promote</strong> note as follows:</p>
+<ol>
+<li>open a <a href="#notebook">notebook</a></li>
+<li>choose and view a <a href="#note">note</a> in the note tree</li>
+<li>open menu <code>Note</code></li>
+<li>choose one of the <strong>outlining actions</strong><ul>
+<li><code>Move up</code><ul>
+<li>move note one position <strong>up</strong> on its level (depth)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="down">Down</h4>
+<p><strong>Promote</strong> note as follows:</p>
+<ol>
+<li>open a <a href="#notebook">notebook</a></li>
+<li>choose and view a <a href="#note">note</a> in the note tree</li>
+<li>open menu <code>Note</code></li>
+<li>choose one of the <strong>outlining actions</strong><ul>
+<li><code>Move down</code><ul>
+<li>move note one position <strong>down</strong> on its level (depth)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="move-to-last">Move to last</h4>
+<p><strong>Promote</strong> note as follows:</p>
+<ol>
+<li>open a <a href="#notebook">notebook</a></li>
+<li>choose and view a <a href="#note">note</a> in the note tree</li>
+<li>open menu <code>Note</code></li>
+<li>choose one of the <strong>outlining actions</strong><ul>
+<li><code>Move to last</code><ul>
+<li>move note to <strong>the last</strong> from the top on its level (depth)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="live-preview">Live Preview</h3>
+<p><a href="https://www.youtube.com/watch?v=vRDZSAHkk9Y"><img alt="v" src="https://img.youtube.com/vi/vRDZSAHkk9Y/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<p>Easily toggle live HTML preview of edited Markdown with shortcut or edit panel buttons.</p>
+<h4 id="view-and-edit-mode">View and Edit mode</h4>
+<p><img alt="Image" src="USER_DOCUMENTATION.click-to-edit.png" / class="img-fluid rounded border my-2"></p>
+<p>If you want to <strong>edit</strong> a section either <strong>double-click</strong> anywhere in the 
+rendered preview on the right (MindForger window) or choose:</p>
+<ul>
+<li>menu <code>Notebook/Edit</code> for title section</li>
+<li>menu <code>Note/Edit</code> for any sub-section</li>
+</ul>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="wingman">Wingman</h2>
+<p><a href="https://www.youtube.com/watch?v=eyLV5P_Bujs"><img alt="v" src="https://img.youtube.com/vi/eyLV5P_Bujs/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<p>Wingman is MindForger's <strong>private AI assistant</strong>. It brings the power of
+<a href="https://en.wikipedia.org/wiki/Large_language_model">large language models</a> (LLM)
+to your notes and it <strong>runs on your computer</strong> - open-weight models like
+gpt-oss, Llama, GLM or Qwen hosted by <a href="https://ollama.com">ollama</a> never send a
+single word of your notes anywhere.</p>
+<p>Why <strong>local AI</strong>:</p>
+<ul>
+<li><strong>Privacy</strong> - your notes, ideas and plans stay on your machine.</li>
+<li><strong>Offline</strong> - Wingman works without internet connection.</li>
+<li><strong>Free</strong> - no account, API key, subscription or per-token bill.</li>
+<li><strong>Your choice</strong> - pick the model which fits your hardware and your language.</li>
+</ul>
+<p>Whether you need to write an <strong>in-depth analysis</strong>, draft a <strong>blog post</strong>, prepare
+a <strong>plan</strong>, or simply <strong>generate ideas</strong>, Wingman can also:</p>
+<ul>
+<li>summarize</li>
+<li><a href="#eli5--explain-like-i-m-5">explain</a></li>
+<li><a href="#translate">translate</a></li>
+<li><a href="#rewrite">rewrite / reformulate</a></li>
+<li><a href="#fix-grammar">fix grammar</a></li>
+<li><a href="#complete-text">complete text</a></li>
+<li>find tasks in a Notebook or Note</li>
+<li>suggest synonyms and antonyms</li>
+</ul>
+<p>... and much more - ask it anything using your own prompt.</p>
+<p><strong>Wingman in MindForger</strong>:</p>
+<ul>
+<li>menu <code>Knowledge/Wingman LLM</code> (<kbd>Ctrl-/</kbd> on Linux and Windows) opens the Wingman chat
+  window where you run predefined or your own prompts, e.g. on the text selected in the
+  Note editor</li>
+<li>submenus <code>Wingman LLM</code> of the <code>Notebook</code>, <code>Note</code> and <code>Edit</code> menus run the most common prompts
+  directly - <code>Summarize</code>, <code>Explain</code>, <code>Find Tasks</code>, <code>Find Grammar Errors</code>, <code>Translate to English</code>,
+  <code>Fix Grammar</code>, <code>Finish Text</code> or <code>Rewrite Text</code> - and <code>More prompts...</code> offers the rest</li>
+<li>Wingman also powers the semantic search of similar Notes (associations) using text embeddings</li>
+</ul>
+<p><strong>SOTA models</strong>: MindForger can talk to remote state-of-the-art (SOTA) large language
+models of the LLM cloud providers as well. Such models are <strong>out of scope</strong> of this
+documentation - your text is sent to a 3rd party when you use them. The <code>Your data privacy</code>
+indicator in the Wingman preferences tells you whether the selected LLM keeps your data on your
+machine or shares them. Local AI is the recommended way to use Wingman.</p>
+<h3 id="llm-provider-configuration">LLM provider configuration</h3>
+<p>Wingman uses a local LLM (for privacy) or remote LLM (for SOTA performance) provider. <strong>Local</strong> LLM provider as prerequisite: </p>
+<ol>
+<li><strong>install ollama</strong> from https://ollama.com for macOS and Windows<ul>
+<li>run <code>curl -fsSL https://ollama.com/install.sh | sh</code> on Linux</li>
+</ul>
+</li>
+<li><strong>download a model</strong> e.g. <code>ollama pull llama3.2</code> - browse the
+   <a href="https://ollama.com/library">model library</a> for more (gpt-oss, Qwen, GLM, ...).
+   Bigger models give better answers, but need more memory (RAM/GPU) and are slower - start with
+   a small one and upgrade if your hardware allows</li>
+<li><strong>check</strong> that ollama is running and the model is installed: <code>ollama list</code>
+   (ollama serves its API at <code>http://localhost:11434</code>)</li>
+</ol>
+<p><strong>Local</strong> (or remote) LLM configuration:</p>
+<ol>
+<li><strong>add</strong> LLM provider to MindForger:<ol>
+<li>open menu <code>Knowledge</code></li>
+<li>choose <code>Preferences</code> menu item</li>
+<li>select <code>Wingman</code> tab in the configuration dialog</li>
+<li>click <kbd>Add LLM</kbd> and choose <code>ollama</code></li>
+<li>keep the default <code>ollama Server URL</code> (<code>http://localhost:11434</code>) - change it only if ollama runs on
+   another machine</li>
+<li>choose the <code>LLM Model</code> from the list (<kbd>Refresh</kbd> loads the models installed in ollama)
+   or type its name</li>
+<li>click <kbd>Probe</kbd> to check the configuration and <kbd>Add</kbd> to save it</li>
+</ol>
+</li>
+<li>select the ollama model in the <code>Use LLM</code> drop down of the <code>Wingman</code> tab and click <kbd>Test Connection</kbd>
+   to make sure that MindForger can talk to it - <code>Your data privacy</code> of the selected LLM
+   confirms that your data are <strong>not</strong> shared with any 3rd party</li>
+<li>click <kbd>OK</kbd> to save the preferences</li>
+</ol>
+<p>If something goes wrong:</p>
+<ul>
+<li><code>Could not connect to the ollama server</code> - check that ollama is running (<code>ollama serve</code>)
+  and that the URL is correct</li>
+<li><code>No models found on ollama server</code> - install a model using <code>ollama pull</code></li>
+</ul>
+<p>Now open Wingman using <kbd>Ctrl-/</kbd> and enjoy your <strong>private AI</strong>.</p>
+<h3 id="fix-grammar">Fix grammar</h3>
+<p><a href="https://www.youtube.com/watch?v=QLX9CWzzEa8"><img alt="v" src="https://img.youtube.com/vi/QLX9CWzzEa8/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<h3 id="translate">Translate</h3>
+<p><a href="https://www.youtube.com/watch?v=akesdLhWZ-I"><img alt="v" src="https://img.youtube.com/vi/akesdLhWZ-I/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<p>Otto Wichterle byl světově proslulý český vědec a vynálezce, pracující zejména v oblasti makromolekulární organické chemie, mezi jejíž zakladatele patřil. Proslulý je především svými objevy a vynálezy, které vedly k zásadnímu zdokonalení a celosvětovému rozšíření měkkých kontaktních čoček. Tyto výsledky vycházely z jeho původní vědecké práce v oblasti hydrogelů. Wichterle se proslavil též objevem umělého polyamidového vlákna – silonu.</p>
+<h3 id="rewrite">Rewrite</h3>
+<p><a href="https://www.youtube.com/watch?v=eyLV5P_Bujs"><img alt="v" src="https://img.youtube.com/vi/eyLV5P_Bujs/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<h3 id="complete-text">Complete text</h3>
+<p><a href="https://www.youtube.com/watch?v=eyLV5P_Bujs"><img alt="v" src="https://img.youtube.com/vi/eyLV5P_Bujs/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<h3 id="eli5--explain-like-i-m-5">ELI5: Explain like I'm 5</h3>
+<p><a href="https://www.youtube.com/watch?v=fln4XdnlR0A"><img alt="v" src="https://img.youtube.com/vi/fln4XdnlR0A/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="markdown-editor">Markdown editor</h2>
+<p>MindForger can be used as a Markdown <strong>editor</strong>.</p>
+<p>It allows you to easily write <a href="#markdown">Markdown</a> 
+documents in a WYSIWYG text editor with
+Markdow <strong>syntax</strong> hints and an HTML rendered <strong>preview</strong>.</p>
+<p>MindForger terminology:</p>
+<ul>
+<li>A Markdown file is a <strong>Notebook</strong>.</li>
+<li>A Markdown document section (line with leading <code>#</code>) is a <strong>Note</strong>.</li>
+</ul>
+<p>MindForger represents any Markdown as <a href="#markdown-outline">follows</a>...</p>
+<h3 id="open-markdown-file">Open Markdown file</h3>
+<p>MindForger can be used to edit a <strong>single</strong> Markdown file:</p>
+<div class="codehilite"><pre><span></span><code>$ mindforger analysis.md
+</code></pre></div>
+
+<p>If the given file exists, then it's opened for editing, otherwise a
+new Markdown file with this name is <strong>created</strong> and opened.</p>
+<h3 id="markdown-markup">Markdown markup</h3>
+<blockquote>
+<p><strong>Markdown</strong> is a lightweight markup language for creating formatted text using a plain-text editor. John Gruber and Aaron Swartz created Markdown in 2004 as a markup language that is appealing to human readers in its source code form.[9] Markdown is widely used in blogging, instant messaging, online forums, collaborative software, documentation pages, and readme 
+files. -- <a href="https://en.wikipedia.org/wiki/Markdown">Wikipedia</a></p>
+</blockquote>
+<p>You can write your remarks as <strong>plain text</strong> without any formatting in MindForger.</p>
+<p>However, you <strong>may</strong> use <a href="https://daringfireball.net/projects/markdown/">Markdown markup</a> to emphasize important parts of the text, make links, create lists, etc. MindForger will also use Markdown to store your remarks which enables you to use any Markdown editor or tool.</p>
+<p>You don't have to learn <a href="https://spec.commonmark.org/">Markdown specification</a> as MindForger editor and <code>Format</code> menu will help and guide you.</p>
+<h3 id="markdown-mapping">Markdown mapping</h3>
+<p>In order to enable quick <strong>navigation</strong> and <strong>refactoring</strong> 
+of Markdown documents, MindForger shows Markdown documents (<strong>Notebooks</strong>) 
+as an <strong>outline</strong> of Markdown sections (<strong>Notes</strong>) allowing
+you to efficiently choose/read/edit/refactor a particular section.</p>
+<p><img alt="Image" src="FAQS.outliner-rules.png" / class="img-fluid rounded border my-2"></p>
+<p>Check side-by-side Markdown document <strong>text view</strong>
+and <strong>MindForger view</strong> in the image above:</p>
+<ul>
+<li>The <code>INSTALLATION</code> Markdown document is opened in a text editor (Emacs) on the <strong>left</strong>.</li>
+<li>The same Markdown document is opened in MindForger on the <strong>right</strong>.</li>
+</ul>
+<p>As you can see, MindForger represents the hierarchy of sections 
+(prefixed/underlined in Markdown syntax with/by <code>#</code>, <code>-</code> or <code>=</code>) 
+as a <strong>tree</strong> - called an <strong>outline</strong>:</p>
+<ul>
+<li>The tree of sections (in the left MindForger window) reflects 
+  the <strong>depth/level</strong> of individual sections e.g. section <code>UBUNTU</code> 
+  on the second level is prefixed with <code>##</code> and shown on the second 
+  level in the tree.</li>
+</ul>
+<p><img alt="Image" src="FAQS.title-section-edit.png" / class="img-fluid rounded border my-2"></p>
+<ul>
+<li>You can <strong>open</strong> Markdown document <strong>title section</strong> (<code>INSTALLATION</code>) by
+  clicking its name <code>INSTALLATION</code> above <strong>outline</strong>.</li>
+<li>Any <strong>sub-section</strong> can be opened by clicking its name in the tree.</li>
+</ul>
+<p>For switching between section (pre)view and edit mode refer to the <a href="#view-vs-edit-mode">next section</a>.</p>
+<h4 id="document---notebook">Document ~ Notebook</h4>
+<p><strong>Markdown document</strong> (file) is represented as <a href="getting-started.html#notebook">notebook</a> in MindForger.</p>
+<h4 id="section---note">Section ~ Note</h4>
+<p>Markdown document <strong>section</strong> is represented as <a href="getting-started.html#note">note</a> in MindForger.</p>
+<h3 id="markdown-format">Markdown format</h3>
+<p><a href="https://daringfireball.net/projects/markdown/">Markdown</a> is  a plain text formatting syntax introduced by John Gruber.
+Markdown allows you to write using an easy-to-read, easy-to-write plain text 
+format, easily rendered as HTML.</p>
+<p>MindForger uses Markdown-based DSL.
+There are many flavors of Markdown - for
+Markdown syntax documentation please refer to:</p>
+<ul>
+<li><a href="https://daringfireball.net/projects/markdown/syntax">John Gruber Markdown syntax</a> documentation</li>
+<li><a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/">GitHub Markdown</a> documentation</li>
+<li><a href="https://github.github.com/gfm/">GitHub flavored Markdown</a> specification</li>
+<li><a href="https://mermaidjs.github.io/">Mermaid diagrams</a> documentation</li>
+</ul>
+<p>Sub-sections of this section provide Markdown syntax
+overview and rendering demonstration. As you read
+particular Markdown syntax features, be sure to
+open each section for <strong>edit</strong> (to check syntax) and
+experiment with <strong>menu</strong> <code>Format/*</code>.</p>
+<h4 id="text">Text</h4>
+<p><code>Monospace</code> text, <em>emph</em> text, <strong>bold</strong> text, 
+<em>italic</em> text, <strong>bold</strong> text, ~~deleted~~ text.</p>
+<hr />
+<p>💡 edit this Note to see the syntax</p>
+<h4 id="keyboard-keys">Keyboard keys</h4>
+<p>You can use <kbd>Alt+f b</kbd> to make marked text bold.</p>
+<hr />
+<p>💡 edit this Note to see the syntax</p>
+<h4 id="images">Images</h4>
+<p>See Markdown source of this Note to learn <strong>image</strong> syntax.</p>
+<p>Image from web:</p>
+<p><img alt="MindForger logo" src="http://www.mindforger.com/images/mind-forger.png" / class="img-fluid rounded border my-2"></p>
+<p>Image from current MindForger repository:</p>
+<p><img alt="MF screenshot" src="./HISTORY.mindforger.png" / class="img-fluid rounded border my-2"></p>
+<hr />
+<p>💡 edit this Note to see the syntax <br/>
+💡 click menu <code>Format/Image</code> or press <kbd>Alt+f g</kbd> to insert image.</p>
+<h4 id="links">Links</h4>
+<p>See Markdown source of this Note to learn <strong>link</strong> syntax.</p>
+<p>Link to web:</p>
+<ul>
+<li><a href="http://www.mindforger.com">MindForger home page</a></li>
+</ul>
+<p>Automatic web link:</p>
+<ul>
+<li>https://github.com/dvorka/mindforger</li>
+</ul>
+<p>Link to a Notebook in active MindForger repository:</p>
+<ul>
+<li><a href="history.html">MF history</a></li>
+</ul>
+<p>Link to a Note in active MindForger repository:</p>
+<ul>
+<li><a href="about.html#why-mindforger">MF motivation</a></li>
+</ul>
+<p>Link to a file on the filesystem:</p>
+<ul>
+<li><a href="/etc/bash.bashrc">.bashrc</a></li>
+</ul>
+<p>Link to a directory on the filesystem:</p>
+<ul>
+<li><a href="/tmp">/tmp</a></li>
+</ul>
+<hr />
+<p>💡 edit this Note to see the syntax <br/>
+💡 click menu <code>Format/Link</code> or press <kbd>Alt+f l</kbd> to insert link.</p>
+<h4 id="smarty-pants">Smarty pants</h4>
+<p><a href="https://daringfireball.net/projects/smartypants/">Smarty pants like</a> like:</p>
+<ul>
+<li>curly " and '</li>
+<li>``backsticks''</li>
+<li>dashes a--ha and a---ha</li>
+<li>(tm) and (r) and (c)</li>
+<li>consecutive dots ...</li>
+<li>1/4 1/2</li>
+<li>A^B and a^(b+2)</li>
+</ul>
+<hr />
+<p>💡 edit this Note to see the syntax</p>
+<h4 id="hr">HR</h4>
+<p>Horizontal...</p>
+<hr />
+<p>... rulers ...</p>
+<hr />
+<p>... split screen horizontally.</p>
+<hr />
+<h4 id="list">List</h4>
+<p>Bullet list:</p>
+<ul>
+<li>why<ul>
+<li>?</li>
+</ul>
+</li>
+<li>how<ul>
+<li>!</li>
+</ul>
+</li>
+<li>what<ul>
+<li>.</li>
+</ul>
+</li>
+</ul>
+<p>Numbered list:</p>
+<ol>
+<li>why<ol>
+<li>?</li>
+</ol>
+</li>
+<li>how<ol>
+<li>?</li>
+</ol>
+</li>
+<li>what<ol>
+<li>?</li>
+</ol>
+</li>
+</ol>
+<hr />
+<p>💡 edit this Note to see the syntax</p>
+<h4 id="tasks">Tasks</h4>
+<p>Task list:</p>
+<ul>
+<li>[x] skip-gram<ul>
+<li>[ ] bag of words</li>
+</ul>
+</li>
+<li>[X] GloWe vs. word2vec<ul>
+<li>[ ] word embedding</li>
+</ul>
+</li>
+<li>[x] stemmer</li>
+</ul>
+<hr />
+<p>💡 edit this Note to see the syntax</p>
+<h4 id="blockquote">Blockquote</h4>
+<p>Riddle:</p>
+<blockquote>
+<p>frodo and
+glum,</p>
+<blockquote>
+<p>riddles</p>
+<blockquote>
+<p>in the dark</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<hr />
+<p>💡 edit this Note to see the syntax</p>
+<h4 id="tables">Tables</h4>
+<p>Pets:</p>
+<table class="table table-bordered table-vcenter">
+<thead>
+<tr>
+<th>Snake</th>
+<th>Turtle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Karkulka</td>
+<td>Ema</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-bordered table-vcenter">
+<thead>
+<tr>
+<th align="left">Frontend</th>
+<th align="left">Backend</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Qt</td>
+<td align="left">C++</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p>Columns can be <strong>aligned</strong> to left/right or centered:</p>
+<table class="table table-bordered table-vcenter">
+<thead>
+<tr>
+<th align="left">Left</th>
+<th align="center">Center</th>
+<th align="right">Right</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">This is frontend</td>
+<td align="center">This is middle-ware</td>
+<td align="right">This is backend</td>
+</tr>
+<tr>
+<td align="left">Js</td>
+<td align="center">ESB</td>
+<td align="right">C++</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p>💡 edit this Note to see the syntax</p>
+<h4 id="source-code-with-syntax-highlighting">Source code with syntax highlighting</h4>
+<p>There are multiple options how a block of source code can be written in Markdown.</p>
+<p><strong>IMPORTANT</strong>: note leading empty lines before code blocks.</p>
+<hr />
+<p>1) Tab indentation w/o language spec and w/o syntax highlighting:</p>
+<div class="codehilite"><pre><span></span><code>public static void main(string[] args) {
+    return 0;
+}
+</code></pre></div>
+
+<hr />
+<p>2) Code block w/ language spec:</p>
+<div class="codehilite"><pre><span></span><code>    ```java
+    ```
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">string</span><span class="o">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>or w/o language spec:</p>
+<div class="codehilite"><pre><span></span><code>public static void main(string[] args) {
+    return 0;
+}
+</code></pre></div>
+
+<hr />
+<p>3) Fenced block w/ language spec:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">string</span><span class="o">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>or w/o language spec:</p>
+<div class="codehilite"><pre><span></span><code>public static void main(string[] args) {
+    return 0;
+}
+</code></pre></div>
+
+<hr />
+<p>💡 edit this Note to see the syntax</p>
+<h4 id="math">Math</h4>
+<p><img alt="i" src="USER_DOCUMENTATION.math.png" / class="img-fluid rounded border my-2"></p>
+<p><a href="https://www.mathjax.org/">MathJax</a> handles <strong>inline</strong> expressions like: x^2 + y^2 = z^2 or <strong>block</strong> expressions like: $$\frac{D\rho}{Dt} = 0.$$</p>
+<p>Check MathJax documentation and/or <a href="https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference">cheatsheet</a> for more examples.</p>
+<p>Quadratic equation root: When (a \ne 0), there are two solutions to (ax^2 + bx + c = 0) and they are
+$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$</p>
+<p>Sum:
+$$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$</p>
+<p>Limit:
+$$\lim_{x\to 0}$$</p>
+<p>Sqrt:
+$$\left(\frac{\sqrt x}{y^3}\right)$$</p>
+<hr />
+<p>Alternatively you can use https://www.codecogs.com to render
+expression to image and include it in Markdown.</p>
+<hr />
+<p>💡 edit this Note to see the syntax <br/>
+💡 if math expressions are <strong>not</strong> rendered, then you must <strong>enable</strong> MathJax using menu menu <code>Knowledge/Preferences/Viewer/Math support</code></p>
+<h5 id="mathjax">MathJax</h5>
+<p><img alt="i" src="USER_DOCUMENTATION.mathjax.png" / class="img-fluid rounded border my-2"></p>
+<p>MathJax <a href="https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference">cheetsheet</a>:</p>
+<ul>
+<li>use <code>$</code> to inline expressions, and <code>$$</code> for blocks</li>
+<li>superscript: $x^2$</li>
+<li>subscript: $x_i$</li>
+<li>superscript and subscript: $x^2_i$</li>
+<li>Greek letters:
+  $\alpha, \beta, \delta ... \omega, \Delta, ... \Omega$</li>
+<li>groups: for <code>10^10</code> you get $10^10$, but <code>10^{10}</code> gives $10^{10}$. </li>
+<li>parenthesis: [, ( and use <code>\{</code> for curly braces</li>
+<li>fraction: $\frac{2}{3}$ $\frac{a+b}{c-d}$</li>
+<li>square: $\sqrt{10}$ $\sqrt[3]{\frac xy}$</li>
+<li>exponential: $2^8$</li>
+<li>absolute: $\vert{x}\vert$</li>
+<li>metric: $\Vert{x}\Vert$</li>
+<li>interval: $\langle x, y \rangle$</li>
+<li>sum: $\sum x_i$</li>
+<li>integral: $\int x_i$ $\iint x_i$ $\iiint x_i$</li>
+<li>union: $x \cup y$, $\bigcup x$</li>
+<li>intersection: $x \cap y$, $\bigcap x$</li>
+<li>limit: $\lim_{x\to 0}$</li>
+<li>goniometrical: $\sin x$</li>
+<li>bigger/smaller: $\lt \gt \le \leq \leqq \leqslant \ge \geq \geqq \geqslant$</li>
+<li>not using <code>n</code>: $\neq$</li>
+<li>sets: $\cup \cap \setminus \subset \subseteq \subsetneq \supset \in \notin \emptyset \varnothing$</li>
+<li>combinatorics: $\binom{n+1}{2k}$</li>
+<li>arrows: $\to \rightarrow \leftarrow \Rightarrow \Leftarrow \mapsto$</li>
+<li>statements and proofs: $\land \lor \lnot \forall \exists \top \bot \vdash \vDash$</li>
+<li>long dots: $\ldots$</li>
+<li>infinity: $\infty \aleph_0 \nabla \partial$</li>
+<li>limits: $\epsilon \varepsilon$</li>
+<li>vectors and hats: $\hat x, \bar y, \overline{abc}, \vec x$</li>
+</ul>
+<p>Limit block:</p>
+<p>$$\lim_{x\to 0}$$</p>
+<h4 id="diagrams">Diagrams</h4>
+<p>MindForger supports <a href="https://github.com/mermaid-js/mermaid">Mermaid</a> (<a href="https://github.com/JakeSteam/Mermaid">cheatsheet</a>) to render <strong>diagrams</strong>.</p>
+<p>Flowchart diagram:</p>
+<div class="codehilite"><pre><span></span><code>graph TD;
+    A--&gt;B;
+    A--&gt;C;
+    B--&gt;D;
+    C--&gt;D;
+</code></pre></div>
+
+<p>Sequence diagram - note different Mermaid diagram markup encapsulation element which has different background rendering that code block:</p>
+<div class="mermaid">
+sequenceDiagram
+    participant Alice
+    participant Bob
+    Alice->>John: Hello John, how are you?
+    loop Healthcheck
+        John->>John: Fight against hypochondria
+    end
+    Note right of John: Rational thoughts <br/>prevail!
+    John-->>Alice: Great!
+    John->>Bob: How about you?
+    Bob-->>John: Jolly good!
+</div>
+
+<p>GANTT diagram:</p>
+<div class="codehilite"><pre><span></span><code>gantt
+        dateFormat  YYYY-MM-DD
+        title GANTT diagrams in MindForger
+        section A section
+        Completed task            :done,    des1, 2014-01-06,2014-01-08
+        Active task               :active,  des2, 2014-01-09, 3d
+        Future task               :         des3, after des2, 5d
+        Future task2              :         des4, after des3, 5d
+        section Critical tasks
+        Completed task in the critical line :crit, done, 2014-01-06,24h
+        Implement parser and jison          :crit, done, after des1, 2d
+        Create tests for parser             :crit, active, 3d
+        Future task in critical line        :crit, 5d
+        Create tests for renderer           :2d
+        Add to mermaid                      :1d
+</code></pre></div>
+
+<hr />
+<p>💡 edit this Note to see the syntax <br/>
+💡 if diagram expressions are <strong>not</strong> rendered, then you must <strong>enable</strong> them using menu <code>Knowledge/Preferences/Viewer/Diagram support</code>.</p>
+<h4 id="comments">Comments</h4>
+<p>If you want <strong>line</strong> or <strong>multi-line</strong> comment that 
+is strictly for yourself (readers of the converted 
+document should not be able 
+to see it, even with "view source") you could (ab)use 
+the link labels (for use with reference style links) 
+that are available in the core Markdown specification.</p>
+<p><strong>Single line comment</strong>:</p>
+<p><strong>Multi-line comment</strong>:</p>
+<p>Note that two conditions are <strong>important</strong>:</p>
+<ul>
+<li>Using <code>#</code> (and not other delimiter allowed by Markdown specification)</li>
+<li>An empty line before the comment. Empty line after the comment has no impact on the result.</li>
+</ul>
+<hr />
+<p>If you need <strong>inline</strong> comment, then use HTML comments:</p>
+<ul>
+<li>There is  you cannot see.</li>
+</ul>
+<hr />
+<p>💡 edit this Note to see the syntax</p>
+<h3 id="drag--amp--drop-images-and-files">Drag &amp; Drop Images and Files</h3>
+<p>Drag:</p>
+<ul>
+<li><strong>file</strong><ul>
+<li>... for example <code>.pdf</code>, presentation or <code>.zip</code> archive</li>
+</ul>
+</li>
+<li><strong>image</strong><ul>
+<li>... <code>.png</code>, <code>.gif</code>, ... or any other image</li>
+</ul>
+</li>
+<li><strong>image data</strong><ul>
+<li>... screenshot or image selection from Gimp, Krita or any other graphics editor</li>
+</ul>
+</li>
+</ul>
+<p>... and <strong>drop</strong> to Note/Notebook editor.</p>
+<p>DnD allows easy import of attachments/images to MindForger
+repository - either by value (choose <code>Copy</code> in attachment/image
+dialog) or by reference (path to the file on local file system
+is used).</p>
+<h3 id="table-of-contents-generator">Table of contents generator</h3>
+<p><a href="https://www.youtube.com/watch?v=UVVF22xG4hY"><img alt="v" src="https://img.youtube.com/vi/UVVF22xG4hY/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<h3 id="link-completion">Link completion</h3>
+<p><a href="https://www.youtube.com/watch?v=YCn0ZJfe4nU"><img alt="v" src="https://img.youtube.com/vi/YCn0ZJfe4nU/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<p>While editing a Note or Notebook write prefix of
+a Notebook/Note name and use <kbd>Ctrl-/</kbd> to 
+get link completion. When you choose a link from completer,
+Markdown link to target Notebook/Note is automatically created.</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="markdown-ide">Markdown IDE</h2>
+<p>MindForger is more than just Markdown editor - it is integrated development environment (<strong>IDE</strong>) 
+for the development of Markdown document collections (repositories, documentation, books, etc.):</p>
+<ul>
+<li><strong>multiple</strong> Markdown documents can be opened in order to perform search, refactoring
+  and analytics</li>
+<li>user defined <strong>stencils</strong> can be used to quickly create new notebooks and notes</li>
+<li>notebook <strong>structure</strong> can be easily refactored with outliner-style operations
+  defined on notes</li>
+<li>both notebooks and notes can be <strong>refactored</strong> withing or across different notebooks and notes</li>
+</ul>
+<h3 id="open-markdown-directory">Open Markdown directory</h3>
+<p>You can open <strong>any</strong> directory and MindForger will find
+all Markdown files within the directory and its sub-directories
+and open them for search, navigation and editing:</p>
+<div class="codehilite"><pre><span></span><code>$ mindforger a-git-repository-with-interesting-content
+</code></pre></div>
+
+<p>For example, you can find an <a href="#markdown-content-and-examples">interesting Git repository</a>
+on GitHub or BitBucket, clone it to your machine and open it 
+with MindForger to easily navigate it.</p>
+<h4 id="multiple-documents">Multiple documents</h4>
+<p><img alt="Image" src="USER_DOCUMENTATION.multiple-documents.png" / class="img-fluid rounded border my-2"></p>
+<p>You can open <strong>any</strong> directory and MindForger will find
+all Markdown files within that directory and all its 
+sub-directories and make them available for search, navigation 
+and editation:</p>
+<div class="codehilite"><pre><span></span><code>$ mindforger a-github-repository-with-interesting-content
+</code></pre></div>
+
+<p>Where <code>a-github-repository-with-interesting-content</code> is a directory
+containing Markdown documents.</p>
+<hr />
+<p>💡 if you openeded more than one MindForger document, you can see all documents indexed by MindForger by clicking menu <code>View/Notebooks</code></p>
+<h3 id="stencils">Stencils</h3>
+<p><img alt="Image" src="USER_DOCUMENTATION.stencils.png" / class="img-fluid rounded border my-2"></p>
+<p>Stencil represents a common pattern that can be used in
+various situations e.g. to solve a task. It might be a how to 
+(like how to change a car wheel) that <strong>once created</strong>, you 
+may want to use <strong>repeatedly</strong> w/ possibility of customization.</p>
+<p>Notebook stencil corresponds to application of 
+a problem/semantic domain to another problem. 
+Once you have a <em>modus operandi</em> or you know how to 
+do that, than this is the case.</p>
+<p>You can use a stencil when creating a <strong>new</strong> notebook
+or note - check <code>Stencils</code> drop-down in the dialog
+opened using menu <code>Notebook/New</code> or <code>Note/New</code>.</p>
+<p><a href="#mindforger-repository">MindForger repositories</a> (including 
+the default one) contain stencils for both notebooks and notes:</p>
+<div class="codehilite"><pre><span></span><code>&lt;mindforger repository&gt;/
+├── ...
+└── stencils
+    ├── notebooks
+    └── notes
+</code></pre></div>
+
+<p>MindForger is shipped with an initial set of stencils for meeting
+notes, software analysis/design, <a href="https://en.wikipedia.org/wiki/GROW_model">GROW model</a>
+etc. </p>
+<p>You can easily <strong>extend</strong> outlines just by copying Markdown file
+to <code>stencils/notes</code> or <code>stencils/notebooks</code> directory.</p>
+<h3 id="refactoring">Refactoring</h3>
+<p><img alt="Image" src="USER_DOCUMENTATION.note-refactoring.png" / class="img-fluid rounded border my-2"></p>
+<p>Hierarchy of <strong>Notes</strong> (Markdown document sections) can be easily
+changed using operations introduced by <a href="https://en.wikipedia.org/wiki/Outliner">outliners</a>.
+<strong>Note</strong> can be...</p>
+<ul>
+<li>moved up</li>
+<li>moved down</li>
+<li>demoted ~ moved deeper in Notes hierarchy</li>
+<li>promoted ~ moved lower in depth</li>
+<li>... and more</li>
+</ul>
+<p>To manipulate a note, choose it in the <strong>outline view</strong> (tree of notes/Markdown sections 
+on the left) and either use shortcuts (<kbd>ctrl+up</kbd>, <kbd>ctrl+down</kbd>, 
+<kbd>ctrl+left</kbd>, <kbd>ctrl+right</kbd>) or menu <code>Note/Promote</code>, ...</p>
+<h4 id="note-refactoring">Note refactoring</h4>
+<p>Note (Markdown section) can be refactoring (along with its child notes)
+between different Notebooks (Markdown documents):</p>
+<ul>
+<li>choose <strong>source</strong> note to be refactored in the outliner tree of notes</li>
+<li>use menu <code>Note/Move to Notebook</code> to specify <strong>target</strong> notebook</li>
+</ul>
+<p>Note and its child notes will be moved to the target notebook.</p>
+<h3 id="home-notebook">Home notebook</h3>
+<p>You can mark any notebook as <strong>home</strong> and it will be opened:</p>
+<ul>
+<li>on MindForger start</li>
+<li>using <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>h</kbd> keyboard shortcut</li>
+</ul>
+<p>Home notebook can be <strong>set</strong>/unset using menu <code>Notebook/Make Home</code>.</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="search">Search</h2>
+<p>Ability to find a specific Notebook or Note is one of the 
+most important MindForger features. Notebooks and Notes
+can be found by:</p>
+<ul>
+<li>full-text search (content)</li>
+<li>name</li>
+<li>tag(s)</li>
+</ul>
+<hr />
+<p>💡 see menu <code>Find</code> for search options</p>
+<h3 id="fulltext">Fulltext</h3>
+<p>Use menu <code>Find/Full-text Search</code> to search for <strong>notes</strong>
+using full-text search. Result shows notes Markdown source
+with <strong>highlighted</strong> matches.</p>
+<p>Search <strong>scope</strong>:</p>
+<ul>
+<li>If you run full-text search from notebooks
+  view (menu <code>View/Notebooks</code>), then <strong>all</strong> notebooks and their
+  notes are searched.</li>
+<li>If you run full-text search when a notebook is opened
+  (notes outline on the left, note view/editor on the right),
+  then <strong>only</strong> notes of that particular notebook are searched.</li>
+</ul>
+<h3 id="name">Name</h3>
+<p>Use menu <code>Find/Find Notebook by Name</code> / <code>Find/Find Note by Name</code>
+to search for <strong>notebooks</strong> / <strong>notes</strong> by name. Result shows as you
+write the name in the dialog.</p>
+<p>Search <strong>scope</strong>:</p>
+<ul>
+<li>If you run note search <strong>by name</strong> from notebooks
+  view (menu <code>View/Notebooks</code>), then <strong>all</strong> notebooks notes
+  are searched.</li>
+<li>If you run note search <strong>by name</strong> when a notebook is opened
+  (notes outline on the left, note view/editor on the right),
+  then <strong>only</strong> notes of that particular notebook are searched.</li>
+</ul>
+<h3 id="tag">Tag</h3>
+<p>Use menu <code>Find/Find Notebook by Tags</code> / <code>Find/Find Note by Tags</code>
+to search for <strong>notebooks</strong> / <strong>notes</strong> by tag(s). Result shows as you
+add/remove tags in the dialog.</p>
+<p>Search <strong>scope</strong>:</p>
+<ul>
+<li>If you run note search <strong>by tag</strong> from notebooks
+  view (menu <code>View/Notebooks</code>), then <strong>all</strong> notebooks notes
+  are searched.</li>
+<li>If you run note search <strong>by tag</strong> when a notebook is opened
+  (notes outline on the left, note view/editor on the right),
+  then <strong>only</strong> notes of that particular notebook are searched.</li>
+</ul>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="thinking-notebook">Thinking Notebook</h2>
+<p>MindForger aims to mimic human mind - <strong>learning</strong>, <strong>recalling</strong>, 
+<strong>recognition</strong>, <strong>associations</strong>, <strong>forgetting</strong> - in order to achieve 
+synergy with your mind to make your searching, reading and writing more 
+productive:</p>
+<ul>
+<li><strong>learning</strong>: MindForger loads Markdown document(s), parses them and construct <a href="#knowledge-graph-navigator">knowledge graph</a> </li>
+<li><strong>recalling</strong>: you can recall notebooks/notes by content, name, tags, semantic domain, ...</li>
+<li><strong>recognition</strong>: MindForger is able to recognize people, organization, places, ... in your remarks</li>
+<li><strong>associations</strong>: MindForger suggests relevant notes as you browse, read and edit notebooks and notes</li>
+<li><strong>forgetting</strong>: MindForger handles the process of scoping and forgetting analogous to human mind</li>
+</ul>
+<h3 id="learning">Learning</h3>
+<p><em>...learning data, relationships, similarity (granularity N and O), relevancy in time (timestamps and R/W count), ...</em></p>
+<p>MindForger can be used to learn:</p>
+<ul>
+<li>manage knowledge in a <a href="#mindforger-repository">MindForger repository</a></li>
+<li>edit single <a href="#markdown-file">Markdown file</a></li>
+<li>edit <a href="#markdown-directory">multiple Markdown files</a> in given (sub)directories</li>
+</ul>
+<h4 id="mindforger-repository">MindForger repository</h4>
+<p>MindForger repository is a directory with specific 
+<a href="developer-documentation.html#repository-layout">structure</a> 
+where MindForger stores your <strong>knowledge</strong>. It contains Markdown 
+files (<a href="developer-documentation.html#markdown-hosted-dsl">Markdown hosted DSL</a>) 
+allowing you to get most of MindForger capabilities.</p>
+<p>If you run MindForger without parameters, then it opens the
+default MindForger repository:</p>
+<div class="codehilite"><pre><span></span><code>$ mindforger
+</code></pre></div>
+
+<p>If MindForger default repository doesn't exist, then it is created
+on MindForger first start in:</p>
+<div class="codehilite"><pre><span></span><code>~/mindforger-repository
+</code></pre></div>
+
+<p>Repository structure looks like this:</p>
+<div class="codehilite"><pre><span></span><code>$ tree mindforger-repository/
+
+mindforger-repository/
+├── limbo
+├── memory
+├── mind
+└── stencils
+    ├── notebooks
+    └── notes
+</code></pre></div>
+
+<h3 id="metadata">Metadata</h3>
+<h4 id="tags">Tags</h4>
+<h4 id="read-write-statistics">Read/write statistics</h4>
+<h4 id="progress">Progress</h4>
+<h4 id="deadlines">Deadlines</h4>
+<h4 id="things-and-types">Things and types</h4>
+<h4 id="relationships">Relationships</h4>
+<h3 id="auto-linking">Auto-linking</h3>
+<p><img alt="Autolinking" src="USER_DOCUMENTATION.autolinking.png" / class="img-fluid rounded border my-2"></p>
+<p>Autolinking discovers relevant notes in your MindForger repository and/or Markdown document
+and automatically injects links to the text. In the screenshot above all links were injected
+i.e. source text (Markdown) is just plain text without links.</p>
+<p>Autolinking helps in immediately finding remarks related to the notebooks and notes you 
+are browsing.</p>
+<p>Autolinking also saves the time - you don't have to create/change/maintain links in your
+remarks.</p>
+<p>Tips and tricks:</p>
+<ul>
+<li>If note name contains <code>:</code>, then <strong>only</strong> text preceding <code>:</code> is used for matching.<ul>
+<li>Example: if "GPS: General positioning system" is note name, then text is searched for "GPS" only
+  as it brings more matcheds.</li>
+</ul>
+</li>
+<li>Autolinking can be configured so that it performs <strong>case insensitive search</strong> for the first letters
+  in note names.<ul>
+<li>Example: if "Stencils" is note name, then text is searched <strong>also</strong> for "stencils"
+  as it brings more matcheds.</li>
+</ul>
+</li>
+<li>Autolinking can be quickly toggled using menu <code>Knowledge/Autolink</code>.</li>
+</ul>
+<h3 id="tayr--think-as-you-read">TaYR: Think as you Read</h3>
+<p><img alt="TAYR" src="USER_DOCUMENTATION.tayr.png" / class="img-fluid rounded border my-2"></p>
+<p>MindForger is able to <strong>suggest relevant notes</strong> as you browse and
+read:</p>
+<ul>
+<li>relevant notes are computed for the note being currently <strong>selected</strong></li>
+<li>relevant notes are shown in the <strong>lower left corner</strong> by <code>Associations</code> table</li>
+<li>similarity score in the <code>Associations</code> table indicates <strong>relative relevancy</strong> in %</li>
+</ul>
+<p>In the screenshot above you can see relevant notes (lower left corner) for the selected
+note <code>My 3D Printer MK2S by Prusa RESEARCH</code>.</p>
+<p>See also: <a href="#think-vs--sleep-mode">think vs. sleep mode</a></p>
+<h3 id="tayw--think-as-you-write">TaYW: Think as you Write</h3>
+<p><img alt="TAYW" src="USER_DOCUMENTATION.tayw.png" / class="img-fluid rounded border my-2"></p>
+<p>MindForger is able to <strong>suggest relevant notes</strong> as you write note
+content in the editor:</p>
+<ul>
+<li>relevant notes are computed for the <strong>word under the cursor</strong></li>
+<li>relevant notes are shown in the <strong>lower left corner</strong> by <code>Associations</code> table</li>
+<li>similarity score in the <code>Associations</code> table indicates <strong>relative relevancy</strong> in %</li>
+</ul>
+<p>In the screenshot above you can see relevant notes (lower left corner) for the selected
+word <code>graph</code> (notice cursor between letter <code>g</code> and <code>r</code> on the current line with light-gray background).</p>
+<h3 id="tayb--think-as-you-browse">TaYB: Think as you Browse</h3>
+<p><img alt="Navigator" src="USER_DOCUMENTATION.knowledge-graph-navigator.png" / class="img-fluid rounded border my-2"></p>
+<p><strong>Knowledge graph navigator</strong> allows you to browse notebooks, notes, tags and other resources
+in <strong>visually</strong>.</p>
+<p>Navigator can be either activated using toolbar or using <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>k</kbd> keyboard
+shortcut. It is <strong>scope sensitive</strong> e.g. if you activate navigator while viewing note, then this note
+becomes central node of the visualization.</p>
+<p>Knowledge graph can be <strong>zoomed</strong>, <strong>shuffled</strong> and its edgest can be (globally) stretched/shrinked.</p>
+<p><em>... how exactly it thinks and why it's useful</em></p>
+<h3 id="tays--think-as-you-search">TaYS: Think as you Search</h3>
+<p><em>...[semantic search - this feature is being implemented - RAG]...</em></p>
+<h3 id="knowledge-graph-navigator">Knowledge graph navigator</h3>
+<blockquote>
+<p><em>"I hear, and I forget; I see, and I remember." -- Chinese proverb</em></p>
+</blockquote>
+<h3 id="scopes">Scopes</h3>
+<p>MindForger works with two types of scopes:</p>
+<ul>
+<li><a href="#time-scope">Time Scope</a></li>
+<li><a href="#tag-scope">Tag Scope</a></li>
+</ul>
+<h4 id="time-scope">Time Scope</h4>
+<p>Use menu <code>Knowledge/Scope</code> or <kbd>Alt+k c</kbd> to configure <strong>time</strong> scope.</p>
+<hr />
+<p>Consider the following situations:</p>
+<ul>
+<li>
+<p>Over the years your employer company internal systems change and/or
+  you work for a number of different employers. Each time there is 
+  a different/better/stronger 
+  Wifi authentication configuration (video conference
+  setup, payslips system, etc.). Therefore in you memory (or in MindForger
+  remarks) there are <strong>multiple</strong> how-tos, but you want to use
+  only the <strong>recent</strong> want. At the same time you do not want to
+  (explicitly) remove/purge the previous how-tos as they can be useful in different
+  situations.</p>
+</li>
+<li>
+<p>You learn how to manually divide two long numbers as a child.
+  Then you do <strong>not</strong> need this skill <strong>for years</strong> as you use calculator/computer.
+  When you want to learn your child how to manually divide numbers,
+  you have to find it (deep) in your memory.</p>
+</li>
+</ul>
+<p>This is where MindForger <strong>time scope</strong> functionality comes in - you can 
+restrict the scope (notes working set) by <strong>time</strong>. For example:</p>
+<ul>
+<li>you work on a project and want to see only notes you modified <strong>today</strong></li>
+<li>whenever you use MindForger you want to work with notes not older
+  than <strong>18 months</strong></li>
+<li>when reading/working with your employer internal systems how-to <strong>notebook</strong> you want to
+  see only notes younger than <strong>1 year</strong></li>
+</ul>
+<p>In particular you can set <strong>global</strong> time scope:</p>
+<ul>
+<li>Notebooks listing: <ul>
+<li>Only <strong>noteboks</strong> within given time scope (younger) will be shown.</li>
+</ul>
+</li>
+<li>Add/forget notebook:<ul>
+<li>Notebooks can be added/forgotten.</li>
+</ul>
+</li>
+<li>Notebook's note tree view: <ul>
+<li>Only notes within given time scope will be shown.
+  If note <strong>is</strong> within timescope and note's parent notes are <strong>not</strong>, then note <strong>is</strong>
+  shown along with its parents (parents would be normally hidden). In other words, fresh note
+  ensures its parents are shown.</li>
+</ul>
+</li>
+<li>Add/remove note: <ul>
+<li>Notes can be added/forgotten.</li>
+<li><strong>IMPORTANT</strong>: remember that note can be forgotten <strong>along with its child notes</strong> that can be
+  hidden (if they didn't match time scope) i.e. you may delete notes you don't see.</li>
+</ul>
+</li>
+<li>Promote/demote/up/down note:<ul>
+<li>Notes can be added/forgotten.</li>
+<li><strong>IMPORTANT</strong>: remember that these operations work on the *<em>non-filtered</em> model i.e.
+  you perform operation (e.g. up), nothing seems to happen, but the note was just moved above
+  a hiddin note that is not in scope i.e. you refactor notes you don't see.</li>
+</ul>
+</li>
+<li>Note refactoring:<ul>
+<li>Notes can be refactoring (to other notebook) and extracted.</li>
+<li><strong>IMPORTANT</strong>: remember that note can be refactored <strong>along with its child notes</strong> that can be
+  hidden (if they didn't match time scope) i.e. you may move notes you don't see.</li>
+</ul>
+</li>
+</ul>
+<p>In particular you can set <strong>note</strong> specific time scope that overrides global time scope:</p>
+<ul>
+<li>... behaviour is the same as above except that this setting has no effect on notebooks listing ...</li>
+</ul>
+<h4 id="tag-scope">Tag Scope</h4>
+<p>Use menu <code>Knowledge/Scope</code> or <kbd>Alt+k c</kbd> to configure <strong>tag(s)</strong> scope.</p>
+<hr />
+<p>Scoping using <strong>tag(s)</strong> allows you to limit notebook <strong>working set</strong> only
+to notebooks having specified set of tags. It's useful when you work with
+bigger MindForger repositoriers and you don't want to be distracted by
+unrelated notebooks.</p>
+<p>Scoping using tags can be combined (<code>AND</code>) with <a href="#time-scope">scoping using time</a>.</p>
+<h3 id="recognize-what-matters">Recognize what matters</h3>
+<h4 id="named-entity-recognition">Named-entity recognition</h4>
+<p><img alt="Image" src="USER_DOCUMENTATION.ner.png" / class="img-fluid rounded border my-2"></p>
+<p><em>This feature is being implemented.</em></p>
+<h4 id="semantic-search-and-domains">Semantic search and domains</h4>
+<p><em>...[semantic search - this feature is being implemented - RAG]...</em></p>
+<p>Word embeddings based search, associations and navigation.</p>
+<h3 id="forgetting">Forgetting</h3>
+<blockquote>
+<p>Motto: "Computers need to forget". -- <a href="http://blog.mindforger.com/2007/11/computers-need-to-forget.html">Viktor Mayer-Schönberger</a></p>
+</blockquote>
+<p>Before I deep dive to MindForger features let me formulate
+a few questions to explain the motivation behind 
+forgetting/scoping related functionality:</p>
+<ul>
+<li>Do we forget or we simply don’t remember?</li>
+<li>When we forget?</li>
+<li>How and where exactly forgetting in our minds happens?</li>
+<li>If we remember something, can it be forgotten?</li>
+<li>Do we need to forget and why?</li>
+</ul>
+<p>I believe that if a concept makes it to long term memory
+(LTM), then it can be never forgotten. It’s in LTM and 
+it always be there. The only question is how many 
+association/links it has. In the worst case it may happen 
+that there is no association path it it - it ends as an
+island or orphan better said. If it’s not reminded or not 
+used for long time, association can get weaker and weaker 
+and such concepts is diving deeper and deeper to LTM. However,
+it is always there. Thus it’s just about the lookup. 
+According to my experience a strong emotional experience or 
+return to the deeper paths of LTM (talking about your friends 
+or family about your early childhood) helps to remind such
+concepts and in the latter case even strongly bind them 
+to upper level LTM (move them up in the memory) and 
+refresh such memories so that you can remind them later 
+much more easier.</p>
+<p>If there would be no possibility of the selection of sensed
+informations and all the sensing will be fixed in our 
+memory, its capacity would be fully used very soon.</p>
+<p>MindForger, as computer program, needs to forget. But
+forgetting does <strong>NOT</strong> mean deleting of information.</p>
+<p>MindForger maintains <strong>all</strong> the remarks you ever written
+(see <a href="#limbo">limbo</a>), but works with/shows only with 
+a <a href="#time-scope">scope</a> <strong>configurable</strong> by you.</p>
+<h4 id="limbo">Limbo</h4>
+<p><a href="https://www.youtube.com/watch?v=gtGbCdb_7c8"><img alt="v" src="https://img.youtube.com/vi/gtGbCdb_7c8/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<p>MindForger does <strong>not</strong> <strong>delete</strong> notebooks - it moves them to a location called Limbo that
+can be found in <code>${ACTIVE_MF_REPOSITORY}/limbo</code>. This is where you can delete Markdown
+documents permanently.</p>
+<p>MindForger, in its current implementation, <strong>does</strong> delete notes. They are not moved to a note Limbo.
+If you use menu <code>Note/Delete</code>, then the note is deleted. </p>
+<p>Side note: I personally use CMS (Git) - I have full history of notebooks and notes. Tracking of
+all notes would be useful, however HW resource consumption intensive. This is also
+why I don't want to duplicate this (already sophisticated) functionality within MindForger.</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="productivity">Productivity</h2>
+<p>MindForger aims to help you when you study, write a document/paper/article/book or
+want to achieve a goal.</p>
+<p>Therefore it enables you to...</p>
+<ul>
+<li>prioritize work on notebooks using <strong>urgency</strong> and <strong>importance</strong></li>
+<li>helps you to decide what you do first and next using <strong>Eisenhower matrix</strong></li>
+<li>track <strong>progress</strong> in %</li>
+<li>specify <strong>deadlines</strong> (for notes)</li>
+</ul>
+<h3 id="urgency-and-importance">Urgency and Importance</h3>
+<p><img alt="Image" src="USER_DOCUMENTATION.importance-urgency-edit.png" / class="img-fluid rounded border my-2"></p>
+<p>When creating (menu <code>Notebook/New</code>) or editing <strong>notebook</strong> (edit mode <code>More...</code> button) you
+can specify:</p>
+<ul>
+<li><strong>importance</strong> property ~ how important is the notebook</li>
+<li><strong>urgency</strong> property ~ how important is (study/challenge/...) task related to notebook (or notebook content itself)</li>
+</ul>
+<p><img alt="Image" src="USER_DOCUMENTATION.importance-urgency-view.png" / class="img-fluid rounded border my-2"></p>
+<p>These properties are in turn shown in <strong>notebooks view</strong> (menu <code>View/Notebooks</code>) and <a href="#eisenhower-matrix">Eisenhower matrix</a>.</p>
+<h4 id="eisenhower-matrix">Eisenhower matrix</h4>
+<p><img alt="Image" src="USER_DOCUMENTATION.eisenhower-matrix.png" / class="img-fluid rounded border my-2"></p>
+<p><strong>Wikipedia</strong>: <a href="https://en.wikipedia.org/wiki/Time_management#The_Eisenhower_Method">Eisenhower matrix</a> stems from a quote attributed to Dwight D. Eisenhower: "I have two kinds of problems, the urgent and the important. The urgent are not important, and the important are never urgent."</p>
+<p>Using the Eisenhower Decision Principle, tasks are evaluated using the criteria <a href="#urgency-and-importance">important/unimportant</a> and <a href="#urgency-and-importance">urgent/not urgent</a>, and then placed in according quadrants in an <strong>Eisenhower Matrix</strong> (also known as an "Eisenhower Box" or "Eisenhower Decision Matrix"). Tasks are then handled as follows:</p>
+<p>Tasks in</p>
+<ol>
+<li><strong>Important/Urgent quadrant</strong> are done immediately and personally e.g. crises, deadlines, problems.</li>
+<li><strong>Important/Not Urgent quadrant</strong> get an end date and are done personally e.g. relationships, planning, recreation.</li>
+<li><strong>Unimportant/Urgent quadrant</strong> are delegated e.g. interruptions, meetings, activities.</li>
+<li><strong>Unimportant/Not Urgent quadrant</strong> are dropped e.g. time wasters, pleasant activities, trivia.</li>
+</ol>
+<p>This method is said to have been used by U.S. President Dwight D. Eisenhower.</p>
+<h3 id="organizers--tag-based-aspects">Organizers: tag-based aspects</h3>
+<p><a href="https://www.youtube.com/watch?v=Tje2mso7jNY"><img alt="v" src="https://img.youtube.com/vi/Tje2mso7jNY/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<h4 id="eisenhower-matrix-on-tags">Eisenhower matrix on tags</h4>
+<p><img alt="i" src="USER_DOCUMENTATION.eisenhower-matrix.png" / class="img-fluid rounded border my-2"></p>
+<p>The <strong>Eisenhower Matrix</strong>, also known as the <strong>Eisenhower Decision Matrix</strong> or simply the <strong>Eisenhower Box</strong>, is a time management tool that helps prioritize tasks based on their urgency and importance. It is named after Dwight D. Eisenhower, the 34th President of the United States, who was known for his effective time management skills.</p>
+<p>The matrix categorizes tasks into four quadrants:</p>
+<ol>
+<li>
+<p><strong>Urgent and Important</strong> (Do First): These are the tasks that require immediate attention and have high priority. They should be done as soon as possible to avoid negative consequences or missed opportunities.</p>
+</li>
+<li>
+<p><strong>Important</strong>, but Not Urgent (Schedule): These tasks are important for long-term goals but do not require immediate action. They should be scheduled and given appropriate time and attention.</p>
+</li>
+<li>
+<p><strong>Urgent</strong>, but Not Important (Delegate): These tasks are time-sensitive but do not contribute significantly to your goals. They should be delegated to others if possible, to free up your time for more important tasks.</p>
+</li>
+<li>
+<p><strong>Not Urgent and Not Important</strong> (Eliminate): These tasks are low priority and do not contribute to your goals. They should be eliminated or minimized to make room for more important activities.</p>
+</li>
+</ol>
+<p>Using the Eisenhower Matrix helps in prioritizing tasks effectively, reducing procrastination, and ensuring that important goals are not overlooked. It encourages a focus on important tasks, enables better time allocation, and maximizes productivity.</p>
+<h4 id="kanban-on-tags">Kanban on Tags</h4>
+<p><a href="https://www.youtube.com/watch?v=Tje2mso7jNY"><img alt="v" src="https://img.youtube.com/vi/Tje2mso7jNY/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<p><strong>Kanban</strong> is a project management methodology that originated from the Toyota Production System in the late 1940s. It is a visual system that helps teams track and manage their work. The word "Kanban" <strong>translates</strong> to "visual signal" or "card" in Japanese.</p>
+<p>In Kanban, the work is represented as cards or sticky notes, which are placed on a board with different <strong>columns</strong> that represent the various <strong>stages</strong> of the workflow, such as <strong>"To Do"</strong>, <strong>"In Progress"</strong>, and <strong>"Done"</strong>. This provides a clear visual representation of the work in progress and allows team members to see what tasks are in each stage of development.</p>
+<p>The key principles of Kanban include visualizing workflow, limiting work in progress, and focusing on continuous improvement. By visualizing the work, you can identify <strong>bottlenecks</strong> and areas for <strong>improvement</strong>.</p>
+<p>MindForger allows you to create <strong>Kanban boards</strong> and organize <a href="getting-started.html#note">notes</a> to <strong>columns</strong> using <a href="#tags">tags</a>.</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="machine-learning--nlp">Machine learning: NLP</h2>
+<blockquote>
+<p><em>"Artificial intelligence will overcome natural intelligence soon. However, natural stupidity can never be replaced by the artificial one." -- Jára da Cimrman</em></p>
+</blockquote>
+<h3 id="csv-export">CSV export</h3>
+<p><img alt="i" src="USER_DOCUMENTATION.export-workspace-to-csv.png" / class="img-fluid rounded border my-2"></p>
+<p>You can export <a href="getting-started.html#workspace">workspace</a> to comma separated file (CSV):</p>
+<ol>
+<li>open menu <code>Knowledge</code></li>
+<li>choose <code>Export</code> menu item</li>
+<li>choose <code>CSV</code> sub-menu item</li>
+<li><code>Export Workspace to CSV</code> dialog is opened:
+   - type in file name
+   - choose whether you want to encode notebook <a href="#tags">tags</a> using
+     <strong>one hot encoding</strong> (OHE)</li>
+<li>click <kbd>Export</kbd> to export the workspace</li>
+</ol>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="coaching">Coaching</h2>
+<p>(Auto) <strong>coaching</strong> is a self-improvement process where individuals provide themselves with guidance, support, and feedback to achieve personal or professional goals. It involves self-reflection, setting goals, creating action plans, and monitoring progress. </p>
+<p>Auto coaching usually incorporates various techniques like journaling, visualization, affirmations, and self-assessment tools to foster self-awareness, self-motivation, and personal growth. It is a proactive approach to personal development and can be done through books, online resources, or through the use of specific self-coaching methodologies.</p>
+<p>MindForger can be used as an <strong>auto coaching tool</strong>.</p>
+<h3 id="grow-model">GROW model</h3>
+<p><img alt="Image" src="USER_DOCUMENTATION.screenshot-grow-model.png" / class="img-fluid rounded border my-2"></p>
+<p>The <strong>GROW model</strong> is a popular (auto) <strong>coaching</strong> framework that is used to structure a conversation or coaching session. GROW stands for <strong>Goal</strong>, <strong>Reality</strong>, <strong>Options</strong>, and <strong>Way Forward</strong>. The model helps individuals or teams set clear goals, explore the current reality, generate options for actions, and establish a plan to move forward. It is widely used in areas such as personal development, career coaching, and leadership coaching.</p>
+<p>Use MindForger GROW model <a href="#stencils">stencil</a> to create G.R.O.W. <a href="getting-started.html#notebook">notebook</a> with <strong>questions</strong> allowing you to efficiently use the G.R.O.W method.</p>
+<h3 id="smarter-goals">SMARTER goals</h3>
+<p>SMARTER goals is a framework used to set effective and measurable <strong>goals</strong>. It stands for:</p>
+<ol>
+<li>
+<p><strong>Specific</strong>: Goals should be clear and well-defined. Avoid vague or general statements. Specify what exactly you want to achieve.</p>
+</li>
+<li>
+<p><strong>Measurable</strong>: Goals should be quantifiable so that progress can be easily tracked. Include specific criteria or indicators to measure success.</p>
+</li>
+<li>
+<p><strong>Attainable</strong>: Goals should be realistic and within reach. Consider the resources, skills, and time available to achieve the goal.</p>
+</li>
+<li>
+<p><strong>Relevant</strong>: Goals should be aligned with your overall objectives and have significance to your life or work. Ensure they are worthwhile and meaningful.</p>
+</li>
+<li>
+<p><strong>Time-bound</strong>: Goals should have a clear deadline or timeline. Set specific dates to create a sense of urgency and to keep yourself accountable.</p>
+</li>
+<li>
+<p><strong>Evaluate</strong>: Continuously monitor and evaluate progress towards your goals. Assess whether adjustments or improvements are needed.</p>
+</li>
+<li>
+<p><strong>Readjust</strong>: Adapt or readjust your goals as necessary, based on new information or changing circumstances. Remain flexible and open to revisions.</p>
+</li>
+</ol>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="tools">Tools</h2>
+<p>MindForger tools:</p>
+<ul>
+<li><a href="#cli">CLI</a> </li>
+</ul>
+<h3 id="cli">CLI</h3>
+<p>In certain situations, it is faster to use commands to navigate around the MindForger UI instead of using a mouse. In these cases, you can use the <strong>command line interface</strong> (CLI):</p>
+<ul>
+<li>activate CLI using one of the following options:<ul>
+<li><kbd>Alt-x</kbd></li>
+<li>choose <code>View</code> menu, <code>CLI</code> sub-menu</li>
+</ul>
+</li>
+<li>type <code>?</code> to get help</li>
+<li>type <code>/</code> to find <a href="getting-started.html#notebooks">notebooks</a> and <a href="getting-started.html#note">notes</a></li>
+<li>type <code>@</code> to search internet sites like arXiv or Wikipedia for knowledge</li>
+<li>type <code>&gt;</code> to run a command</li>
+</ul>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="cheatsheets">Cheatsheets</h2>
+<p>See MindForger cheetsheet(s):</p>
+<ul>
+<li><a href="#keyboard-shortcuts">Keyboard Shortcuts</a></li>
+</ul>
+<h3 id="markdown-cheatsheet">Markdown cheatsheet</h3>
+<p>See <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown cheat sheet</a>.</p>
+<h3 id="mathjax-cheatsheet">MathJax cheatsheet</h3>
+<p>See <a href="#mathjax">MathJax cheat sheet</a>.</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="keyboard-shortcuts">Keyboard shortcuts</h2>
+<p>Prefer menu based keyboard shortcuts which are self-documented e.g.</p>
+<ul>
+<li><kbd>Alt+b n</kbd><ul>
+<li>create new notebook</li>
+</ul>
+</li>
+<li><kbd>Alt+b e</kbd><ul>
+<li>edit currently viewed notebook</li>
+</ul>
+</li>
+<li><kbd>Alt+n n</kbd><ul>
+<li>create new note</li>
+</ul>
+</li>
+<li><kbd>Alt+n e</kbd><ul>
+<li>edit currently viewed note</li>
+</ul>
+</li>
+<li>... and many others...</li>
+</ul>
+<p>Editor:</p>
+<ul>
+<li><kbd>Alt+Left</kbd><ul>
+<li>... save Note, leave editor and show rendered HTML.</li>
+</ul>
+</li>
+<li><kbd>Ctrl+g</kbd><ul>
+<li>... cancel editation and leave editor without saving</li>
+</ul>
+</li>
+</ul>
+<p>Views:</p>
+<ul>
+<li><kbd>Ctrl+Shift+b</kbd><ul>
+<li>... find note<strong>b</strong>ook by name.</li>
+</ul>
+</li>
+<li><kbd>Ctrl+Shift+n</kbd> <ul>
+<li>... find <strong>n</strong>ote by name.</li>
+</ul>
+</li>
+<li><kbd>Ctrl+Shift+o</kbd><ul>
+<li>... show list of n<strong>o</strong>tebooks.</li>
+</ul>
+</li>
+</ul>
+<h3 id="linux-keyboard-shortcuts">Linux keyboard shortcuts</h3>
+<p>...</p>
+<h3 id="macos-keyboard-shortcuts">macOS keyboard shortcuts</h3>
+<p>...</p>
+<h3 id="windows-keyboard-shortcuts">Windows keyboard shortcuts</h3>
+<p>...</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="command-line-and-man">Command line and man</h2>
+<p>For information on MindForger command line options read the manual page:</p>
+<div class="codehilite"><pre><span></span><code>man mindforger
+</code></pre></div>
+
+<p>For command options see the help file:</p>
+<div class="codehilite"><pre><span></span><code>$ mindforger --help
+
+Usage: mindforger <span class="o">[</span>options<span class="o">]</span> <span class="o">[</span>&lt;directory&gt;<span class="p">|</span>&lt;file&gt;<span class="o">]</span>
+Thinking notebook.
+
+Options:
+  -t, --theme &lt;theme&gt;            Use <span class="s1">&#39;dark&#39;</span>, <span class="s1">&#39;light&#39;</span> or other GUI &lt;theme&gt;.
+  -c, --config-file-path &lt;file&gt;  Load configuration from given &lt;file&gt;.
+  -v, --version                  Displays version information.
+  -h, --help                     Displays this help.
+
+Arguments:
+  <span class="o">[</span>&lt;directory&gt;<span class="p">|</span>&lt;file&gt;<span class="o">]</span>           MindForger repository or directory/file with
+                                 Markdown file<span class="o">(</span>s<span class="o">)</span> to open
+</code></pre></div>
+
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="library">Library</h2>
+<p><img alt="i" src="USER_DOCUMENTATION.library-add.png" / class="img-fluid rounded border my-2"></p>
+<p>Library bring ability to index external PDF files and generate Notebooks which represent them in MindForger. Synchronization and removal of the library (directory with files) is supported as well.</p>
+</div></div>
+              </div>
+              <!-- END MAIN CONTENT -->
+              <!-- BEGIN TABLE OF CONTENTS -->
+              <div class="col-3 d-none d-xl-block">
+                <div class="mf-toc sticky-top">
+              <div class="mf-toc-title">On this page</div>
+              <div class="nav nav-vertical" id="toc">
+                <a href="#basics" class="nav-link">Basics</a>
+<a href="#knowledge-manager" class="nav-link">Knowledge manager</a>
+<a href="#create-notebook" class="nav-link ms-3 small">Create Notebook</a>
+<a href="#open-notebook" class="nav-link ms-3 small">Open Notebook</a>
+<a href="#outliner" class="nav-link ms-3 small">Outliner</a>
+<a href="#live-preview" class="nav-link ms-3 small">Live Preview</a>
+<a href="#wingman" class="nav-link">Wingman</a>
+<a href="#llm-provider-configuration" class="nav-link ms-3 small">LLM provider configuration</a>
+<a href="#fix-grammar" class="nav-link ms-3 small">Fix grammar</a>
+<a href="#translate" class="nav-link ms-3 small">Translate</a>
+<a href="#rewrite" class="nav-link ms-3 small">Rewrite</a>
+<a href="#complete-text" class="nav-link ms-3 small">Complete text</a>
+<a href="#eli5--explain-like-i-m-5" class="nav-link ms-3 small">ELI5: Explain like I'm 5</a>
+<a href="#markdown-editor" class="nav-link">Markdown editor</a>
+<a href="#open-markdown-file" class="nav-link ms-3 small">Open Markdown file</a>
+<a href="#markdown-markup" class="nav-link ms-3 small">Markdown markup</a>
+<a href="#markdown-mapping" class="nav-link ms-3 small">Markdown mapping</a>
+<a href="#markdown-format" class="nav-link ms-3 small">Markdown format</a>
+<a href="#drag--amp--drop-images-and-files" class="nav-link ms-3 small">Drag &amp; Drop Images and Files</a>
+<a href="#table-of-contents-generator" class="nav-link ms-3 small">Table of contents generator</a>
+<a href="#link-completion" class="nav-link ms-3 small">Link completion</a>
+<a href="#markdown-ide" class="nav-link">Markdown IDE</a>
+<a href="#open-markdown-directory" class="nav-link ms-3 small">Open Markdown directory</a>
+<a href="#stencils" class="nav-link ms-3 small">Stencils</a>
+<a href="#refactoring" class="nav-link ms-3 small">Refactoring</a>
+<a href="#home-notebook" class="nav-link ms-3 small">Home notebook</a>
+<a href="#search" class="nav-link">Search</a>
+<a href="#fulltext" class="nav-link ms-3 small">Fulltext</a>
+<a href="#name" class="nav-link ms-3 small">Name</a>
+<a href="#tag" class="nav-link ms-3 small">Tag</a>
+<a href="#thinking-notebook" class="nav-link">Thinking Notebook</a>
+<a href="#learning" class="nav-link ms-3 small">Learning</a>
+<a href="#metadata" class="nav-link ms-3 small">Metadata</a>
+<a href="#auto-linking" class="nav-link ms-3 small">Auto-linking</a>
+<a href="#tayr--think-as-you-read" class="nav-link ms-3 small">TaYR: Think as you Read</a>
+<a href="#tayw--think-as-you-write" class="nav-link ms-3 small">TaYW: Think as you Write</a>
+<a href="#tayb--think-as-you-browse" class="nav-link ms-3 small">TaYB: Think as you Browse</a>
+<a href="#tays--think-as-you-search" class="nav-link ms-3 small">TaYS: Think as you Search</a>
+<a href="#knowledge-graph-navigator" class="nav-link ms-3 small">Knowledge graph navigator</a>
+<a href="#scopes" class="nav-link ms-3 small">Scopes</a>
+<a href="#recognize-what-matters" class="nav-link ms-3 small">Recognize what matters</a>
+<a href="#forgetting" class="nav-link ms-3 small">Forgetting</a>
+<a href="#productivity" class="nav-link">Productivity</a>
+<a href="#urgency-and-importance" class="nav-link ms-3 small">Urgency and Importance</a>
+<a href="#organizers--tag-based-aspects" class="nav-link ms-3 small">Organizers: tag-based aspects</a>
+<a href="#machine-learning--nlp" class="nav-link">Machine learning: NLP</a>
+<a href="#csv-export" class="nav-link ms-3 small">CSV export</a>
+<a href="#coaching" class="nav-link">Coaching</a>
+<a href="#grow-model" class="nav-link ms-3 small">GROW model</a>
+<a href="#smarter-goals" class="nav-link ms-3 small">SMARTER goals</a>
+<a href="#tools" class="nav-link">Tools</a>
+<a href="#cli" class="nav-link ms-3 small">CLI</a>
+<a href="#cheatsheets" class="nav-link">Cheatsheets</a>
+<a href="#markdown-cheatsheet" class="nav-link ms-3 small">Markdown cheatsheet</a>
+<a href="#mathjax-cheatsheet" class="nav-link ms-3 small">MathJax cheatsheet</a>
+<a href="#keyboard-shortcuts" class="nav-link">Keyboard shortcuts</a>
+<a href="#linux-keyboard-shortcuts" class="nav-link ms-3 small">Linux keyboard shortcuts</a>
+<a href="#macos-keyboard-shortcuts" class="nav-link ms-3 small">macOS keyboard shortcuts</a>
+<a href="#windows-keyboard-shortcuts" class="nav-link ms-3 small">Windows keyboard shortcuts</a>
+<a href="#command-line-and-man" class="nav-link">Command line and man</a>
+<a href="#library" class="nav-link">Library</a>
+              </div>
+            </div>
+              </div>
+              <!-- END TABLE OF CONTENTS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- BEGIN FOOTER -->
+        <footer class="footer footer-transparent d-print-none">
+          <div class="container-xl">
+            <ul class="list-inline list-inline-dots mb-0 text-center">
+              <li class="list-inline-item">Copyright &copy; 2018-2026 MindForger </li>
+              <li class="list-inline-item">Thinking Notebook</li>
+              <li class="list-inline-item">Doc made with <a href="https://www.mindforger.com" target="_blank">MindForger</a></li>
+              <li class="list-inline-item"><a href="https://github.com/dvorka/mindforger-documentation/edit/main/memory/USER_DOCUMENTATION.md" target="_blank">Edit on GitHub</a></li>
+              <li class="list-inline-item"><a href="https://github.com/dvorka/mindforger-documentation/blob/main/memory/USER_DOCUMENTATION.md" target="_blank">Source</a></li>
+              <li class="list-inline-item"><a href="rss.xml">RSS</a></li>
+            </ul>
+          </div>
+        </footer>
+        <!-- END FOOTER -->
+      </div>
+    </div>
+    <script src="assets/tabler/js/tabler.min.js" defer></script>
+    <script src="assets/katex/katex.min.js" defer></script>
+    <script src="assets/katex/auto-render.min.js" defer></script>
+    <script defer>
+      document.addEventListener("DOMContentLoaded", function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ]
+        });
+      });
+    </script>
+  </body>
+</html>

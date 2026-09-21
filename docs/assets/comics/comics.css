@@ -1,0 +1,1274 @@
+/* fonts of the comics are vendored by build/make/download_assets.py */
+@font-face {
+    font-family: 'Bangers';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('fonts/bangers.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Comic Neue';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('fonts/comic-neue-700.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../fonts/lato-400.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('../fonts/lato-700.woff2') format('woff2');
+}
+
+/* the comic is a standalone page */
+html, body {
+    margin: 0;
+    background: #000000;
+}
+/* title above the first page - the look of the captions of the pages */
+.cx-title {
+    box-sizing: border-box;
+    max-width: 948px;
+    margin: 0 auto;
+    padding: 1.6em 16px 0;
+    text-align: center;
+}
+.cx-title h1 {
+    display: inline-block;
+    margin: 0;
+    padding: 0.05em 0.5em 0.1em;
+    font: 400 3.4em/1.15 'Bangers', sans-serif;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #000000;
+    background: #ffcd8d;
+    border: 0.06em solid #ffffff;
+    box-shadow: 0.08em 0.08em 0 #008c00;
+    transform: rotate(-1.5deg);
+}
+.cx-title h1 span {
+    color: #008c00;
+}
+
+/* footnote below the last control of the comic */
+.cx-footnote {
+    padding: 0 16px 2em;
+    text-align: center;
+    font: 400 1.3em/1.2 'Bangers', sans-serif;
+    letter-spacing: 0.08em;
+}
+.cx-footnote a {
+    color: #ffcd8d;
+    text-decoration: none;
+    text-shadow: 0.08em 0.08em 0 #008c00;
+}
+.cx-footnote a:hover {
+    color: #7fc074;
+    text-shadow: 0.08em 0.08em 0 #000000;
+}
+
+/* ============================================================
+   MindForger comic - everything is scoped under .cx / cx-*
+   so it does not clash with anything else
+   ============================================================ */
+
+.cx {
+    /* MindForger dark theme - app/src/qt/look_n_feel.cpp */
+    --cx-bg: #000000;
+    --cx-bg-deep: #0a0a0a;
+    --cx-card: #191919;
+    --cx-card-hi: #2a2a2a;
+    --cx-line: #5a5a5a;
+    --cx-text: #ffffff;
+    --cx-muted: #aaaaaa;
+    --cx-dim: #777777;
+    --cx-highlight: #008c00;
+
+    /* MindForger tag colors - lib/src/config/color.h */
+    --cx-red: #ff8181;
+    --cx-green: #7fc074;
+    --cx-blue: #99b1ff;
+    --cx-yellow: #ffcd8d;
+    --cx-orange: #ed7014;
+    --cx-purple: #c79ec9;
+
+    /* MindForger Markdown syntax highlighting (dark theme) */
+    --cx-md-bold: #ffff00;
+    --cx-md-italic: #00aa00;
+    --cx-md-list: #009900;
+    --cx-md-link: #00ffff;
+    --cx-md-code: #999999;
+
+    /* note type families - the same as in the diagram */
+    --cx-know: var(--cx-yellow);
+    --cx-spark: var(--cx-green);
+    --cx-open: var(--cx-red);
+    --cx-act: var(--cx-blue);
+
+    --cx-ink: #000000;
+    --cx-paper: #ffffff;
+    --cx-max-w: 948px;
+
+    box-sizing: border-box;
+    max-width: var(--cx-max-w);
+    margin: 0 auto;
+    padding: 2em 16px;
+    font: 14px/1.5 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+    color: var(--cx-text);
+    background: var(--cx-bg);
+}
+
+/* full width black band around the comic */
+.cx-outer {
+    background: #000000;
+}
+
+.cx {
+    scroll-margin-top: 44px;
+}
+
+.cx h1,
+.cx h4 {
+    font-family: inherit;
+}
+
+.cx *,
+.cx *::before,
+.cx *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.cx ul {
+    list-style: none;
+}
+
+.cx button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+
+/* ------------------------------------------------ viewer */
+
+.cx-viewer {
+    container-type: inline-size;
+}
+
+/* all pages share one grid cell - the viewer keeps the height of the tallest page and never jumps */
+.cx-pages {
+    display: grid;
+}
+
+.cx-page {
+    grid-area: 1 / 1;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.35s ease, visibility 0s linear 0.35s;
+}
+
+.cx-page.cx-on {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.35s ease;
+}
+
+.cx-art {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    /* every size inside the art is in em - the art scales like an image */
+    font-size: 1.5cqw;
+    background:
+        radial-gradient(circle, #1d1d1d 0.09em, transparent 0.11em) 0 0 / 1.1em 1.1em,
+        var(--cx-bg-deep);
+    border: 0.3em solid var(--cx-paper);
+    box-shadow: 0.5em 0.5em 0 var(--cx-highlight);
+    cursor: pointer;
+}
+
+.cx-art.cx-dark {
+    background:
+        radial-gradient(circle, #15102a 0.09em, transparent 0.11em) 0 0 / 1.1em 1.1em,
+        #050309;
+}
+
+.cx-text {
+    min-height: 5.6em;
+    margin-top: 1.4em;
+    padding: 0.7em 1em;
+    border-left: 3px solid var(--cx-highlight);
+    background: var(--cx-card);
+    color: var(--cx-text);
+}
+
+.cx-text b {
+    color: var(--cx-yellow);
+}
+
+/* ------------------------------------------------ controls */
+
+.cx-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+    margin-top: 1em;
+}
+
+.cx-btn {
+    min-width: 7.5em;
+    white-space: nowrap;
+    padding: 0.35em 0.9em;
+    font: 400 1.3em/1.2 'Bangers', sans-serif !important;
+    letter-spacing: 0.08em;
+    color: var(--cx-ink) !important;
+    background: var(--cx-yellow) !important;
+    border: 2px solid var(--cx-paper) !important;
+    box-shadow: 3px 3px 0 var(--cx-highlight);
+    transition: transform 0.1s ease, opacity 0.2s ease;
+}
+
+.cx-btn:hover {
+    transform: translate(-1px, -1px);
+}
+
+.cx-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--cx-highlight);
+}
+
+.cx-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+    transform: none;
+}
+
+.cx-dots {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45em;
+}
+
+.cx-dots button {
+    width: 0.8em;
+    height: 0.8em;
+    border: 1px solid var(--cx-line);
+    border-radius: 50%;
+    background: var(--cx-card-hi);
+}
+
+.cx-dots button[aria-current="true"] {
+    border-color: var(--cx-green);
+    background: var(--cx-highlight);
+    box-shadow: 0 0 8px var(--cx-highlight);
+}
+
+.cx-count {
+    margin-top: 0.5em;
+    font-size: 0.85em;
+    text-align: center;
+    color: var(--cx-dim);
+}
+
+.cx-btn:focus-visible,
+.cx-dots button:focus-visible,
+.cx-art:focus-visible {
+    outline: 2px solid var(--cx-green);
+    outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+    .cx-btn {
+        min-width: 0;
+        padding: 0.35em 0.6em;
+        font-size: 1.05em !important;
+    }
+    .cx-nav {
+        gap: 0.5em;
+    }
+    .cx-dots {
+        gap: 0.3em;
+    }
+    .cx-dots button {
+        width: 0.6em;
+        height: 0.6em;
+    }
+    .cx-text {
+        min-height: 9em;
+    }
+}
+
+/* ------------------------------------------------ comic vocabulary */
+
+.cx-abs {
+    position: absolute;
+}
+
+/* narration box - top left corner of a panel */
+.cx-cap {
+    position: absolute;
+    top: 0.9em;
+    left: 0.9em;
+    z-index: 5;
+    padding: 0.15em 0.6em;
+    font: 400 1.7em/1.2 'Bangers', sans-serif;
+    letter-spacing: 0.06em;
+    color: var(--cx-ink);
+    background: var(--cx-yellow);
+    border: 0.1em solid var(--cx-ink);
+    box-shadow: 0.15em 0.15em 0 var(--cx-ink);
+}
+
+.cx-cap small {
+    font-size: 0.7em;
+    color: #5a3a10;
+}
+
+.cx-bubble {
+    position: absolute;
+    z-index: 4;
+    padding: 0.45em 0.8em;
+    font: 700 1.55em/1.2 'Comic Neue', 'Comic Sans MS', sans-serif;
+    text-align: center;
+    color: #111111;
+    background: var(--cx-paper);
+    border: 0.12em solid var(--cx-ink);
+    border-radius: 1.1em;
+    box-shadow: 0.12em 0.12em 0 rgba(0, 0, 0, 0.6);
+}
+
+.cx-bubble em {
+    font-style: normal;
+    color: var(--cx-highlight);
+}
+
+/* speech tail - --tx positions it along the bottom edge */
+.cx-bubble::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: var(--tx, 20%);
+    border: 0.55em solid transparent;
+    border-top: 0.9em solid var(--cx-paper);
+    border-bottom: 0;
+    transform: skewX(var(--tk, -20deg));
+    filter: drop-shadow(0 0.1em 0 var(--cx-ink));
+}
+
+.cx-bubble.cx-up::after {
+    top: auto;
+    bottom: 100%;
+    border-top: 0;
+    border-bottom: 0.9em solid var(--cx-paper);
+    filter: drop-shadow(0 -0.1em 0 var(--cx-ink));
+}
+
+/* tail on the left side pointing to the speaker */
+.cx-bubble.cx-left::after {
+    top: 50%;
+    left: auto;
+    right: 100%;
+    border: 0.55em solid transparent;
+    border-right: 0.9em solid var(--cx-paper);
+    border-left: 0;
+    transform: translateY(-50%);
+    filter: drop-shadow(-0.1em 0 0 var(--cx-ink));
+}
+
+/* wingman speaks in terminal green */
+.cx-bubble.cx-ai {
+    color: var(--cx-green);
+    background: var(--cx-bg-deep);
+    border-color: var(--cx-green);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.25em;
+}
+
+.cx-bubble.cx-ai::after {
+    border-top-color: var(--cx-green);
+    border-right-color: var(--cx-green);
+    filter: none;
+}
+.cx-bubble.cx-ai.cx-left::after {
+    border-top-color: transparent;
+}
+
+/* thought bubble - a cloud with little circles instead of a tail */
+.cx-think {
+    border-radius: 2em;
+}
+
+.cx-think::after,
+.cx-think::before {
+    content: "";
+    position: absolute;
+    border: 0.12em solid var(--cx-ink);
+    border-radius: 50%;
+    background: var(--cx-paper);
+    transform: none;
+    filter: none;
+}
+
+.cx-think::after {
+    top: calc(100% + 0.3em);
+    left: var(--tx, 20%);
+    width: 0.9em;
+    height: 0.9em;
+}
+
+.cx-think::before {
+    top: calc(100% + 1.4em);
+    left: calc(var(--tx, 20%) - 0.6em);
+    width: 0.5em;
+    height: 0.5em;
+}
+
+/* sound effects */
+.cx-sfx {
+    position: absolute;
+    z-index: 3;
+    font: 400 3.4em/1 'Bangers', sans-serif;
+    letter-spacing: 0.05em;
+    color: var(--c, var(--cx-yellow));
+    -webkit-text-stroke: 0.035em var(--cx-ink);
+    text-shadow: 0.07em 0.07em 0 var(--cx-ink);
+    transform: rotate(var(--r, -8deg));
+    white-space: nowrap;
+}
+
+/* MindForger UI card - the same look as the diagram boxes */
+.cx-card {
+    position: absolute;
+    padding: 1.3em 0.9em 0.8em;
+    font-size: 1.05em;
+    background: var(--cx-card);
+    border: 0.08em solid var(--cx-line);
+    border-radius: 0.55em;
+    box-shadow: 0 0 1.5em rgba(0, 140, 0, 0.15);
+}
+
+.cx-legend {
+    position: absolute;
+    top: -0.8em;
+    left: 0.8em;
+    padding: 0.05em 0.5em;
+    font-size: 0.72em;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--cx-yellow);
+    background: var(--cx-bg);
+    border: 0.1em solid var(--cx-line);
+    border-radius: 0.3em;
+}
+
+.cx-chip {
+    display: inline-block;
+    padding: 0 0.4em;
+    font-size: 0.9em;
+    font-style: normal;
+    font-weight: 700;
+    white-space: nowrap;
+    color: var(--c);
+    background: color-mix(in srgb, var(--c) 12%, #000);
+    border: 0.08em solid color-mix(in srgb, var(--c) 60%, transparent);
+    border-radius: 0.25em;
+}
+
+.cx-tag {
+    display: inline-block;
+    padding: 0 0.35em;
+    font-weight: 700;
+    color: var(--cx-ink);
+    background: var(--c, var(--cx-blue));
+    border-radius: 0.2em;
+}
+
+.cx-key {
+    display: inline-block;
+    min-width: 1.6em;
+    padding: 0.1em 0.45em;
+    font-weight: 800;
+    text-align: center;
+    color: var(--cx-text);
+    background: var(--cx-card-hi);
+    border: 0.08em solid var(--cx-line);
+    border-bottom-width: 0.25em;
+    border-radius: 0.3em;
+}
+
+.cx-muted {
+    color: var(--cx-muted);
+}
+
+.cx-dim {
+    color: var(--cx-dim);
+}
+
+/* the pixel-art you - drawn by the script like in the diagram */
+.cx-you {
+    position: absolute;
+    z-index: 2;
+    padding: 0.6em;
+    background: var(--cx-card);
+    border: 0.08em solid var(--cx-line);
+    border-radius: 0.55em;
+}
+
+.cx-you svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    shape-rendering: crispEdges;
+    background: var(--cx-bg);
+}
+
+.cx-you .cx-legend {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.cx-asks b {
+    position: absolute;
+    font: 800 2.6em/1 'JetBrains Mono', monospace;
+    color: var(--cx-purple);
+    text-shadow: 0 0 0.3em var(--cx-purple);
+    animation: cx-float 2.4s ease-in-out infinite;
+}
+
+/* markdown editor lines */
+.cx-md {
+    font-variant-ligatures: none;
+}
+
+.cx-md li {
+    white-space: nowrap;
+}
+
+.cx-md .h {
+    font-weight: 800;
+    color: var(--cx-text);
+}
+
+.cx-md .b {
+    font-weight: 800;
+    color: var(--cx-md-bold);
+}
+
+.cx-md .i {
+    font-style: italic;
+    color: var(--cx-md-italic);
+}
+
+.cx-md .l {
+    color: var(--cx-md-list);
+}
+
+.cx-md .a {
+    color: var(--cx-md-link);
+    text-decoration: underline;
+}
+
+.cx-md .c {
+    color: var(--cx-md-code);
+}
+
+.cx-tree li {
+    padding: 0.1em 0.4em 0.1em calc(0.4em + var(--dep, 0) * 1.3em);
+    white-space: nowrap;
+    border-radius: 0.2em;
+}
+
+.cx-tree li::before {
+    content: "\25B8 ";
+    color: var(--cx-dim);
+}
+
+.cx-sel {
+    color: var(--cx-text);
+    background: var(--cx-highlight);
+}
+
+.cx-bar {
+    height: 0.4em;
+    background: var(--cx-card-hi);
+    border-radius: 0.2em;
+    overflow: hidden;
+}
+
+.cx-bar i {
+    display: block;
+    width: var(--p, 40%);
+    height: 100%;
+    background: var(--cx-green);
+}
+
+.cx-fields {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.35em 0.8em;
+    align-items: center;
+    margin-bottom: 0.8em;
+    font-size: 0.9em;
+}
+
+.cx-input {
+    padding: 0.1em 0.5em;
+    font-weight: 700;
+    background: var(--cx-bg);
+    border: 0.08em solid var(--cx-line);
+    border-radius: 0.2em;
+}
+
+.cx-editor {
+    padding: 0.6em 0.7em;
+    font-size: 1.1em;
+    background: var(--cx-bg);
+    border: 0.08em solid var(--cx-green);
+    border-radius: 0.3em;
+}
+
+.cx-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3em;
+    margin-top: 0.7em;
+}
+
+.cx-badges span {
+    padding: 0 0.45em;
+    font-size: 0.8em;
+    color: var(--cx-muted);
+    border: 0.08em solid var(--cx-line);
+    border-radius: 1em;
+}
+
+/* generic to specific arrow next to the outline */
+.cx-axis {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3em;
+    font-size: 1.1em;
+}
+
+.cx-axis b {
+    font: 400 1.3em/1 'Bangers', sans-serif;
+    letter-spacing: 0.08em;
+    color: var(--cx-yellow);
+}
+
+.cx-axis b:last-child {
+    color: var(--cx-green);
+}
+
+.cx-axis i {
+    position: relative;
+    flex: 1;
+    width: 0.35em;
+    background: linear-gradient(var(--cx-yellow), var(--cx-green));
+}
+
+.cx-axis i::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border: 0.7em solid transparent;
+    border-top: 1em solid var(--cx-green);
+    border-bottom: 0;
+    transform: translateX(-50%);
+}
+
+/* notebook window - table of contents and the note */
+.cx-window {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 0.6em;
+    margin-top: 0.5em;
+}
+
+.cx-pane-label {
+    margin-bottom: 0.3em;
+    font-size: 0.7em;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cx-dim);
+}
+
+.cx-pane {
+    padding: 0.4em 0.6em;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9em;
+    color: #222222;
+    background: #f0f0f0;
+    border-radius: 0.2em;
+}
+
+.cx-pane .cx-pane-label {
+    color: #777777;
+}
+
+.cx-pane p {
+    margin-top: 0.3em;
+}
+
+.cx-pane .cx-hl {
+    color: #000000;
+}
+
+.cx-link {
+    color: #1a55c9;
+}
+
+/* notebook shelves - books standing on a board */
+.cx-shelf-label {
+    font-size: 0.85em;
+    color: var(--cx-muted);
+}
+
+.cx-shelf {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.25em;
+    height: 8em;
+    margin-bottom: 0.8em;
+    padding: 0 0.4em;
+    border-bottom: 0.45em solid #6b4423;
+}
+
+.cx-shelf i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.3em;
+    height: var(--h);
+    font-size: 0.95em;
+    font-style: normal;
+    font-weight: 800;
+    color: var(--cx-ink);
+    background: var(--c);
+    border-radius: 0.2em 0.2em 0 0;
+    box-shadow: inset -0.3em 0 0 rgba(0, 0, 0, 0.18), inset 0 0.5em 0 rgba(255, 255, 255, 0.15);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+.cx-kanban-big {
+    font-size: 1.15em;
+}
+
+.cx-matrix {
+    display: grid;
+    grid-template-columns: 1.4em 1fr 1fr;
+    gap: 0.4em;
+}
+
+.cx-axis-y {
+    grid-row: 1 / 3;
+    font-size: 0.8em;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-align: center;
+    color: var(--cx-muted);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+.cx-axis-x {
+    grid-column: 2 / 4;
+    font-size: 0.8em;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-align: center;
+    color: var(--cx-muted);
+}
+
+.cx-q {
+    min-height: 6em;
+    padding: 0.4em 0.6em;
+    background: var(--cx-card-hi);
+    border-top: 0.25em solid var(--c);
+    border-radius: 0.2em;
+}
+
+.cx-q b {
+    display: block;
+    margin-bottom: 0.3em;
+    font-size: 0.85em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c);
+}
+
+.cx-q span {
+    display: block;
+    margin-bottom: 0.25em;
+    padding: 0.1em 0.4em;
+    font-size: 0.9em;
+    background: var(--cx-card);
+    border-left: 0.2em solid var(--c);
+}
+
+/* scattered information in the first panel */
+.cx-scrap {
+    position: absolute;
+    padding: 0.35em 0.7em;
+    font-weight: 700;
+    color: var(--cx-muted);
+    background: var(--cx-card);
+    border: 0.08em dashed var(--cx-line);
+    border-radius: 0.3em;
+    transform: rotate(var(--r, 0deg));
+    animation: cx-drift 5s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+}
+
+.cx-scrap b {
+    color: var(--cx-text);
+}
+
+.cx-postit {
+    color: #3a2a00;
+    background: #ffe36e;
+    border: 0;
+    box-shadow: 0.2em 0.2em 0 rgba(0, 0, 0, 0.5);
+}
+
+/* flowing note types in the capture panel */
+.cx-flow {
+    position: absolute;
+    top: var(--y);
+    left: 27%;
+    opacity: 0;
+}
+
+.cx-on .cx-flow {
+    animation: cx-flow 3.2s linear infinite;
+    animation-delay: var(--d, 0s);
+}
+
+.cx-mf {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    text-align: center;
+}
+
+.cx-mf img {
+    width: 5em;
+    height: 5em;
+}
+
+.cx-mf b {
+    font: 400 2em/1 'Bangers', sans-serif;
+    letter-spacing: 0.06em;
+    color: var(--cx-text);
+}
+
+.cx-kanban {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6em;
+}
+
+.cx-kanban h4 {
+    margin-bottom: 0.4em;
+    padding-bottom: 0.2em;
+    font-size: 0.85em;
+    letter-spacing: 0.1em;
+    color: var(--c);
+    border-bottom: 0.15em solid var(--c);
+}
+
+.cx-kanban li {
+    margin-bottom: 0.35em;
+    padding: 0.2em 0.4em;
+    font-size: 0.85em;
+    white-space: nowrap;
+    background: var(--cx-card-hi);
+    border-left: 0.2em solid var(--c);
+    border-radius: 0.2em;
+}
+
+.cx-moving {
+    position: relative;
+    outline: 0.12em solid var(--cx-yellow);
+    box-shadow: 0 0 0.8em var(--cx-yellow);
+}
+
+.cx-on .cx-moving {
+    animation: cx-hop 3s ease-in-out infinite;
+}
+
+.cx-term-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: -0.3em -0.2em 0.6em;
+    padding-bottom: 0.3em;
+    font-size: 0.85em;
+    color: var(--cx-muted);
+    border-bottom: 0.08em solid var(--cx-line);
+}
+
+.cx-dot {
+    width: 0.6em;
+    height: 0.6em;
+    border-radius: 50%;
+    background: var(--cx-green);
+    box-shadow: 0 0 0.5em var(--cx-green);
+}
+
+.cx-term li {
+    white-space: nowrap;
+}
+
+.cx-term .p {
+    color: var(--cx-text);
+}
+
+.cx-term .p::before {
+    content: "> ";
+    color: var(--cx-green);
+}
+
+.cx-term .r {
+    margin-bottom: 0.4em;
+    color: var(--cx-green);
+}
+
+.cx-models span {
+    display: inline-block;
+    margin: 0.3em 0.3em 0 0;
+    padding: 0 0.4em;
+    font-size: 0.8em;
+    color: var(--cx-purple);
+    border: 0.08em solid var(--cx-purple);
+    border-radius: 1em;
+}
+
+.cx-query {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.35em 0.6em;
+    font-size: 1.2em;
+    background: var(--cx-bg);
+    border: 0.1em solid var(--cx-green);
+    border-radius: 0.3em;
+}
+
+.cx-query svg {
+    width: 1em;
+    height: 1em;
+    stroke: var(--cx-green);
+}
+
+.cx-caret {
+    display: inline-block;
+    width: 0.5em;
+    height: 1.1em;
+    background: var(--cx-green);
+    animation: cx-blink 1s steps(1) infinite;
+}
+
+.cx-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3em;
+    margin: 0.6em 0;
+}
+
+.cx-tabs span {
+    padding: 0.05em 0.45em;
+    font-size: 0.8em;
+    color: var(--cx-muted);
+    border: 0.08em solid var(--cx-line);
+    border-radius: 0.3em;
+}
+
+.cx-tabs .cx-sel {
+    color: var(--cx-text);
+    border-color: var(--cx-green);
+}
+
+.cx-hits li {
+    margin-bottom: 0.35em;
+    padding: 0.25em 0.5em;
+    white-space: nowrap;
+    background: var(--cx-card-hi);
+    border-radius: 0.2em;
+}
+
+.cx-hits mark {
+    color: var(--cx-ink);
+    background: var(--cx-md-bold);
+}
+
+.cx-assoc li {
+    display: grid;
+    grid-template-columns: 1fr 3em;
+    align-items: center;
+    gap: 0.5em;
+    margin-bottom: 0.4em;
+    white-space: nowrap;
+}
+
+.cx-assoc .cx-bar {
+    grid-column: 1 / -1;
+    margin-top: -0.25em;
+}
+
+.cx-assoc em {
+    font-style: normal;
+    text-align: right;
+    color: var(--cx-green);
+}
+
+.cx-graph line {
+    stroke: var(--cx-line);
+    stroke-width: 0.6;
+}
+
+.cx-graph text {
+    font: 700 5px 'JetBrains Mono', monospace;
+    fill: var(--cx-muted);
+    text-anchor: middle;
+}
+
+.cx-file {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4em;
+    text-align: center;
+}
+
+.cx-file svg {
+    width: 7em;
+    height: auto;
+}
+
+.cx-band {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.35em 0;
+    font: 400 1.6em/1.2 'Bangers', sans-serif;
+    letter-spacing: 0.15em;
+    text-align: center;
+    color: var(--cx-ink);
+    background: var(--cx-green);
+    border-top: 0.1em solid var(--cx-ink);
+}
+
+.cx-cta {
+    display: inline-block;
+    padding: 0.3em 0.9em;
+    font: 400 1.7em/1.2 'Bangers', sans-serif;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    color: var(--cx-ink);
+    background: var(--cx-yellow);
+    border: 0.1em solid var(--cx-paper);
+    box-shadow: 0.15em 0.15em 0 var(--cx-highlight);
+}
+
+.cx-cta.cx-alt {
+    color: var(--cx-text);
+    background: var(--cx-card);
+}
+
+.cx-orbit {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    width: 0;
+    height: 0;
+}
+
+.cx-orbit .cx-chip {
+    position: absolute;
+    transform: rotate(var(--a)) translateX(var(--rx, 13em)) rotate(calc(-1 * var(--a)));
+    translate: -50% -50%;
+}
+
+.cx-on .cx-orbit {
+    animation: cx-spin 40s linear infinite;
+}
+
+.cx-on .cx-orbit .cx-chip {
+    animation: cx-counter 40s linear infinite;
+}
+
+/* entrance - elements pop in one by one when the page is shown */
+.cx-on .cx-pop {
+    animation: cx-pop 0.45s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+    animation-delay: var(--d, 0s);
+}
+
+@keyframes cx-pop {
+    from { opacity: 0; transform: scale(0.6) rotate(var(--r, 0deg)); }
+    to { opacity: 1; transform: scale(1) rotate(var(--r, 0deg)); }
+}
+
+@keyframes cx-float {
+    0%, 100% { transform: translateY(0) rotate(-8deg); opacity: 0.55; }
+    50% { transform: translateY(-0.3em) rotate(8deg); opacity: 1; }
+}
+
+@keyframes cx-drift {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -0.35em; }
+}
+
+@keyframes cx-flow {
+    0% { left: 27%; opacity: 0; }
+    12% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { left: 64%; opacity: 0; }
+}
+
+@keyframes cx-hop {
+    0%, 35% { left: 0; }
+    50%, 85% { left: calc(100% + 0.6em); }
+    100% { left: 0; }
+}
+
+@keyframes cx-blink {
+    50% { opacity: 0; }
+}
+
+@keyframes cx-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes cx-counter {
+    to { rotate: -360deg; }
+}
+
+/* ------------------------------------------------ phone: stacked panels */
+
+.cx-page {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.cx-art {
+    min-width: 0;
+}
+
+@container (max-width: 560px) {
+    .cx-art {
+        flex: 1;
+        aspect-ratio: auto;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: center;
+        align-items: center;
+        justify-content: center;
+        gap: 1.8em 1em;
+        padding: 5em 1.2em 2.4em;
+        font-size: 3.3cqw;
+    }
+    .cx-art > * {
+        position: relative !important;
+        inset: auto !important;
+        order: 1;
+    }
+    .cx-art > .cx-cap {
+        position: absolute !important;
+        top: 0.9em !important;
+        left: 0.9em !important;
+    }
+    .cx-card {
+        width: 100% !important;
+        height: auto !important;
+    }
+    .cx-bubble {
+        order: 2;
+        width: auto !important;
+        max-width: 85%;
+    }
+    .cx-bubble.cx-left::after,
+    .cx-bubble.cx-up::after {
+        top: 100%;
+        bottom: auto;
+        left: 45%;
+        right: auto;
+        border: 0.55em solid transparent;
+        border-top: 0.9em solid var(--cx-paper);
+        border-bottom: 0;
+        transform: none;
+        filter: drop-shadow(0 0.1em 0 var(--cx-ink));
+    }
+    .cx-bubble.cx-ai::after {
+        border-top-color: var(--cx-green) !important;
+    }
+    .cx-you {
+        order: 3;
+        width: 28% !important;
+    }
+    .cx-sfx {
+        order: 4;
+        font-size: 2.6em !important;
+    }
+    .cx-art > .cx-band {
+        order: 5;
+        margin: 0 -1.2em -2.4em;
+        width: calc(100% + 2.4em);
+        font-size: 1.3em;
+    }
+    .cx-on .cx-flow {
+        opacity: 1;
+        animation: none;
+    }
+    .cx-orbit {
+        display: none;
+    }
+    .cx-scrap {
+        animation: none;
+    }
+    .cx-md li,
+    .cx-hits li,
+    .cx-term li,
+    .cx-kanban li {
+        white-space: normal;
+    }
+    .cx-hide-m {
+        display: none !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cx *,
+    .cx *::before,
+    .cx *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+    .cx .cx-flow {
+        opacity: 1;
+        left: calc(27% + var(--i, 0) * 6%);
+    }
+}

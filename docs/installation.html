@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Installation - MindForger Documentation</title>
+    <meta name="description" content="If your operating system or distribution is not listed below, then check packages repository for Linux and Unix. macOS Install MindForger on macOS..." />
+    <meta name="author" content="Martin.Dvorak@mindforger.com" />
+    <link rel="canonical" href="https://www.mindforger.com/docs/installation.html" />
+    <link rel="alternate" type="application/rss+xml" title="MindForger Blog" href="rss.xml" />
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="assets/mind-forger.png" type="image/png" />
+    <meta name="theme-color" content="#008c00" />
+
+    <!-- BEGIN OPEN GRAPH -->
+    <meta property="og:site_name" content="MindForger Documentation" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Installation - MindForger Documentation" />
+    <meta property="og:description" content="If your operating system or distribution is not listed below, then check packages repository for Linux and Unix. macOS Install MindForger on macOS..." />
+    <meta property="og:url" content="https://www.mindforger.com/docs/installation.html" />
+    <meta property="og:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Installation - MindForger Documentation" />
+    <meta name="twitter:description" content="If your operating system or distribution is not listed below, then check packages repository for Linux and Unix. macOS Install MindForger on macOS..." />
+    <meta name="twitter:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
+    <!-- END OPEN GRAPH -->
+
+    <!-- BEGIN STYLES -->
+    <link href="assets/tabler/css/tabler.min.css" rel="stylesheet" />
+    <link href="assets/tabler/css/tabler-props.min.css" rel="stylesheet" />
+    <link href="assets/tabler/css/tabler-themes.min.css" rel="stylesheet" />
+    <link href="assets/pygments.css" rel="stylesheet" />
+    <link href="assets/mindforger-docs.css" rel="stylesheet" />
+    
+    <!-- END STYLES -->
+
+    <!-- BEGIN THEME SCRIPT: light/dark theme, must run before the page renders -->
+    <script src="assets/tabler/js/tabler-theme.min.js"></script>
+    <!-- END THEME SCRIPT -->
+  </head>
+  <body>
+    <div class="page">
+      <!-- BEGIN NAVBAR -->
+      <div class="sticky-top">
+        <header class="navbar navbar-expand-md d-print-none">
+          <div class="container-xl">
+            <!-- BEGIN NAVBAR TOGGLER -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbar-menu" aria-controls="navbar-menu"
+                    aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- END NAVBAR TOGGLER -->
+            <!-- BEGIN NAVBAR LOGO -->
+            <div class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+              <a href="index.html" class="mf-brand">
+                <img src="assets/mind-forger.png" alt="MindForger" class="mf-brand-logo">
+                <span class="mf-brand-text">MindForger</span>
+              </a><span style="font-weight: normal;">Docs</span>
+            </div>
+            <!-- END NAVBAR LOGO -->
+            <div class="navbar-nav flex-row order-md-last">
+              <div class="d-none d-md-flex">
+                <div class="nav-item">
+                  <a href="?theme=dark" class="nav-link px-0 hide-theme-dark"
+                     title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /></svg></a>
+                  <a href="?theme=light" class="nav-link px-0 hide-theme-light"
+                     title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <header class="navbar-expand-md">
+          <div class="collapse navbar-collapse" id="navbar-menu">
+            <div class="navbar">
+              <div class="container-xl">
+                <div class="row flex-column flex-md-row flex-fill align-items-center">
+                  <div class="col">
+                    <!-- BEGIN NAVBAR MENU -->
+                    <ul class="navbar-nav" id="navbar-base">
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg></span>
+                          <span class="nav-link-title">Home</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="index.html">Documentation</a>
+<a class="dropdown-item" href="toc.html">Table of Contents</a>
+<a class="dropdown-item" href="history.html">Project History</a>
+<a class="dropdown-item" href="credits.html">Credits</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="about.html">About</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg></span>
+                          <span class="nav-link-title">User Documentation</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="assets/comics/index.html">Comics</a>
+<a class="dropdown-item active" href="installation.html">Installation</a>
+<a class="dropdown-item" href="getting-started.html">Getting Started</a>
+<a class="dropdown-item" href="user-documentation.html">User Documentation</a>
+<a class="dropdown-item" href="note-taking-best-practices.html">Note Taking Best Practices</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="faqs.html">FAQs</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M7 8l-4 4l4 4" /><path d="M17 8l4 4l-4 4" /><path d="M14 4l-4 16" /></svg></span>
+                          <span class="nav-link-title">Technical Documentation</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="developer-documentation.html">Developer Guide</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M12 17a3 3 0 0 0 -3 -3" /><path d="M15 17a6 6 0 0 0 -6 -6" /><path d="M9 17h.01" /></svg></span>
+                          <span class="nav-link-title">News</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="blog.html">Blog</a>
+<a class="dropdown-item" href="releases.html">Releases</a>
+<a class="dropdown-item" href="https://github.com/dvorka/mindforger/blob/master/Changelog" target="_blank" rel="noopener">Changelog</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="rss.xml" target="_blank" rel="noopener">RSS</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                    <!-- END NAVBAR MENU -->
+                  </div>
+                  <div class="col col-md-auto">
+                    <ul class="navbar-nav">
+                      <li class="nav-item">
+                        <a class="nav-link" href="https://www.mindforger.com" target="_blank">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M3.6 9h16.8" /><path d="M3.6 15h16.8" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" /></svg></span>
+                          <span class="nav-link-title">mindforger.com</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+      </div>
+      <!-- END NAVBAR -->
+      <div class="page-wrapper">
+        <!-- BEGIN PAGE HEADER -->
+        <div class="page-header d-print-none" aria-label="Page header">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                <div class="page-pretitle">User Documentation</div>
+                <h1 class="page-title">Installation</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END PAGE HEADER -->
+
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="row">
+              <!-- BEGIN MAIN CONTENT -->
+              <div class="col-12 col-xl-9">
+                <div class="card mb-3"><div class="card-body">
+<p>Install:</p>
+<ul>
+<li><a href="#macos">macOS</a></li>
+<li><a href="#windows">Windows</a></li>
+<li><a href="#snap">Snap</a></li>
+<li><a href="#ubuntu">Ubuntu</a></li>
+<li><a href="#debian">Debian</a></li>
+<li><a href="#fedora">Fedora</a></li>
+<li><a href="#freebsd">FreeBSD</a></li>
+<li><a href="#arch-linux">Arch Linux</a></li>
+<li><a href="#nixos-">NixOS</a></li>
+<li><a href="#opensuse">openSUSE</a></li>
+<li><a href="#wsl">WSL</a></li>
+</ul>
+<p>Build:</p>
+<ul>
+<li><a href="#build-on-macos">build on macOS</a></li>
+<li><a href="#build-on-windows">build on Windows</a></li>
+<li><a href="#build-on-ubuntu">build on Ubuntu</a></li>
+<li><a href="#build-on-debian">build on Debian</a></li>
+<li><a href="#build-on-fedora">build on Fedora</a></li>
+<li><a href="#build-on-gentoo">build on Gentoo</a></li>
+<li><a href="#build-on-nixos">build on NixOS</a></li>
+<li><a href="#build-on-wsl">build on WSL</a></li>
+<li><a href="#build-and-run-in-container">build and run container</a></li>
+</ul>
+<p>Configure:</p>
+<ul>
+<li><a href="#appearance-and-themes">Appearance and themes</a></li>
+<li><a href="#custom-html-preview-css">Custom HTML Preview CSS</a></li>
+<li><a href="#spell-check">Spell check</a></li>
+<li><a href="#think-vs--sleep-mode">Think vs. Sleep mode</a></li>
+</ul>
+<p>Package for a new distribution or OS:</p>
+<ul>
+<li><a href="https://github.com/dvorka/mindforger/releases">download tarball</a></li>
+</ul>
+<p>Look up:</p>
+<ul>
+<li><a href="releases.html">release</a></li>
+<li><a href="releases.html#changelog">change</a></li>
+</ul>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="install-a-package">Install a package</h2>
+<p>Install MindForger using a package.</p>
+<p>If your operating system or distribution is not listed below, then check <a href="https://pkgs.org/search/?q=mindforger]">packages repository</a> for Linux and Unix.</p>
+<h3 id="macos">macOS</h3>
+<p>Install MindForger on macOS either using <code>brew</code> or by downloading <code>.dmg</code>.</p>
+<p><strong>Homebrew</strong></p>
+<p>Install MindForger using <a href="https://brew.sh">HomeBrew</a>:</p>
+<div class="codehilite"><pre><span></span><code>brew install mindforger
+</code></pre></div>
+
+<p><strong>Disk iMaGe</strong></p>
+<p>Install MindForger using <code>.dmg</code>:</p>
+<ul>
+<li><a href="https://github.com/dvorka/mindforger/releases">download .dmg</a> from <a href="https://github.com/dvorka/mindforger/releases">GitHub releases</a></li>
+</ul>
+<p>Install <code>.dmg</code>:</p>
+<ul>
+<li>Open/mount <code>.dmg</code></li>
+<li>Drag and drop/copy <code>mindforger</code> from <code>.dmg</code> to <code>Applications</code></li>
+<li>Run <code>MindForger</code></li>
+</ul>
+<p>MindForger creates copy of the documentation in your home directory (<code>~/mindforger-repository</code>) and opens it as default repository.</p>
+<h3 id="windows">Windows</h3>
+<p>Install MindForger using installer.</p>
+<ul>
+<li>Download installer executable from https://github.com/dvorka/mindforger/releases (or try <a href="https://ci.appveyor.com/project/dvorka/mindforger/build/artifacts">nightly build</a>)</li>
+<li>Run installer.</li>
+</ul>
+<h3 id="wsl">WSL</h3>
+<p>Install <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">Windows Subsystem for Linux</a> (WSL) and check that you have Ubuntu 16.04 or newer:</p>
+<div class="codehilite"><pre><span></span><code>lsb_release -a
+  ...
+  Release:        16.04
+  Codename:       xenial
+</code></pre></div>
+
+<p>If not, then run <code>sudo do-release-upgrade</code>.</p>
+<p>Install and start an X server for Windows like <a href="https://sourceforge.net/projects/xming/">Xming</a>.</p>
+<hr />
+<p>Install MindForger from PPA. Add <a href="http://www.mindforger.com/debian">my PPA</a> to Apt, trust <a href="http://www.mindforger.com/gpgpubkey.txt">GPG key</a>,
+install MindForger and run it:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># add PPA to trusted repositories</span>
+sudo add-apt-repository ppa:ultradvorka/productivity
+
+<span class="c1"># update sources</span>
+sudo apt update
+
+<span class="c1"># install MindForger</span>
+sudo apt install mindforger
+
+<span class="c1"># run MindForger</span>
+<span class="nv">DISPLAY</span><span class="o">=</span>:0.0 mindforger
+</code></pre></div>
+
+<h3 id="snap">Snap</h3>
+<p>There are the following Snap distributions:</p>
+<ul>
+<li><a href="https://snapcraft.io/mindforger">SnapCraft.io</a> package which uses strict confinement.</li>
+<li><strong>Classic</strong> confinement package downloadable from <a href="https://github.com/dvorka/mindforger/releases">GitHub Releases</a> page.</li>
+</ul>
+<h3 id="ubuntu">Ubuntu</h3>
+<p>Install MindForger from <strong>PPA</strong>.
+Add <a href="https://launchpad.net/~ultradvorka/+archive/ubuntu/productivity">my Lauchpad hosted PPA</a> and install MindForger:</p>
+<div class="codehilite"><pre><span></span><code># add PPA to trusted repositories
+sudo add-apt-repository ppa:ultradvorka/productivity
+
+# update sources
+sudo apt update
+
+# install MindForger
+sudo apt install mindforger
+</code></pre></div>
+
+<h3 id="debian">Debian</h3>
+<p>Install MindForger on <a href="https://www.debian.org/">Debian</a> either by downloading <code>.deb</code> or from <strong>PPA</strong>.</p>
+<p>Download <code>.deb</code> package for your Debian version from:</p>
+<ul>
+<li><a href="https://github.com/dvorka/mindforger/releases">GitHub Releases</a> <strong>Assets</strong> section</li>
+</ul>
+<p>To install MindForger from the <strong>PPA</strong> add <a href="http://www.mindforger.com/debian">my PPA</a> for <strong>your Debian release</strong> version, trust <a href="http://www.mindforger.com/gpgpubkey.txt">GPG key</a> and
+install MindForger - follow the instructions described in:</p>
+<ul>
+<li>http://www.mindforger.com/debian-ppa</li>
+</ul>
+<p>For example Debian <strong>"bookworm"</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># add PPA to APT sources:</span>
+<span class="nb">echo</span> <span class="s2">&quot;deb http://www.mindforger.com/debian-ppa/bookworm bookworm main&quot;</span> <span class="p">|</span> sudo tee /etc/apt/sources.list.d/mindforger.list
+
+<span class="c1"># import PPA&#39;s GPG key</span>
+wget -qO - http://www.mindforger.com/gpgpubkey.txt <span class="p">|</span> sudo apt-key add -
+
+<span class="c1"># update sources</span>
+sudo apt update
+
+<span class="c1"># install MindForger</span>
+sudo apt install mindforger
+</code></pre></div>
+
+<h3 id="fedora">Fedora</h3>
+<p>Install MindForger on <a href="https://getfedora.org/">Fedora</a>:</p>
+<ul>
+<li><a href="https://github.com/dvorka/mindforger/releases">download RPM</a> from GitHub releases</li>
+</ul>
+<p>Install RPM:</p>
+<div class="codehilite"><pre><span></span><code>sudo dnf install mindforger-MAJOR.MINOR.REVISION.rpm
+</code></pre></div>
+
+<h3 id="freebsd">FreeBSD</h3>
+<p>Install MindForger on <a href="https://www.freshports.org/deskutils/mindforger">FreeBSD</a>:</p>
+<div class="codehilite"><pre><span></span><code>pkg install deskutils/mindforger
+pkg install mindforger
+</code></pre></div>
+
+<p>(<a href="https://cgit.freebsd.org/ports/commit/?id=0c3409cfc37cfce255d0578b13805bf059a3be16">port commit</a>)</p>
+<h3 id="arch-linux">Arch Linux</h3>
+<p>Install MindForger from Arch User Repository (AUR):</p>
+<ul>
+<li>https://aur.archlinux.org/packages/mindforger/</li>
+</ul>
+<h3 id="nixos">NixOS</h3>
+<p>Install <a href="https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/editors/mindforger">MindForger package</a> on <a href="https://nixos.org/">NixOS</a>:</p>
+<div class="codehilite"><pre><span></span><code>nix-env -i mindforger
+</code></pre></div>
+
+<h3 id="opensuse">openSUSE</h3>
+<p>Install MindForger on <a href="https://www.opensuse.org/">openSUSE</a>:</p>
+<div class="codehilite"><pre><span></span><code>sudo zypper in opi
+opi mindforger
+</code></pre></div>
+
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="build-from-source-code">Build from source code</h2>
+<p>Build MindForger from the source code.</p>
+<h3 id="build-on-macos">Build on macOS</h3>
+<p>Build MindForger on macOS Sierra 10.12+.</p>
+<p>Open <code>Terminal</code> and install/update <a href="https://developer.apple.com/">Xcode</a> command line tools:</p>
+<div class="codehilite"><pre><span></span><code>xcode-select --install
+</code></pre></div>
+
+<p>Install/update <a href="https://brew.sh">HomeBrew</a> package manager:</p>
+<div class="codehilite"><pre><span></span><code>ruby -e <span class="s2">&quot;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install<span class="k">)</span><span class="s2">&quot;</span>
+brew doctor
+</code></pre></div>
+
+<p>Install build tools and dependencies:</p>
+<div class="codehilite"><pre><span></span><code>brew install ccache
+</code></pre></div>
+
+<p>Download Qt from https://www.qt.io/download and in its online installer choose:</p>
+<ul>
+<li><code>Qt/Qt 5.x.x</code><ul>
+<li>latest available <code>5.x.x</code> (<code>Qt 5.9.9</code> or any newer Qt relese)</li>
+<li>you can skip components like <code>Android</code> or <code>iOS</code> </li>
+</ul>
+</li>
+<li><code>Developer and Designer Tools</code><ul>
+<li><code>Qt Creator</code></li>
+<li><code>qmake</code></li>
+<li><code>CMake</code></li>
+<li><code>Qt Installer Framework</code></li>
+</ul>
+</li>
+</ul>
+<p>Once Qt is installed you can use <code>~/Qt/MaintennanceTool.app</code> to add/remove Qt components.</p>
+<p>Get <a href="https://github.com/dvorka/mindforger">source code</a>:</p>
+<div class="codehilite"><pre><span></span><code>git clone https://github.com/dvorka/mindforger.git
+git submodule init
+git submodule update
+</code></pre></div>
+
+<p>There are two ways how to <strong>build</strong> MindForger Disk iMaGe package:</p>
+<ol>
+<li>either using <strong>scripts</strong> from MindForger's GitHub repository:<ul>
+<li><code>build/macos/mindforger-build.sh</code> which creates MindForger executable</li>
+<li><code>build/macos/dmg-package-build.sh</code> which creates Disk iMaGe <code>.dmg</code> package on top of binary executable build made by <code>mindforger-build.sh</code></li>
+</ul>
+</li>
+<li>or using the <strong>steps described below</strong></li>
+</ol>
+<p>Add dependencies to <code>PATH</code>:</p>
+<ul>
+<li>fix paths: username, Qt and its components versions might be different</li>
+<li>add <code>PATH</code> modifications below to your <code>.bash_profile</code> and/or <code>.bashrc</code>
+  or <code>.zshrc</code> depending on your shell (configuration)</li>
+<li>don't forget to apply changes e.g. using <code>. .bashr_profile</code></li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="c1"># clang</span>
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/Users/username/Qt/5.x.x/clang_64/bin:</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="c1"># cmake</span>
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">:/Users/username/Qt/Tools/CMake/CMake.app/Contents/bin&quot;</span>
+<span class="c1"># installer</span>
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">:/Users/username/Qt/Tools/QtInstallerFramework/3.2/bin&quot;</span>
+</code></pre></div>
+
+<p>Get <a href="https://github.com/dvorka/mindforger">source code</a>:</p>
+<div class="codehilite"><pre><span></span><code>git clone https://github.com/dvorka/mindforger.git
+git submodule init
+git submodule update
+</code></pre></div>
+
+<p>Build <strong>dependencies</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># build dependency: cmark-gfm</span>
+<span class="nb">cd</span> mindforger/deps/cmark-gfm
+mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+cmake -DCMARK_TESTS<span class="o">=</span>OFF -DCMARK_SHARED<span class="o">=</span>OFF ..
+cmake --build .
+</code></pre></div>
+
+<p>Compile <strong>sources</strong> from repository <strong>root</strong> directory:</p>
+<div class="codehilite"><pre><span></span><code>qmake -r mindforger.pro
+<span class="c1"># consider adding -j parameter with the number of CPU cores to use e.g. make -j 8</span>
+make
+</code></pre></div>
+
+<p>Optionally <strong>install</strong> MindForger:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span> app <span class="o">&amp;&amp;</span> cp -rvf mindforger.app /Applications
+</code></pre></div>
+
+<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger documentation repository to home directory - location and directory name matters</span>
+<span class="nb">cd</span> ~
+git clone https://github.com/dvorka/mindforger-repository.git
+</code></pre></div>
+
+<p>Run MindForger either as application or using command line:</p>
+<div class="codehilite"><pre><span></span><code>/Applications/mindforger.app/contents/MacOS/mindforger
+</code></pre></div>
+
+<hr />
+<p>Qt Creator <strong>development environment</strong> setup:</p>
+<ul>
+<li>start <code>Qt Creator</code> as application</li>
+<li>open project <code>mindforger.pro</code></li>
+<li>configure project: <code>clang</code> kit, <code>debug</code> and <code>release</code> profiles</li>
+<li>menu <code>Build/Run qmake</code></li>
+<li>menu <code>Build/Build all</code></li>
+<li>menu <code>Build/Run</code></li>
+</ul>
+<p>Build <code>.dmg</code> <strong>distribution</strong>:</p>
+<ul>
+<li>start <strong>terminal</strong> session</li>
+<li>change to <code>mindforger/build/macos</code></li>
+<li>run <code>build/macos/dmg-package-build.sh</code></li>
+<li>check <code>.dmg</code> distro created in <code>mindforger/app/mindforger.dmg</code></li>
+</ul>
+<h3 id="build-on-windows">Build on Windows</h3>
+<p>Build MindForger on <a href="https://www.microsoft.com/en-us/windows">Microsoft Windows</a>.</p>
+<p>Install build <strong>tools</strong>:</p>
+<ul>
+<li>Install <a href="https://visualstudio.microsoft.com/downloads/">Microsoft Visual Studio IDE Community</a> edition.<ul>
+<li>Choose <code>Desktop development with C++</code> in installer.</li>
+</ul>
+</li>
+<li>Install <a href="https://www.qt.io/download">Qt and Qt Creator IDE</a><ul>
+<li>Qt version - choose <strong>latest</strong> <code>5.x.x</code> Qt release available (must be <code>Qt 5.9.5</code> or newer, suggested <code>Qt 5.12.0</code> or newer)</li>
+<li>Choose <code>Qt &gt; Qt 5.x.x &gt; QMSVC 2017 64-bit</code></li>
+<li>Choose <code>Qt &gt; Qt 5.x.x &gt; Qt WebEngine</code></li>
+<li>Choose <code>Qt &gt; Developer and Designer tools &gt; Qt Creator</code></li>
+</ul>
+</li>
+<li>Install <code>cmake</code></li>
+<li>Install <code>patch</code></li>
+</ul>
+<p>Get <strong>source code</strong> from <a href="https://github.com/dvorka/mindforger">GitHub</a>:</p>
+<ul>
+<li>Create directory where you want to build MindForger e.g.
+  <code>C:\Users\USER\mindforger-build</code></li>
+</ul>
+<div class="codehilite"><pre><span></span><code># create and change to build directory
+C: | cd %HOMEPATH% | mkdir mindforger-build | cd mindforger-build
+# clone MindForger repository
+git clone https://github.com/dvorka/mindforger.git
+# update repository sub-modules
+cd mindforger
+git submodule init
+git submodule update
+</code></pre></div>
+
+<ul>
+<li>MindForger sources can be found in 
+  <code>C:\Users\USER\mindforger-build\mindforger</code></li>
+</ul>
+<p>Build <strong>dependencies</strong>:</p>
+<ul>
+<li>build <code>cmark-gfm</code>: </li>
+</ul>
+<div class="codehilite"><pre><span></span><code>cd deps\cmark-gfm
+mkdir build                                                                                                                                                                                                      
+cd build                                                                                                                                                                                                         
+cmake -G &quot;Visual Studio 15 2017 Win64&quot; -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF ..
+cmake --build . --config Release -- /m
+</code></pre></div>
+
+<p>Get default MindForger repository - <strong>documentation and examples</strong> (will be loaded on the first start):</p>
+<div class="codehilite"><pre><span></span><code># change to home directory
+C: | cd %HOMEPATH%
+# clone MindForger documentation
+git clone https://github.com/dvorka/mindforger-repository.git
+</code></pre></div>
+
+<p><strong>Build</strong> MindForger in Qt Creator:</p>
+<ol>
+<li>Start Qt Creator</li>
+<li>Open MindForger project:<ul>
+<li><code>Welcome/Open project</code></li>
+<li>Choose <code>C:\Users\USER\mindforger-build\mindforger\mindforger.pro</code> as project file.</li>
+</ul>
+</li>
+<li>Choose kit:<ul>
+<li><code>Desktop Qt 5.x.x MSVC2017 64bit</code></li>
+</ul>
+</li>
+<li>Set build directory:<ul>
+<li>Set left toolbar's <code>Projects/Build Settings/Build directory</code> to <code>C:\Users\USER\mindforger-build\mindforger</code></li>
+</ul>
+</li>
+<li>Set build configuration:<ul>
+<li>Set <code>Projects/Build Settings/Edit build configuration</code> choose <code>Release</code></li>
+</ul>
+</li>
+<li>Build:<ul>
+<li>Menu <code>Build/Build All</code></li>
+</ul>
+</li>
+</ol>
+<p><strong>Run</strong> MindForger from Qt Creator:</p>
+<ul>
+<li>Menu <code>Build\Run</code></li>
+</ul>
+<p>Create <strong>installer</strong>:</p>
+<ul>
+<li>Install <a href="http://www.jrsoftware.org">JRSoftware</a> <a href="http://www.jrsoftware.org/download.php/is-unicode.exe">Inno Setup 5</a></li>
+<li>Prepare development environment. Change path according to your Qt installation<ul>
+<li>Run <code>%QT_HOME%\5.x.x\msvc2017_64\bin\qtenv2.bat</code></li>
+</ul>
+</li>
+<li>Gather dependencies<ul>
+<li><code>cd C:\Users\USER\mindforger-build\mindforger</code></li>
+<li><code>%QT_HOME%\5.x.x\msvc2017_64\bin\windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime</code></li>
+</ul>
+</li>
+<li>Build installer - <strong>update</strong> path to <code>vcredist_x64.exe</code> in the command below according to your setup:<ul>
+<li><code>cd C:\Users\USER\mindforger-build\mindforger</code></li>
+<li><code>"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /Qp /DVcRedistPath="c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012\vcredist_x64.exe" build\windows\installer\mindforger-setup.iss</code> </li>
+</ul>
+</li>
+<li>MindForger <strong>installer</strong> can be found in <code>app\release\installer</code> folder.</li>
+</ul>
+<p>To create <strong>debug</strong> version of MindForger and executable replace <code>debug</code> with <code>release</code> in the steps above and 
+use <code>mindforger-setup-debug.iss</code> installer configuration.</p>
+<h3 id="build-on-wsl">Build on WSL</h3>
+<p>Build MindForger on <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">Windows Subsystem for Linux</a> (WSL).</p>
+<p>Install build tools:</p>
+<div class="codehilite"><pre><span></span><code>sudo apt-get install build-essential zlib1g-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools qt5-default ccache
+</code></pre></div>
+
+<p>Update <code>gcc</code> and <code>g++</code> to version 5 (at least):</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># adds the the test toolchain which includes gcc-5 and g++5 </span>
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt-get update
+sudo apt-get install gcc-5 g++-5
+<span class="c1"># substitute gcc-5 for gcc and g++-5 for g++ (current version)</span>
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 <span class="m">60</span> --slave /usr/bin/g++ g++ /usr/bin/g++-5
+</code></pre></div>
+
+<p>Get <a href="https://github.com/dvorka/mindforger">source code</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger repository</span>
+git clone https://github.com/dvorka/mindforger.git
+<span class="c1"># update repository sub-modules</span>
+<span class="nb">cd</span> mindforger
+git submodule init
+git submodule update
+</code></pre></div>
+
+<p>Build <strong>dependencies</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
+<span class="nb">cd</span> mindforger/deps/cmark-gfm
+mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+cmake -DCMARK_TESTS<span class="o">=</span>OFF -DCMARK_SHARED<span class="o">=</span>OFF ..
+cmake --build .
+</code></pre></div>
+
+<p>Compile and install from Git repository root directory:</p>
+<div class="codehilite"><pre><span></span><code>qmake -r mindforger.pro
+<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
+make
+sudo make install
+</code></pre></div>
+
+<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger documentation repository to home directory (location and directory name matters)</span>
+<span class="nb">cd</span> ~
+git clone https://github.com/dvorka/mindforger-repository.git
+
+<span class="c1"># verify MindForger repository installation</span>
+ls mindforger-repository
+  limbo  memory  mind  stencils
+</code></pre></div>
+
+<p>Run MindForger and start your XServer for Windows (e.g. <a href="https://sourceforge.net/projects/xming/">Xming</a>)</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">DISPLAY</span><span class="o">=</span>:0.0 ./mindforger
+</code></pre></div>
+
+<h3 id="build-on-ubuntu">Build on Ubuntu</h3>
+<p>Build MindForger on Ubuntu 16.04 or later.</p>
+<p>Install package dependencies:</p>
+<div class="codehilite"><pre><span></span><code>sudo apt-get install build-essential zlib1g-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools qt5-default ccache cmake
+</code></pre></div>
+
+<p>Get <a href="https://github.com/dvorka/mindforger">source code</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger repository</span>
+git clone https://github.com/dvorka/mindforger.git
+<span class="c1"># update repository sub-modules</span>
+<span class="nb">cd</span> mindforger
+git submodule init
+git submodule update
+</code></pre></div>
+
+<p>Build <strong>dependencies</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
+<span class="nb">cd</span> mindforger/deps/cmark-gfm
+mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+cmake -DCMARK_TESTS<span class="o">=</span>OFF -DCMARK_SHARED<span class="o">=</span>OFF ..
+cmake --build .
+</code></pre></div>
+
+<p><strong>Compile</strong> sources and <strong>install</strong> MindForger from Git repository root directory:</p>
+<div class="codehilite"><pre><span></span><code>qmake -r mindforger.pro
+<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
+make
+sudo make install
+</code></pre></div>
+
+<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger documentation repository to home directory (location and directory name matters)</span>
+<span class="nb">cd</span> ~
+git clone https://github.com/dvorka/mindforger-repository.git
+</code></pre></div>
+
+<p>Run MindForger:</p>
+<div class="codehilite"><pre><span></span><code>./mindforger
+</code></pre></div>
+
+<p>See also <code>mindforger/build/ubuntu/build-all-clean-system.sh</code></p>
+<h3 id="build-on-debian">Build on Debian</h3>
+<p>Build MindForger on Debian 9 (<code>stretch</code>) or later.</p>
+<p>Install package dependencies:</p>
+<div class="codehilite"><pre><span></span><code>sudo apt-get install build-essential zlib1g-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools ccache cmake debhelper
+</code></pre></div>
+
+<p>Get <a href="https://github.com/dvorka/mindforger">source code</a>:</p>
+<div class="codehilite"><pre><span></span><code># clone MindForger repository
+git clone https://github.com/dvorka/mindforger.git
+# update repository sub-modules
+git submodule init
+git submodule update
+</code></pre></div>
+
+<p>Build dependencies:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
+<span class="nb">cd</span> mindforger/deps/cmark-gfm
+mkdir build
+<span class="c1"># OPTIONAL step on certain Debian vesions: cmake -S . -B ./build</span>
+<span class="nb">cd</span> build
+cmake -DCMARK_TESTS<span class="o">=</span>OFF -DCMARK_SHARED<span class="o">=</span>OFF ..
+cmake --build .
+</code></pre></div>
+
+<p>Compile and install from Git repository root directory:</p>
+<div class="codehilite"><pre><span></span><code>qmake -r mindforger.pro
+<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
+make
+sudo make install
+</code></pre></div>
+
+<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
+<div class="codehilite"><pre><span></span><code># clone MindForger documentation repository to home directory (location and directory name matters)
+cd ~
+git clone https://github.com/dvorka/mindforger-repository.git
+</code></pre></div>
+
+<p>Run MindForger:</p>
+<div class="codehilite"><pre><span></span><code>./mindforger
+</code></pre></div>
+
+<h3 id="build-on-fedora">Build on Fedora</h3>
+<p>Build MindForger on Fedora.</p>
+<p>Install package dependencies:</p>
+<div class="codehilite"><pre><span></span><code>sudo dnf install zlib-devel hunspell-devel qt-devel qt5-devel ccache
+</code></pre></div>
+
+<p>Get source code:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger repository</span>
+git clone https://github.com/dvorka/mindforger.git
+<span class="c1"># update repository sub-modules                                            </span>
+git submodule init
+git submodule update
+</code></pre></div>
+
+<p>Build dependencies:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
+<span class="nb">cd</span> mindforger/deps/cmark-gfm
+mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+cmake -DCMARK_TESTS<span class="o">=</span>OFF -DCMARK_SHARED<span class="o">=</span>OFF ..
+cmake --build .
+</code></pre></div>
+
+<p>Compile and install from Git repository root directory:</p>
+<div class="codehilite"><pre><span></span><code>qmake-qt5 -r mindforger.pro
+<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
+make
+sudo make install
+</code></pre></div>
+
+<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
+<div class="codehilite"><pre><span></span><code># clone MindForger documentation repository to home directory (location and directory name matters)
+cd ~
+git clone https://github.com/dvorka/mindforger-repository.git
+</code></pre></div>
+
+<p>Run MindForger:</p>
+<div class="codehilite"><pre><span></span><code>./mindforger
+</code></pre></div>
+
+<h3 id="build-on-gentoo">Build on Gentoo</h3>
+<p>Build MindForger on <a href="https://www.gentoo.org/">Gentoo</a>:</p>
+<p>Install package dependencies.</p>
+<p>Get source code:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger repository</span>
+git clone https://github.com/dvorka/mindforger.git
+<span class="c1"># update repository sub-modules                                            </span>
+git submodule init
+git submodule update
+</code></pre></div>
+
+<p>Build dependencies:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
+<span class="nb">cd</span> mindforger/deps/cmark-gfm
+mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+cmake -DCMARK_TESTS<span class="o">=</span>OFF -DCMARK_SHARED<span class="o">=</span>OFF ..
+cmake --build .
+</code></pre></div>
+
+<p>Compile and install from Git repository root directory:</p>
+<div class="codehilite"><pre><span></span><code>qmake <span class="nv">CONFIG</span><span class="o">+=</span>mfwebengine -r mindforger.pro
+<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
+make
+sudo make install
+</code></pre></div>
+
+<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
+<div class="codehilite"><pre><span></span><code># clone MindForger documentation repository to home directory (location and directory name matters)
+cd ~
+git clone https://github.com/dvorka/mindforger-repository.git
+</code></pre></div>
+
+<p>Run MindForger:</p>
+<div class="codehilite"><pre><span></span><code>./mindforger
+</code></pre></div>
+
+<h3 id="build-on-nixos">Build on NixOS</h3>
+<p>Build MindForger on <a href="https://www.gentoo.org/">Gentoo</a>:</p>
+<p>Install package <a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/mindforger/default.nix">dependencies</a>.</p>
+<p>Get source code:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger repository</span>
+git clone https://github.com/dvorka/mindforger.git
+<span class="c1"># update repository sub-modules                                            </span>
+git submodule init
+git submodule update
+</code></pre></div>
+
+<p>Build dependencies:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
+<span class="nb">cd</span> mindforger/deps/cmark-gfm
+mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+cmake -DCMARK_TESTS<span class="o">=</span>OFF -DCMARK_SHARED<span class="o">=</span>OFF ..
+cmake --build .
+</code></pre></div>
+
+<p>Compile and install from Git repository root directory:</p>
+<div class="codehilite"><pre><span></span><code>qmake <span class="nv">CONFIG</span><span class="o">+=</span>mfwebengine -r mindforger.pro
+<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
+make
+sudo make install
+</code></pre></div>
+
+<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
+<div class="codehilite"><pre><span></span><code># clone MindForger documentation repository to home directory (location and directory name matters)
+cd ~
+git clone https://github.com/dvorka/mindforger-repository.git
+</code></pre></div>
+
+<p>Run MindForger:</p>
+<div class="codehilite"><pre><span></span><code>./mindforger
+</code></pre></div>
+
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="docker">Docker</h2>
+<p>Run MindForger in Docker container.</p>
+<h3 id="build-and-run-in-container">Build and run in container</h3>
+<p>Build <a href="https://www.docker.com/">Docker</a> image and run MindForger in Docker container.</p>
+<p>Build image:</p>
+<div class="codehilite"><pre><span></span><code>mkdir mindforger
+
+# download Dockerfile
+curl https://raw.githubusercontent.com/dvorka/mindforger/master/build/docker/mindforger/Dockerfile &gt; mindforger/Dockerfile
+
+# build image
+docker build -t mindforger:latest mindforger
+</code></pre></div>
+
+<p>Run container:</p>
+<div class="codehilite"><pre><span></span><code># allow access to X server (UNSECURE, but simple):
+xhost +local:root
+
+# run image
+docker run -it --env=&quot;DISPLAY&quot; --env=&quot;QT_X11_NO_MITSHM=1&quot; \
+    --volume=&quot;/tmp/.X11-unix:/tmp/.X11-unix:rw&quot; mindforger:latest mindforger
+
+# determine and remember container ID
+docker ps -l -q &gt; ~/.mindforger.docker
+</code></pre></div>
+
+<p>Run MindForger by starting container:</p>
+<div class="codehilite"><pre><span></span><code># start (stopped) container
+docker start $(cat ~/.mindforger.docker)
+</code></pre></div>
+
+<p>Check also https://github.com/dvorka/mindforger/tree/master/build/docker for handy scripts.</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="nightly-builds">Nightly builds</h2>
+<p>Nightly builds:</p>
+<ul>
+<li><a href="https://github.com/dvorka/mindforger/actions">macOS .dmg</a></li>
+<li><a href="https://ci.appveyor.com/project/dvorka/mindforger/build/artifacts">Windows installer</a></li>
+<li><a href="https://github.com/dvorka/mindforger/actions/workflows/build_ubuntu.yml">tarball</a></li>
+</ul>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="configure">Configure</h2>
+<p>MindForger can be configured either from UI:</p>
+<ul>
+<li>menu <code>Knowledge/Preferences</code></li>
+</ul>
+<p>... or using configuration file (while MindForger is <strong>NOT</strong> running):</p>
+<ul>
+<li><code>~/.mindforger.md</code></li>
+</ul>
+<p>Review <code>.mindforger.md</code> for configuration option details and descriptions.</p>
+<h3 id="appearance-and-themes">Appearance and themes</h3>
+<h4 id="custom-html-preview-css">Custom HTML Preview CSS</h4>
+<p>If you want to change color, font size, rendering of HTML preview, then it can
+be done using <strong>custom CSS</strong>.</p>
+<p>You can either use your custom CSS - there is no UI for such change:</p>
+<ol>
+<li>make sure MindForger is not running</li>
+<li>download CSS you like https://github.com/dvorka/mindforger/tree/master/app/resources/qt/css (dark or light and choose <code>Raw</code>)</li>
+<li>edit downloaded CSS file and change font size, ...</li>
+<li>open <code>$HOME/.mindforger.md</code> and <strong>change</strong> path to your CSS, e.g.</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>...
+* Markdown CSS theme: /home/USERNAME/my.css
+...
+</code></pre></div>
+
+<p>This will ensure that CSS from given path will be loaded by HTML preview since the next time MindForger is started.</p>
+<h3 id="wingman-preferences">Wingman preferences</h3>
+<p>See <a href="user-documentation.html#llm-provider-configuration">LLM provider configuration</a></p>
+<h3 id="spell-check-preferences">Spell check preferences</h3>
+<p>MindForger's <strong>spell check</strong> implementation is based on <a href="https://github.com/hunspell/hunspell">Hunspell</a>.</p>
+<h4 id="spell-check-configuration-on-linux">Spell check configuration on Linux</h4>
+<p>Install <a href="https://github.com/hunspell/hunspell">Hunspell</a>:</p>
+<div class="codehilite"><pre><span></span><code>sudo apt install hunspell
+</code></pre></div>
+
+<p>Download <strong>vocabulary</strong> for your language from:</p>
+<ul>
+<li>https://extensions.openoffice.org/en/project/english-dictionaries-apache-openoffice</li>
+</ul>
+<p><strong>Install</strong> vocabulary:</p>
+<ul>
+<li>extract <code>.oxt</code> archive downloaded from the URL above to get <code>.dict</code> and <code>.aff</code> files</li>
+<li>determine Hunspell's vocabulary search path by running:</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>hunspell -D
+</code></pre></div>
+
+<ul>
+<li>copy downloaded (<code>.dict</code> and <code>.aff</code>) vocabulary files to one of 
+  the directories on Hunspell's search path e.g. <code>/usr/share/hunspell</code></li>
+</ul>
+<h4 id="spell-check-configuration-on-windows">Spell check configuration on Windows</h4>
+<p><a href="https://github.com/hunspell/hunspell">Hunspell</a> is included
+in MindForger executable, therefore it does not have to be installed.</p>
+<p>Download <strong>vocabulary</strong> for your language from:</p>
+<ul>
+<li>https://extensions.openoffice.org/en/project/english-dictionaries-apache-openoffice</li>
+</ul>
+<p><strong>Install</strong> vocabulary:</p>
+<ul>
+<li>extract <code>.oxt</code> archive downloaded from the URL above to get <code>.dict</code> and <code>.aff</code> files</li>
+<li>copy downloaded (<code>.dict</code> and <code>.aff</code>) vocabulary files to one of 
+  the directories on Hunspell's search path:</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>C:\Users\&lt;profile&gt;\dictionaries
+C:\Users\&lt;profile&gt;\Local Settings\dictionaries
+C:\Users\&lt;profile&gt;\AppData\Local\dictionaries
+</code></pre></div>
+
+<h3 id="think-vs--sleep-mode">Think vs. Sleep mode</h3>
+<p>MindForger can be either in <strong>thinking</strong> or <strong>sleeping</strong> mode:</p>
+<ul>
+<li><strong>Thinking</strong> mode can be activated by checking menu item <code>Knowledge/Think</code> and it's also
+  indicated by the <code>Thinking</code> indicator in main window status bar.<ul>
+<li>MindForger runs background mind-related computations/tasks that can be <strong>CPU intensive</strong></li>
+<li>MindForger suggests relevant notes as you browse/read/write</li>
+<li>MindForger named-entity recognition model is loaded and enabled</li>
+<li>...</li>
+</ul>
+</li>
+<li><strong>Sleeping</strong> mode can be activated by unchecking menu item <code>Knowledge/Think</code> and it's also
+  indicated by the <code>Sleeping</code> indicator in main window status bar.<ul>
+<li>MindForger runs <strong>no</strong> background mind-related computations/tasks i.e. it 
+  does <strong>not</strong> consume any extra CPU power and does <strong>not</strong> show any async information</li>
+</ul>
+</li>
+</ul>
+<p>Switch thinking/sleeping mode based on whether you <strong>need</strong> mind features for the particular
+repository or not - consider performance/CPU consumption vs features trade-off.</p>
+<h4 id="aa-poler-preferences">AA poler preferences</h4>
+</div></div>
+              </div>
+              <!-- END MAIN CONTENT -->
+              <!-- BEGIN TABLE OF CONTENTS -->
+              <div class="col-3 d-none d-xl-block">
+                <div class="mf-toc sticky-top">
+              <div class="mf-toc-title">On this page</div>
+              <div class="nav nav-vertical" id="toc">
+                <a href="#install-a-package" class="nav-link">Install a package</a>
+<a href="#macos" class="nav-link ms-3 small">macOS</a>
+<a href="#windows" class="nav-link ms-3 small">Windows</a>
+<a href="#wsl" class="nav-link ms-3 small">WSL</a>
+<a href="#snap" class="nav-link ms-3 small">Snap</a>
+<a href="#ubuntu" class="nav-link ms-3 small">Ubuntu</a>
+<a href="#debian" class="nav-link ms-3 small">Debian</a>
+<a href="#fedora" class="nav-link ms-3 small">Fedora</a>
+<a href="#freebsd" class="nav-link ms-3 small">FreeBSD</a>
+<a href="#arch-linux" class="nav-link ms-3 small">Arch Linux</a>
+<a href="#nixos" class="nav-link ms-3 small">NixOS</a>
+<a href="#opensuse" class="nav-link ms-3 small">openSUSE</a>
+<a href="#build-from-source-code" class="nav-link">Build from source code</a>
+<a href="#build-on-macos" class="nav-link ms-3 small">Build on macOS</a>
+<a href="#build-on-windows" class="nav-link ms-3 small">Build on Windows</a>
+<a href="#build-on-wsl" class="nav-link ms-3 small">Build on WSL</a>
+<a href="#build-on-ubuntu" class="nav-link ms-3 small">Build on Ubuntu</a>
+<a href="#build-on-debian" class="nav-link ms-3 small">Build on Debian</a>
+<a href="#build-on-fedora" class="nav-link ms-3 small">Build on Fedora</a>
+<a href="#build-on-gentoo" class="nav-link ms-3 small">Build on Gentoo</a>
+<a href="#build-on-nixos" class="nav-link ms-3 small">Build on NixOS</a>
+<a href="#docker" class="nav-link">Docker</a>
+<a href="#build-and-run-in-container" class="nav-link ms-3 small">Build and run in container</a>
+<a href="#nightly-builds" class="nav-link">Nightly builds</a>
+<a href="#configure" class="nav-link">Configure</a>
+<a href="#appearance-and-themes" class="nav-link ms-3 small">Appearance and themes</a>
+<a href="#wingman-preferences" class="nav-link ms-3 small">Wingman preferences</a>
+<a href="#spell-check-preferences" class="nav-link ms-3 small">Spell check preferences</a>
+<a href="#think-vs--sleep-mode" class="nav-link ms-3 small">Think vs. Sleep mode</a>
+              </div>
+            </div>
+              </div>
+              <!-- END TABLE OF CONTENTS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- BEGIN FOOTER -->
+        <footer class="footer footer-transparent d-print-none">
+          <div class="container-xl">
+            <ul class="list-inline list-inline-dots mb-0 text-center">
+              <li class="list-inline-item">Copyright &copy; 2018-2026 MindForger </li>
+              <li class="list-inline-item">Thinking Notebook</li>
+              <li class="list-inline-item">Doc made with <a href="https://www.mindforger.com" target="_blank">MindForger</a></li>
+              <li class="list-inline-item"><a href="https://github.com/dvorka/mindforger-documentation/edit/main/memory/INSTALLATION.md" target="_blank">Edit on GitHub</a></li>
+              <li class="list-inline-item"><a href="https://github.com/dvorka/mindforger-documentation/blob/main/memory/INSTALLATION.md" target="_blank">Source</a></li>
+              <li class="list-inline-item"><a href="rss.xml">RSS</a></li>
+            </ul>
+          </div>
+        </footer>
+        <!-- END FOOTER -->
+      </div>
+    </div>
+    <script src="assets/tabler/js/tabler.min.js" defer></script>
+    
+  </body>
+</html>

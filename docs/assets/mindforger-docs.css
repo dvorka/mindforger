@@ -1,0 +1,190 @@
+/*
+ * MindForger documentation: Tabler theme customization for www.mindforger.com/docs
+ *
+ * Brand: MindForger green (www.mindforger.com), the logo blue as a secondary
+ * accent and Lato - the font of the MindForger website.
+ */
+
+/* BEGIN LATO (vendored, see build/make/download_assets.py) */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/lato-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('fonts/lato-700.woff2') format('woff2');
+}
+/* END LATO */
+
+:root,
+[data-bs-theme='light'] {
+  /* MindForger green */
+  --tblr-primary: #008c00;
+  --tblr-primary-rgb: 0, 140, 0;
+  --tblr-primary-fg: #ffffff;
+  --tblr-link-color: #008c00;
+  --tblr-link-hover-color: #7fc074;
+  /* the blue dot of the MindForger logo */
+  --mf-accent: #289ae0;
+  --tblr-font-sans-serif: 'Lato', system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', sans-serif;
+}
+
+[data-bs-theme='dark'] {
+  /* lighter green: #008c00 does not have enough contrast on a dark background */
+  --tblr-primary: #7fc074;
+  --tblr-primary-rgb: 127, 192, 116;
+  --tblr-primary-fg: #1a1a1a;
+  --tblr-link-color: #7fc074;
+  --tblr-link-hover-color: #a5d69c;
+  --mf-accent: #5cb8f0;
+}
+
+body {
+  font-family: var(--tblr-font-sans-serif);
+}
+
+/* BEGIN NAVBAR BRAND */
+.mf-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.mf-brand:hover {
+  color: inherit;
+}
+
+.mf-brand-logo {
+  width: 28px;
+  height: 28px;
+}
+
+.mf-brand-text {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+/* END NAVBAR BRAND */
+
+/* BEGIN PAGE HEADER */
+.page-header .page-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.page-header .page-pretitle {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+/* END PAGE HEADER */
+
+/* BEGIN TABLE OF CONTENTS */
+.mf-toc {
+  top: 8rem;
+  max-height: calc(100vh - 10rem);
+  overflow-y: auto;
+  padding: 0.5rem 0 1rem 0.75rem;
+  border-left: 1px solid var(--tblr-border-color);
+}
+
+.mf-toc-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--tblr-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.mf-toc .nav-link {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.875rem;
+  border-left: 2px solid transparent;
+  color: var(--tblr-body-color);
+}
+
+.mf-toc .nav-link:hover {
+  color: var(--tblr-primary);
+  border-left-color: var(--tblr-primary);
+}
+/* END TABLE OF CONTENTS */
+
+/* BEGIN CONTENT */
+.card-body > h2:first-child {
+  margin-top: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.card-body h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+}
+
+.card-body h4,
+.card-body h5,
+.card-body h6 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-top: 1.25rem;
+}
+
+/* anchor targets must not hide below the sticky navbar */
+.card-body :is(h2, h3, h4, h5, h6)[id] {
+  scroll-margin-top: 8rem;
+}
+
+.card-body img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* source code: the syntax highlighting colors come from assets/pygments.css,
+   the block itself follows the Tabler theme - including the color of the text
+   which Pygments does not tokenize */
+.card-body pre {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--tblr-border-color);
+  border-radius: var(--tblr-border-radius);
+  background: var(--tblr-bg-surface-secondary);
+  color: var(--tblr-body-color);
+  overflow-x: auto;
+}
+
+.card-body pre code,
+.card-body .codehilite {
+  background: transparent;
+  color: inherit;
+}
+
+[data-bs-theme='dark'] .card-body pre {
+  color: #f8f8f2;
+}
+
+.card-body blockquote {
+  padding-left: 1rem;
+  border-left: 3px solid var(--tblr-primary);
+  color: var(--tblr-secondary);
+}
+
+.card-body table {
+  display: block;
+  overflow-x: auto;
+}
+/* END CONTENT */
+
+/* BEGIN FOOTER */
+.footer .list-inline {
+  color: var(--tblr-secondary);
+}
+/* END FOOTER */

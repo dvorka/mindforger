@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Blog - MindForger Documentation</title>
+    <meta name="description" content="News and articles about MindForger - one post per release, newest first." />
+    <meta name="author" content="Martin.Dvorak@mindforger.com" />
+    <link rel="canonical" href="https://www.mindforger.com/docs/blog.html" />
+    <link rel="alternate" type="application/rss+xml" title="MindForger Blog" href="rss.xml" />
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="assets/mind-forger.png" type="image/png" />
+    <meta name="theme-color" content="#008c00" />
+
+    <!-- BEGIN OPEN GRAPH -->
+    <meta property="og:site_name" content="MindForger Documentation" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Blog - MindForger Documentation" />
+    <meta property="og:description" content="News and articles about MindForger - one post per release, newest first." />
+    <meta property="og:url" content="https://www.mindforger.com/docs/blog.html" />
+    <meta property="og:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Blog - MindForger Documentation" />
+    <meta name="twitter:description" content="News and articles about MindForger - one post per release, newest first." />
+    <meta name="twitter:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
+    <!-- END OPEN GRAPH -->
+
+    <!-- BEGIN STYLES -->
+    <link href="assets/tabler/css/tabler.min.css" rel="stylesheet" />
+    <link href="assets/tabler/css/tabler-props.min.css" rel="stylesheet" />
+    <link href="assets/tabler/css/tabler-themes.min.css" rel="stylesheet" />
+    <link href="assets/pygments.css" rel="stylesheet" />
+    <link href="assets/mindforger-docs.css" rel="stylesheet" />
+    
+    <!-- END STYLES -->
+
+    <!-- BEGIN THEME SCRIPT: light/dark theme, must run before the page renders -->
+    <script src="assets/tabler/js/tabler-theme.min.js"></script>
+    <!-- END THEME SCRIPT -->
+  </head>
+  <body>
+    <div class="page">
+      <!-- BEGIN NAVBAR -->
+      <div class="sticky-top">
+        <header class="navbar navbar-expand-md d-print-none">
+          <div class="container-xl">
+            <!-- BEGIN NAVBAR TOGGLER -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbar-menu" aria-controls="navbar-menu"
+                    aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- END NAVBAR TOGGLER -->
+            <!-- BEGIN NAVBAR LOGO -->
+            <div class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+              <a href="index.html" class="mf-brand">
+                <img src="assets/mind-forger.png" alt="MindForger" class="mf-brand-logo">
+                <span class="mf-brand-text">MindForger</span>
+              </a><span style="font-weight: normal;">Docs</span>
+            </div>
+            <!-- END NAVBAR LOGO -->
+            <div class="navbar-nav flex-row order-md-last">
+              <div class="d-none d-md-flex">
+                <div class="nav-item">
+                  <a href="?theme=dark" class="nav-link px-0 hide-theme-dark"
+                     title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /></svg></a>
+                  <a href="?theme=light" class="nav-link px-0 hide-theme-light"
+                     title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <header class="navbar-expand-md">
+          <div class="collapse navbar-collapse" id="navbar-menu">
+            <div class="navbar">
+              <div class="container-xl">
+                <div class="row flex-column flex-md-row flex-fill align-items-center">
+                  <div class="col">
+                    <!-- BEGIN NAVBAR MENU -->
+                    <ul class="navbar-nav" id="navbar-base">
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg></span>
+                          <span class="nav-link-title">Home</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="index.html">Documentation</a>
+<a class="dropdown-item" href="toc.html">Table of Contents</a>
+<a class="dropdown-item" href="history.html">Project History</a>
+<a class="dropdown-item" href="credits.html">Credits</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="about.html">About</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg></span>
+                          <span class="nav-link-title">User Documentation</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="assets/comics/index.html">Comics</a>
+<a class="dropdown-item" href="installation.html">Installation</a>
+<a class="dropdown-item" href="getting-started.html">Getting Started</a>
+<a class="dropdown-item" href="user-documentation.html">User Documentation</a>
+<a class="dropdown-item" href="note-taking-best-practices.html">Note Taking Best Practices</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="faqs.html">FAQs</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M7 8l-4 4l4 4" /><path d="M17 8l4 4l-4 4" /><path d="M14 4l-4 16" /></svg></span>
+                          <span class="nav-link-title">Technical Documentation</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="developer-documentation.html">Developer Guide</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M12 17a3 3 0 0 0 -3 -3" /><path d="M15 17a6 6 0 0 0 -6 -6" /><path d="M9 17h.01" /></svg></span>
+                          <span class="nav-link-title">News</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item active" href="blog.html">Blog</a>
+<a class="dropdown-item" href="releases.html">Releases</a>
+<a class="dropdown-item" href="https://github.com/dvorka/mindforger/blob/master/Changelog" target="_blank" rel="noopener">Changelog</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="rss.xml" target="_blank" rel="noopener">RSS</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                    <!-- END NAVBAR MENU -->
+                  </div>
+                  <div class="col col-md-auto">
+                    <ul class="navbar-nav">
+                      <li class="nav-item">
+                        <a class="nav-link" href="https://www.mindforger.com" target="_blank">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M3.6 9h16.8" /><path d="M3.6 15h16.8" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" /></svg></span>
+                          <span class="nav-link-title">mindforger.com</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+      </div>
+      <!-- END NAVBAR -->
+      <div class="page-wrapper">
+        <!-- BEGIN PAGE HEADER -->
+        <div class="page-header d-print-none" aria-label="Page header">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                <div class="page-pretitle">News</div>
+                <h1 class="page-title">Blog</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END PAGE HEADER -->
+
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="row">
+              <!-- BEGIN MAIN CONTENT -->
+              <div class="col-12 col-xl-9">
+                <div class="card mb-3"><div class="card-body">
+<p>News and articles about MindForger - one post per <a href="releases.html">release</a>, newest first.</p>
+<h3 id="you--amp--mindforger--a-comic">You &amp; MindForger: a comic</h3>
+<p><em>2026-09-20</em></p>
+<p><img alt="You &amp; MindForger comic" src="BLOG.comics-you-and-mindforger.png" / class="img-fluid rounded border my-2"></p>
+<p>Knowledge hits you from everywhere - papers, lectures, podcasts, chats - and most of it is gone by Friday, unless you give it a home. To explain what MindForger is about without a wall of text, I turned the idea into a comic: meet <strong>You &amp; MindForger</strong> - it follows one confused knowledge worker from the chaos of browser tabs and sticky notes, through typed Notes, outlines, notebooks and shelves, Kanban and the Eisenhower matrix, private AI and finding what he wrote weeks ago, all the way to a thinking notebook that is private, free and his. <a href="https://www.mindforger.com/docs/assets/comics/index.html">Read the comic</a>!</p>
+<h3 id="nerdview-for-the-mindforger-documentation">Nerdview for the MindForger documentation</h3>
+<p><em>2026-09-19</em></p>
+<p><img alt="nerdview sketch" src="BLOG.nerdview-yoda.jpg" / class="img-fluid rounded border my-2"></p>
+<p>To have some fun I prepared MindForger functional architecture overview
+diagram. I used my beloved <a href="https://supernote.com/">SuperNote</a> Yoda to sketch the diagram
+and then turned it to the animated diagram which is now available as
+<a href="https://mindforger.com/#overview">Nerdview</a> on the web.</p>
+<p><img alt="comics" src="BLOG.nerdview.png" / class="img-fluid rounded border my-2"></p>
+<p>The diagram is animated - it shows the flow and how ideas, facts, experiences ... are turned to Notes, Notes to Notebooks with the outline, then organized to (note)book shelves and browsed
+in the knowledge graph, kanban and/or processed by Wingman.</p>
+<h3 id="mindforger-2-2-0--rewrap--snap--webengine--katex-and-mermaid">MindForger 2.2.0: Rewrap, Snap, WebEngine, KaTeX and Mermaid</h3>
+<p><em>2026-09-13</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/2.2.0">release on GitHub</a></p>
+<p><img alt="MindForger 2.2.0" src="BLOG.mindforger-2-2-0.png" / class="img-fluid rounded border my-2"></p>
+<p><a href="https://www.mindforger.com/">MindForger</a>  is getting back in shape! This <strong>minor</strong> release brings significant stabilization and performance improvements, which MindForger has desperately needed for some time. I fixed long standing bugs and accelerated Markdown to HTML rendering. I switched MindForger from the legacy, slow, and fragile HTML rendering engine (<code>QtWebKit</code> fork abandoned in 2018 which I kept for Linux distro backward compatibility) to the latest and greatest one (<code>QtWebEngine</code>) which has been used by Windows and macOS for years. I also fixed and sped up math, source code, and diagrams rendering by switching to SOTA libraries, upgrading to the latest versions and fixing what was broken.</p>
+<ul>
+<li><strong>Editation</strong><ul>
+<li><code>Rewrap Paragraph</code> fills the paragraph/rewraps the paragraph under the cursor to 80 columns.</li>
+<li>Easily add emojis by clicking associated button when adding new Notebook/Note or editing Notebook/Note name or description.</li>
+</ul>
+</li>
+<li><strong>Markdown to HTML rendering</strong><ul>
+<li>Qt WebEngine, which is ~8x faster than Qt WebKit, is newly default HTML rendering backend on Linux as it already was on Windows and macOS.</li>
+<li><strong>Math</strong> support now offers KaTeX (fast, offline @ QT resources included MF binary) and MathJax (legacy, upgraded, offline) instead of online CDN dependency.</li>
+<li>Offline Mermaid <strong>diagram</strong> rendering works again - mermaid.js was not registered as a Qt resource, so it always silently failed. Online option removed.</li>
+</ul>
+</li>
+<li><strong>Autolinking</strong><ul>
+<li>Colors of autolinking generated Note/Outline interlinks are in blue.</li>
+<li>Bare http(s):// URLs containing Markdown-special characters (e.g. '_') got backslash-escaped by the autolinking preprocessor's Markdown round-trip which corrupted the result - fixed by verbatim using CommonMark's &lt;...&gt;.</li>
+</ul>
+</li>
+<li><strong>Snap</strong><ul>
+<li>Menu/toolbar icons are no longer missing in the strict Snap.</li>
+</ul>
+</li>
+</ul>
+<h3 id="mindforger-2-1-0--snap--autolinking-colorization-and-wingman">MindForger 2.1.0: Snap, Autolinking colorization and Wingman</h3>
+<p><em>2026-09-03</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/2.1.0">release on GitHub</a></p>
+<p><img alt="MindForger 2.1.0" src="BLOG.mindforger-2-1-0.png" / class="img-fluid rounded border my-2"></p>
+<p>This <strong>minor</strong> <a href="https://www.mindforger.com/">MindForger</a> release brings improved autolinking, <strong>Snap</strong> distribution, new local <strong>large language models</strong> providers, various fixes and small enhancements:</p>
+<ul>
+<li><strong>Autolinking</strong><ul>
+<li>Manual links are newly rendered in a different color than
+  autolinker created links.</li>
+</ul>
+</li>
+<li><strong>Snap</strong><ul>
+<li>Install MindForger either from the <a href="https://snapcraft.io/mindforger">snapcraft.io</a> (strict confinement) or by downloading the <code>.snap</code> (classic confinement).</li>
+</ul>
+</li>
+<li><strong>Wingman</strong>:<ul>
+<li>Added Ollama as local LLM provider (privacy) and OpenRouter as new remote LLM provider (100s of SOTA models).</li>
+</ul>
+</li>
+<li><strong>Fixes and enhancements</strong>:<ul>
+<li>Check various <a href="https://github.com/dvorka/mindforger/blob/2.1.0/Changelog">minor fixes</a> and <a href="https://github.com/dvorka/mindforger/blob/2.1.0/Changelog">enhancements</a>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="mindforger-2-0-0--wingman--notebooks-tree-and-libraries">MindForger 2.0.0: Wingman, Notebooks Tree and Libraries</h3>
+<p><em>2024-02-16</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/2.0.0">release on GitHub</a></p>
+<p><img alt="MindForger 2.0.0" src="BLOG.mindforger-2-0-0.gif" / class="img-fluid rounded border my-2"></p>
+<p>This <strong>major</strong> <a href="https://www.mindforger.com/">MindForger</a> release brings <strong>wingman</strong>, <strong>notebooks tree</strong> and <strong>libraries</strong>:</p>
+<ul>
+<li><strong>Wingman</strong>:<ul>
+<li><strong>Wingman</strong> is MindForger's integration with large language models which brings note-taking and knowledge management to the next level. MindForger newly allows you to easily expand your notes and knowledge by leveraging the power of artificial intelligence. Whether you need to prepare a plan, write an in-depth analysis, draft a blog post, or simply generate ideas. Large language model can <a href="https://www.youtube.com/watch?v=QLX9CWzzEa8&amp;list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&amp;index=5&amp;pp=iAQB">fix grammar</a>, <a href="https://www.youtube.com/watch?v=akesdLhWZ-I&amp;list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&amp;index=7&amp;pp=iAQB">translate</a>, <a href="https://www.youtube.com/watch?v=eyLV5P_Bujs&amp;list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&amp;index=6&amp;t=5s&amp;pp=iAQB">write</a>, <a href="https://www.youtube.com/watch?v=eyLV5P_Bujs&amp;list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&amp;index=6&amp;t=5s&amp;pp=iAQB">reformulate</a> <a href="https://www.youtube.com/watch?v=TAV8tHajjeg&amp;list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&amp;index=9&amp;pp=iAQB">summarize</a>, suggest <a href="https://www.youtube.com/watch?v=Xj0wZz2vBSw&amp;list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&amp;index=10&amp;pp=iAQB">synonyms and antonyms</a>, and much more. You can effortlessly generate high-quality content, and enhance the organization of your knowledge.</li>
+</ul>
+</li>
+<li><strong>Notebooks tree</strong>:<ul>
+<li>With <strong>Notebooks tree</strong>, you can organize notebooks in a tree (outline) just like notes in notebooks.</li>
+<li>By using a tree-like structure, you can organize your notebooks in a logical and <strong>hierarchical</strong> manner, similar to how folders and subfolders organize files on a computer. This allows you to break down your knowledge into smaller, more manageable chunks and helps you find and access specific information easily.</li>
+<li>Structuring notebooks to form a tree promotes better organization and clarity. You can create a top-level notebook, representing a <strong>broad</strong> topic or category, and then create sub-notebooks within it to represent <strong>more specific</strong> subtopics or subcategories. This hierarchical arrangement enables you to maintain a clear overview of your knowledge and facilitates navigation within your notebooks.</li>
+</ul>
+</li>
+<li><strong>Libraries</strong>:<ul>
+<li>Library (directory with files) bring ability to index external PDF files and generate Notebooks which represent them in MindForger.</li>
+<li>The notebook representing the PDF allows easy access to the PDF notebook. Notebook can be used to write ideas, thoughts and remarks related to the PDF document.</li>
+<li>Synchronization of the library is supported as well.</li>
+</ul>
+</li>
+<li><strong>Web search</strong><ul>
+<li>Find knowledge for a term under the cursor, selected in the text or notebook/note name, on the internet: Wikipedia, arXiv, GitHub, or StackOverflow.</li>
+</ul>
+</li>
+<li><strong>Fixes and enhancements</strong>:<ul>
+<li>Check also other <a href="https://github.com/dvorka/mindforger/blob/dev/2.0.0/Changelog">minor fixes</a> and <a href="https://github.com/dvorka/mindforger/milestone/68?closed=1">enhancements</a>.</li>
+</ul>
+</li>
+</ul>
+<p><a href="https://github.com/dvorka/mindforger/blob/dev/2.0.0/app/src/qt/mindforger.cpp">May you do good, not evil.</a></p>
+<h3 id="mindforger-1-54-0--smart-er--markdown-editor-and-macos-fixes">MindForger 1.54.0: Smart(er) Markdown editor and macOS fixes</h3>
+<p><em>2022-03-07</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/1.54.0">release on GitHub</a></p>
+<p><img alt="MindForger 1.54.0" src="BLOG.mindforger-1-54-0.png" / class="img-fluid rounded border my-2"></p>
+<p>This <a href="https://www.mindforger.com/">MindForger</a> release brings  <strong>smart(er) Markdown editor</strong> and significantly improved <strong>macOS</strong> version:</p>
+<ul>
+<li><strong>smart(er) editor</strong>:<ul>
+<li><code>{[("'~</code> completion</li>
+<li>bulleted task lists completion</li>
+<li>automatic bulleted and numbered lists indentation on <kbd>ENTER</kbd></li>
+<li>multi-line code fences completion</li>
+<li><kbd>TAB</kbd> indentation to SPACE @ TAB multiple</li>
+<li>selected block of text rigid left/right move with <kbd>TAB</kbd>/<kbd>Shift-TAB</kbd></li>
+</ul>
+</li>
+<li>improved <strong>macOS</strong> version:<ul>
+<li>from Linux style to macOS style application and Markdown editor shortcuts</li>
+<li>added new menu shortcuts for actions like new Notebook and Note refactoring</li>
+<li>main window is not wider than screen on the application boot</li>
+<li>polished MindForger logo and menu <code>icns</code> icons (transparency)</li>
+<li>dark look &amp; feel theme used by default</li>
+<li>Qt downgraded from 5.9.9 (security, macOS only)</li>
+</ul>
+</li>
+<li><strong>loss of data</strong> prevention:<ul>
+<li><code>RD_ONLY</code> file detection with warning</li>
+<li>click to a preview link while editing opens dialog allowing to save changes</li>
+<li>reviewed non-repository (Markdown file or directory mode) UI ensures that MindForger repository specific actions are not available and unsupported (meta)data cannot be lost</li>
+</ul>
+</li>
+<li><strong>UX:</strong><ul>
+<li><kbd>Page up</kbd>, <kbd>Page down</kbd>, <kbd>Home</kbd> and <kbd>End</kbd> navigation in Notebook, Notes and Recent tables</li>
+<li>Kanban and Eisenhower matrix selection model and navigation allow at most one row selection</li>
+<li>Kanban and Eisenhower items can be moved around columns with keyboard shortcuts</li>
+<li>view/edit bottom buttons work even if "double-click to edit" is disabled</li>
+<li>toolbar is not hidden on window minimization and visibility preferences are correctly persisted in the configuration</li>
+<li>Emacs editor keybinding enhancements: <kbd>^-y</kbd>, <kbd>alt-w</kbd>, <kbd>^-w</kbd> and <kbd>alt-d</kbd></li>
+<li>Vim keybinding removal</li>
+</ul>
+</li>
+<li>various other <a href="https://github.com/dvorka/mindforger/blob/dev/1.54.0/Changelog">minor fixes</a> and <a href="https://github.com/dvorka/mindforger/milestone/68?closed=1">enhancements</a>.</li>
+</ul>
+<p><a href="https://github.com/dvorka/mindforger/blob/master/app/src/qt/mindforger.cpp">May you do good, not evil.</a> 🇺🇦</p>
+<h3 id="mindforger-1-53-0--spell-check---kanban-and-eisenhower-matrix-on-tags---csv-ohe-export-----terminal">MindForger 1.53.0: Spell check + Kanban and Eisenhower Matrix on tags + CSV OHE export + µ terminal</h3>
+<p><em>2021-12-26</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/1.53.0">release on GitHub</a></p>
+<p><img alt="MindForger 1.53.0" src="BLOG.mindforger-1-53-0.gif" / class="img-fluid rounded border my-2"></p>
+<p>This <strong>major</strong> <a href="https://www.mindforger.com/">MindForger</a> release brings:</p>
+<ul>
+<li><a href="http://hunspell.github.io/">Hunspell</a>-based spell checking <a href="https://twitter.com/mindforger/status/1475139367329058816">👁</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Kanban_(development)">Kanban</a> style organizer of notebooks and/or notes on tags allowing you to plan and structure your learning <a href="https://twitter.com/mindforger/status/1457393862532599809">👁</a></li>
+<li><a href="https://www.eisenhower.me/eisenhower-matrix/">Eisenhower Matrix</a> organizer of notebooks and/or notes on tags to assess priorities</li>
+<li>ability to edit notes with external editor, WYSIWYG or tool <a href="https://twitter.com/mindforger/status/1457383960405843976">👁</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV</a> notes export with <a href="https://en.wikipedia.org/wiki/One-hot">one-hot-encoded</a> tags which can be used to build <a href="https://www.kdnuggets.com/2020/01/h2o-framework-machine-learning.html">machine learning models</a> for your remarks or any set of Markdown documents <a href="https://twitter.com/mindforger/status/1458671975891714060">👁</a></li>
+<li>minimal <a href="https://en.wikipedia.org/wiki/Command-line_interface">terminal</a> allowing you to run commands directly from MindForger e.g. to push your knowledge to a Git repository or to run external applications</li>
+<li>configuration of custom CSS for Markdown to HTML rendering in viewer <a href="https://twitter.com/mindforger/status/1460360021166940164">👁</a></li>
+<li>repository specific configuration</li>
+<li>lazy (PDF) documents indexation POC</li>
+<li>various <a href="https://github.com/dvorka/mindforger/blob/dev/1.53.0/Changelog">minor fixes</a> and <a href="https://github.com/dvorka/mindforger/milestone/68?closed=1">enhancements</a></li>
+</ul>
+<h3 id="mindforger-1-52-0--autolinking-and-macos-enhancements">MindForger 1.52.0: Autolinking and macOS enhancements</h3>
+<p><em>2020-03-08</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/1.52.0">release on GitHub</a></p>
+<p><img alt="MindForger 1.52.0" src="BLOG.mindforger-1-52-0.gif" / class="img-fluid rounded border my-2"></p>
+<p>This <strong>major</strong> <a href="https://www.mindforger.com/">MindForger</a> release brings:</p>
+<ul>
+<li>long awaited autolinking</li>
+<li>macOS enhancements</li>
+<li>several <a href="https://github.com/dvorka/mindforger/milestone/59?closed=1">minor fixes and improvements</a>.</li>
+</ul>
+<p><strong>Autolinking</strong> (automatic interlinking) injects links (Notebooks and Notes names ~ Markdown document names and section names) to your remarks. Released implementation is <code>cmark-gfm</code> and <code>Trie</code> based to achieve desired performance and ensure autolinked Markdown format integrity. It can be further improvement with additional research (like hierarchical/scope centric multi-link selection) and implementation enhancements (like Aho-Corasic text search).</p>
+<p>Shortcuts, drag &amp; drop and ability to <a href="https://twitter.com/mindforger/status/1236394013542014979">paste image</a> (even an image selection) improved on <strong>macOS</strong>. Big thanks to <strong>Petr Kozelka</strong> who borrowed <a href="https://twitter.com/mindforger/status/1235813289080139776">MacBook</a> to improve and fix macOS implementation!</p>
+<h3 id="mindforger-1-51-0--live-preview">MindForger 1.51.0: Live preview</h3>
+<p><em>2020-02-17</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/1.51.0">release on GitHub</a></p>
+<p><img alt="MindForger 1.51.0" src="BLOG.mindforger-1-51-0.gif" / class="img-fluid rounded border my-2"></p>
+<p>This <a href="https://www.mindforger.com">MindForger</a> release brings:</p>
+<ul>
+<li><a href="https://twitter.com/mindforger/status/1221886781299286016">Live preview</a> of notes which is rendered as you write.</li>
+<li><strong>Persistent</strong> Notebooks table sorting (column and order).</li>
+<li><strong>Whole</strong> Notebook preview when switched to hoist mode.</li>
+<li>Improved <a href="https://twitter.com/mindforger/status/1223156770715193344/photo/1">Mermaid diagram</a> support.</li>
+</ul>
+<p>... and various minor <a href="https://github.com/dvorka/mindforger/milestone/60?closed=1">improvements and fixes</a>.</p>
+<h3 id="mindforger-1-50-0--dashboard--link-completion--image-drag--amp--drop--fts--amp--toolbar-revamp">MindForger 1.50.0: Dashboard, link completion, image drag &amp; drop, FTS &amp; toolbar revamp</h3>
+<p><em>2020-01-18</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/1.50.0">release on GitHub</a></p>
+<p><img alt="MindForger 1.50.0" src="BLOG.mindforger-1-50-0.png" / class="img-fluid rounded border my-2"></p>
+<p>This major <a href="https://www.mindforger.com/">MindForger</a> release brings:</p>
+<ul>
+<li>new <a href="https://twitter.com/mindforger/status/1211542588760694785">Dashboard view</a></li>
+<li><a href="https://twitter.com/mindforger/status/1213567404149747720">FTS revamp</a></li>
+<li>drag&amp;drop of images and attachments with copy to repository</li>
+<li><a href="https://twitter.com/mindforger/status/1215387059122249728">CLI in toolbar</a></li>
+<li>Notebook and Note <a href="https://twitter.com/mindforger/status/1216128131075125250">link completion</a> on <kbd>Ctrl+/</kbd></li>
+<li>persistent hoist mode</li>
+<li>new <a href="https://twitter.com/mindforger/status/1211546640898805761">icons sets for menu</a> and <a href="https://twitter.com/mindforger/status/1215387059122249728">toolbar</a></li>
+</ul>
+<p>... several <a href="https://github.com/dvorka/mindforger/milestone/44?closed=1">bug fixes</a> and usability enhancements.</p>
+<p>I want to thank MindForger users for feedback, bug reports and constructive critics! Enjoy this new release!</p>
+<h3 id="mindforger-1-49-0--microsoft-windows-and-github-flavored-markdown">MindForger 1.49.0: Microsoft Windows and GitHub Flavored Markdown</h3>
+<p><em>2019-03-03</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/1.49.0">release on GitHub</a></p>
+<p><img alt="MindForger 1.49.0" src="BLOG.mindforger-1-49-0.png" / class="img-fluid rounded border my-2"></p>
+<p>This major release brings <strong>native</strong> <a href="https://www.microsoft.com/windows">Microsoft Windows</a> port of MindForger and support of <a href="https://github.github.com/gfm/">GitHub Flavored Markdown</a> (via replacement of Discount with <a href="https://github.com/github/cmark-gfm">mark-gfm</a> - GitHub's fork of cmark, a <a href="http://commonmark.org/">CommonMark</a> parsing and rendering library).</p>
+<p><img alt="Bonitoo.io" src="BLOG.mindforger-1-49-0-bonitoo.png" / class="img-fluid rounded border my-2"></p>
+<p>Big thanks to <a href="https://www.bonitoo.io/">bonitoo.io</a> and <strong>Ivan Kudibal</strong> who decided to contribute to MindForger -  kudos to <strong>Vlasta <em>Šaman</em> Hájek</strong> who ported MindForger to Microsoft Windows in one month!</p>
+<h3 id="mindforger-1-48-0--csv-export--mathjax-menu-and-autolinking-preview">MindForger 1.48.0: CSV Export, MathJax Menu and Autolinking Preview</h3>
+<p><em>2018-11-10</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/1.48.0">release on GitHub</a></p>
+<p><img alt="MindForger 1.48.0" src="BLOG.mindforger-1-48-0.png" / class="img-fluid rounded border my-2"></p>
+<p>This MindForger release brings <a href="https://twitter.com/mindforger/status/1050352536081829888">CSV export</a>, <a href="https://twitter.com/mindforger/status/1049565072404729856">MathJax menu</a>, <a href="https://twitter.com/mindforger/status/1061677980219518976">HTML zooming</a> and <a href="https://twitter.com/mindforger/status/1049998778420396032">autolinking preview</a>. <strong>CSV export</strong> enables AI/ML/DS analysis of your remarks. <strong>MathJax menu</strong> aims to significantly improve your productivity when writing mathematical expressions. <strong>Autolinking</strong> is an experimental feature which automatically <strong>turns you plain text notes to hypertext</strong> while your browse them. Autolinking automatically discovers notes across your repository with the right title and creates links (just for view, note is not changed).</p>
+<h3 id="mindforger-1-47-0--knowledge-graph-navigator">MindForger 1.47.0: Knowledge Graph Navigator</h3>
+<p><em>2018-10-02</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/1.47.0">release on GitHub</a></p>
+<p><img alt="MindForger 1.47.0" src="BLOG.mindforger-1-47-0.png" / class="img-fluid rounded border my-2"></p>
+<p>This major MindForger release brings knowledge graph navigator (<a href="https://www.youtube.com/watch?v=ZbQmZ1fKpxI">video</a>), full-text search with regular expressions, HTML notebook export, TWiki document import, <a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-and-run-in-container-">Docker</a>-based distribution, significant improvements in <a href="http://www.mindforger.com/images/screenshots/recent.png">recent notes</a> and asynchronous associations.</p>
+<h3 id="mindforger-1-46-0--standard-terminology-and-toolbar">MindForger 1.46.0: Standard Terminology and Toolbar</h3>
+<p><em>2018-09-02</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/1.46.0">release on GitHub</a></p>
+<p><img alt="MindForger 1.46.0" src="BLOG.mindforger-1-46-0.png" / class="img-fluid rounded border my-2"></p>
+<p>This release aims to improve MindForger usability. Terminology has been changed from nerd-style terms to commonly used naming. Newly added toolbar will make MindForger use much easier. In addition it lays the foundation for visual knowledge navigator. I also fixed several issues - both in frontend and backend.</p>
+<h3 id="mindforger-1-43-0--eisenhower-matrix--tags-view-and-recent-notes">MindForger 1.43.0: Eisenhower Matrix, Tags View and Recent Notes</h3>
+<p><em>2018-07-10</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/1.43.0">release on GitHub</a></p>
+<p><img alt="MindForger 1.43.0" src="BLOG.mindforger-1-43-0.png" / class="img-fluid rounded border my-2"></p>
+<p>This MindForger release brings <a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/user-documentation.md#eisenhower-matrix-">Eisenhower matrix</a>, tags view, recent notes view and <a href="https://github.com/dvorka/mindforger-repository">updated documentation</a>.
+In addition it lays the foundation for <a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/user-documentation.md#named-entity-recognition-">named-entity recognition (NER)</a> and <a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/user-documentation.md#knowledge-graph-navigator-">knowledge graph navigator</a>. I also fixed several issues - both in frontend and backend (parsing huge repositories).</p>
+<h3 id="mindforger-1-42-0--initial-mindforger-release">MindForger 1.42.0: Initial MindForger Release</h3>
+<p><em>2018-05-30</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/1.42.0">release on GitHub</a></p>
+<p><img alt="MindForger 1.42.0" src="HISTORY.42nd-birthday.jpg" / class="img-fluid rounded border my-2"></p>
+<p>I am happy to announce the first release of MindForger - the 4th generation of my thinking notebook. Rethought, redesigned and rewritten from scratch it becomes the tool I was dreaming about for years.</p>
+<p>Although it's the first release, it brings several unique features and there is much more to come.</p>
+<p>I didn't choose the date randomly - MindForger is released on the day of my 42nd birthday... and yes, it can confirm answer to the Ultimate Question of life, the Universe, and Everything!</p>
+<p>Stay tuned - distribution/platform support, new features and demos will be releases in the upcoming weeks.</p>
+<h3 id="computers-need-to-forget">Computers Need To Forget</h3>
+<p><em>2007-11-16</em> | <a href="http://blog.mindforger.com/2007/11/computers-need-to-forget.html">original post</a> | labels: cognition, memory, mind</p>
+<blockquote>
+<p>A Harvard professor argues that <a href="http://arstechnica.com/news.ars/post/20070509-escaping-the-data-panopticon-teaching-computers-to-forget.html">too much information is being retained by computers</a>, and the machines need to learn how to forget things as humans always have. "If whatever we do can be held against us years later, if all our impulsive comments are preserved, they can easily be combined into a composite picture of ourselves," he writes in the paper.</p>
+</blockquote>
+<p>This is exactly the idea I have in my mind for some time. Having installed the same system for three years and looking to my desktop, downloaded documents, mailbox and mind maps I can see how it is spoiled and contaminated by zombie items.</p>
+<p>The purpose of computers is to remember everything. Actually I think that human brain remembers every single piece of information as well (cognition, experience, perception). Human beings just differ in ability to look up the particular "thing" - it's there, but an appropriate stimulus that triggers the association queue is needed (scent, sensual perception, event).</p>
+<p><img alt="Computers Need To Forget" src="BLOG.computers-need-to-forget.jpg" / class="img-fluid rounded border my-2"></p>
+<p>The right question to ask is "What does it mean to forget?"</p>
+<p>In my opinion it is a function of the mind that protects it from madness. Presume that your memory is a graph - "things" are nodes and associations are edges (pretty common model). There is an entry node. A new stimulus is put right behind the entry node. As the stimulus get older and older it dives deeper and deeper. If there are no fresh associations which would keep it near enough to the entry node, it is forgot. Say that the distance is defined as number of hops from entry node to the stimulus node and there is some threshold (let me call it Rubicon). The piece of information is forgot once the distance from the entry is is bigger then Rubicon.</p>
+<p>The same approach could be applied to computers...</p>
+<ul>
+<li>Imagine that there is hades - an underground where old bookmarks, applications, emails and mind maps stay.</li>
+<li>Once the application is not used for some time, it gets across Rubicon and ends in hades, the same applies to emails and comments which are not read, etc.</li>
+<li>The important thing is that e.g. icons @ desktop are not deleted (like windows icon sweep offers), but just moved to hades, and might be rescued later.</li>
+<li>If you search "live" part of the system, hades is searched as well. You might ask system to union live and hades icons on your desktop, etc.</li>
+<li>If you use GMail, you know I mean ;-)</li>
+</ul>
+<p>In other words I just wanted to say: "to forget doesn't mean to delete". Does it make sense?</p>
+</div></div>
+              </div>
+              <!-- END MAIN CONTENT -->
+              <!-- BEGIN TABLE OF CONTENTS -->
+              <div class="col-3 d-none d-xl-block">
+                <div class="mf-toc sticky-top">
+              <div class="mf-toc-title">On this page</div>
+              <div class="nav nav-vertical" id="toc">
+                <a href="#you--amp--mindforger--a-comic" class="nav-link ms-3 small">You &amp; MindForger: a comic</a>
+<a href="#nerdview-for-the-mindforger-documentation" class="nav-link ms-3 small">Nerdview for the MindForger documentation</a>
+<a href="#mindforger-2-2-0--rewrap--snap--webengine--katex-and-mermaid" class="nav-link ms-3 small">MindForger 2.2.0: Rewrap, Snap, WebEngine, KaTeX and Mermaid</a>
+<a href="#mindforger-2-1-0--snap--autolinking-colorization-and-wingman" class="nav-link ms-3 small">MindForger 2.1.0: Snap, Autolinking colorization and Wingman</a>
+<a href="#mindforger-2-0-0--wingman--notebooks-tree-and-libraries" class="nav-link ms-3 small">MindForger 2.0.0: Wingman, Notebooks Tree and Libraries</a>
+<a href="#mindforger-1-54-0--smart-er--markdown-editor-and-macos-fixes" class="nav-link ms-3 small">MindForger 1.54.0: Smart(er) Markdown editor and macOS fixes</a>
+<a href="#mindforger-1-53-0--spell-check---kanban-and-eisenhower-matrix-on-tags---csv-ohe-export-----terminal" class="nav-link ms-3 small">MindForger 1.53.0: Spell check + Kanban and Eisenhower Matrix on tags + CSV OHE export + µ terminal</a>
+<a href="#mindforger-1-52-0--autolinking-and-macos-enhancements" class="nav-link ms-3 small">MindForger 1.52.0: Autolinking and macOS enhancements</a>
+<a href="#mindforger-1-51-0--live-preview" class="nav-link ms-3 small">MindForger 1.51.0: Live preview</a>
+<a href="#mindforger-1-50-0--dashboard--link-completion--image-drag--amp--drop--fts--amp--toolbar-revamp" class="nav-link ms-3 small">MindForger 1.50.0: Dashboard, link completion, image drag &amp; drop, FTS &amp; toolbar revamp</a>
+<a href="#mindforger-1-49-0--microsoft-windows-and-github-flavored-markdown" class="nav-link ms-3 small">MindForger 1.49.0: Microsoft Windows and GitHub Flavored Markdown</a>
+<a href="#mindforger-1-48-0--csv-export--mathjax-menu-and-autolinking-preview" class="nav-link ms-3 small">MindForger 1.48.0: CSV Export, MathJax Menu and Autolinking Preview</a>
+<a href="#mindforger-1-47-0--knowledge-graph-navigator" class="nav-link ms-3 small">MindForger 1.47.0: Knowledge Graph Navigator</a>
+<a href="#mindforger-1-46-0--standard-terminology-and-toolbar" class="nav-link ms-3 small">MindForger 1.46.0: Standard Terminology and Toolbar</a>
+<a href="#mindforger-1-43-0--eisenhower-matrix--tags-view-and-recent-notes" class="nav-link ms-3 small">MindForger 1.43.0: Eisenhower Matrix, Tags View and Recent Notes</a>
+<a href="#mindforger-1-42-0--initial-mindforger-release" class="nav-link ms-3 small">MindForger 1.42.0: Initial MindForger Release</a>
+<a href="#computers-need-to-forget" class="nav-link ms-3 small">Computers Need To Forget</a>
+              </div>
+            </div>
+              </div>
+              <!-- END TABLE OF CONTENTS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- BEGIN FOOTER -->
+        <footer class="footer footer-transparent d-print-none">
+          <div class="container-xl">
+            <ul class="list-inline list-inline-dots mb-0 text-center">
+              <li class="list-inline-item">Copyright &copy; 2018-2026 MindForger </li>
+              <li class="list-inline-item">Thinking Notebook</li>
+              <li class="list-inline-item">Doc made with <a href="https://www.mindforger.com" target="_blank">MindForger</a></li>
+              <li class="list-inline-item"><a href="https://github.com/dvorka/mindforger-documentation/edit/main/memory/BLOG.md" target="_blank">Edit on GitHub</a></li>
+              <li class="list-inline-item"><a href="https://github.com/dvorka/mindforger-documentation/blob/main/memory/BLOG.md" target="_blank">Source</a></li>
+              <li class="list-inline-item"><a href="rss.xml">RSS</a></li>
+            </ul>
+          </div>
+        </footer>
+        <!-- END FOOTER -->
+      </div>
+    </div>
+    <script src="assets/tabler/js/tabler.min.js" defer></script>
+    
+  </body>
+</html>

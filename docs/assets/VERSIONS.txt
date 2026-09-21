@@ -1,0 +1,7 @@
+MindForger documentation - vendored 3rd party web assets
+Updated: 2026-09-20
+
+Tabler: 1.5.1 (MIT) - https://tabler.io
+KaTeX:  0.18.7 (MIT) - https://katex.org
+Comics: Bangers, Comic Neue 700 (OFL) - https://fonts.google.com
+Lato:   latin 400, 700 (OFL) - https://fonts.google.com/specimen/Lato

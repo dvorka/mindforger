@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
-    <title>MindForger - Thinking Notebook</title>
+<html lang="hi">
+    <title>MindForger - सोचने वाली नोटबुक</title>
 
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 
     <meta name="DC.title" content="MindForger"/>
     <meta name="DC.creator" content="Martin.Dvorak@mindforger.com"/>
-    <meta name="DC.description" content="Thinking notebook and Markdown editor web site home page."/>
+    <meta name="DC.description" content="सोचने वाली नोटबुक और Markdown संपादक - मुख्य पृष्ठ।"/>
 
     <meta name="Author" content="Martin.Dvorak@mindforger.com"/>
-    <meta name="Keywords" content="Markdown, notebook, editor, AI, ML, IDE, machine learning, ML, outliner, semantic web, coaching, GROW, SMART" lang="en"/>
-    <meta name="Description" content="Thinking notebook and Markdown editor web site home page" lang="en"/>
+    <meta name="Keywords" content="Markdown, नोटबुक, संपादक, AI, ML, IDE, मशीन लर्निंग, रूपरेखा, ज्ञान, सिमेंटिक वेब, कोचिंग, GROW, SMART" lang="hi"/>
+    <meta name="Description" content="सोचने वाली नोटबुक और Markdown संपादक - मुख्य पृष्ठ" lang="hi"/>
     <meta name="Robots" content="index,FOLLOW"/>
     <meta name="resource-type" content="document"/>
     <meta http-equiv="Cache-Control" content="public"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="canonical" href="https://www.mindforger.com/"/>
+    <link rel="canonical" href="https://www.mindforger.com/hi/"/>
     <link rel="alternate" hreflang="en" href="https://www.mindforger.com/"/>
     <link rel="alternate" hreflang="cs" href="https://www.mindforger.com/cs/"/>
     <link rel="alternate" hreflang="es" href="https://www.mindforger.com/es/"/>
@@ -24,10 +24,10 @@
     <link rel="alternate" hreflang="hi" href="https://www.mindforger.com/hi/"/>
     <link rel="alternate" hreflang="x-default" href="https://www.mindforger.com/"/>
 
-    <link rel="stylesheet" type="text/css" href="./css/w3.css"/>
-    <link rel="stylesheet" type="text/css" href="./css/stylesheet.css"/>
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
-    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" type="text/css" href="../css/w3.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/stylesheet.css"/>
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="../favicon.ico" type="image/x-icon"/>
     <link rel="alternate" type="application/atom+xml" title="MindForger Blog" href="https://blog.mindforger.com/atom.xml"/>
 
     <!-- parallax -->
@@ -51,7 +51,7 @@
 
     /* First image: Pinta/Adjustments/Brightness/-50 */
     .bgimg-1 {
-	background-image: url('./images/parallax/1-title-screen.jpg');
+	background-image: url('../images/parallax/1-title-screen.jpg');
 	min-height: 100%;
     }
 
@@ -1637,58 +1637,81 @@
     </style>
     <!-- END mfd: functional architecture diagram - head -->
 
+    <style>
+    /* localization tweaks - हिन्दी */
+    body, h1, h2, h3, h4, h5, h6 {
+        font-family: "Lato", "Noto Sans Devanagari", "Nirmala UI", "Mangal", sans-serif;
+    }
+    .w3-wide,
+    .mfPageSubtitle,
+    .mfStatLabel,
+    .mfd [class*="mfd-"] {
+        letter-spacing: normal;
+    }
+    .mfd-stage,
+    .mfd-readout {
+        font-size: 13px;
+    }
+    .mfd-badge text {
+        font-size: 9px;
+    }
+    .mfd-graph text {
+        font-size: 8.5px;
+    }
+    </style>
+
 <body>
 
 <!-- Top Navbar -->
 <div class="w3-top">
   <div class="w3-bar w3-white" id="myNavbar">
-    <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
+    <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="नेविगेशन मेन्यू दिखाएँ या छिपाएँ">
       <i class="fa fa-bars"></i>
     </a>
     <!-- language switcher - one line per localized index.html, see l10n/build.py -->
     <div class="w3-dropdown-click w3-right">
       <button class="w3-button" onclick="toggleLangFunction()" title="Language">
-        <i class="fa fa-globe"></i> EN <i class="fa fa-caret-down"></i>
+        <i class="fa fa-globe"></i> HI <i class="fa fa-caret-down"></i>
       </button>
       <div id="langDropdown" class="w3-dropdown-content w3-bar-block w3-white w3-card-4" style="right:0; min-width:150px;">
-        <a href="index.html" class="w3-bar-item w3-button" hreflang="en" lang="en" style="font-weight:bold;">English</a>
-        <a href="cs/index.html" class="w3-bar-item w3-button" hreflang="cs" lang="cs">Čeština</a>
-        <a href="es/index.html" class="w3-bar-item w3-button" hreflang="es" lang="es">Español</a>
-        <a href="zh/index.html" class="w3-bar-item w3-button" hreflang="zh-Hans" lang="zh-Hans">中文</a>
-        <a href="hi/index.html" class="w3-bar-item w3-button" hreflang="hi" lang="hi">हिन्दी</a>
+        <a href="../index.html" class="w3-bar-item w3-button" hreflang="en" lang="en">English</a>
+        <a href="../cs/index.html" class="w3-bar-item w3-button" hreflang="cs" lang="cs">Čeština</a>
+        <a href="../es/index.html" class="w3-bar-item w3-button" hreflang="es" lang="es">Español</a>
+        <a href="../zh/index.html" class="w3-bar-item w3-button" hreflang="zh-Hans" lang="zh-Hans">中文</a>
+        <a href="../hi/index.html" class="w3-bar-item w3-button" hreflang="hi" lang="hi" style="font-weight:bold;">हिन्दी</a>
       </div>
     </div>
     <!-- https://www.w3schools.com/icons/fontawesome_icons_webapp.asp -->
-    <a href="#download" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-download"></i> Download</a>
+    <a href="#download" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-download"></i> डाउनलोड</a>
     <a href="#home" class="w3-bar-item w3-button">MindForger</a>
-    <a href="#documentation" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-user"></i> Docs</a>
+    <a href="#documentation" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-user"></i> दस्तावेज़</a>
     <a href="#overview" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-sitemap"></i> Nerdview</a>
-    <a href="#features" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-th"></i> Features</a>
+    <a href="#features" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-th"></i> विशेषताएँ</a>
     <!-- a href="#you-mf" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-comments"></i> You&amp;MF</a -->
-    <a href="#vision" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-eye"></i> Vision</a>
+    <a href="#vision" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-eye"></i> दृष्टि</a>
   </div>
 
   <!-- Navbar on small screens -->
   <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium">
-    <a href="#vision" class="w3-bar-item w3-button" onclick="toggleFunction()">Vision</a>
+    <a href="#vision" class="w3-bar-item w3-button" onclick="toggleFunction()">दृष्टि</a>
     <!-- a href="#you-mf" class="w3-bar-item w3-button" onclick="toggleFunction()">You&amp;MF</a -->
-    <a href="#features" class="w3-bar-item w3-button" onclick="toggleFunction()">Features</a>
+    <a href="#features" class="w3-bar-item w3-button" onclick="toggleFunction()">विशेषताएँ</a>
     <a href="#overview" class="w3-bar-item w3-button" onclick="toggleFunction()">Nerdview</a>
-    <a href="#documentation" class="w3-bar-item w3-button" onclick="toggleFunction()">Doc</a>
-    <a href="#download" class="w3-bar-item w3-button" onclick="toggleFunction()">Download</a>
+    <a href="#documentation" class="w3-bar-item w3-button" onclick="toggleFunction()">दस्तावेज़</a>
+    <a href="#download" class="w3-bar-item w3-button" onclick="toggleFunction()">डाउनलोड</a>
   </div>
 </div>
 
 <!-- First Parallax Image with Logo Text -->
 <div class="bgimg-1 w3-display-container DISABLED_w3-opacity-min" id="home">
   <!-- https://github.blog/news-insights/the-library/github-ribbons/ -->
-  <a href="https://github.com/dvorka/mindforger" target="_blank"><img style="position: absolute; top: 30px; right: 0; border: 0;" decoding="async" width="149" height="149" src="./images/forkme_right_green.png" class="attachment-full size-full" alt="Fork me on GitHub" loading="lazy"></a>
-  <!-- a href="https://opencollective.com/mindforger" target="_blank"><img style="position: absolute; top: 30px; left: 0; border: 0;" decoding="async" width="149" height="149" src="./images/opencollective-ribbon-left.png" alt="&#9829; me on OC" loading="lazy"></a -->
+  <a href="https://github.com/dvorka/mindforger" target="_blank"><img style="position: absolute; top: 30px; right: 0; border: 0;" decoding="async" width="149" height="149" src="../images/forkme_right_green.png" class="attachment-full size-full" alt="Fork me on GitHub" loading="lazy"></a>
+  <!-- a href="https://opencollective.com/mindforger" target="_blank"><img style="position: absolute; top: 30px; left: 0; border: 0;" decoding="async" width="149" height="149" src="../images/opencollective-ribbon-left.png" alt="&#9829; me on OC" loading="lazy"></a -->
 
   <div class="w3-display-middle" style="white-space:nowrap;">
     <center>
-      <span id="mfPagetTitle" class="w3-center w3-padding-large w3-white w3-xxxlarge w3-wide w3-animate-opacity mfPagetTitle">Thinking Notebook</span>
-      <span class="w3-animate-opacity mfPageSubtitle">Privacy is your right, not a privilege.</span>
+      <span id="mfPagetTitle" class="w3-center w3-padding-large w3-white w3-xxxlarge w3-wide w3-animate-opacity mfPagetTitle">सोचने वाली नोटबुक</span>
+      <span class="w3-animate-opacity mfPageSubtitle">निजता आपका अधिकार है, विशेषाधिकार नहीं।</span>
       <!-- span class="ribbon">LLM</span -->
     </center>
   </div>
@@ -1699,25 +1722,25 @@
 <div class="w3-row w3-center mfStats">
   <div class="w3-col s4">
     <div class="mfStatNumber">8+</div>
-    <div class="mfStatLabel">Years Active</div>
-    <div class="mfStatNote">since Dec 2017</div>
+    <div class="mfStatLabel">वर्ष से सक्रिय</div>
+    <div class="mfStatNote">दिसंबर 2017 से</div>
   </div>
   <div class="w3-col s4">
     <div class="mfStatNumber">2.7k+</div>
-    <div class="mfStatLabel">GitHub Stars</div>
-    <div class="mfStatNote">and 170+ forks</div>
+    <div class="mfStatLabel">GitHub स्टार</div>
+    <div class="mfStatNote">और 170+ फ़ोर्क</div>
   </div>
   <div class="w3-col s4">
     <div class="mfStatNumber">35k+</div>
-    <div class="mfStatLabel">Downloads</div>
-    <div class="mfStatNote" title="Counts GitHub release assets only - Snap, distribution packages and PPA installs are not included.">from GitHub alone</div>
+    <div class="mfStatLabel">डाउनलोड</div>
+    <div class="mfStatNote" title="इसमें केवल GitHub रिलीज़ की फ़ाइलें गिनी गई हैं - Snap, डिस्ट्रिब्यूशन पैकेज और PPA से हुए इंस्टॉल शामिल नहीं हैं।">केवल GitHub से</div>
   </div>
 </div>
 
 
 <div class="w3-row w3-center w3-black w3-padding-16" style="border-top: 3px solid white;">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Vision</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">दृष्टि</span><br>
   </div>
 </div>
 
@@ -1726,51 +1749,51 @@
 <div class="w3-content w3-container w3-padding-64" id="vision">
 
    <div class="w3-container w3-center" style="margin-bottom: 30px;">
-      Are you <b>drowning</b> in <b>information</b>, but <b>starving</b> for <b>knowledge</b>?
+      क्या आप <b>जानकारी</b> में <b>डूब</b> रहे हैं, पर <b>ज्ञान</b> के लिए <b>तरस</b> रहे हैं?
       <br/><br/>
 
-      Where do you
-      keep your <b>private remarks</b> like ideas, personal plans, exam preparation notes, gift tips,
-      how-tos, dreams, business visions, finance strategies, meeting minutes and auto
-      coaching notes? Loads of documents, sketches and remarks spread
-      around the file system, cloud, web and Post-it notes? Are you afraid of your knowledge <b>privacy</b>? Are you able to
-      <b>find</b> particular remarks once you create them? Do you know how are the remarks
-      mutually <b>related</b> when you browse, read or write them? No?
+      आप अपने
+      <b>निजी नोट</b> कहाँ रखते हैं - विचार, व्यक्तिगत योजनाएँ, परीक्षा की तैयारी के नोट, उपहार के सुझाव,
+      तरीक़े, सपने, व्यापारिक दृष्टि, वित्तीय रणनीतियाँ, बैठकों के विवरण और
+      स्वयं को कोच करने वाले नोट? ढेर सारे दस्तावेज़, रेखाचित्र और टिप्पणियाँ फ़ाइल सिस्टम,
+      क्लाउड, वेब और चिपकने वाली पर्चियों पर बिखरी हुई? क्या आपको अपने ज्ञान की <b>निजता</b> की चिंता है? क्या आप कोई
+      नोट बाद में दोबारा <b>ढूँढ़</b> पाते हैं? जब आप उन्हें देखते, पढ़ते या लिखते हैं, तो क्या आप जानते हैं कि वे आपस में
+      कैसे <b>जुड़े</b> हैं? नहीं?
    </div>
 
    <!-- screenshots -->
    <div class="w3-content" style="max-width:1200px">
-     <img class="mySlidesVision" src="images/screenshots/tayr.png" style="width:100%">
-     <img class="mySlidesVision" src="images/screenshots/knowledge-graph-navigator-light.png" style="width:100%">
-     <img class="mySlidesVision" src="images/screenshots/markdown-images.png" style="width:100%">
-     <img class="mySlidesVision" src="images/screenshots/hoisting.png" style="width:100%">
-     <img class="mySlidesVision" src="images/screenshots/i18n.png" style="width:100%">
-     <img class="mySlidesVision" src="images/screenshots/tayw.png" style="width:100%">
+     <img class="mySlidesVision" src="../images/screenshots/tayr.png" style="width:100%">
+     <img class="mySlidesVision" src="../images/screenshots/knowledge-graph-navigator-light.png" style="width:100%">
+     <img class="mySlidesVision" src="../images/screenshots/markdown-images.png" style="width:100%">
+     <img class="mySlidesVision" src="../images/screenshots/hoisting.png" style="width:100%">
+     <img class="mySlidesVision" src="../images/screenshots/i18n.png" style="width:100%">
+     <img class="mySlidesVision" src="../images/screenshots/tayw.png" style="width:100%">
 
      <div class="w3-row-padding w3-section">
        <div class="w3-col s2 mfSlideThumbnail">
-	 <img class="visionChoice w3-opacity" src="images/screenshots/tayr.png" style="width:100%" onclick="currentDivVision(1)">
-	 Think as you read
+	 <img class="visionChoice w3-opacity" src="../images/screenshots/tayr.png" style="width:100%" onclick="currentDivVision(1)">
+	 पढ़ते हुए सोचें
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-	 <img class="visionChoice w3-opacity" src="images/screenshots/knowledge-graph-navigator-light.png" style="width:100%" onclick="currentDivVision(2)">
-	 Knowledge graph
+	 <img class="visionChoice w3-opacity" src="../images/screenshots/knowledge-graph-navigator-light.png" style="width:100%" onclick="currentDivVision(2)">
+	 ज्ञान ग्राफ़
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-	 <img class="visionChoice w3-opacity" src="images/screenshots/markdown-images.png" style="width:100%" onclick="currentDivVision(3)">
-	 Markdown with preview
+	 <img class="visionChoice w3-opacity" src="../images/screenshots/markdown-images.png" style="width:100%" onclick="currentDivVision(3)">
+	 पूर्वावलोकन के साथ Markdown
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-	 <img class="visionChoice w3-opacity" src="images/screenshots/hoisting.png" style="width:100%" onclick="currentDivVision(4)">
+	 <img class="visionChoice w3-opacity" src="../images/screenshots/hoisting.png" style="width:100%" onclick="currentDivVision(4)">
 	 Hoisting
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-	 <img class="visionChoice w3-opacity" src="images/screenshots/i18n.png" style="width:100%" onclick="currentDivVision(5)">
-	 I18n
+	 <img class="visionChoice w3-opacity" src="../images/screenshots/i18n.png" style="width:100%" onclick="currentDivVision(5)">
+	 भाषाएँ
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-	 <img class="visionChoice w3-opacity" src="images/screenshots/tayw.png" style="width:100%" onclick="currentDivVision(6)">
-	 Think as you write
+	 <img class="visionChoice w3-opacity" src="../images/screenshots/tayw.png" style="width:100%" onclick="currentDivVision(6)">
+	 लिखते हुए सोचें
        </div>
      </div>
    </div>
@@ -1805,63 +1828,63 @@
 
 
    <div class="w3-container w3-center" style="margin-top: 30px; margin-bottom: 30px;">
-     <b>MindForger</b> is
-     <a class="mf-link" href="#human-mind">human mind</a> inspired
-     <a class="mf-link" href="#personal">personal</a>
-     <a class="mf-link" href="#knowledge">knowledge</a>
-     <a class="mf-link" href="#management">management</a>
-     <a class="mf-link" href="#tool">tool</a>:
+     <b>MindForger</b> एक
+     <a class="mf-link" href="#human-mind">मानव मन</a> से प्रेरित
+     <a class="mf-link" href="#personal">व्यक्तिगत</a>
+     <a class="mf-link" href="#knowledge">ज्ञान</a>
+     <a class="mf-link" href="#management">प्रबंधन</a>
+     <a class="mf-link" href="#tool">उपकरण</a> है:
    </div>
 
 
    <div class="group">
      <div class="left">
-       <div class="mfGroupLeftText">Human&nbsp;Mind</div>
+       <div class="mfGroupLeftText">मानव&nbsp;मन</div>
      </div>
      <div class="right" id="human-mind">
-       MindForger aims to mimic human mind - <b>learning</b>, <b>recalling</b>, <b>recognition</b>,
-       <b>associations</b>, <b>forgetting</b> - in order
-       to achieve <b>synergy</b> with your mind to make your searching,
-       reading and writing more productive.
+       MindForger मानव मन की नक़ल करने का प्रयास करता है - <b>सीखना</b>, <b>स्मरण</b>, <b>पहचान</b>,
+       <b>संबंध</b>, <b>भूलना</b> - ताकि
+       आपके मन के साथ <b>तालमेल</b> बने और आपका खोजना,
+       पढ़ना और लिखना अधिक उपयोगी हो।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Personal</div>
+       <div class="mfGroupLeftText">व्यक्तिगत</div>
      </div>
      <div class="right" id="personal">
-       MindForger ensures that you <b>own</b> your <b>personal</b> data.
-       It respects <b>privacy</b> and enables <b>security</b> of your knowledge.
+       MindForger यह सुनिश्चित करता है कि आपका <b>व्यक्तिगत</b> डेटा आपका ही <b>रहे</b>।
+       यह <b>निजता</b> का सम्मान करता है और आपके ज्ञान की <b>सुरक्षा</b> संभव बनाता है।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Knowledge</div>
+       <div class="mfGroupLeftText">ज्ञान</div>
      </div>
      <div class="right" id="knowledge">
-       MindForger seeks <b>knowledge</b> hidden in your remarks
-       to enable its <b>mining</b>.
+       MindForger आपके नोट में छिपे <b>ज्ञान</b> को ढूँढ़ता है
+       ताकि उसका <b>खनन</b> किया जा सके।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Management</div>
+       <div class="mfGroupLeftText">प्रबंधन</div>
      </div>
      <div class="right" id="management">
-       MindForger starts where editors and search
-       engines end. It thinks as you search, browse, read and write. Once you <b>find</b>
-       a remark, MindForger brings its associations. As you <b>browse</b> notes and <b>read</b>
-       them it looks up related relevant knowledge in your notebooks.
-       If you <b>edit</b> a remark, MindForger brings associations as you <b>write</b>.
-       It reminds you about existing content related to the text being written.
+       MindForger वहाँ से शुरू होता है जहाँ संपादक और खोज
+       इंजन ख़त्म होते हैं। आप जब खोजते, देखते, पढ़ते और लिखते हैं, यह साथ-साथ सोचता है। जैसे ही आप कोई नोट
+       <b>ढूँढ़ते</b> हैं, MindForger उससे जुड़े नोट सामने ले आता है। जब आप नोट <b>देखते</b> और <b>पढ़ते</b> हैं,
+       यह आपकी नोटबुक में उससे संबंधित ज्ञान खोजता है।
+       जब आप कोई नोट <b>संपादित</b> करते हैं, तो <b>लिखते</b> समय ही यह संबंधित नोट सुझाता है
+       और याद दिलाता है कि इस विषय पर आप पहले क्या लिख चुके हैं।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Tool</div>
+       <div class="mfGroupLeftText">उपकरण</div>
      </div>
      <div class="right" id="tool">
-       MindForger is a <b>desktop</b> application for Linux.
+       MindForger, Linux के लिए एक <b>डेस्कटॉप</b> एप्लिकेशन है।
      </div>
    </div>
 </div>
@@ -1871,7 +1894,7 @@
 
 <div class="w3-row w3-center w3-black w3-padding-16" style="border-top: 3px solid white;">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Features</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">विशेषताएँ</span><br>
   </div>
 </div>
 
@@ -1881,37 +1904,37 @@
 
    <!-- screenshots -->
    <div class="w3-content" style="max-width:1200px">
-     <img class="mySlidesFeatures" src="images/screenshots/wingman.png" style="width:100%">
-     <img class="mySlidesFeatures" src="images/screenshots/refactoring.png" style="width:100%">
-     <img class="mySlidesFeatures" src="images/screenshots/stencils.png" style="width:100%">
-     <img class="mySlidesFeatures" src="images/screenshots/knowledge-graph-navigator-tags.png" style="width:100%">
-     <img class="mySlidesFeatures" src="images/screenshots/math.png" style="width:100%">
-     <img class="mySlidesFeatures" src="images/screenshots/recent.png" style="width:100%">
+     <img class="mySlidesFeatures" src="../images/screenshots/wingman.png" style="width:100%">
+     <img class="mySlidesFeatures" src="../images/screenshots/refactoring.png" style="width:100%">
+     <img class="mySlidesFeatures" src="../images/screenshots/stencils.png" style="width:100%">
+     <img class="mySlidesFeatures" src="../images/screenshots/knowledge-graph-navigator-tags.png" style="width:100%">
+     <img class="mySlidesFeatures" src="../images/screenshots/math.png" style="width:100%">
+     <img class="mySlidesFeatures" src="../images/screenshots/recent.png" style="width:100%">
 
      <div class="w3-row-padding w3-section">
        <div class="w3-col s2 mfSlideThumbnail">
-      	 <img class="featuresChoice w3-opacity" src="images/screenshots/wingman.png" style="width:100%" onclick="currentDivFeatures(1)">
+      	 <img class="featuresChoice w3-opacity" src="../images/screenshots/wingman.png" style="width:100%" onclick="currentDivFeatures(1)">
 	        LLM
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-      	 <img class="featuresChoice w3-opacity" src="images/screenshots/refactoring.png" style="width:100%" onclick="currentDivFeatures(2)">
-	        Refactoring
+      	 <img class="featuresChoice w3-opacity" src="../images/screenshots/refactoring.png" style="width:100%" onclick="currentDivFeatures(2)">
+	        रीफ़ैक्टरिंग
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-          <img class="featuresChoice w3-opacity" src="images/screenshots/stencils.png" style="width:100%" onclick="currentDivFeatures(3)">
-          Stencils
+          <img class="featuresChoice w3-opacity" src="../images/screenshots/stencils.png" style="width:100%" onclick="currentDivFeatures(3)">
+          टेम्पलेट
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-         <img class="featuresChoice w3-opacity" src="images/screenshots/knowledge-graph-navigator-tags.png" style="width:100%" onclick="currentDivFeatures(4)">
-         Tag navigator
+         <img class="featuresChoice w3-opacity" src="../images/screenshots/knowledge-graph-navigator-tags.png" style="width:100%" onclick="currentDivFeatures(4)">
+         टैग नेविगेटर
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-         <img class="featuresChoice w3-opacity" src="images/screenshots/math.png" style="width:100%" onclick="currentDivFeatures(5)">
-         Math
+         <img class="featuresChoice w3-opacity" src="../images/screenshots/math.png" style="width:100%" onclick="currentDivFeatures(5)">
+         गणित
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-         <img class="featuresChoice w3-opacity" src="images/screenshots/recent.png" style="width:100%" onclick="currentDivFeatures(6)">
-         Recent notes
+         <img class="featuresChoice w3-opacity" src="../images/screenshots/recent.png" style="width:100%" onclick="currentDivFeatures(6)">
+         हाल के नोट
        </div>
      </div>
    </div>
@@ -1946,128 +1969,128 @@
 
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Associations</div>
+       <div class="mfGroupLeftText">संबंध</div>
      </div>
      <div class="right" id="associations">
-       <b>MindForger thinks as you read and write.</b> While you work on a Note, MindForger
-       <b>associates</b> it with related Notes from your whole workspace - including those
-       you <b>forgot</b> you ever wrote. Associations are computed <b>locally</b>, with
-       no cloud and no LLM required.
+       <b>जब आप पढ़ते और लिखते हैं, MindForger सोचता है।</b> जब आप किसी नोट पर काम करते हैं, MindForger उसे
+       आपके पूरे वर्कस्पेस के संबंधित नोट से <b>जोड़ता</b> है - उन नोट से भी जिन्हें आप लिखना
+       <b>भूल</b> चुके थे। संबंध <b>स्थानीय रूप से</b> गिने जाते हैं,
+       न क्लाउड चाहिए, न कोई LLM।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Autolinking</div>
+       <div class="mfGroupLeftText">स्वतः&nbsp;लिंक</div>
      </div>
      <div class="right" id="autolinking">
-       <b>Links that write themselves.</b> Names of Notebooks and Notes mentioned in your text
-       are <b>automatically</b> turned into links in the preview - your hand-written
-       links are rendered in blue, generated ones in green - so that your knowledge
-       gets interconnected without any extra effort - no need to manually creat links, Wiki camel case words or other linking conventions.
+       <b>ऐसे लिंक जो ख़ुद बन जाते हैं।</b> आपके पाठ में जिन नोटबुक और नोट के नाम आते हैं,
+       वे पूर्वावलोकन में <b>अपने आप</b> लिंक बन जाते हैं - आपके हाथ से लिखे लिंक नीले रंग में
+       और अपने आप बने लिंक हरे रंग में दिखते हैं - इस तरह आपका ज्ञान बिना किसी अतिरिक्त
+       मेहनत के आपस में जुड़ जाता है। न लिंक हाथ से बनाने पड़ते हैं, न विकी कैमल-केस या कोई और नियम।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Private&nbsp;AI</div>
+       <div class="mfGroupLeftText">निजी&nbsp;AI</div>
      </div>
      <div class="right" id="wingman">
-       <b>Assistant that doesn't send your notes anywhere.</b> Wingman runs open-weight
-       <b>Large Language Models</b> - like gpt-oss, Llama, GLM or Qwen - <b>privately on your machine</b>
-       via <a class="mf-link" target="_blank" href="https://ollama.com">ollama</a> to <b>summarize</b>,
-       <b>explain</b>, <b>translate</b>, <b>rewrite</b>, fix <b>grammar</b>, generate <b>tags</b> or find
-       <b>tasks</b> in the Notes you read and write.
+       <b>ऐसा सहायक जो आपके नोट कहीं नहीं भेजता।</b> AI साथी (Wingman)
+       <a class="mf-link" target="_blank" href="https://ollama.com">ollama</a> के ज़रिए <b>आपकी ही मशीन पर निजी तौर पर</b>
+       खुले-वेट वाले <b>बड़े भाषा मॉडल</b> चलाता है - जैसे gpt-oss, Llama, GLM या Qwen - ताकि आपके पढ़े और लिखे नोट का
+       <b>सारांश</b> बने, <b>व्याख्या</b> हो, <b>अनुवाद</b> हो, <b>पुनर्लेखन</b> हो, <b>व्याकरण</b> सुधरे, <b>टैग</b> बनें या उनमें
+       <b>कार्य</b> खोजे जा सकें।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Keyboard&nbsp;First</div>
+       <div class="mfGroupLeftText">पहले&nbsp;कीबोर्ड</div>
      </div>
      <div class="right" id="keyboard-first">
-       <b>Keep your hands on the keyboard.</b> MindForger is designed to be used
-       <b>without a mouse</b> - almost every action has a <b>keyboard shortcut</b> and every
-       menu item has an <b>accelerator</b>. Recall a Notebook or Note by name in a few
-       keystrokes, easily restructure the outline, complete links to
-       Notes as you type or run commands. Your thoughts flow
-       straight from your mind to your notes.
+       <b>हाथ कीबोर्ड पर ही रहें।</b> MindForger इस तरह बनाया गया है कि इसे
+       <b>माउस के बिना</b> चलाया जा सके - लगभग हर क्रिया का अपना <b>कीबोर्ड शॉर्टकट</b> है और हर
+       मेन्यू आइटम का अपना <b>ऐक्सेलरेटर</b>। कुछ ही कुंजियों में नोटबुक या नोट को नाम से वापस पाएँ,
+       रूपरेखा आसानी से पुनर्व्यवस्थित करें, लिखते-लिखते नोट के लिंक
+       पूरे करें या कमांड चलाएँ। आपके विचार सीधे
+       मन से नोट तक पहुँचते हैं।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Stencils</div>
+       <div class="mfGroupLeftText">टेम्पलेट</div>
      </div>
      <div class="right" id="stencils">
-       <b>Start from structure, not from a blank page.</b> Create Notebooks from <b>stencils</b> -
-       meeting minutes, software analysis and design documents, <b>S.M.A.R.T.E.R.</b> goals or
-       the <b>GROW model</b> - and capture thoughts as one of 16 <b>typed Notes</b>
-       like idea, question, lesson, task or SWOT. Add your own stencils and Note types
-       to fit how you think.
+       <b>ख़ाली पन्ने से नहीं, ढाँचे से शुरू करें।</b> <b>टेम्पलेट</b> से नोटबुक बनाएँ -
+       बैठक का विवरण, सॉफ़्टवेयर विश्लेषण और डिज़ाइन दस्तावेज़, <b>S.M.A.R.T.E.R.</b> लक्ष्य या
+       <b>GROW मॉडल</b> - और अपने विचारों को 16 में से किसी एक <b>प्रकार के नोट</b> के रूप में दर्ज करें,
+       जैसे विचार, प्रश्न, सबक, कार्य या SWOT। आप अपनी सोच के अनुसार अपने टेम्पलेट
+       और नोट प्रकार भी जोड़ सकते हैं।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Refactoring</div>
+       <div class="mfGroupLeftText">रीफ़ैक्टरिंग</div>
      </div>
      <div class="right" id="refactoring">
-       <b>Refactor your thinking</b> like source code. MindForger brings IDE&nbsp;style features to your notes -
-       <b>clone</b>, <b>promote</b>, <b>demote</b>, <b>move</b> and <b>extract</b> Notes
-       within one Markdown file or <b>across</b> many of them, using keyboard shortcuts
-       for extreme efficiency and speed.
+       अपनी सोच को स्रोत कोड की तरह <b>रीफ़ैक्टर करें</b>। MindForger आपके नोट में IDE&nbsp;जैसी सुविधाएँ लाता है -
+       एक ही Markdown फ़ाइल के भीतर या कई फ़ाइलों के <b>आर-पार</b> नोट को <b>क्लोन</b> करें,
+       <b>ऊपर</b> या <b>नीचे</b> के स्तर पर ले जाएँ, <b>खिसकाएँ</b> और <b>अलग निकालें</b> - वह भी कीबोर्ड शॉर्टकट से,
+       बेहद तेज़ी और दक्षता के साथ।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Knowledge&nbsp;Graph</div>
+       <div class="mfGroupLeftText">ज्ञान&nbsp;ग्राफ़</div>
      </div>
      <div class="right" id="knowledge-graph">
-       <b>Walk through your knowledge.</b> The knowledge graph navigator renders Notebooks,
-       Notes, <b>tags</b> and their relationships as an interactive <b>force-directed graph</b>
-       which you can explore node by node - like implicit mind map.
+       <b>अपने ज्ञान में टहलें।</b> ज्ञान ग्राफ़ नेविगेटर नोटबुक, नोट,
+       <b>टैग</b> और उनके संबंधों को एक अन्तःक्रियात्मक <b>बल-निर्देशित ग्राफ़</b> के रूप में दिखाता है,
+       जिसे आप एक-एक नोड करके देख सकते हैं - जैसे कोई अंतर्निहित माइंड मैप।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Organizers</div>
+       <div class="mfGroupLeftText">ऑर्गनाइज़र</div>
      </div>
      <div class="right" id="organizers">
-       <b>Know what to do next.</b> <b>Kanban</b> boards and <b>Eisenhower matrix</b>
-       organizers sort your Notebooks and Notes by their tags - TODO, WIP, DONE or urgent
-       and important - so you don't need another task management app.
-       <b>Notebook shelves</b> then let you group Notebooks to as many named
-       shelves as you need. <b>From Notes to Notebooks, from Notebooks to priorities and actions.</b>
+       <b>जानें कि आगे क्या करना है।</b> <b>कानबान</b> बोर्ड और <b>आइज़नहावर मैट्रिक्स</b>
+       ऑर्गनाइज़र आपकी नोटबुक और नोट को उनके टैग के अनुसार छाँटते हैं - TODO, WIP, DONE या तत्काल
+       और महत्वपूर्ण - इसलिए आपको कामों के लिए कोई अलग ऐप नहीं चाहिए।
+       <b>नोटबुक शेल्फ़</b> आपको नोटबुक को जितने चाहें उतने नामित शेल्फ़ में
+       बाँटने देते हैं। <b>नोट से नोटबुक तक, नोटबुक से प्राथमिकताओं और कार्रवाई तक।</b>
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">No&nbsp;Lock-in</div>
+       <div class="mfGroupLeftText">कोई&nbsp;बंधन&nbsp;नहीं</div>
      </div>
      <div class="right" id="no-lock-in">
-       <b>Your files, your tools.</b> Everything is <b>plain Markdown</b> on your disk.
-       Open a MindForger workspace, <b>any</b> existing <b>Markdown directory</b> or just
-       a <b>single</b> Markdown <b>file</b>. Synchronize, share, back up and encrypt your
-       knowledge with the tools you trust - own Git server, private
-       <a class="mf-link" target="_blank" href="https://github.com/">GitHub</a> or
-       <a class="mf-link" target="_blank" href="https://bitbucket.org">Bitbucket</a> repository,
-       or cloud drive of your choice.
+       <b>आपकी फ़ाइलें, आपके उपकरण।</b> सब कुछ आपकी डिस्क पर <b>सादा Markdown</b> है।
+       MindForger का वर्कस्पेस खोलें, पहले से मौजूद <b>कोई भी</b> <b>Markdown डायरेक्टरी</b> खोलें या बस
+       <b>एक</b> Markdown <b>फ़ाइल</b>। अपने ज्ञान को उन उपकरणों से सिंक करें, साझा करें, बैकअप लें और
+       एन्क्रिप्ट करें जिन पर आप भरोसा करते हैं - अपना Git सर्वर, निजी
+       <a class="mf-link" target="_blank" href="https://github.com/">GitHub</a> या
+       <a class="mf-link" target="_blank" href="https://bitbucket.org">Bitbucket</a> रिपॉज़िटरी,
+       या अपनी पसंद की क्लाउड ड्राइव।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Math & Diagrams</div>
+       <div class="mfGroupLeftText">गणित&nbsp;और&nbsp;आरेख</div>
      </div>
      <div class="right" id="writing">
-       Markdown editor with <b>live preview</b>, <b>syntax highlighting</b>, offline <b>KaTeX</b> math and <b>Mermaid</b> diagrams,
-       <b>spell check</b>, <b>emojis</b>, Emacs keybindings,
-       paragraph rewrap, <b>hoist</b> mode and the option to edit a Note in your favorite external editor.
+       Markdown संपादक, जिसमें <b>लाइव पूर्वावलोकन</b>, <b>सिंटैक्स हाइलाइटिंग</b>, ऑफ़लाइन <b>KaTeX</b> गणित और <b>Mermaid</b> आरेख,
+       <b>वर्तनी जाँच</b>, <b>इमोजी</b>, Emacs कुंजी-बंधन,
+       अनुच्छेद पुनर्व्यवस्था, <b>hoist</b> मोड और नोट को अपने पसंदीदा बाहरी संपादक में खोलने का विकल्प है।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Docs Library</div>
+       <div class="mfGroupLeftText">दस्तावेज़&nbsp;लाइब्रेरी</div>
      </div>
      <div class="right" id="library">
-       Index directories with <b>PDF</b> documents as Notebooks, keep them in sync
-       and detect <b>orphaned</b> documents. Study, read and annotate your PDFs conveniently
-       connected with your remarks.
+       <b>PDF</b> दस्तावेज़ों वाली डायरेक्टरी को नोटबुक के रूप में इंडेक्स करें, उन्हें सिंक रखें
+       और <b>अनाथ</b> दस्तावेज़ पहचानें। अपने PDF को अपने नोट से जुड़ा रखते हुए
+       आराम से पढ़ें, समझें और टिप्पणी करें।
      </div>
    </div>
    <!-- div class="group" style="margin-top: 10px;">
@@ -2075,26 +2098,26 @@
        <div class="mfGroupLeftText">CLI</div>
      </div>
      <div class="right" id="cli">
-       Run <b>commands</b> without leaving MindForger or <b>search</b> for the current Note name or selected
-       text on <b>Wikipedia</b>, <b>arXiv</b> or <b>StackOverflow</b>.
+       MindForger छोड़े बिना <b>कमांड</b> चलाएँ, या मौजूदा नोट का नाम अथवा चुना हुआ
+       पाठ <b>विकिपीडिया</b>, <b>arXiv</b> या <b>StackOverflow</b> पर <b>खोजें</b>।
      </div>
    </div -->
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Export</div>
+       <div class="mfGroupLeftText">निर्यात</div>
      </div>
      <div class="right" id="export">
-       Export Notebooks to <b>HTML</b> or <b>Markdown</b>, or your whole workspace to <b>CSV</b>
-       with one-hot encoded tags - ready for your machine learning and analytics tools.
+       नोटबुक को <b>HTML</b> या <b>Markdown</b> में निर्यात करें, या पूरे वर्कस्पेस को
+       वन-हॉट एन्कोडेड टैग के साथ <b>CSV</b> में - मशीन लर्निंग और विश्लेषण के आपके उपकरणों के लिए तैयार।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Fast&nbsp;&amp;&nbsp;Native</div>
+       <div class="mfGroupLeftText">तेज़&nbsp;और&nbsp;नेटिव</div>
      </div>
      <div class="right" id="native">
-       Written in <b>C++</b> and <b>Qt</b>, works completely <b>offline</b> and runs on
-       <b>Linux</b>, <b>macOS</b> and <b>Windows</b>.
+       <b>C++</b> और <b>Qt</b> में लिखा गया, पूरी तरह <b>ऑफ़लाइन</b> काम करता है और
+       <b>Linux</b>, <b>macOS</b> तथा <b>Windows</b> पर चलता है।
      </div>
    </div>
 
@@ -2102,14 +2125,14 @@
 
 <div class="w3-row w3-center w3-black w3-padding-16" id="overview" style="scroll-margin-top: 44px;">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Nerdview</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Nerdview</span><br>
   </div>
 </div>
 
 
 <!-- Container: Overview -->
 <!-- BEGIN mfd: functional architecture diagram - markup -->
-<section class="mfd" id="mfd" aria-label="MindForger functional architecture diagram">
+<section class="mfd" id="mfd" aria-label="MindForger की कार्यात्मक संरचना का आरेख">
  <div class="mfd-frame">
   <div class="mfd-stage" id="mfd-stage">
     <svg class="mfd-wires mfd-wires-below" id="mfd-wires-below" aria-hidden="true"></svg>
@@ -2119,91 +2142,91 @@
     <div class="mfd-top">
       <div class="mfd-top-body">
         <div class="mfd-top-cell">
-          <ul class="mfd-types mfd-types-l" data-types="fact lesson experience conclusion"></ul>
+          <ul class="mfd-types mfd-types-l" data-types="तथ्य सबक अनुभव निष्कर्ष"></ul>
           <div class="mfd-node mfd-face" id="mfd-face-top" role="button" tabindex="0" data-face="writer"
-               data-title="YOU - RESEARCH, STUDY, BRAINSTORM, WRITE"
-               data-detail="Every thought you have becomes a typed Note - fact, lesson, idea, question, task, solution, strength, weakness, opportunity, threat and more. MindForger ontology ships with 16 Note types and you can add your own.">
-            <span class="mfd-legend">you</span>
+               data-title="आप - शोध, अध्ययन, विचार-मंथन, लेखन"
+               data-detail="आपका हर विचार एक प्रकार वाले नोट में बदल जाता है - तथ्य, सबक, विचार, प्रश्न, कार्य, समाधान, शक्ति, कमज़ोरी, अवसर, ख़तरा और बहुत कुछ। MindForger की ऑन्टोलॉजी में 16 नोट प्रकार पहले से हैं और आप अपने प्रकार भी जोड़ सकते हैं।">
+            <span class="mfd-legend">आप</span>
             <svg class="mfd-pixface" viewBox="0 0 16 16" aria-hidden="true"></svg>
           </div>
-          <ul class="mfd-types" data-types="idea question task solution"></ul>
+          <ul class="mfd-types" data-types="विचार प्रश्न कार्य समाधान"></ul>
         </div>
       </div>
     </div>
 
     <div class="mfd-box" id="mfd-box">
       <span class="mfd-legend" role="button" tabindex="0"
-            data-title="MINDFORGER - PRIVACY FIRST THINKING NOTEBOOK"
-            data-detail="Your knowledge lives in plain Markdown files in a local repository - nothing is uploaded anywhere. Synchronize, back up and encrypt it with the tools you trust - Git, cloud drive of your choice, ecryptfs.">
-        <img src="./images/mind-forger.png" alt=""/><span><b>MindForger</b> - privacy first thinking notebook</span>
+            data-title="MINDFORGER - निजता को पहले रखने वाली सोचने वाली नोटबुक"
+            data-detail="आपका ज्ञान सादी Markdown फ़ाइलों में, आपकी अपनी स्थानीय रिपॉज़िटरी में रहता है - कुछ भी कहीं अपलोड नहीं होता। उसे उन्हीं उपकरणों से सिंक, बैकअप और एन्क्रिप्ट करें जिन पर आप भरोसा करते हैं - Git, अपनी पसंद की क्लाउड ड्राइव, ecryptfs।">
+        <img src="../images/mind-forger.png" alt=""/><span><b>MindForger</b> - निजता को पहले रखने वाली सोचने वाली नोटबुक</span>
       </span>
 
       <!-- upper level: write -->
       <div class="mfd-level">
-        <div class="mfd-level-label"><span>research / study / create / brainstorm / write</span></div>
+        <div class="mfd-level-label"><span>शोध / अध्ययन / सृजन / विचार-मंथन / लेखन</span></div>
         <div class="mfd-level-body">
           <div class="mfd-row-forge">
             <div class="mfd-node mfd-page" id="mfd-note" role="button" tabindex="0"
-                 data-title="NOTE"
-                 data-detail="The atom of knowledge - a Markdown section with name, type, tags, progress and deadline. Write it in the Markdown editor with live preview, spell check, KaTeX math, Mermaid diagrams, emojis and autolinking to other Notes.">
-              <span class="mfd-legend">note</span>
-              <span class="mfd-doc-title">Retrieval failure</span>
+                 data-title="नोट"
+                 data-detail="ज्ञान का परमाणु - नाम, प्रकार, टैग, प्रगति और समय सीमा वाला एक Markdown खंड। इसे आप Markdown संपादक में लिखते हैं, जिसमें लाइव पूर्वावलोकन, वर्तनी जाँच, KaTeX गणित, Mermaid आरेख, इमोजी और दूसरे नोट के स्वतः लिंक मिलते हैं।">
+              <span class="mfd-legend">नोट</span>
+              <span class="mfd-doc-title">स्मरण विफलता</span>
               <ul class="mfd-lines" data-feed="0 1 2 1"></ul>
             </div>
 
             <div class="mfd-node" id="mfd-outline" role="button" tabindex="0"
-                 data-title="OUTLINE"
-                 data-detail="Notes form a hierarchy of Markdown sections. Refactor it IDE-style - promote, demote, move up and down, clone, extract Note to a new Notebook or move it to another Notebook.">
-              <span class="mfd-legend">outline</span>
+                 data-title="रूपरेखा"
+                 data-detail="नोट मिलकर Markdown खंडों का एक पदानुक्रम बनाते हैं। उसे IDE की तरह रीफ़ैक्टर करें - स्तर ऊपर-नीचे करें, क्रम बदलें, क्लोन करें, किसी नोट को नई नोटबुक में निकालें या दूसरी नोटबुक में ले जाएँ।">
+              <span class="mfd-legend">रूपरेखा</span>
               <ul class="mfd-tree" data-outline></ul>
-              <div class="mfd-badges"><span class="mfd-badge-txt">promote</span><span class="mfd-badge-txt">demote</span><span class="mfd-badge-txt">refactor</span></div>
+              <div class="mfd-badges"><span class="mfd-badge-txt">ऊपर</span><span class="mfd-badge-txt">नीचे</span><span class="mfd-badge-txt">रीफ़ैक्टर</span></div>
             </div>
 
             <div class="mfd-node" id="mfd-notebook" role="button" tabindex="0"
-                 data-title="NOTEBOOK"
-                 data-detail="An outline of Notes with a description stored as a single plain Markdown file on your disk. Create it from stencils (like GROW model), or add PDF documents from a library. Notebook types: outline, GROW and PDF.">
-              <span class="mfd-legend">notebook</span>
-              <span class="mfd-doc-title">Cognition <em>- cognition.md</em></span>
+                 data-title="नोटबुक"
+                 data-detail="विवरण सहित नोट की रूपरेखा, जो आपकी डिस्क पर एक ही सादी Markdown फ़ाइल में रहती है। इसे टेम्पलेट (जैसे GROW मॉडल) से बनाएँ, या लाइब्रेरी से PDF दस्तावेज़ जोड़ें। नोटबुक के प्रकार: रूपरेखा, GROW और PDF।">
+              <span class="mfd-legend">नोटबुक</span>
+              <span class="mfd-doc-title">संज्ञान <em>- संज्ञान.md</em></span>
               <div class="mfd-window">
                 <ul class="mfd-tree" data-outline></ul>
                 <div class="mfd-pane">
-                  <span class="mfd-doc-title">Retrieval failure</span>
+<span class="mfd-doc-title">स्मरण विफलता</span>
                   <ul class="mfd-lines" data-feed="0 1 1"></ul>
                 </div>
               </div>
-              <div class="mfd-badges"><span class="mfd-badge-txt">outline</span><span class="mfd-badge-txt">GROW</span><span class="mfd-badge-txt">PDF</span></div>
+              <div class="mfd-badges"><span class="mfd-badge-txt">रूपरेखा</span><span class="mfd-badge-txt">GROW</span><span class="mfd-badge-txt">PDF</span></div>
             </div>
           </div>
 
           <div class="mfd-row-views">
             <div class="mfd-node" id="mfd-shelves" role="button" tabindex="0"
-                 data-title="NOTEBOOK SHELVES"
-                 data-detail="Organize Notebooks to as many named shelves as you need - for instance my research or hobby shelf - and browse each of them as your custom Notebook tree.">
-              <span class="mfd-legend">notebook shelves</span>
+                 data-title="नोटबुक शेल्फ़"
+                 data-detail="नोटबुक को जितने चाहें उतने नामित शेल्फ़ में व्यवस्थित करें - जैसे मेरा शोध शेल्फ़ या शौक शेल्फ़ - और हर शेल्फ़ को अपने बनाए नोटबुक वृक्ष की तरह देखें।">
+              <span class="mfd-legend">नोटबुक शेल्फ़</span>
               <div class="mfd-shelves" data-shelves></div>
             </div>
 
             <div class="mfd-node" id="mfd-kanban" role="button" tabindex="0"
-                 data-title="KANBAN AND EISENHOWER MATRIX"
-                 data-detail="Organizers sort Notebooks and Notes using their tags - to Kanban columns like TODO, WIP and DONE or to Eisenhower matrix quadrants (urgent, important, important &amp; urgent) - so that you know what to do next.">
+                 data-title="कानबान और आइज़नहावर मैट्रिक्स"
+                 data-detail="ऑर्गनाइज़र नोटबुक और नोट को उनके टैग के अनुसार छाँटते हैं - TODO, WIP और DONE जैसे कानबान स्तंभों में या आइज़नहावर मैट्रिक्स के चतुर्थांशों में (तत्काल, महत्वपूर्ण, महत्वपूर्ण &amp; तत्काल) - ताकि आप जान सकें कि आगे क्या करना है।">
               <span class="mfd-legend">kanban</span>
               <div class="mfd-board" data-kanban></div>
             </div>
 
             <div class="mfd-node" id="mfd-kgraph" role="button" tabindex="0"
-                 data-title="KNOWLEDGE GRAPH NAVIGATOR"
-                 data-detail="Map of your whole knowledge - Notebooks, Notes, tags and their relationships rendered as an interactive force-directed graph which you can walk node by node.">
-              <span class="mfd-legend">knowledge graph</span>
+                 data-title="ज्ञान ग्राफ़ नेविगेटर"
+                 data-detail="आपके पूरे ज्ञान का नक़्शा - नोटबुक, नोट, टैग और उनके संबंध एक अन्तःक्रियात्मक बल-निर्देशित ग्राफ़ के रूप में, जिसमें आप एक-एक नोड चलकर घूम सकते हैं।">
+              <span class="mfd-legend">ज्ञान ग्राफ़</span>
               <div class="mfd-graph-host" data-graph></div>
-              <span class="mfd-caption">Notebooks, Notes and tags</span>
+              <span class="mfd-caption">नोटबुक, नोट और टैग</span>
             </div>
 
             <div class="mfd-node" id="mfd-wingman" role="button" tabindex="0"
-                 data-title="WINGMAN - LOCAL LLM"
-                 data-detail="Optional AI assistant powered by open-weight LLMs (like gpt-oss, Llama or GLM) running privately on your machine via ollama - summarize, explain, fix grammar, translate, rewrite, generate tags or find tasks. Remote OpenRouter and OpenAI providers are available only when you opt in.">
-              <span class="mfd-legend">wingman</span>
+                 data-title="AI साथी - स्थानीय LLM"
+                 data-detail="वैकल्पिक सहायक, जो खुले-वेट वाले LLM (जैसे gpt-oss, Llama या GLM) से चलता है और ollama के ज़रिए आपकी अपनी मशीन पर निजी तौर पर चलता है - सारांश बनाता है, व्याख्या करता है, व्याकरण सुधारता है, अनुवाद करता है, पुनर्लेखन करता है, टैग बनाता है या कार्य खोजता है। OpenRouter और OpenAI जैसी दूरस्थ सेवाएँ तभी उपलब्ध होती हैं जब आप स्वयं उन्हें चुनें।">
+              <span class="mfd-legend">AI साथी</span>
               <div class="mfd-term-mini">
-                <div class="mfd-term-head">ollama @ localhost<span class="mfd-dot" title="private"></span></div>
+                <div class="mfd-term-head">ollama @ localhost<span class="mfd-dot" title="निजी"></span></div>
                 <div class="mfd-term-lines" data-wingman></div>
                 <div class="mfd-models" data-models><span>gpt-oss</span><span>llama</span><span>glm</span></div>
               </div>
@@ -2214,10 +2237,10 @@
 
       <!-- lower level: find -->
       <div class="mfd-level mfd-level-find">
-        <div class="mfd-level-label"><span>find / read / understand / learn</span></div>
+        <div class="mfd-level-label"><span>खोजें / पढ़ें / समझें / सीखें</span></div>
         <div class="mfd-level-body">
           <div class="mfd-node mfd-find" id="mfd-find">
-            <span class="mfd-legend">find by</span>
+            <span class="mfd-legend">किससे खोजें</span>
             <div class="mfd-find-head">
               <span class="mfd-find-title" id="mfd-find-title"></span>
               <span class="mfd-find-sub" id="mfd-find-sub"></span>
@@ -2230,7 +2253,7 @@
               <div class="mfd-chevrons" aria-hidden="true"><span>&gt;</span><span>&gt;</span><span>&gt;</span></div>
               <div class="mfd-scene" id="mfd-scene" aria-live="polite"></div>
             </div>
-            <div class="mfd-tabs" id="mfd-tabs" role="tablist" aria-label="Find knowledge by"></div>
+            <div class="mfd-tabs" id="mfd-tabs" role="tablist" aria-label="ज्ञान खोजने का तरीक़ा"></div>
           </div>
         </div>
       </div>
@@ -2238,16 +2261,16 @@
 
     <!-- you: seek knowledge -->
     <div class="mfd-node mfd-face mfd-seeker" id="mfd-face-bottom" role="button" tabindex="0" data-face="seeker"
-         data-title="YOU - SEEKING KNOWLEDGE"
-         data-detail="Weeks later you need the knowledge back. Ask - by name, tag, full-text, knowledge graph, Wingman, association or task - and MindForger finds, recalls and associates the relevant Notes.">
-      <span class="mfd-legend">you</span>
+         data-title="आप - ज्ञान की खोज में"
+         data-detail="कुछ हफ़्तों बाद आपको वह ज्ञान वापस चाहिए। बस पूछिए - नाम, टैग, पूर्ण-पाठ, ज्ञान ग्राफ़, AI साथी, संबंध या कार्य के ज़रिए - और MindForger प्रासंगिक नोट ढूँढ़, याद और संबद्ध कर देगा।">
+      <span class="mfd-legend">आप</span>
       <svg class="mfd-pixface" viewBox="0 0 16 16" aria-hidden="true"></svg>
       <span class="mfd-asks" aria-hidden="true"><b>?</b><b>?</b><b>?</b></span>
     </div>
   </div>
 
   <div class="mfd-readout">
-    <div class="mfd-term-head"><span class="mfd-dot"></span>details</div>
+    <div class="mfd-term-head"><span class="mfd-dot"></span>विवरण</div>
     <div class="mfd-readout-body" id="mfd-readout" aria-live="polite"></div>
   </div>
  </div>
@@ -2327,42 +2350,42 @@
 
     // note types as defined by lib/src/mind/ontology/ontology.cpp - in the order they flow in
     var TYPES = [
-        ['fact', 'know', 'memory is stored, cue is missing'],
-        ['idea', 'spark', 'spaced repetition deck'],
-        ['question', 'open', 'why tip-of-the-tongue?'],
-        ['lesson', 'know', 'review notes within 24h'],
-        ['task', 'act', 'read Tulving on cues'],
-        ['solution', 'spark', 'active recall practice'],
-        ['experience', 'know', 'names slip under stress'],
-        ['opportunity', 'spark', 'link Notes to cues'],
-        ['weakness', 'open', 'cramming before exams'],
-        ['conclusion', 'know', 'context aids recall'],
-        ['action', 'act', 'self-test every evening'],
-        ['option', 'spark', 'try a memory palace'],
-        ['strength', 'spark', 'strong visual memory'],
-        ['threat', 'open', 'interference of similar facts'],
-        ['result', 'know', 'recall up 20% in a month'],
-        ['note', 'plain', 'Tulving and Pearlstone, 1966']
+        ['तथ्य', 'know', 'स्मृति मौजूद है, संकेत नहीं'],
+        ['विचार', 'spark', 'अंतराल पुनरावृत्ति का डेक'],
+        ['प्रश्न', 'open', 'शब्द ज़ुबान पर क्यों अटकता है?'],
+        ['सबक', 'know', '24 घंटे के भीतर नोट दोहराएँ'],
+        ['कार्य', 'act', 'संकेतों पर Tulving पढ़ें'],
+        ['समाधान', 'spark', 'सक्रिय स्मरण का अभ्यास'],
+        ['अनुभव', 'know', 'तनाव में नाम भूल जाते हैं'],
+        ['अवसर', 'spark', 'नोट को संकेतों से जोड़ें'],
+        ['कमज़ोरी', 'open', 'परीक्षा से ठीक पहले रटना'],
+        ['निष्कर्ष', 'know', 'संदर्भ स्मरण में मदद करता है'],
+        ['क्रिया', 'act', 'हर शाम स्वयं की परीक्षा लें'],
+        ['विकल्प', 'spark', 'स्मृति महल आज़माएँ'],
+        ['शक्ति', 'spark', 'दृश्य स्मृति मज़बूत है'],
+        ['ख़तरा', 'open', 'मिलते-जुलते तथ्यों का हस्तक्षेप'],
+        ['परिणाम', 'know', 'एक महीने में स्मरण 20% बेहतर'],
+        ['नोट', 'plain', 'Tulving और Pearlstone, 1966']
     ];
     var TYPE_BY_NAME = {};
     TYPES.forEach(function (t) {
         TYPE_BY_NAME[t[0]] = t;
     });
 
-    var OUTLINE = [[0, 'Memory'], [1, 'Working memory'], [2, 'Chunking'], [0, 'Attention'], [1, 'Retrieval failure']];
-    var OUTLINE_SELECTED = 'Retrieval failure';
-    var NOTEBOOK = 'Cognition';
-    var TAGGED = [['Memory', '#brain']];
+    var OUTLINE = [[0, 'स्मृति'], [1, 'कार्यशील स्मृति'], [2, 'चंकिंग'], [0, 'ध्यान'], [1, 'स्मरण विफलता']];
+    var OUTLINE_SELECTED = 'स्मरण विफलता';
+    var NOTEBOOK = 'संज्ञान';
+    var TAGGED = [['स्मृति', '#मस्तिष्क']];
 
     // star layout of the knowledge graph navigator - name: [x, y, label below node];
     // like in MindForger only a neighbourhood is shown, so Notes missing here are hidden
     var GRAPH_LAYOUT = {
-        'Cognition': [100, 54, true],
-        'Memory': [42, 34],
-        'Attention': [158, 34],
-        'Working memory': [42, 90, true],
-        'Retrieval failure': [158, 90, true],
-        '#brain': [92, 14]
+        'संज्ञान': [100, 54, true],
+        'स्मृति': [42, 34],
+        'ध्यान': [158, 34],
+        'कार्यशील स्मृति': [42, 90, true],
+        'स्मरण विफलता': [158, 90, true],
+        '#मस्तिष्क': [92, 14]
     };
 
     // knowledge graph derived from the outline - Notebook is the center, each Note is linked
@@ -2389,26 +2412,26 @@
     }
 
     var SHELVES = [
-        ['my research shelf', [['Cognition', 'var(--mfd-yellow)', 100], ['Memory', 'var(--mfd-blue)', 84], ['Focus', 'var(--mfd-green)', 76], ['Sleep', 'var(--mfd-purple)', 70], ['Learning', 'var(--mfd-red)', 94]]],
-        ['hobby shelf', [['Running', 'var(--mfd-red)', 92], ['Chess', 'var(--mfd-purple)', 70], ['Cooking', 'var(--mfd-yellow)', 100], ['Travel', 'var(--mfd-blue)', 84], ['Guitar', 'var(--mfd-green)', 78]]]
+        ['मेरा शोध शेल्फ़', [['संज्ञान', 'var(--mfd-yellow)', 100], ['स्मृति', 'var(--mfd-blue)', 84], ['फ़ोकस', 'var(--mfd-green)', 76], ['नींद', 'var(--mfd-purple)', 70], ['अधिगम', 'var(--mfd-red)', 94]]],
+        ['शौक शेल्फ़', [['दौड़', 'var(--mfd-red)', 92], ['शतरंज', 'var(--mfd-purple)', 70], ['खाना बनाना', 'var(--mfd-yellow)', 100], ['यात्रा', 'var(--mfd-blue)', 84], ['गिटार', 'var(--mfd-green)', 78]]]
     ];
 
     var KANBAN = [
-        ['TODO', ['Retrieval failure', 'Sleep', 'Exam'], 'var(--mfd-yellow)'],
-        ['WIP', ['Focus', 'Rust'], 'var(--mfd-orange)'],
-        ['DONE', ['Chunking', 'Memory'], 'var(--mfd-green)']
+        ['TODO', ['स्मरण विफलता', 'नींद', 'परीक्षा'], 'var(--mfd-yellow)'],
+        ['WIP', ['फ़ोकस', 'Rust'], 'var(--mfd-orange)'],
+        ['DONE', ['चंकिंग', 'स्मृति'], 'var(--mfd-green)']
     ];
-    var KANBAN_MOVING = 'Retrieval failure';
+    var KANBAN_MOVING = 'स्मरण विफलता';
 
     var GRAPH = buildGraph(NOTEBOOK, OUTLINE, TAGGED, GRAPH_LAYOUT);
 
     var WINGMAN_PROMPTS = [
-        ['summarize', '5 key points'],
-        ['explain like I\'m 5', 'done'],
-        ['fix grammar', '3 fixes'],
-        ['generate tags', '#memory #brain'],
-        ['find tasks', '2 tasks found'],
-        ['translate to English', 'done']
+        ['इस नोट का सारांश दें', '5 मुख्य बिंदु'],
+        ['पाँच साल के बच्चे को समझाएँ', 'हो गया'],
+        ['व्याकरण सुधारें', '3 सुधार'],
+        ['टैग बनाएँ', '#स्मृति #मस्तिष्क'],
+        ['कार्य खोजें', '2 कार्य मिले'],
+        ['अंग्रेज़ी में अनुवाद करें', 'हो गया']
     ];
 
     /* ================================================ renderers */
@@ -2488,12 +2511,12 @@
 
     var MODES = [
         {
-            id: 'name', tab: 'name', title: 'find by name', query: 'ret',
-            sub: 'Notebooks and Notes filtered as you type',
+            id: 'name', tab: 'नाम', title: 'नाम से खोज', query: 'स्मरण',
+            sub: 'लिखते ही नोटबुक और नोट छँटते जाते हैं',
             targets: ['mfd-shelves'],
-            detail: 'Find Notebook or Note by name - type a few letters and the list of names is filtered instantly. Open the hit and continue in its Notebook on a shelf.',
+            detail: 'नोटबुक या नोट को नाम से ढूँढ़ें - कुछ अक्षर लिखिए और नामों की सूची तुरंत छँट जाती है। मिले हुए नोट को खोलिए और शेल्फ़ पर रखी उसकी नोटबुक में आगे बढ़िए।',
             scene: function (m) {
-                var names = [['NB', 'Cognition'], ['N', 'Retrieval failure'], ['N', 'Memory'], ['N', 'Interpretation'], ['N', 'Chunking'], ['NB', 'Secrets']];
+                var names = [['NB', 'संज्ञान'], ['N', 'स्मरण विफलता'], ['N', 'स्मृति'], ['N', 'व्याख्या'], ['N', 'चंकिंग'], ['NB', 'रहस्य']];
                 return '<ul class="mfd-grid2">' + names.map(function (x, i) {
                     var hit = x[1].toLowerCase().indexOf(m.query) >= 0;
                     return item(i, hit, x[0], markMatch(x[1], m.query));
@@ -2501,83 +2524,83 @@
             }
         },
         {
-            id: 'tag', tab: 'tag', title: 'find by tag', query: '#memory',
-            sub: 'Notebooks and Notes carrying the selected tags',
+            id: 'tag', tab: 'टैग', title: 'टैग से खोज', query: '#स्मृति',
+            sub: 'चुने हुए टैग वाली नोटबुक और नोट',
             targets: ['mfd-kgraph', 'mfd-kanban'],
-            detail: 'Find Notebooks and Notes by tags - pick one or more tags and get everything labeled with them. Tags are also nodes of the knowledge graph and columns of organizers.',
+            detail: 'नोटबुक और नोट को टैग से ढूँढ़ें - एक या कई टैग चुनिए और उनसे चिह्नित सब कुछ पाइए। टैग ज्ञान ग्राफ़ के नोड और ऑर्गनाइज़र के स्तंभ भी हैं।',
             scene: function () {
-                var tags = ['cognition', 'memory', 'todo', 'ml', 'brain'];
-                var cards = [['Retrieval failure', ['memory', 'brain']], ['Gradient', ['ml']], ['Sleep', ['memory']], ['Focus', ['todo']], ['Chunking', ['memory']], ['Travel', ['todo']]];
+                var tags = ['संज्ञान', 'स्मृति', 'todo', 'ml', 'मस्तिष्क'];
+                var cards = [['स्मरण विफलता', ['स्मृति', 'मस्तिष्क']], ['ग्रेडिएंट', ['ml']], ['नींद', ['स्मृति']], ['फ़ोकस', ['todo']], ['चंकिंग', ['स्मृति']], ['यात्रा', ['todo']]];
                 return '<div class="mfd-tagcloud">' + tags.map(function (t) {
-                    return '<span class="mfd-tag' + (t === 'memory' ? ' mfd-tag-sel' : '') + '">#' + t + '</span>';
+                    return '<span class="mfd-tag' + (t === 'स्मृति' ? ' mfd-tag-sel' : '') + '">#' + t + '</span>';
                 }).join('') + '</div><ul class="mfd-grid3">' + cards.map(function (c, i) {
-                    return item(i, c[1].indexOf('memory') >= 0, 'N', c[0]);
+                    return item(i, c[1].indexOf('स्मृति') >= 0, 'N', c[0]);
                 }).join('') + '</ul>';
             }
         },
         {
-            id: 'fts', tab: 'full-text', title: 'full-text search', query: 'gradient',
-            sub: 'exact, ignore case or regular expression',
+            id: 'fts', tab: 'पूर्ण-पाठ', title: 'पूर्ण-पाठ खोज', query: 'ग्रेडिएंट',
+            sub: 'सटीक, बिना केस के भेद के या नियमित अभिव्यक्ति से',
             targets: ['mfd-shelves'],
-            detail: 'Full-text search scans the text of all Notes in all Notebooks - match exact phrase, ignore case or use a regular expression.',
+            detail: 'पूर्ण-पाठ खोज सभी नोटबुक के सभी नोट का पाठ छानती है - सटीक वाक्यांश खोजिए, केस की अनदेखी कीजिए या नियमित अभिव्यक्ति का उपयोग कीजिए।',
             scene: function (m) {
-                var lines = ['## Deep learning', 'gradient descent minimizes loss', 'vanishing gradient in deep nets', '## Optimizers', 'Adam adapts gradient step size', '## Cognition', 'memory follows a learning curve'];
+                var lines = ['## डीप लर्निंग', 'ग्रेडिएंट डिसेंट हानि को न्यूनतम करता है', 'गहरे नेटवर्क में ग्रेडिएंट का लुप्त होना', '## ऑप्टिमाइज़र', 'Adam ग्रेडिएंट के स्टेप आकार को ढालता है', '## संज्ञान', 'स्मृति अधिगम वक्र का अनुसरण करती है'];
                 return '<div class="mfd-doc" style="--mfd-lines:' + lines.length + ';--mfd-scan-step:180ms"><ul>' + lines.map(function (l, i) {
                     return '<li style="--i:' + i + '"' + (l.indexOf('#') === 0 ? ' class="mfd-h"' : '') + '>' + markMatch(l, m.query) + '</li>';
                 }).join('') + '</ul><span class="mfd-scan"></span></div>' +
-                    '<span class="mfd-summary" style="--mfd-lines:' + lines.length + ';--mfd-scan-step:180ms">3 matches in 2 Notes</span>';
+                    '<span class="mfd-summary" style="--mfd-lines:' + lines.length + ';--mfd-scan-step:180ms">2 नोट में 3 मिलान</span>';
             }
         },
         {
-            id: 'graph', tab: 'knowledge graph', title: 'knowledge graph', query: 'Cognition',
-            sub: 'walk the knowledge graph navigator',
+            id: 'graph', tab: 'ज्ञान ग्राफ़', title: 'ज्ञान ग्राफ़', query: 'संज्ञान',
+            sub: 'ज्ञान ग्राफ़ नेविगेटर में टहलें',
             targets: ['mfd-kgraph'],
-            detail: 'Knowledge graph navigator lets you walk your knowledge graph - from a Notebook to its Notes, from Notes to tags and on to related Notes.',
+            detail: 'ज्ञान ग्राफ़ नेविगेटर आपको अपने ज्ञान ग्राफ़ में चलने देता है - नोटबुक से उसके नोट तक, नोट से टैग तक और आगे संबंधित नोट तक।',
             scene: function () {
-                var walk = [NOTEBOOK, 'Attention', OUTLINE_SELECTED];
+                var walk = [NOTEBOOK, 'ध्यान', OUTLINE_SELECTED];
                 return renderGraph('mfd-graph-scene', walk) + '<div class="mfd-crumbs">' + walk.map(function (id, i) {
                     return '<span style="--w:' + i + '">' + id + '</span>';
                 }).join('') + '</div>';
             }
         },
         {
-            id: 'wingman', tab: 'wingman', title: 'wingman', query: 'summarize this Note',
-            sub: 'ask local LLM - your Notes never leave your machine',
+            id: 'wingman', tab: 'AI साथी', title: 'AI साथी', query: 'इस नोट का सारांश दें',
+            sub: 'स्थानीय LLM से पूछिए - आपके नोट कभी आपकी मशीन से बाहर नहीं जाते',
             targets: ['mfd-wingman'],
-            detail: 'Ask Wingman - a local LLM served by ollama - to summarize, explain or find tasks in the Note you read. Your Notes never leave your machine.',
+            detail: 'AI साथी से - जो ollama पर चलने वाला स्थानीय LLM है - कहिए कि वह आपके पढ़े जा रहे नोट का सारांश दे, उसे समझाए या उसमें कार्य खोजे। आपके नोट कभी आपकी मशीन से बाहर नहीं जाते।',
             scene: function () {
-                return '<div class="mfd-chat"><div class="mfd-term-head">wingman - llama @ ollama<span class="mfd-private">local - private</span></div><p data-answer></p></div>';
+                return '<div class="mfd-chat"><div class="mfd-term-head">AI साथी - llama @ ollama<span class="mfd-private">स्थानीय - निजी</span></div><p data-answer></p></div>';
             },
             play: function (scene, delayMs) {
                 typeInto(scene.querySelector('[data-answer]'),
-                    'Retrieval failure in short: the memory is stored, but the cue to reach it is missing. Practice active recall, reinstate the context and use spaced repetition.',
+                    'स्मरण विफलता संक्षेप में: स्मृति संचित है, पर उस तक पहुँचाने वाला संकेत नहीं मिल रहा। सक्रिय स्मरण का अभ्यास कीजिए, संदर्भ दोबारा बनाइए और अंतराल पुनरावृत्ति का उपयोग कीजिए।',
                     delayMs);
             }
         },
         {
-            id: 'association', tab: 'association', title: 'associations', query: 'reading this Note',
-            sub: 'MindForger thinks as you read and write',
+            id: 'association', tab: 'संबंध', title: 'संबंध', query: 'यह नोट पढ़ते हुए',
+            sub: 'जब आप पढ़ते और लिखते हैं, MindForger सोचता है',
             targets: ['mfd-kgraph'],
-            detail: 'As you read or write a Note, MindForger thinks along and suggests associated Notes - relevant knowledge you might have forgotten you have.',
+            detail: 'जब आप कोई नोट पढ़ते या लिखते हैं, MindForger साथ-साथ सोचता है और संबद्ध नोट सुझाता है - वह प्रासंगिक ज्ञान जिसके होने की बात आप शायद भूल चुके थे।',
             scene: function () {
-                var assoc = [['Memory', 87], ['Retrieval cues', 74], ['Forgetting curve', 61], ['Chunking', 52]];
-                return '<div class="mfd-assoc"><span class="mfd-item" style="--i:0">' + kind('N') + '<span>Retrieval failure</span></span><ul>' + assoc.map(function (a, i) {
+                var assoc = [['स्मृति', 87], ['स्मरण संकेत', 74], ['विस्मृति वक्र', 61], ['चंकिंग', 52]];
+                return '<div class="mfd-assoc"><span class="mfd-item" style="--i:0">' + kind('N') + '<span>स्मरण विफलता</span></span><ul>' + assoc.map(function (a, i) {
                     return '<li style="--i:' + i + '"><span>' + a[0] + '</span><span class="mfd-bar"><i style="--v:' + a[1] + '%"></i></span><b>' + a[1] + '%</b></li>';
                 }).join('') + '</ul></div>';
             }
         },
         {
-            id: 'task', tab: 'task', title: 'tasks', query: '#important #urgent',
-            sub: 'Eisenhower matrix and Kanban organizers',
+            id: 'task', tab: 'कार्य', title: 'कार्य', query: '#महत्वपूर्ण #तत्काल',
+            sub: 'आइज़नहावर मैट्रिक्स और कानबान ऑर्गनाइज़र',
             targets: ['mfd-kanban'],
-            detail: 'Organizers turn tagged Notebooks and Notes into Eisenhower matrix quadrants or Kanban columns - see what is urgent, what is important and what is done.',
+            detail: 'ऑर्गनाइज़र टैग लगी नोटबुक और नोट को आइज़नहावर मैट्रिक्स के चतुर्थांशों या कानबान स्तंभों में बदल देते हैं - आप देख सकते हैं कि क्या तत्काल है, क्या महत्वपूर्ण है और क्या पूरा हो चुका है।',
             scene: function () {
                 // quadrant names follow lib/src/model/eisenhower_matrix.cpp
                 var quadrants = [
-                    ['urgent', 'var(--mfd-yellow)', ['Pay bill']],
-                    ['important & urgent', 'var(--mfd-red)', ['Retrieval failure', 'Exam']],
-                    ['not important', 'var(--mfd-muted)', ['Sort photos']],
-                    ['important', 'var(--mfd-green)', ['Learn Rust', 'Sleep']]
+                    ['तत्काल', 'var(--mfd-yellow)', ['बिल भरना']],
+                    ['महत्वपूर्ण और तत्काल', 'var(--mfd-red)', ['स्मरण विफलता', 'परीक्षा']],
+                    ['महत्वपूर्ण नहीं', 'var(--mfd-muted)', ['फ़ोटो छाँटना']],
+                    ['महत्वपूर्ण', 'var(--mfd-green)', ['Rust सीखना', 'नींद']]
                 ];
                 var i = 0;
                 return '<div class="mfd-matrix">' + quadrants.map(function (q) {
@@ -3096,7 +3119,7 @@
     setMode(0);
     layout();
     requestAnimationFrame(tick);
-    showDetail('MINDFORGER', 'Knowledge flows in from the top, questions come from the bottom. Click any box or tab to learn more.');
+    showDetail('MINDFORGER', 'ज्ञान ऊपर से भीतर आता है, प्रश्न नीचे से आते हैं। और जानने के लिए किसी भी बॉक्स या टैब पर क्लिक कीजिए।');
 })();
 </script>
 <!-- END mfd: functional architecture diagram - script -->
@@ -3104,22 +3127,22 @@
 
 <div class="w3-row w3-center w3-black w3-padding-16" id="llm" style="border-top: 3px solid white;">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">LLM</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">LLM</span><br>
   </div>
 </div>
 
 <!-- Container: LLM -->
 <div class="w3-content w3-container w3-padding-64">
-  Optional MindForger's <a class="mf-link" target="_blank" href="docs/user-documentation.html#wingman">Wingman</a> can use
-  either local (privacy - <a  class="mf-link" target="_blank" href="https://ollama.com">Ollama</a>)
-  or remote (SOTA - <a class="mf-link" target="_blank" href="https://openrouter.ai">OpenRouter</a>
-  or <a class="mf-link" target="_blank" href="https://openai.com">OpenAI</a>) <b>Large Language Model (LLM)</b>
-  to provide <b>semantic</b> and <b>syntactic</b> assistance when you <b>read</b> and <b>write</b> your
-  notes - with Wingman you can:
+  MindForger का वैकल्पिक <a class="mf-link" target="_blank" href="../docs/user-documentation.html#wingman">AI साथी</a>
+  स्थानीय (निजता - <a  class="mf-link" target="_blank" href="https://ollama.com">Ollama</a>)
+  या दूरस्थ (सर्वश्रेष्ठ - <a class="mf-link" target="_blank" href="https://openrouter.ai">OpenRouter</a>
+  अथवा <a class="mf-link" target="_blank" href="https://openai.com">OpenAI</a>) <b>बड़े भाषा मॉडल (LLM)</b> का उपयोग कर
+  तब <b>अर्थगत</b> और <b>व्याकरणिक</b> सहायता देता है जब आप अपने नोट <b>पढ़ते</b> और <b>लिखते</b> हैं।
+  AI साथी के साथ आप कर सकते हैं:
 
   <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Fix&nbsp;grammar</div>
+       <div class="mfGroupLeftText">व्याकरण&nbsp;सुधारें</div>
      </div>
      <div class="right" id="open-source">
       <iframe width="280" height="158" src="https://www.youtube.com/embed/QLX9CWzzEa8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -3127,7 +3150,7 @@
    </div>
   <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Summarize</div>
+       <div class="mfGroupLeftText">सारांश&nbsp;दें</div>
      </div>
      <div class="right" id="open-source">
       <iframe width="280" height="158" src="https://www.youtube.com/embed/TAV8tHajjeg" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -3135,7 +3158,7 @@
    </div>
   <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Explain</div>
+       <div class="mfGroupLeftText">समझाएँ</div>
      </div>
      <div class="right" id="open-source">
        <iframe width="280" height="158" src="https://www.youtube.com/embed/fln4XdnlR0A" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -3143,7 +3166,7 @@
    </div>
   <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Translate</div>
+       <div class="mfGroupLeftText">अनुवाद&nbsp;करें</div>
      </div>
      <div class="right" id="open-source">
       <iframe width="280" height="158" src="https://www.youtube.com/embed/akesdLhWZ-I" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -3151,7 +3174,7 @@
    </div>
   <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Complete&nbsp;text</div>
+       <div class="mfGroupLeftText">पाठ&nbsp;पूरा&nbsp;करें</div>
      </div>
      <div class="right" id="open-source">
       <iframe width="280" height="158" src="https://www.youtube.com/embed/eyLV5P_Bujs" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -3159,19 +3182,19 @@
    </div>
   <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Get&nbsp;synonyms&nbsp;&&nbsp;antonyms</div>
+       <div class="mfGroupLeftText">पर्यायवाची&nbsp;और&nbsp;विलोम</div>
      </div>
      <div class="right" id="open-source">
        <iframe width="280" height="158" src="https://www.youtube.com/embed/Xj0wZz2vBSw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
      </div>
    </div>
 
-   ... and much more.
+   ... और भी बहुत कुछ।
 </div>
 
 <div class="w3-row w3-center w3-black w3-padding-16" id="floss">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">FLOSS</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">FLOSS</span><br>
   </div>
 </div>
 
@@ -3180,37 +3203,37 @@
 
   <!-- screenshots -->
    <div class="w3-content" style="max-width:1200px">
-     <img class="mySlidesFloss" src="images/screenshots/fts.png" style="width:100%">
-     <img class="mySlidesFloss" src="images/screenshots/eisenhower-matrix.png" style="width:100%">
-     <img class="mySlidesFloss" src="images/screenshots/grow-model.png" style="width:100%">
-     <img class="mySlidesFloss" src="images/screenshots/task-lists.png" style="width:100%">
-     <img class="mySlidesFloss" src="images/screenshots/library-add.png" style="width:100%">
-     <img class="mySlidesFloss" src="images/screenshots/multiple-documents.png" style="width:100%">
+     <img class="mySlidesFloss" src="../images/screenshots/fts.png" style="width:100%">
+     <img class="mySlidesFloss" src="../images/screenshots/eisenhower-matrix.png" style="width:100%">
+     <img class="mySlidesFloss" src="../images/screenshots/grow-model.png" style="width:100%">
+     <img class="mySlidesFloss" src="../images/screenshots/task-lists.png" style="width:100%">
+     <img class="mySlidesFloss" src="../images/screenshots/library-add.png" style="width:100%">
+     <img class="mySlidesFloss" src="../images/screenshots/multiple-documents.png" style="width:100%">
 
      <div class="w3-row-padding w3-section">
       <div class="w3-col s2 mfSlideThumbnail">
-        <img class="flossChoice w3-opacity" src="images/screenshots/fts.png" style="width:100%" onclick="currentDivFloss(1)">
-        Full-text search
+        <img class="flossChoice w3-opacity" src="../images/screenshots/fts.png" style="width:100%" onclick="currentDivFloss(1)">
+        पूर्ण-पाठ खोज
       </div>
       <div class="w3-col s2 mfSlideThumbnail">
-	      <img class="flossChoice w3-opacity" src="images/screenshots/eisenhower-matrix.png" style="width:100%" onclick="currentDivFloss(2)">
-	      Eisenhower matrix
+	      <img class="flossChoice w3-opacity" src="../images/screenshots/eisenhower-matrix.png" style="width:100%" onclick="currentDivFloss(2)">
+	      आइज़नहावर मैट्रिक्स
       </div>
       <div class="w3-col s2 mfSlideThumbnail">
-	      <img class="flossChoice w3-opacity" src="images/screenshots/grow-model.png" style="width:100%" onclick="currentDivFloss(3)">
-	      G.R.O.W. model
+	      <img class="flossChoice w3-opacity" src="../images/screenshots/grow-model.png" style="width:100%" onclick="currentDivFloss(3)">
+	      G.R.O.W. मॉडल
       </div>
       <div class="w3-col s2 mfSlideThumbnail">
-	      <img class="flossChoice w3-opacity" src="images/screenshots/task-lists.png" style="width:100%" onclick="currentDivFloss(4)">
-	      Task lists
+	      <img class="flossChoice w3-opacity" src="../images/screenshots/task-lists.png" style="width:100%" onclick="currentDivFloss(4)">
+	      कार्य सूचियाँ
       </div>
       <div class="w3-col s2 mfSlideThumbnail">
-	      <img class="flossChoice w3-opacity" src="images/screenshots/library-add.png" style="width:100%" onclick="currentDivFloss(5)">
-	      PDF library
+	      <img class="flossChoice w3-opacity" src="../images/screenshots/library-add.png" style="width:100%" onclick="currentDivFloss(5)">
+	      PDF लाइब्रेरी
       </div>
       <div class="w3-col s2 mfSlideThumbnail">
-	      <img class="flossChoice w3-opacity" src="images/screenshots/multiple-documents.png" style="width:100%" onclick="currentDivFloss(6)">
-	      Multiple documents
+	      <img class="flossChoice w3-opacity" src="../images/screenshots/multiple-documents.png" style="width:100%" onclick="currentDivFloss(6)">
+	      कई दस्तावेज़
       </div>
     </div>
    </div>
@@ -3245,80 +3268,80 @@
 
 
    <div class="w3-container w3-center" style="margin-top: 30px; margin-bottom: 30px;">
-     <b>MindForger</b> is
-     <a class="mf-link" href="#open-source">open</a>,
-     <a class="mf-link" href="#free">free</a> and
-     <a class="mf-link" href="#performance">fast</a> -
-     a thinking notebook and Markdown editor which respects your
-     <a class="mf-link" href="#privacy">privacy</a> and your
-     <a class="mf-link" href="#security">security</a>:
+     <b>MindForger</b>
+     <a class="mf-link" href="#open-source">खुला</a>,
+     <a class="mf-link" href="#free">स्वतंत्र</a> और
+     <a class="mf-link" href="#performance">तेज़</a> है -
+     एक सोचने वाली नोटबुक और Markdown संपादक, जो आपकी
+     <a class="mf-link" href="#privacy">निजता</a> और आपकी
+     <a class="mf-link" href="#security">सुरक्षा</a> का सम्मान करता है:
    </div>
 
 
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Open</div>
+       <div class="mfGroupLeftText">खुला</div>
      </div>
      <div class="right" id="open-source">
-       MindForger is <b>open source</b> software
+       MindForger <b>मुक्त स्रोत</b> सॉफ़्टवेयर है
        (<a class="mf-link" target="_blank" href="https://en.wikipedia.org/wiki/Free_and_open-source_software">FLOSS</a>) -
-       anyone can download, review and audit
-       <a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger">its source code</a>.
-       Your Notes use an <b>open format</b> - plain
+       कोई भी इसका
+       <a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger">स्रोत कोड</a> डाउनलोड कर, पढ़ कर और जाँच कर सकता है।
+       आपके नोट <b>खुले प्रारूप</b> में रहते हैं - सादी
        <a class="mf-link" target="_blank" href="https://github.github.com/gfm/">GitHub Flavored Markdown</a>
-       files which you can edit in any text or Markdown editor like
+       फ़ाइलें, जिन्हें आप किसी भी टेक्स्ट या Markdown संपादक में खोल सकते हैं, जैसे
        <a class="mf-link" target="_blank" href="https://code.visualstudio.com/">VS Code</a>,
        <a class="mf-link" target="_blank" href="https://obsidian.md/">Obsidian</a>,
-       <a class="mf-link" target="_blank" href="https://typora.io/">Typora</a> or
-       <a class="mf-link" target="_blank" href="https://www.vim.org/">Vim</a>.
+       <a class="mf-link" target="_blank" href="https://typora.io/">Typora</a> या
+       <a class="mf-link" target="_blank" href="https://www.vim.org/">Vim</a>।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Free</div>
+       <div class="mfGroupLeftText">स्वतंत्र</div>
      </div>
      <div class="right" id="free">
-       Free software is a matter of <b>liberty</b>, not price - you are free to run, study,
-       change and share your copy of MindForger. It is licensed under the
+       स्वतंत्र सॉफ़्टवेयर क़ीमत का नहीं, <b>स्वतंत्रता</b> का मामला है - आप MindForger की अपनी प्रति को
+       चलाने, पढ़ने, बदलने और साझा करने के लिए स्वतंत्र हैं। यह
        <a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger/blob/master/LICENSE">GNU GPL</a>
-       and it <b>costs nothing</b> to download and use. No account, no subscription.
+       के अंतर्गत है और इसे डाउनलोड करने तथा उपयोग करने में <b>कोई शुल्क नहीं</b> लगता। न खाता, न सदस्यता।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Performance</div>
+       <div class="mfGroupLeftText">प्रदर्शन</div>
      </div>
      <div class="right" id="performance">
-       MindForger is a <b>native C++/Qt</b> application. Workspaces with <b>1000s</b> of Notes
-       and <b>100s</b> of Markdown files are parsed and indexed in moments, and then
-       searched, viewed and edited without delay.
+       MindForger एक <b>नेटिव C++/Qt</b> एप्लिकेशन है। <b>हज़ारों</b> नोट और
+       <b>सैकड़ों</b> Markdown फ़ाइलों वाले वर्कस्पेस पल भर में पढ़े और इंडेक्स हो जाते हैं, और उसके बाद
+       उनमें खोजना, देखना और संपादन करना बिना किसी देरी के होता है।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Privacy</div>
+       <div class="mfGroupLeftText">निजता</div>
      </div>
      <div class="right" id="privacy">
-       Your Notes live <b>locally on your machine</b>. MindForger has no account and no
-       telemetry and it <b>uploads nothing</b> - neither your data nor an anonymized digest
-       of it. With a local ollama model, even AI assistance stays offline.
+       आपके नोट <b>आपकी ही मशीन पर</b> रहते हैं। MindForger में न कोई खाता है, न
+       टेलीमेट्री, और यह <b>कुछ भी अपलोड नहीं करता</b> - न आपका डेटा, न उसका गुमनाम सारांश।
+       स्थानीय ollama मॉडल के साथ तो AI की मदद भी ऑफ़लाइन ही रहती है।
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Security</div>
+       <div class="mfGroupLeftText">सुरक्षा</div>
      </div>
      <div class="right" id="security">
-       Your workspace is just a directory, so you can <b>encrypt</b> it with the tool you trust -
-       full disk encryption like
+       आपका वर्कस्पेस केवल एक डायरेक्टरी है, इसलिए आप उसे अपने भरोसे के उपकरण से <b>एन्क्रिप्ट</b> कर सकते हैं -
+       पूरी डिस्क एन्क्रिप्शन जैसे
        <a class="mf-link" target="_blank" href="https://gitlab.com/cryptsetup/cryptsetup">LUKS</a>,
-       <a class="mf-link" target="_blank" href="https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/">BitLocker</a> or
+       <a class="mf-link" target="_blank" href="https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/">BitLocker</a> या
        <a class="mf-link" target="_blank" href="https://support.apple.com/guide/mac-help/protect-data-on-your-mac-with-filevault-mh11785/mac">FileVault</a>,
-       or an encrypted folder with
+       या इनसे बना एन्क्रिप्टेड फ़ोल्डर:
        <a class="mf-link" target="_blank" href="https://nuetzlich.net/gocryptfs/">gocryptfs</a>,
-       <a class="mf-link" target="_blank" href="https://veracrypt.io/">VeraCrypt</a> or
-       <a class="mf-link" target="_blank" href="https://cryptomator.org/">Cryptomator</a>.
-       Found a vulnerability? Please <a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger/blob/master/SECURITY.md">report</a> it!
+       <a class="mf-link" target="_blank" href="https://veracrypt.io/">VeraCrypt</a> या
+       <a class="mf-link" target="_blank" href="https://cryptomator.org/">Cryptomator</a>।
+       कोई भेद्यता मिली? कृपया उसकी <a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger/blob/master/SECURITY.md">सूचना दें</a>!
      </div>
    </div>
 
@@ -3328,7 +3351,7 @@
 
 <div class="w3-row w3-center w3-black w3-padding-16" id="documentation">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Documentation</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">दस्तावेज़</span><br>
   </div>
 </div>
 
@@ -3358,45 +3381,45 @@
 
     <div class="group" style="margin-top: 10px;">
       <div class="left">
-        <div class="mfGroupLeftText"><a class="mf-link" target="_blank" href="docs/index.html">Documentation</a></div>
+        <div class="mfGroupLeftText"><a class="mf-link" target="_blank" href="../docs/index.html">दस्तावेज़</a></div>
       </div>
       <div class="right" id="doc-wiki">
-          MindForger <a class="mf-link" target="_blank" href="docs/index.html">documentation</a> is
-          the primary source of information about MindForger. It contains getting started, user guide, installation instructions, release notes,
-          developer guide, FAQ and more.
+          MindForger के बारे में जानकारी का मुख्य स्रोत उसके
+          <a class="mf-link" target="_blank" href="../docs/index.html">दस्तावेज़</a> हैं। उनमें शुरुआत कैसे करें, उपयोगकर्ता मार्गदर्शिका, संस्थापन निर्देश, रिलीज़ नोट,
+          डेवलपर मार्गदर्शिका, अक्सर पूछे जाने वाले प्रश्न और बहुत कुछ शामिल है। (फ़िलहाल केवल अंग्रेज़ी में।)
       </div>
     </div>
     <div class="group" style="margin-top: 10px;">
       <div class="left">
-        <div class="mfGroupLeftText"><a class="mf-link" target="_blank" href="https://www.youtube.com/playlist?list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS">YouTube Tutorials</a></div>
+        <div class="mfGroupLeftText"><a class="mf-link" target="_blank" href="https://www.youtube.com/playlist?list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS">YouTube ट्यूटोरियल</a></div>
       </div>
       <div class="right" id="doc-wiki">
-        MindForger <b>tutorials</b> on <a class="mf-link" target="_blank" href="https://www.youtube.com/playlist?list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS">YouTube</a> are a great way to learn how to use MindForger. They cover various topics from
-        installation, basic usage, advanced features to tips and tricks.
+        <a class="mf-link" target="_blank" href="https://www.youtube.com/playlist?list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS">YouTube</a> पर MindForger के <b>ट्यूटोरियल</b> इसे सीखने का बढ़िया तरीक़ा हैं। इनमें
+        संस्थापन और बुनियादी उपयोग से लेकर उन्नत विशेषताओं तथा टिप्स और ट्रिक्स तक, सब शामिल है।
       </div>
     </div>
 
 
    <div id="community" class="w3-container w3-center w3-margin-top">
      <br>
-     <b>Follow</b>
-     @mindforger on
-     <a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger on GitHub">GitHub</a>,
-     <a href="https://x.com/mindforger" target="_blank" title="@mindforger on X">X</a>,
+     @mindforger को यहाँ
+     <b>फ़ॉलो करें</b>:
+     <a href="https://github.com/dvorka/mindforger" target="_blank" title="GitHub पर @mindforger">GitHub</a>,
+     <a href="https://x.com/mindforger" target="_blank" title="X पर @mindforger">X</a>,
      <!--
      <a href="https://www.instagram.com/mindforger" target="_blank" title="@mindforger on Instagram">Instagram</a>,
      <a href="https://groups.google.com/forum/#!forum/mindforger" target="_blank" title="@mindforger on Google Groups">Google Groups</a>,
      -->
-     <a href="https://www.facebook.com/pages/MindForger/172099806154112" target="_blank" title="MindForger on Facebook">Facebook</a>
-     and
-     <a href="https://www.youtube.com/user/MindForgerChannel" target="_blank" title="MindForger on YouTube">YouTube</a>.
+     <a href="https://www.facebook.com/pages/MindForger/172099806154112" target="_blank" title="Facebook पर MindForger">Facebook</a>
+     और
+     <a href="https://www.youtube.com/user/MindForgerChannel" target="_blank" title="YouTube पर MindForger">YouTube</a>।
    </div>
 </div>
 
 
 <div class="w3-row w3-center w3-black w3-padding-16">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Contribute</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">योगदान दें</span><br>
   </div>
 </div>
 
@@ -3404,9 +3427,9 @@
 <!-- Container: Contribute -->
 <div class="w3-content w3-container w3-padding-64" id="contribute">
    <div class="w3-container w3-center" style="margin-bottom: 30px; width: 80%; margin-left: 10%">
-     Current <b>MindForger</b> implementation is just an initial imperfect sketch of much broader
-     <b>vision</b>. It's purpose is to <b>demonstrate</b> viability of thinking notebook idea and to <b>show</b>
-     possible research directions.
+     <b>MindForger</b> का मौजूदा रूप एक कहीं बड़ी <b>दृष्टि</b> का
+     शुरुआती और अधूरा ख़ाका भर है। इसका उद्देश्य यह <b>दिखाना</b> है कि सोचने वाली नोटबुक का विचार व्यवहार्य है, और आगे के
+     संभावित शोध की दिशाएँ <b>सुझाना</b> है।
    </div>
 
 
@@ -3416,25 +3439,25 @@
 
 
    <div id="contribute" class="w3-container w3-center" style="margin-top: 30px; margin-bottom: 30px; width: 50%; margin-left: 25%">
-       Feel free to <a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger on GitHub" class="mf-link"><b>contribute</b></a>!
-       Don't hesitate to contact <a href="mailto:martin.dvorak@mindforger.com" class="mf-link">me</a>.
+       बेझिझक <a href="https://github.com/dvorka/mindforger" target="_blank" title="GitHub पर @mindforger" class="mf-link"><b>योगदान दीजिए</b></a>!
+       मुझसे <a href="mailto:martin.dvorak@mindforger.com" class="mf-link">संपर्क</a> करने में संकोच न करें।
    </div>
 
 
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Contribute</div>
+       <div class="mfGroupLeftText">योगदान दें</div>
      </div>
      <div class="right" style="text-align: left;">
        <ul>
-	 <li><b>Bugs and suggestions</b> ... <a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger on GitHub" class="mf-link">submit</a> bugs, issues, ideas and enhancements.
-	 <li><b>Translations</b> ... translate MindForger to your language.
-	 <li><b>Platform support</b> ... port MindForger to your favorite OS or distribution.
-	 <li><b>Code</b> ... <a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger on GitHub" class="mf-link">submit pull request</a> or patch with implementation of a feature you missed.
-	 <li><b>Research</b> ... consider making your AI/ML, NLP, data mining, ... research on top of (your) documents indexed to MindForger ontology.
-	 <li><b>Integration</b> ... how-to or code enabling integration with your (favorite) project.
-	 <li><b>Enhancements</b> ... submit performance, efficiency and/or productivity enhancements.
-	 <li><b>Documentation</b> ... write a document, blog post or tweet, create YouTube video, ...
+	 <li><b>बग और सुझाव</b> ... बग, समस्याएँ, विचार और सुधार <a href="https://github.com/dvorka/mindforger" target="_blank" title="GitHub पर @mindforger" class="mf-link">दर्ज कीजिए</a>।
+	 <li><b>अनुवाद</b> ... MindForger का अपनी भाषा में अनुवाद कीजिए।
+	 <li><b>प्लेटफ़ॉर्म समर्थन</b> ... MindForger को अपने पसंदीदा ऑपरेटिंग सिस्टम या डिस्ट्रिब्यूशन पर पोर्ट कीजिए।
+	 <li><b>कोड</b> ... जो सुविधा आपको चाहिए उसका <a href="https://github.com/dvorka/mindforger" target="_blank" title="GitHub पर @mindforger" class="mf-link">पुल रिक्वेस्ट</a> या पैच भेजिए।
+	 <li><b>शोध</b> ... अपने AI/ML, NLP या डेटा माइनिंग शोध को MindForger की ऑन्टोलॉजी में इंडेक्स किए (अपने) दस्तावेज़ों पर आधारित करने पर विचार कीजिए।
+	 <li><b>एकीकरण</b> ... अपने (पसंदीदा) प्रोजेक्ट से जोड़ने का तरीक़ा या कोड दीजिए।
+	 <li><b>सुधार</b> ... प्रदर्शन, दक्षता या उत्पादकता से जुड़े सुधार भेजिए।
+	 <li><b>दस्तावेज़ीकरण</b> ... कोई दस्तावेज़, ब्लॉग पोस्ट या ट्वीट लिखिए, YouTube वीडियो बनाइए, ...
        </ul>
      </div>
    </div>
@@ -3442,7 +3465,7 @@
 
 <div class="w3-row w3-center w3-black w3-padding-16">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Releases</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">रिलीज़</span><br>
   </div>
 </div>
 
@@ -3451,24 +3474,24 @@
    <div class="w3-container w3-center" style="width: 80%; margin-left: 10%">
      <br/>
 
-     MindForger releases:<br/>
+     MindForger की रिलीज़:<br/>
      <br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/2.2.0" target="_blank">Rewrap, Snap, WebEngine (Linux), KaTeX and Mermaid (2.2.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/2.1.0" target="_blank">Ollama/OpenRouter/OpenAI LLM providers, library mgmt (2.1.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/2.0.0" target="_blank">LLM integration, Notebook tree, Libraries (2.0.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.54.0" target="_blank">Smart(er) editor and improved macOS version (1.54.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.53.0" target="_blank">Spell check, Kanban and Eisenhower Matrix on tags (1.53.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.52.0" target="_blank">Autolinking (1.52.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.51.0" target="_blank">Live preview (1.51.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.50.0" target="_blank">Dashboard, Link Completion, Image Drag&amp;Drop, FTS (1.50.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.49.0" target="_blank">Microsoft Windows and GitHub Flavored Markdown (1.49.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.48.0" target="_blank">CSV export and MathJax Menu (1.48.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.47.0" target="_blank">Knowledge Graph Navigator (1.47.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.46.0" target="_blank">Standard Terminology and Toolbar (1.46.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.43.0" target="_blank">Eisenhower Matrix, Tags View and Recent Notes (1.43.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.42.0" target="_blank">Initial Release (1.42.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/2.2.0" target="_blank">अनुच्छेद पुनर्व्यवस्था, Snap, WebEngine (Linux), KaTeX और Mermaid (2.2.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/2.1.0" target="_blank">Ollama/OpenRouter/OpenAI LLM प्रदाता, लाइब्रेरी प्रबंधन (2.1.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/2.0.0" target="_blank">LLM एकीकरण, नोटबुक वृक्ष, लाइब्रेरी (2.0.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.54.0" target="_blank">अधिक स्मार्ट संपादक और बेहतर macOS संस्करण (1.54.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.53.0" target="_blank">वर्तनी जाँच, टैग पर आधारित कानबान और आइज़नहावर मैट्रिक्स (1.53.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.52.0" target="_blank">स्वतः लिंक (1.52.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.51.0" target="_blank">लाइव पूर्वावलोकन (1.51.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.50.0" target="_blank">डैशबोर्ड, लिंक पूर्णता, चित्र ड्रैग&amp;ड्रॉप, पूर्ण-पाठ खोज (1.50.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.49.0" target="_blank">Microsoft Windows और GitHub Flavored Markdown (1.49.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.48.0" target="_blank">CSV निर्यात और MathJax मेन्यू (1.48.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.47.0" target="_blank">ज्ञान ग्राफ़ नेविगेटर (1.47.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.46.0" target="_blank">मानक शब्दावली और टूलबार (1.46.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.43.0" target="_blank">आइज़नहावर मैट्रिक्स, टैग दृश्य और हाल के नोट (1.43.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.42.0" target="_blank">पहली रिलीज़ (1.42.0)</a><br/>
      <br/>
-     [<a href="https://raw.githubusercontent.com/dvorka/mindforger/master/Changelog" target="_blank">changelog</a>]
+     [<a href="https://raw.githubusercontent.com/dvorka/mindforger/master/Changelog" target="_blank">परिवर्तन सूची</a>]
 
      <br/>
    </div>
@@ -3476,7 +3499,7 @@
 
 <div class="w3-row w3-center w3-black w3-padding-16" id="praise">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Praise</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">प्रतिक्रियाएँ</span><br>
   </div>
 </div>
 
@@ -3486,64 +3509,64 @@
 
      <div class="mfQuoteCard mySlidesQuotes">
        <div class="mfQuoteText">
-         I do think it is wonderful that you have built MindForger and made it available
-         as an open source application!
+         मुझे सचमुच बहुत अच्छा लगता है कि आपने MindForger बनाया और उसे
+         एक मुक्त स्रोत एप्लिकेशन के रूप में सबके लिए उपलब्ध कराया!
        </div>
        <div class="mfQuoteBy">
          <span class="mfQuoteWho">&mdash; M.F.</span><br/>
-         open source evangelist &middot; November 2023
+         मुक्त स्रोत के प्रचारक &middot; नवंबर 2023
        </div>
      </div>
 
      <div class="mfQuoteCard mySlidesQuotes">
        <div class="mfQuoteText">
-         God DAMN I think I have an estranged twin somewhere that decided to make the (Markdown) IDE of my dreams!
+         बाप रे! मुझे लगता है कहीं मेरा कोई बिछड़ा हुआ जुड़वाँ है, जिसने मेरे सपनों का (Markdown) IDE बनाने की ठान ली!
        </div>
        <div class="mfQuoteBy">
          <span class="mfQuoteWho">&mdash; S.J.</span><br/>
-         avid note-taker &middot; June 2025
+         नोट लिखने के शौक़ीन &middot; जून 2025
        </div>
      </div>
 
      <div class="mfQuoteCard mySlidesQuotes">
        <div class="mfQuoteText">
-         I am using MindForger everyday... mostly as a Markdown editor to maintain
-         a journal (one note per day) and a few notebooks for specific topics or events. Thank you for the app!
+         मैं MindForger रोज़ इस्तेमाल करता हूँ... ज़्यादातर Markdown संपादक की तरह, एक
+         डायरी रखने के लिए (हर दिन एक नोट) और कुछ ख़ास विषयों या आयोजनों की नोटबुक के लिए। इस ऐप के लिए धन्यवाद!
        </div>
        <div class="mfQuoteBy">
          <span class="mfQuoteWho">&mdash; L.O.</span><br/>
-         journal keeper &middot; May 2026
+         डायरी लिखने वाले &middot; मई 2026
        </div>
      </div>
 
      <div class="mfQuoteCard mySlidesQuotes">
        <div class="mfQuoteText">
-         I recognize that it&rsquo;s a great idea, with huge application potential to many purposes,
-         far beyond an IDE to be used as a thinking aid or a text editor&hellip; The applications?
-         Well, as with your MindForger concept, there are many.
+         मैं मानता हूँ कि यह एक शानदार विचार है, जिसमें कई कामों के लिए ज़बरदस्त संभावनाएँ हैं -
+         सोचने में मदद करने वाले या पाठ संपादक के रूप में इस्तेमाल होने वाले IDE से कहीं आगे&hellip; कहाँ-कहाँ काम आएगा?
+         आपके MindForger के विचार की ही तरह, इसके उपयोग भी अनेक हैं।
        </div>
        <div class="mfQuoteBy">
          <span class="mfQuoteWho">&mdash; I.A.J.</span><br/>
-         academic &middot; September 2020
+         शिक्षाविद &middot; सितंबर 2020
        </div>
      </div>
 
      <div class="mfQuoteCard mySlidesQuotes">
        <div class="mfQuoteText">
-          MindForger looks like an amazing tool.
+          MindForger एक ज़बरदस्त उपकरण लगता है।
        </div>
        <div class="mfQuoteBy">
          <span class="mfQuoteWho">&mdash; B.V.H.</span><br/>
-         writer &middot; March 2017
+         लेखक &middot; मार्च 2017
        </div>
      </div>
 
      <div class="mfQuoteDots">
-       <span class="mfQuoteDot" onclick="currentDivQuotes(1)" title="Quote 1"></span>
-       <span class="mfQuoteDot" onclick="currentDivQuotes(2)" title="Quote 2"></span>
-       <span class="mfQuoteDot" onclick="currentDivQuotes(3)" title="Quote 3"></span>
-       <span class="mfQuoteDot" onclick="currentDivQuotes(4)" title="Quote 4"></span>
-       <span class="mfQuoteDot" onclick="currentDivQuotes(5)" title="Quote 5"></span>
+       <span class="mfQuoteDot" onclick="currentDivQuotes(1)" title="उद्धरण 1"></span>
+       <span class="mfQuoteDot" onclick="currentDivQuotes(2)" title="उद्धरण 2"></span>
+       <span class="mfQuoteDot" onclick="currentDivQuotes(3)" title="उद्धरण 3"></span>
+       <span class="mfQuoteDot" onclick="currentDivQuotes(4)" title="उद्धरण 4"></span>
+       <span class="mfQuoteDot" onclick="currentDivQuotes(5)" title="उद्धरण 5"></span>
      </div>
 
    </div>
@@ -3595,7 +3618,7 @@
 
 <div class="w3-row w3-center w3-black w3-padding-16">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Download</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">डाउनलोड</span><br>
   </div>
 </div>
 
@@ -3603,23 +3626,23 @@
 <div class="w3-container w3-padding-64" id="download">
    <div class="mfDownloadGroup">
      <div class="mfDownloadLeft">
-       <div class="mfGroupLeftText">Install:</div>
+       <div class="mfGroupLeftText">संस्थापन:</div>
      </div>
      <div class="mfDownloadRight">
       <div class="mf-download-button"><a href="https://snapcraft.io/mindforger" target="_blank" class="mf-download-link">Snap</a></div>
-      <div class="mf-download-button"><a href="docs/installation.html#ubuntu" target="_blank" class="mf-download-link">Ubuntu</a></div>
-      <div class="mf-download-button"><a href="docs/installation.html#debian" target="_blank" class="mf-download-link">Debian</a></div>
-      <div class="mf-download-button"><a href="docs/installation.html#fedora" target="_blank" class="mf-download-link">Fedora</a></div>
-      <div class="mf-download-button"><a href="docs/installation.html#arch-linux" target="_blank" class="mf-download-link">Arch</a></div>
-      <div class="mf-download-button-i"><a href="docs/installation.html#windows" target="_blank" class="mf-download-link">Windows</a></div>
-      <div class="mf-download-button-i"><a href="docs/installation.html#wsl" target="_blank" class="mf-download-link">Windows WSL</a></div>
-      <div class="mf-download-button-ii"><a href="docs/installation.html#macos" target="_blank" class="mf-download-link">macOS</a></div>
-      <div class="mf-download-button-ii"><a href="docs/installation.html#docker" target="_blank" class="mf-download-link">Docker</a></div>
+      <div class="mf-download-button"><a href="../docs/installation.html#ubuntu" target="_blank" class="mf-download-link">Ubuntu</a></div>
+      <div class="mf-download-button"><a href="../docs/installation.html#debian" target="_blank" class="mf-download-link">Debian</a></div>
+      <div class="mf-download-button"><a href="../docs/installation.html#fedora" target="_blank" class="mf-download-link">Fedora</a></div>
+      <div class="mf-download-button"><a href="../docs/installation.html#arch-linux" target="_blank" class="mf-download-link">Arch</a></div>
+      <div class="mf-download-button-i"><a href="../docs/installation.html#windows" target="_blank" class="mf-download-link">Windows</a></div>
+      <div class="mf-download-button-i"><a href="../docs/installation.html#wsl" target="_blank" class="mf-download-link">Windows WSL</a></div>
+      <div class="mf-download-button-ii"><a href="../docs/installation.html#macos" target="_blank" class="mf-download-link">macOS</a></div>
+      <div class="mf-download-button-ii"><a href="../docs/installation.html#docker" target="_blank" class="mf-download-link">Docker</a></div>
      </div>
    </div>
    <div class="mfDownloadGroup">
      <div class="mfDownloadLeft">
-       <div class="mfGroupLeftText">Download:</div>
+       <div class="mfGroupLeftText">डाउनलोड:</div>
      </div>
      <div class="mfDownloadRight">
       <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.snap</a></div>
@@ -3632,20 +3655,20 @@
    </div>
    <div class="mfDownloadGroup">
      <div class="mfDownloadLeft">
-       <div class="mfGroupLeftText">Build:</div>
+       <div class="mfGroupLeftText">बिल्ड:</div>
      </div>
      <div class="mfDownloadRight">
-      <div class="mf-download-button"><a href="docs/installation.html#build-on-ubuntu" target="_blank" class="mf-download-link">Ubuntu</a></div>
-      <div class="mf-download-button"><a href="docs/installation.html#build-on-debian" target="_blank" class="mf-download-link">Debian</a></div>
-      <div class="mf-download-button"><a href="docs/installation.html#build-on-fedora" target="_blank" class="mf-download-link">Fedora</a></div>
-      <div class="mf-download-button-i"><a href="docs/installation.html#build-on-windows" target="_blank" class="mf-download-link">Windows</a></div>
-      <div class="mf-download-button-i"><a href="docs/installation.html#build-on-wsl" target="_blank" class="mf-download-link">Windows WSL</a></div>
-      <div class="mf-download-button-ii"><a href="docs/installation.html#build-on-macos" target="_blank" class="mf-download-link">macOS</a></div>
+      <div class="mf-download-button"><a href="../docs/installation.html#build-on-ubuntu" target="_blank" class="mf-download-link">Ubuntu</a></div>
+      <div class="mf-download-button"><a href="../docs/installation.html#build-on-debian" target="_blank" class="mf-download-link">Debian</a></div>
+      <div class="mf-download-button"><a href="../docs/installation.html#build-on-fedora" target="_blank" class="mf-download-link">Fedora</a></div>
+      <div class="mf-download-button-i"><a href="../docs/installation.html#build-on-windows" target="_blank" class="mf-download-link">Windows</a></div>
+      <div class="mf-download-button-i"><a href="../docs/installation.html#build-on-wsl" target="_blank" class="mf-download-link">Windows WSL</a></div>
+      <div class="mf-download-button-ii"><a href="../docs/installation.html#build-on-macos" target="_blank" class="mf-download-link">macOS</a></div>
      </div>
    </div>
    <div class="mfDownloadGroup">
      <div class="mfDownloadLeft">
-       <div class="mfGroupLeftText">Source:</div>
+       <div class="mfGroupLeftText">स्रोत कोड:</div>
      </div>
      <div class="mfDownloadRight">
       <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger" target="_blank" class="mf-download-link">GitHub</a></div>
@@ -3657,11 +3680,11 @@
 <!-- Footer -->
 <footer class="w3-center w3-black w3-padding-64">
    <div class="w3-container w3-center w3-margin" style="padding-top: 20px;">
-     Created with passion for my personal pleasure.<br/>
-     Released on the day of my <a class="mf-link" target="_blank" href="https://en.wikipedia.org/wiki/42_(number)#The_Hitchhiker's_Guide_to_the_Galaxy">42nd</a> birthday to
-     confirm <a class="mf-link" target="_blank" href="https://www.youtube.com/watch?v=aboZctrHfK8">answer</a>
-     to the Ultimate Question of life, the Universe, and Everything.<br/>
-     <a class="mf-link" target="_blank" href="https://github.com/dvorka/">Martin&nbsp;Dvorak</a> and <a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger/blob/master/CREDITS.md">contributors</a><br/>
+     अपने ही आनंद के लिए, लगन से बनाया गया।<br/>
+     अपने <a class="mf-link" target="_blank" href="https://en.wikipedia.org/wiki/42_(number)#The_Hitchhiker's_Guide_to_the_Galaxy">42वें</a> जन्मदिन पर जारी किया गया, ताकि
+     जीवन, ब्रह्मांड और हर चीज़ के परम प्रश्न के उस
+     <a class="mf-link" target="_blank" href="https://www.youtube.com/watch?v=aboZctrHfK8">उत्तर</a> की पुष्टि हो सके।<br/>
+     <a class="mf-link" target="_blank" href="https://github.com/dvorka/">Martin&nbsp;Dvorak</a> और <a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger/blob/master/CREDITS.md">सहयोगी</a><br/>
      2018-2026
    </div>
 </footer>

@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>MindForger Documentation - MindForger Documentation</title>
+    <meta name="description" content="Are you drowning in information, but starving for knowledge?" />
+    <meta name="author" content="Martin.Dvorak@mindforger.com" />
+    <link rel="canonical" href="https://www.mindforger.com/docs/index.html" />
+    <link rel="alternate" type="application/rss+xml" title="MindForger Blog" href="rss.xml" />
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="assets/mind-forger.png" type="image/png" />
+    <meta name="theme-color" content="#008c00" />
+
+    <!-- BEGIN OPEN GRAPH -->
+    <meta property="og:site_name" content="MindForger Documentation" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="MindForger Documentation - MindForger Documentation" />
+    <meta property="og:description" content="Are you drowning in information, but starving for knowledge?" />
+    <meta property="og:url" content="https://www.mindforger.com/docs/index.html" />
+    <meta property="og:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MindForger Documentation - MindForger Documentation" />
+    <meta name="twitter:description" content="Are you drowning in information, but starving for knowledge?" />
+    <meta name="twitter:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
+    <!-- END OPEN GRAPH -->
+
+    <!-- BEGIN STYLES -->
+    <link href="assets/tabler/css/tabler.min.css" rel="stylesheet" />
+    <link href="assets/tabler/css/tabler-props.min.css" rel="stylesheet" />
+    <link href="assets/tabler/css/tabler-themes.min.css" rel="stylesheet" />
+    <link href="assets/pygments.css" rel="stylesheet" />
+    <link href="assets/mindforger-docs.css" rel="stylesheet" />
+    
+    <!-- END STYLES -->
+
+    <!-- BEGIN THEME SCRIPT: light/dark theme, must run before the page renders -->
+    <script src="assets/tabler/js/tabler-theme.min.js"></script>
+    <!-- END THEME SCRIPT -->
+  </head>
+  <body>
+    <div class="page">
+      <!-- BEGIN NAVBAR -->
+      <div class="sticky-top">
+        <header class="navbar navbar-expand-md d-print-none">
+          <div class="container-xl">
+            <!-- BEGIN NAVBAR TOGGLER -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbar-menu" aria-controls="navbar-menu"
+                    aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- END NAVBAR TOGGLER -->
+            <!-- BEGIN NAVBAR LOGO -->
+            <div class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+              <a href="index.html" class="mf-brand">
+                <img src="assets/mind-forger.png" alt="MindForger" class="mf-brand-logo">
+                <span class="mf-brand-text">MindForger</span>
+              </a><span style="font-weight: normal;">Docs</span>
+            </div>
+            <!-- END NAVBAR LOGO -->
+            <div class="navbar-nav flex-row order-md-last">
+              <div class="d-none d-md-flex">
+                <div class="nav-item">
+                  <a href="?theme=dark" class="nav-link px-0 hide-theme-dark"
+                     title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /></svg></a>
+                  <a href="?theme=light" class="nav-link px-0 hide-theme-light"
+                     title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <header class="navbar-expand-md">
+          <div class="collapse navbar-collapse" id="navbar-menu">
+            <div class="navbar">
+              <div class="container-xl">
+                <div class="row flex-column flex-md-row flex-fill align-items-center">
+                  <div class="col">
+                    <!-- BEGIN NAVBAR MENU -->
+                    <ul class="navbar-nav" id="navbar-base">
+                      <li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg></span>
+                          <span class="nav-link-title">Home</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item active" href="index.html">Documentation</a>
+<a class="dropdown-item" href="toc.html">Table of Contents</a>
+<a class="dropdown-item" href="history.html">Project History</a>
+<a class="dropdown-item" href="credits.html">Credits</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="about.html">About</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg></span>
+                          <span class="nav-link-title">User Documentation</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="assets/comics/index.html">Comics</a>
+<a class="dropdown-item" href="installation.html">Installation</a>
+<a class="dropdown-item" href="getting-started.html">Getting Started</a>
+<a class="dropdown-item" href="user-documentation.html">User Documentation</a>
+<a class="dropdown-item" href="note-taking-best-practices.html">Note Taking Best Practices</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="faqs.html">FAQs</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M7 8l-4 4l4 4" /><path d="M17 8l4 4l-4 4" /><path d="M14 4l-4 16" /></svg></span>
+                          <span class="nav-link-title">Technical Documentation</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="developer-documentation.html">Developer Guide</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M12 17a3 3 0 0 0 -3 -3" /><path d="M15 17a6 6 0 0 0 -6 -6" /><path d="M9 17h.01" /></svg></span>
+                          <span class="nav-link-title">News</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="blog.html">Blog</a>
+<a class="dropdown-item" href="releases.html">Releases</a>
+<a class="dropdown-item" href="https://github.com/dvorka/mindforger/blob/master/Changelog" target="_blank" rel="noopener">Changelog</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="rss.xml" target="_blank" rel="noopener">RSS</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                    <!-- END NAVBAR MENU -->
+                  </div>
+                  <div class="col col-md-auto">
+                    <ul class="navbar-nav">
+                      <li class="nav-item">
+                        <a class="nav-link" href="https://www.mindforger.com" target="_blank">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M3.6 9h16.8" /><path d="M3.6 15h16.8" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" /></svg></span>
+                          <span class="nav-link-title">mindforger.com</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+      </div>
+      <!-- END NAVBAR -->
+      <div class="page-wrapper">
+        <!-- BEGIN PAGE HEADER -->
+        <div class="page-header d-print-none" aria-label="Page header">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                <div class="page-pretitle">Home</div>
+                <h1 class="page-title">MindForger Documentation</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END PAGE HEADER -->
+
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="row">
+              <!-- BEGIN MAIN CONTENT -->
+              <div class="col-12 col-xl-9">
+                <div class="card mb-3"><div class="card-body">
+<p><a href="https://www.youtube.com/playlist?list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS"><img alt="MindForger" src="HOME.screenshot-tayr.png" / class="img-fluid rounded border my-2"></a></p>
+<p>Are you <strong>drowning</strong> in <strong>information</strong>, but starving for knowledge?</p>
+<p>Where do you keep your <strong>private remarks</strong> like ideas, personal plans, exam preparation notes, gift tips, how-tos, dreams, business visions, finance strategies, meeting minutes and auto coaching notes? Loads of documents, sketches and remarks spread around the file system, cloud, web and Post-it notes? Are you afraid of your knowledge <strong>privacy</strong>? Are you able to <strong>find</strong> particular remarks once you create them? Do you know how are the remarks mutually <strong>related</strong> when you browse, read or write them? No?</p>
+<p><strong>MindForger</strong> is thinking notebook and <a href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax">Markdown</a> editor:</p>
+<ul>
+<li><a href="installation.html">Installation</a></li>
+<li><a href="getting-started.html">Getting started</a></li>
+<li><a href="https://www.youtube.com/playlist?list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS">YouTube tutorials</a></li>
+<li><a href="user-documentation.html">User documentation</a></li>
+<li><a href="developer-documentation.html">Developer documentation</a></li>
+<li><a href="history.html">History</a></li>
+<li><a href="faqs.html">FAQs</a></li>
+</ul>
+<p><strong>MindForger</strong> aims to be human mind inspired personal knowledge management tool:</p>
+<ul>
+<li><strong>Human mind</strong><ul>
+<li>MindForger aims to mimic human mind -
+  <a href="user-documentation.html#learning">learning</a>,
+  <a href="user-documentation.html#search">recalling</a>,
+  <a href="user-documentation.html#recognize-what-matters">recognition</a>,
+  <a href="user-documentation.html#autolinking--associate-as-you-read">associations</a>,
+  <a href="user-documentation.html#forgetting">forgetting</a> - in order to achieve
+  synergy with your mind to make your searching, reading and writing
+  more productive.</li>
+</ul>
+</li>
+<li><strong>Personal</strong><ul>
+<li>MindForger enables you to <strong>own</strong> your <strong>personal</strong> data - it's meant to
+  store your personal ideas, remarks, notes and plans in a secure way while
+  it respects your privacy.</li>
+<li>MindForger does <strong>not</strong> compete with tools for sharing information like
+  Wikis - its primary purpose is to maintain your <strong>private</strong> data.</li>
+</ul>
+</li>
+<li><strong>Knowledge</strong><ul>
+<li>MindForger seeks knowledge hidden in your remarks to enable its mining
+  and personal machine learning models creation.</li>
+</ul>
+</li>
+<li><strong>Management</strong><ul>
+<li>MindForger starts where editors and search engines end. It thinks as
+  you <a href="user-documentation.html#tays--think-as-you-search">search</a>,
+  <a href="user-documentation.html#tayb--think-as-you-browse">browse</a>,
+  <a href="user-documentation.html#tayr--think-as-you-read">read</a> and
+  <a href="user-documentation.html#tayw--think-as-you-write">write</a>.
+  Once you <strong>find</strong> a remark, MindForger
+  brings its associations. As you <strong>browse</strong> notes and <strong>read</strong> them it looks up
+  related relevant knowledge in your notebooks. If you <strong>edit</strong> a remark,
+  MindForger brings <a href="user-documentation.html#tayr--think-as-you-read">associations</a>
+  as you <strong>write</strong>.
+  It reminds you about existing content related to the text being written.</li>
+<li>MindForger is integrated with local <strong>large language models</strong>,
+  which brings note-taking and knowledge management to a new level. With the integration,
+  MindForger allows you to easily expand your notes and knowledge by leveraging the power
+  of artificial intelligence. Whether you need to write an in-depth analysis, draft a blog
+  post, or simply generate ideas. Large language model can
+  <a href="https://www.youtube.com/watch?v=QLX9CWzzEa8&amp;list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&amp;index=5&amp;pp=iAQB">fix grammar</a>,
+  <a href="https://www.youtube.com/watch?v=akesdLhWZ-I&amp;list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&amp;index=7&amp;pp=iAQB">translate</a>,
+  <a href="https://www.youtube.com/watch?v=eyLV5P_Bujs&amp;list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&amp;index=6&amp;t=5s&amp;pp=iAQB">write</a>,
+  <a href="https://www.youtube.com/watch?v=eyLV5P_Bujs&amp;list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&amp;index=6&amp;t=5s&amp;pp=iAQB">reformulate</a>,
+  <a href="https://www.youtube.com/watch?v=TAV8tHajjeg&amp;list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&amp;index=9&amp;pp=iAQB">summarize</a>,
+  suggest <a href="https://www.youtube.com/watch?v=Xj0wZz2vBSw&amp;list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&amp;index=10&amp;pp=iAQB">synonyms and antonyms</a>,
+  and much more.
+  You can now effortlessly generate high-quality content, enhance the organization
+  of your knowledge, and collaborate seamlessly with others, all within a single platform.
+  MindForger has you covered.</li>
+</ul>
+</li>
+<li><strong>Tool</strong><ul>
+<li>MindForger is a <strong>desktop</strong> application which runs on <a href="installation.html#ubuntu">Linux</a>,
+  <a href="installation.html#macos">macOS</a> and <a href="installation.html#windows">Windows</a>.</li>
+</ul>
+</li>
+</ul>
+<p>Features:</p>
+<ul>
+<li><strong><a href="user-documentation.html#tayr--think-as-you-read">Associations</a></strong><ul>
+<li><strong>MindForger thinks as you read and write.</strong> While you work on a Note, MindForger
+  <strong>associates</strong> it with related Notes from your whole workspace - including those you
+  <strong>forgot</strong> you ever wrote. Associations are computed <strong>locally</strong>, with no cloud and no LLM
+  required.</li>
+</ul>
+</li>
+<li><strong><a href="user-documentation.html#auto-linking">Autolinking</a></strong><ul>
+<li><strong>Links that write themselves.</strong> Names of Notebooks and Notes mentioned in your text are
+  <strong>automatically</strong> turned into links in the preview - your hand-written links are rendered in
+  blue, generated ones in green - so that your knowledge gets interconnected without any extra
+  effort - no need to manually create links, Wiki camel case words or other linking conventions.</li>
+</ul>
+</li>
+<li><strong><a href="user-documentation.html#wingman">Private AI</a></strong><ul>
+<li><strong>Assistant that doesn't send your notes anywhere.</strong> Wingman runs open-weight <strong>Large Language
+  Models</strong> - like gpt-oss, Llama, GLM or Qwen - <strong>privately on your machine</strong> via
+  <a href="https://ollama.com">ollama</a> to <strong>summarize</strong>, <strong>explain</strong>, <strong>translate</strong>, <strong>rewrite</strong>, fix
+  <strong>grammar</strong>, generate <strong>tags</strong> or find <strong>tasks</strong> in the Notes you read and write.</li>
+</ul>
+</li>
+<li><strong><a href="user-documentation.html#keyboard-shortcuts">Keyboard First</a></strong><ul>
+<li><strong>Keep your hands on the keyboard.</strong> MindForger is designed to be used <strong>without a mouse</strong> -
+  almost every action has a <strong>keyboard shortcut</strong> and every menu item has an <strong>accelerator</strong>.
+  Recall a Notebook or Note by name in a few keystrokes, easily restructure the outline,
+  complete links to Notes as you type or run commands. Your thoughts flow straight from your
+  mind to your notes.</li>
+</ul>
+</li>
+<li><strong><a href="user-documentation.html#stencils">Stencils</a></strong><ul>
+<li><strong>Start from structure, not from a blank page.</strong> Create Notebooks from <strong>stencils</strong> - meeting
+  minutes, software analysis and design documents, <strong>S.M.A.R.T.E.R.</strong> goals or the <strong>GROW
+  model</strong> - and capture thoughts as one of 16 <strong>typed Notes</strong> like idea, question, lesson, task
+  or SWOT. Add your own stencils and Note types to fit how you think.</li>
+</ul>
+</li>
+<li><strong><a href="user-documentation.html#refactoring">Refactoring</a></strong><ul>
+<li><strong>Refactor your thinking</strong> like source code. MindForger brings IDE style features to your
+  notes - <strong>clone</strong>, <strong>promote</strong>, <strong>demote</strong>, <strong>move</strong> and <strong>extract</strong> Notes within one Markdown
+  file or <strong>across</strong> many of them, using keyboard shortcuts for extreme efficiency and speed.</li>
+</ul>
+</li>
+<li><strong><a href="user-documentation.html#knowledge-graph-navigator">Knowledge Graph</a></strong><ul>
+<li><strong>Walk through your knowledge.</strong> The knowledge graph navigator renders Notebooks, Notes,
+  <strong>tags</strong> and their relationships as an interactive <strong>force-directed graph</strong> which you can
+  explore node by node - like implicit mind map.</li>
+</ul>
+</li>
+<li><strong><a href="user-documentation.html#organizers--tag-based-aspects">Organizers</a></strong><ul>
+<li><strong>Know what to do next.</strong> <strong>Kanban</strong> boards and <strong>Eisenhower matrix</strong> organizers sort your
+  Notebooks and Notes by their tags - TODO, WIP, DONE or urgent and important - so you don't
+  need another task management app. <strong>Notebook shelves</strong> then let you group Notebooks to as many
+  named shelves as you need. <strong>From Notes to Notebooks, from Notebooks to priorities and
+  actions.</strong></li>
+</ul>
+</li>
+<li><strong><a href="user-documentation.html#markdown-ide">No Lock-in</a></strong><ul>
+<li><strong>Your files, your tools.</strong> Everything is <strong>plain Markdown</strong> on your disk. Open a MindForger
+  workspace, <strong>any</strong> existing <strong>Markdown directory</strong> or just a <strong>single</strong> Markdown <strong>file</strong>.
+  Synchronize, share, back up and encrypt your knowledge with the tools you trust - own Git
+  server, private <a href="https://github.com/">GitHub</a> or <a href="https://bitbucket.org">Bitbucket</a>
+  repository, or cloud drive of your choice.</li>
+</ul>
+</li>
+<li><strong><a href="user-documentation.html#math">Math &amp; Diagrams</a></strong><ul>
+<li>Markdown editor with <strong>live preview</strong>, <strong>syntax highlighting</strong>, offline <strong>KaTeX</strong> math and
+  <strong>Mermaid</strong> diagrams, <strong>spell check</strong>, <strong>emojis</strong>, Emacs keybindings, paragraph rewrap,
+  <strong>hoist</strong> mode and the option to edit a Note in your favorite external editor.</li>
+</ul>
+</li>
+<li><strong><a href="user-documentation.html#library">Docs Library</a></strong><ul>
+<li>Index directories with <strong>PDF</strong> documents as Notebooks, keep them in sync and detect
+  <strong>orphaned</strong> documents. Study, read and annotate your PDFs conveniently connected with your
+  remarks.</li>
+</ul>
+</li>
+<li><strong><a href="user-documentation.html#csv-export">Export</a></strong><ul>
+<li>Export Notebooks to <strong>HTML</strong> or <strong>Markdown</strong>, or your whole workspace to <strong>CSV</strong> with one-hot
+  encoded tags - ready for your machine learning and analytics tools.</li>
+</ul>
+</li>
+<li><strong><a href="installation.html">Fast &amp; Native</a></strong><ul>
+<li>Written in <strong>C++</strong> and <strong>Qt</strong>, works completely <strong>offline</strong> and runs on <strong>Linux</strong>, <strong>macOS</strong>
+  and <strong>Windows</strong>.</li>
+</ul>
+</li>
+</ul>
+<p><strong>MindForger</strong> has been released on the day of my <a href="https://en.wikipedia.org/wiki/42_(number)#The_Hitchhiker's_Guide_to_the_Galaxy">42nd</a> birthday to confirm <a href="https://www.youtube.com/watch?v=aboZctrHfK8">answer</a> to the Ultimate Question of life, the Universe, and Everything, however, the project has longer <a href="history.html">history</a>.</p>
+</div></div>
+              </div>
+              <!-- END MAIN CONTENT -->
+              <!-- BEGIN TABLE OF CONTENTS -->
+              <div class="col-3 d-none d-xl-block">
+                
+              </div>
+              <!-- END TABLE OF CONTENTS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- BEGIN FOOTER -->
+        <footer class="footer footer-transparent d-print-none">
+          <div class="container-xl">
+            <ul class="list-inline list-inline-dots mb-0 text-center">
+              <li class="list-inline-item">Copyright &copy; 2018-2026 MindForger </li>
+              <li class="list-inline-item">Thinking Notebook</li>
+              <li class="list-inline-item">Doc made with <a href="https://www.mindforger.com" target="_blank">MindForger</a></li>
+              <li class="list-inline-item"><a href="https://github.com/dvorka/mindforger-documentation/edit/main/memory/HOME.md" target="_blank">Edit on GitHub</a></li>
+              <li class="list-inline-item"><a href="https://github.com/dvorka/mindforger-documentation/blob/main/memory/HOME.md" target="_blank">Source</a></li>
+              <li class="list-inline-item"><a href="rss.xml">RSS</a></li>
+            </ul>
+          </div>
+        </footer>
+        <!-- END FOOTER -->
+      </div>
+    </div>
+    <script src="assets/tabler/js/tabler.min.js" defer></script>
+    
+  </body>
+</html>

@@ -1,0 +1,1044 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Developer documentation - MindForger Documentation</title>
+    <meta name="description" content="MindForger is written in C++ programming language." />
+    <meta name="author" content="Martin.Dvorak@mindforger.com" />
+    <link rel="canonical" href="https://www.mindforger.com/docs/developer-documentation.html" />
+    <link rel="alternate" type="application/rss+xml" title="MindForger Blog" href="rss.xml" />
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="assets/mind-forger.png" type="image/png" />
+    <meta name="theme-color" content="#008c00" />
+
+    <!-- BEGIN OPEN GRAPH -->
+    <meta property="og:site_name" content="MindForger Documentation" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Developer documentation - MindForger Documentation" />
+    <meta property="og:description" content="MindForger is written in C++ programming language." />
+    <meta property="og:url" content="https://www.mindforger.com/docs/developer-documentation.html" />
+    <meta property="og:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Developer documentation - MindForger Documentation" />
+    <meta name="twitter:description" content="MindForger is written in C++ programming language." />
+    <meta name="twitter:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
+    <!-- END OPEN GRAPH -->
+
+    <!-- BEGIN STYLES -->
+    <link href="assets/tabler/css/tabler.min.css" rel="stylesheet" />
+    <link href="assets/tabler/css/tabler-props.min.css" rel="stylesheet" />
+    <link href="assets/tabler/css/tabler-themes.min.css" rel="stylesheet" />
+    <link href="assets/pygments.css" rel="stylesheet" />
+    <link href="assets/mindforger-docs.css" rel="stylesheet" />
+    
+    <!-- END STYLES -->
+
+    <!-- BEGIN THEME SCRIPT: light/dark theme, must run before the page renders -->
+    <script src="assets/tabler/js/tabler-theme.min.js"></script>
+    <!-- END THEME SCRIPT -->
+  </head>
+  <body>
+    <div class="page">
+      <!-- BEGIN NAVBAR -->
+      <div class="sticky-top">
+        <header class="navbar navbar-expand-md d-print-none">
+          <div class="container-xl">
+            <!-- BEGIN NAVBAR TOGGLER -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbar-menu" aria-controls="navbar-menu"
+                    aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- END NAVBAR TOGGLER -->
+            <!-- BEGIN NAVBAR LOGO -->
+            <div class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+              <a href="index.html" class="mf-brand">
+                <img src="assets/mind-forger.png" alt="MindForger" class="mf-brand-logo">
+                <span class="mf-brand-text">MindForger</span>
+              </a><span style="font-weight: normal;">Docs</span>
+            </div>
+            <!-- END NAVBAR LOGO -->
+            <div class="navbar-nav flex-row order-md-last">
+              <div class="d-none d-md-flex">
+                <div class="nav-item">
+                  <a href="?theme=dark" class="nav-link px-0 hide-theme-dark"
+                     title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /></svg></a>
+                  <a href="?theme=light" class="nav-link px-0 hide-theme-light"
+                     title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <header class="navbar-expand-md">
+          <div class="collapse navbar-collapse" id="navbar-menu">
+            <div class="navbar">
+              <div class="container-xl">
+                <div class="row flex-column flex-md-row flex-fill align-items-center">
+                  <div class="col">
+                    <!-- BEGIN NAVBAR MENU -->
+                    <ul class="navbar-nav" id="navbar-base">
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg></span>
+                          <span class="nav-link-title">Home</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="index.html">Documentation</a>
+<a class="dropdown-item" href="toc.html">Table of Contents</a>
+<a class="dropdown-item" href="history.html">Project History</a>
+<a class="dropdown-item" href="credits.html">Credits</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="about.html">About</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg></span>
+                          <span class="nav-link-title">User Documentation</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="assets/comics/index.html">Comics</a>
+<a class="dropdown-item" href="installation.html">Installation</a>
+<a class="dropdown-item" href="getting-started.html">Getting Started</a>
+<a class="dropdown-item" href="user-documentation.html">User Documentation</a>
+<a class="dropdown-item" href="note-taking-best-practices.html">Note Taking Best Practices</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="faqs.html">FAQs</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M7 8l-4 4l4 4" /><path d="M17 8l4 4l-4 4" /><path d="M14 4l-4 16" /></svg></span>
+                          <span class="nav-link-title">Technical Documentation</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item active" href="developer-documentation.html">Developer Guide</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M12 17a3 3 0 0 0 -3 -3" /><path d="M15 17a6 6 0 0 0 -6 -6" /><path d="M9 17h.01" /></svg></span>
+                          <span class="nav-link-title">News</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="blog.html">Blog</a>
+<a class="dropdown-item" href="releases.html">Releases</a>
+<a class="dropdown-item" href="https://github.com/dvorka/mindforger/blob/master/Changelog" target="_blank" rel="noopener">Changelog</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="rss.xml" target="_blank" rel="noopener">RSS</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                    <!-- END NAVBAR MENU -->
+                  </div>
+                  <div class="col col-md-auto">
+                    <ul class="navbar-nav">
+                      <li class="nav-item">
+                        <a class="nav-link" href="https://www.mindforger.com" target="_blank">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M3.6 9h16.8" /><path d="M3.6 15h16.8" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" /></svg></span>
+                          <span class="nav-link-title">mindforger.com</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+      </div>
+      <!-- END NAVBAR -->
+      <div class="page-wrapper">
+        <!-- BEGIN PAGE HEADER -->
+        <div class="page-header d-print-none" aria-label="Page header">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                <div class="page-pretitle">Technical Documentation</div>
+                <h1 class="page-title">Developer documentation</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END PAGE HEADER -->
+
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="row">
+              <!-- BEGIN MAIN CONTENT -->
+              <div class="col-12 col-xl-9">
+                <div class="card mb-3"><div class="card-body">
+<blockquote>
+<p><em>"There are only two kinds of languages: the ones people complain about and the ones nobody uses" -- <a href="https://www.stroustrup.com/quotes.html">Bjarne Stroustrup</a></em></p>
+</blockquote>
+<p>MindForger is written in <strong>C++</strong> programming language.</p>
+<p>Contribute:</p>
+<ul>
+<li><a href="https://github.com/dvorka/mindforger">Source code</a></li>
+<li><a href="#development-environment">Build</a></li>
+<li><a href="#technical-architecture">Technical architecture</a></li>
+</ul>
+<p>Specifications:</p>
+<ul>
+<li><a href="#repository-layout">Repository Structure</a></li>
+<li><a href="#markdown-hosted-dsl">Outline Format - Markdown hosted DSL</a></li>
+</ul>
+<p>In case that you have any question or want to learn more about technical details
+please don't hesitate to contact <a href="mailto:martin.dvorak@mindforger.com">me</a>.</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="contribute">Contribute</h2>
+<p>Current <strong>MindForger</strong> implementation is just an initial imperfect sketch of much broader <strong>vision</strong>. It's purpose is to <strong>demonstrate</strong> viability of thinking notebook idea and to <strong>show</strong> possible research directions.</p>
+<p>Feel free to <a href="https://www.mindforger.com">contribute</a>! Don't hesitate to contact <a href="martin.dvorak@mindforger.com">me</a>.</p>
+<ul>
+<li><strong>Bugs and suggestions</strong><ul>
+<li>Submit bugs, issues, ideas and enhancements.</li>
+</ul>
+</li>
+<li><strong>Translations</strong><ul>
+<li>Translate MindForger to your favorite language.</li>
+</ul>
+</li>
+<li><strong>Platform support</strong><ul>
+<li>Port MindForger to your favorite OS or distribution.</li>
+</ul>
+</li>
+<li><strong>Code</strong><ul>
+<li>Submit pull request or patch with implementation of a feature you missed.</li>
+</ul>
+</li>
+<li><strong>Research</strong><ul>
+<li>Consider making your AI/ML, NLP, data mining, ... research on top of (your) documents indexed to MindForger ontology.</li>
+</ul>
+</li>
+<li><strong>Integration</strong><ul>
+<li>How-to or code enabling integration with your (favorite) project.</li>
+</ul>
+</li>
+<li><strong>Enhancements</strong><ul>
+<li>Submit performance, efficiency and/or productivity enhancements.</li>
+</ul>
+</li>
+<li><strong>Documentation</strong><ul>
+<li>Write a document, blog post or tweet, create YouTube video, ...</li>
+</ul>
+</li>
+</ul>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="linux-development-environment">Linux development environment</h2>
+<p>Perhaps you may find useful description of my development environment:</p>
+<ul>
+<li>Backend library:<ul>
+<li>Source: <a href="https://github.com/dvorka/mindforger">GitHub</a></li>
+<li>Compiler: <a href="https://gcc.gnu.org">GCC</a></li>
+<li>Compilation speed-up: <code>ccache</code> (set in <code>QtCreator</code> as <code>ccache g++</code>)</li>
+<li>Make: <code>qmake</code> + <code>make</code></li>
+<li>IDE: <a href="https://www.qt.io/product/development-tools">QtCreator</a>
+  (my own build w/ Emacs-style keyboard shortcuts - find it on GitHub)</li>
+<li>Debugger: <code>gdb</code></li>
+<li>Leaks: <code>valgrind</code></li>
+<li>Profiler: GCC + <a href="https://web.eecs.umich.edu/~sugih/pointers/gprof_quick.html">gprof</a></li>
+<li>Unit tests: <a href="https://github.com/google/googletest">Google Test Framework</a></li>
+</ul>
+</li>
+<li>Qt GUI frontend:<ul>
+<li>Compiler: <a href="https://gcc.gnu.org">GCC</a></li>
+<li>Make: <code>qmake</code> + <code>make</code></li>
+<li>IDE: <a href="https://www.qt.io/product/development-tools">QtCreator</a><ul>
+<li><code>Tools/Options/Fonts</code>: vim dark, 12pt, zoom: 100%</li>
+<li><code>Whitespaces</code>: no tabs, visible, no traling whitespaces</li>
+<li>"Borland Turbo C style help" for Qt via F1</li>
+</ul>
+</li>
+<li>Debugger:<ul>
+<li>QtCreator debugger</li>
+<li><code>gdb</code></li>
+</ul>
+</li>
+<li>Unit tests: <a href="http://sikulix.com/">Sikulix</a></li>
+<li>Editor: <code>Emacs</code> (quick edits w/ key bindings that enable my productivity)<ul>
+<li>set tabs for 4</li>
+<li>no tabs just whitespaces</li>
+<li><code>alt-x compile</code> &gt; <code>cd ../.. &amp;&amp; make</code> (make -k for keep going)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>For more details see the source code.</p>
+<h3 id="build">Build</h3>
+<p>See <a href="installation.html#build-on-ubuntu">build on Ubuntu</a> for how to build MindForger:</p>
+<div class="codehilite"><pre><span></span><code>make build-dev
+</code></pre></div>
+
+<p><strong>Unit tests</strong> are conducted by the <a href="https://github.com/google/googletest">gtest</a> framework. Download, build and optionally install this framework before building MindForger unit tests.</p>
+<h3 id="tests">Tests</h3>
+<p><strong>Prerequisite</strong>: <a href="https://github.com/google/googletest">Google test framework</a></p>
+<ol>
+<li>Checkout <code>googletest</code> and go to the checkout:</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>cd googletest
+</code></pre></div>
+
+<ol start="2">
+<li>Create/enter a build directory (skip mkdir if build/ already exists, as it does here):</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>mkdir -p build
+cd build
+</code></pre></div>
+
+<ol start="3">
+<li>Configure with CMake (Release build, install prefix /usr/local):</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>cmake -DCMAKE_BUILD_TYPE=Release ..
+</code></pre></div>
+
+<ol start="4">
+<li>Build:</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>make -j$(nproc)
+</code></pre></div>
+
+<ol start="5">
+<li>Install system-wide (needs root — this copies headers to /usr/local/include/gtest and /usr/local/include/gmock, and libs to /usr/local/lib):</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>sudo make install
+</code></pre></div>
+
+<ol start="6">
+<li>Refresh the linker cache (usually not strictly required for static libs, but harmless):</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>sudo ldconfig
+</code></pre></div>
+
+<ol start="7">
+<li>Verify the install:</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>ls /usr/local/include/gtest/gtest.h
+ls /usr/local/lib/libgtest.a /usr/local/lib/libgtest_main.a
+</code></pre></div>
+
+<ol start="8">
+<li>Set the env vars test-lib-units.sh requires, then run the tests:</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>export M8R_CPU_CORES=$(nproc)
+export M8R_GIT_PATH=/home/dvorka/p/mindforger/git/mindforger
+cd /home/dvorka/p/mindforger/git/mindforger/build
+make test-lib
+</code></pre></div>
+
+<hr />
+<p>MindForger <strong>tests</strong>:</p>
+<ul>
+<li>library unit tests</li>
+<li>frontend GUI tests</li>
+</ul>
+<p><strong>Library</strong> unit tests:</p>
+<ul>
+<li>based on <a href="https://github.com/google/googletest">Google test framework</a></li>
+<li>located in <code>lib/test/src</code></li>
+<li>can be run using <code>build/test-lib-units.sh</code> - see source code for running all/particular
+  test w/ or w/o valgrind/gdb/...</li>
+</ul>
+<p><strong>Frontend</strong> library tests:</p>
+<ul>
+<li>based on <a href="http://sikulix.com/">Sikulix</a></li>
+<li>located in <code>app/test/sikulix</code></li>
+<li>can be run using <code>build/test-gui.sh</code></li>
+</ul>
+<p>For more details check tests source code.</p>
+<h3 id="benchmarks">Benchmarks</h3>
+<p>MindForger has also library benchmarks:</p>
+<ul>
+<li>based on <a href="https://github.com/google/googletest">Google test framework</a></li>
+<li>located in <code>lib/test/benchmark</code></li>
+<li>can be run using <code>build/test-lib-units.sh</code> - see script source code to run particular benchark.</li>
+</ul>
+<p>Benchmarks are <em>disabled</em> by default - go to benchmark source code and remove <code>DISABLED_</code> prefix
+from its name. For more details see Google test framework documentation and benchmarks source code.</p>
+<h3 id="packaging">Packaging</h3>
+<p>Scripts used to created packages for Linux distributions can be found in:</p>
+<ul>
+<li>Ubuntu: <code>build/ubuntu</code><ul>
+<li>tarball &gt; local binary/source deb build (pbuilder) &gt; Launchpad
+  upload &gt; Launchpad PPA</li>
+</ul>
+</li>
+<li>Debian: <code>build/debian</code><ul>
+<li>tarball &gt; local binary/source deb build &gt; local <a href="https://www.aptly.info/">Aptly</a> PPA &gt; PPA snapshot
+  upload to http://www.mindforger.com/debian</li>
+</ul>
+</li>
+<li>Fedora: <code>build/fedora</code><ul>
+<li>deb &gt; <code>alien</code> conversion w/ postprocessing to RPM &gt; upload as release asset</li>
+</ul>
+</li>
+</ul>
+<p><strong>Upstream tarball</strong> is created in the same way as archive released via GitHub:</p>
+<ul>
+<li>GitHub release: <code>build/github</code></li>
+</ul>
+<p>Check <code>make</code> targets for MindForger supported platforms targets:</p>
+<ul>
+<li><code>make help</code></li>
+</ul>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="windows-development-environment">Windows development environment</h2>
+<p>Perhaps you may find useful description of my development environment:</p>
+<ul>
+<li>Source:<ul>
+<li><a href="https://github.com/dvorka/mindforger">GitHub</a></li>
+</ul>
+</li>
+<li>Compiler:<ul>
+<li>Microsoft Visual C++ compiler</li>
+</ul>
+</li>
+<li>Make:<ul>
+<li><code>qmake</code> + <code>cmake</code> + <code>make</code></li>
+</ul>
+</li>
+<li>Installer:<ul>
+<li>JRSoftware Inno Setup</li>
+</ul>
+</li>
+<li>IDE:<ul>
+<li>Qt Creator</li>
+</ul>
+</li>
+<li>Unit tests:<ul>
+<li>Google Test Framework</li>
+</ul>
+</li>
+</ul>
+<p>For more details see source code.</p>
+<h3 id="install-prerequisites">Install prerequisites</h3>
+<ul>
+<li><a href="https://visualstudio.microsoft.com/downloads/">Microsoft Visual Studio</a> (Community Edition suffices), during installation add with C++ support (todo: detailed info or screenshot)<ul>
+<li>or [Windows 10 SDK] (untested)(https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk)</li>
+</ul>
+</li>
+<li>Qt<ul>
+<li>Download <a href="https://www.qt.io/download">Qt for Windows</a> - Open Source</li>
+<li>During installation select:<ul>
+<li>Qt-&gt;Qt 5.12.x-&gt;MSVC 2017 64-bit</li>
+<li>Qt-&gt; Qt WebEngine</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4-win64-x64.msi">cmake</a></li>
+</ul>
+<p>Prepare MindForger sources:</p>
+<ul>
+<li>Checkout Mindforger<ul>
+<li><code>git clone https://github.com/dvorka/mindforger.git</code></li>
+<li><code>cd mindforger</code></li>
+<li><code>git checkout dev/1.49.0-win</code></li>
+</ul>
+</li>
+<li>Init dependencies<ul>
+<li><code>git submodule init</code></li>
+<li><code>git supmodule update</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="build-dependencies">Build dependencies</h3>
+<p>Building dependecies is required only once, during initial building.</p>
+<p>Build <code>cmake-gfm</code> - it requires <code>cmake</code> on the path.</p>
+<ul>
+<li>Goto <code>cmark-gfm</code> directory:<ul>
+<li><code>cd deps\cmark-gfm</code></li>
+</ul>
+</li>
+<li>Use build directory:<ul>
+<li><code>mkdir build</code></li>
+<li><code>cd build</code></li>
+</ul>
+</li>
+<li>Generate build files:<ul>
+<li><code>cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF ..</code></li>
+</ul>
+</li>
+<li>Build both release and debug profiles<ul>
+<li><code>cmake --build . --config Release -- /m</code></li>
+<li><code>cmake --build . --config Debug -- /m</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="build-mindforger">Build MindForger</h3>
+<ul>
+<li>Goto GitHub repository directory:<ul>
+<li><code>cd $GIT\mindforger</code></li>
+</ul>
+</li>
+<li>Setup development environment in cmd line. Change path according to your MSVC 2017 and Qt installation<ul>
+<li><code>"C:\software\Qt\5.12.0\msvc2017_64\bin\qtenv2.bat"</code></li>
+<li><code>"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"</code></li>
+</ul>
+</li>
+<li>Generate make files:<ul>
+<li><code>qmake -r mindforger.pro</code></li>
+</ul>
+</li>
+<li>Build MindForger:<ul>
+<li><code>nmake</code></li>
+</ul>
+</li>
+<li><code>.exe</code> binary will be stored in the <code>app\release</code> folder</li>
+</ul>
+<h4 id="plan-for-windows-build-and-distribution">Plan for Windows build and distribution</h4>
+<p>GitHub:</p>
+<ul>
+<li>milestone: https://github.com/dvorka/mindforger/milestone/10</li>
+<li>branch: https://github.com/dvorka/mindforger/tree/dev/1.49.0-win</li>
+</ul>
+<p>2019/1 plan to port MindForger on Windows:</p>
+<ul>
+<li>[x] <strong>development environment</strong>:<ul>
+<li>document IDE, compiler and OS setup - QtCreator, LLVM (would be nice), Win10 (VM)</li>
+</ul>
+</li>
+<li>[x] <strong>backend lib build</strong>:<ul>
+<li>rewrite using Qt to portable version (Qt is NOT intentionally used in backend now)</li>
+<li>decide whether...<ul>
+<li>go with Qt functions on all platforms</li>
+<li>conditional compilation which introduces Qt dependency for Win only</li>
+</ul>
+</li>
+<li>https://github.com/dvorka/mindforger/issues/77</li>
+</ul>
+</li>
+<li>[x] (preview) <strong>frontend build</strong> to identify non-portable code:<ul>
+<li>skip MD 2 HTML rendering (avoid its compilation) w/
+  <code>html_outline_representation.cpp</code> and <code>MF_NO_MD_2_HTML</code> define</li>
+<li>skip HTML rendering (avoid its compilation)</li>
+<li>https://github.com/dvorka/mindforger/issues/648</li>
+</ul>
+</li>
+<li>[x] <strong>MD 2 HTML rendering</strong>:<ul>
+<li>refactor existing impl to iface &amp; implementation allowing to switch renderer</li>
+<li>migrate to <code>cmark-GFM</code> library ~ GitHub's MD 2 HTML renderer</li>
+</ul>
+</li>
+<li>[x] HTML <strong>viewer</strong>:<ul>
+<li>Qt uses the same engine as on macOS (WebEngine vs. WebKit)</li>
+</ul>
+</li>
+<li>[x] <strong>full build</strong> w/ lib, <code>cmark-GFM</code> and HTML viewer</li>
+<li>[x] Win <strong>installer</strong> (possibly Qt based)</li>
+<li>[ ] make MF real Win app:<ul>
+<li>keyboard shortcuts which follow Windows conventions</li>
+<li>desktop integration which start associated app for opened attachments
+  (PDF, GIF, ...)</li>
+</ul>
+</li>
+</ul>
+<p>Get <strong>pre-release</strong> user feedback:</p>
+<ul>
+<li>https://github.com/dvorka/mindforger/issues/632</li>
+</ul>
+<h3 id="running-mindforger">Running MindForger</h3>
+<ul>
+<li>Manual run outside of QtCreator requires adding Qt libraries and Zlib libraries to <em>PATH</em>. Zlib binaries are located in `$GIT\mindforger\deps\zlib-win\</li>
+<li>Qt files. Change path according to your setup<ul>
+<li><code>"C:\software\Qt\5.12.0\msvc2017_64\bin\qtenv2.bat"</code></li>
+</ul>
+</li>
+<li>Zlib<ul>
+<li><code>set "PATH=%PATH%;$GIT\mindforger\deps\zlib-win"</code></li>
+</ul>
+</li>
+<li>Start MindForger<ul>
+<li><code>app\release\mindforger.exe</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="creating-installer">Creating installer</h3>
+<ul>
+<li>Install <a href="http://www.jrsoftware.org/download.php/is-unicode.exe">Inno Setup 5</a></li>
+<li>Prepare development environment. Change path according to your Qt installation</li>
+<li><code>"C:\software\Qt\5.12.0\msvc2017_64\bin\qtenv2.bat"</code></li>
+<li>Gather dependencies</li>
+<li><code>cd $GIT\mindforger</code></li>
+<li><code>windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime</code></li>
+<li>Build installer. Change path to the <em>vcredist_x64.exe</em> according to your setup.</li>
+<li><code>"c:\Program Files (x86)\Inno Setup 5\ISCC.exe" /Qp /DVcRedistPath="c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.14.26405\vcredist_x64.exe" build\windows\installer\mindforger-setup.iss</code></li>
+<li>the result is in the <code>app\release\installer</code> folder</li>
+</ul>
+<h3 id="building-unit-tests">Building unit tests</h3>
+<p>Unit tests are conducted by the <a href="https://github.com/google/googletest">gtest</a> framework. Download, build and optionally install this framework before building MindForger unit tests.</p>
+<p>Gtest is expected at <code>C:\Program Files\gtest-distribution</code> by default. If you have it somewhere else you have to update the <code>lib\test\src\src.pro</code> Qt project file to change path to gtest.</p>
+<p>Than:</p>
+<ul>
+<li>Prepare development environment. Change path according to your Qt and MSVC 2017 installation<ul>
+<li><code>"C:\software\Qt\5.12.0\msvc2017_64\bin\qtenv2.bat"</code></li>
+<li><code>"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"</code></li>
+</ul>
+</li>
+<li>Go to project file<ul>
+<li><code>cd $GIT\mindforger\lib\test</code></li>
+</ul>
+</li>
+<li>Generate make files<ul>
+<li><code>qmake -r mindforger-lib-unit-tests.pro "CONFIG+=debug" "CONFIG+=mfdebug"</code></li>
+</ul>
+</li>
+<li>Build tests<ul>
+<li><code>nmake</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="running-unit-tests">Running unit tests</h4>
+<ul>
+<li>Prepare environment</li>
+<li><code>set "PATH=%PATH%;$GIT\mindforger\deps\zlib-win"</code></li>
+<li><code>set M8R_GIT_PATH=$GIT\mindforger</code></li>
+<li>Run tests</li>
+<li><code>cd $GIT\mindforger</code></li>
+<li><code>lib\test\src\debug\mindforger-lib-unit-tests.exe</code></li>
+</ul>
+<h3 id="using-scripts">Using scripts</h3>
+<div class="codehilite"><pre><span></span><code>cd build/
+make help
+</code></pre></div>
+
+<hr />
+<p>Alternatively, instead using of following above described manual steps, you can take advantage of batch files prepared for building and running MindForger, installer and unit tests. All the scripts are located in the <code>$GIT\mindforger\build</code> folder:</p>
+<ul>
+<li><code>build-app.bat</code></li>
+<li><code>build-cmake.bat</code></li>
+<li><code>build-installer.bat</code></li>
+<li><code>build-unit-tests.bat</code></li>
+<li><code>env.bat</code></li>
+<li><code>run-app.bat</code></li>
+<li><code>run-unit-tests.bat</code></li>
+</ul>
+<p>Most important is the <code>env.bat</code>. It's called by others and sets up command line environment. Ammend this file to change paths based on your setup. Other scripts are self-explanatory. The <code>run-unit-tests.bat</code> can also take any argument. This is usefull for passing options to the <em>gtest</em> framework.</p>
+<h3 id="windows-continous-integration--ci">Windows Continous Integration (CI)</h3>
+<p>Continous Integration for Windows:</p>
+<ul>
+<li><a href="https://ci.appveyor.com/project/dvorka/mindforger">AppVeyor</a><ul>
+<li>See also <code>appveyor.yml</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="optional-qtcreator-build">Optional QtCreator build</h3>
+<ul>
+<li>Start Qt creator</li>
+<li>Open project <code>%GIT%\mindforger\mindforger.pro</code><ul>
+<li>Enable <strong>Desktop Qt 5.xx MSVC2017 64bit</strong> build</li>
+<li>Set the <strong>Build Directory</strong> to <code>%GIT%\mindforger</code></li>
+</ul>
+</li>
+<li>
+<p>Build MSVC 2017 64-bit</p>
+</li>
+<li>
+<p>For setting debugger in QtCreator follow instructions in Qt documention <a href="https://doc.qt.io/qtcreator/creator-debugger-engines.html">Setting Up Debugger</a></p>
+<ul>
+<li>CDB is part for Windows SDK. If you have only Visual Studio, it must be installed additionaly. Download <a href="https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk">Windows 10 SDK</a> and select <code>Debugging Tools for Windows</code> only.</li>
+</ul>
+</li>
+</ul>
+<h4 id="qtcreator-debugging">QtCreator debugging</h4>
+<ul>
+<li>For setting debugger in QtCreator follow instructions in Qt
+  documention <a href="https://doc.qt.io/qtcreator/creator-debugger-engines.html">Setting Up Debugger</a></li>
+<li>CDB is part for Windows SDK. If you have only Visual Studio, it must be installed additionaly.
+  Download <a href="https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk">Windows 10 SDK</a>
+  and select <code>Debugging Tools for Windows</code> only.</li>
+</ul>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="conventions-and-bps">Conventions and BPs</h2>
+<p>Conventions and best practices.</p>
+<h3 id="git-and-branching-conventions">Git and Branching Conventions</h3>
+<p>Git:</p>
+<ul>
+<li><code>master</code> is the main development branch</li>
+<li>source code in <code>master</code> branch must be always stable</li>
+<li><code>master</code> branch contains the latest MindForger release source code</li>
+<li>new MindForger version <code>&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</code> is developed in Git branch <code>dev/&lt;major&gt;.&lt;minor&gt;/&lt;patch&gt;</code></li>
+</ul>
+<p>Git branch naming convention:</p>
+<ul>
+<li><code>feature-&lt;related issue id&gt;/&lt;feature-name&gt;</code><ul>
+<li>feature branch</li>
+</ul>
+</li>
+<li><code>enhancement-&lt;related issue id&gt;/&lt;enhancement-name&gt;</code><ul>
+<li>enhancement branch</li>
+</ul>
+</li>
+<li><code>bug-&lt;related issue id&gt;/&lt;description&gt;</code><ul>
+<li>bug fix branch</li>
+</ul>
+</li>
+<li><code>benchmark-&lt;related issue id&gt;/&lt;description&gt;</code><ul>
+<li>benchmark branch</li>
+</ul>
+</li>
+<li>
+<p><code>platform-&lt;release version&gt;/&lt;platform-name&gt;</code></p>
+<ul>
+<li>platform support branch</li>
+</ul>
+</li>
+<li>
+<p><code>dev/&lt;release version&gt;</code></p>
+<ul>
+<li>release development branch used <strong>before</strong> release (stable master)</li>
+</ul>
+</li>
+<li><code>stabilization/&lt;release version&gt;</code><ul>
+<li>stable brach used <strong>after</strong> release (patch releases)</li>
+</ul>
+</li>
+</ul>
+<h3 id="source-documentation-conventions">Source documentation conventions</h3>
+<p>Source code documentation conventions:</p>
+<ul>
+<li>Use Doxygen syntax in source code comments
+  https://www.cs.cmu.edu/~410/doc/doxygen.html</li>
+</ul>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="technical-architecture">Technical Architecture</h2>
+<p>MindForger <strong>technical</strong> architecture.</p>
+<h3 id="library">Library</h3>
+<h4 id="3rd-party-dependencies">3rd-party dependencies</h4>
+<h5 id="cmark-gfm">cmark-gfm</h5>
+<p>MindForger uses <a href="https://github.com/github/cmark-gfm">cmark-gfm</a> for rendering
+of Markdown documents to HTML:</p>
+<ul>
+<li>cmark-gfm repository:
+  https://github.com/github/cmark-gfm</li>
+<li>cmark-gfm repository clone:
+  https://github.com/dvorka/cmark</li>
+</ul>
+<p>Fixes to cmark-gfm:</p>
+<ul>
+<li>https://github.com/dvorka/cmark/commit/bc97db117ec777c112055bc55918b63a89efbb65<ul>
+<li>fix of MSVC 2017 build (Windows)</li>
+</ul>
+</li>
+<li>https://github.com/dvorka/cmark/commit/f06d944d8e19816cce322ce87140f8c8cf2db89e<ul>
+<li>Removal of code blocks prefixing with language specification using
+  "language-" to fix Mermaid integration and allow class specification
+  w/o prefix which is not desired.</li>
+</ul>
+</li>
+</ul>
+<p>cmark-gfm versions used:</p>
+<ul>
+<li>1.53.0 - onwards<ul>
+<li>766f161ef6d61019acf3a69f5099489e7d14cd49
+  <code>0.29.0.gfm.2</code> (September 16, 2021)</li>
+</ul>
+</li>
+<li>... - 1.52.0<ul>
+<li>https://github.com/dvorka/cmark/commit/3785191c3afb6cabd56776f6d6c73c90f3131d5d
+  <code>0.28.3.gfm.20</code> (January 31, 2019) with aforementioned patches</li>
+</ul>
+</li>
+<li>1.42.0 - ...<ul>
+<li>MindForger used Discount for Markdown rendering priort cmark-gfm</li>
+</ul>
+</li>
+</ul>
+<h4 id="markdown-recursive-descent-parser">Markdown Recursive Descent Parser</h4>
+<h4 id="nlp--stemmer--lexicon--bow">NLP: Stemmer, Lexicon, BoW</h4>
+<h3 id="gui">GUI</h3>
+<h4 id="qt">Qt</h4>
+<h4 id="model-view-presenter">Model View Presenter</h4>
+<p><img alt="Image" src="./DEVELOPER_DOCUMENTATION.signals.png" / class="img-fluid rounded border my-2"></p>
+<h4 id="async-ui-updates">Async UI updates</h4>
+<h4 id="localization">Localization</h4>
+<p>Adding a new/updating existing MindForger l10n:</p>
+<ul>
+<li>Add translation name to <code>app/app.pro</code>: <code>TRANSLATIONS += resources/qt/translations/mindforger_en.ts</code></li>
+<li>Run <code>lupdate mindforger.pro</code> - it will parse source code
+  and prepare empty file for translations (later update). This is where is new translation
+  written.<ul>
+<li>If <code>lupdate</code> is not present on Ubuntu, then install <code>sudo apt-get install qttools5-dev-tools</code></li>
+</ul>
+</li>
+<li>Edit translations using <code>linguist</code> tool e.g. <code>linguist mindforger_cs.ts</code></li>
+<li>Run <code>lrelease app/app.pro</code> to release translations that might be used in build.</li>
+<li>Add translation <code>.qm</code> resource to <code>app/mf-resources.qrs</code></li>
+<li>Build application.</li>
+<li>Test it:<ul>
+<li><code>export LANGUAGE=cs_CZ &amp;&amp; export LANG=cs_CZ.UTF-8 &amp;&amp; ./mindforger</code></li>
+<li><code>export LANGUAGE=pt_BR &amp;&amp; export LANG=pt_BR.UTF-8 &amp;&amp; ./mindforger</code></li>
+</ul>
+</li>
+</ul>
+<p>See also:</p>
+<ul>
+<li>http://doc.qt.io/qt-5/internationalization.html</li>
+<li>http://doc.qt.io/qt-5/qtlinguist-hellotr-example.html</li>
+</ul>
+<h4 id="force-driven-graph">Force-driven graph</h4>
+<h3 id="benchmarks-1">Benchmarks</h3>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="formats-specification">Formats specification</h2>
+<p>MindForger can open <strong>any</strong> file that uses Markdown format. MindForger
+can also open <strong>any</strong> directory that contains Markdown files (also
+in its sub-directories).</p>
+<p>However, you can use MindForger's <a href="#markdown-hosted-dsl">Markdown hosted DSL</a> and
+<a href="#repository-format">repository format</a> to get much more (mind related) features.</p>
+<h3 id="markdown-hosted-dsl">Markdown hosted DSL</h3>
+<p>This section describes MD conventions that MindForger uses to store outlines.</p>
+<p>Description:</p>
+<ul>
+<li><strong>metadata</strong> added by MindForger are optional</li>
+<li>if user deletes metadata, then they are not added</li>
+<li>user may activate creation of metadata by adding  (any case) just after section title</li>
+<li><code>Metadata</code> keyword is case <strong>insensitive</strong> i.e. any other variant is valid substituation e.g. <code>metadata</code>, <code>MetaData</code>
+     or <code>METADATA</code></li>
+<li><strong>tags</strong> chosen to follow typical naming e.g. GMail (labels, keywords, ... forbidden)</li>
+</ul>
+<p>Example:</p>
+<div class="codehilite"><pre><span></span><code># Canonical Message Similarity Code 
+
+This document contains ideas related to the definition of similarity codes for
+canonical messages.
+
+## Requirements 
+
+... here comes a text.
+</code></pre></div>
+
+<h3 id="repository-layout">Repository layout</h3>
+<p>Design goals:</p>
+<ul>
+<li>Repository specification SHOULD be general i.e. not bound to MindForger
+  so that anybody can create it, use it and it won't be vendor specific.</li>
+<li>Repository format MUST be human friendly i.e. easy to create and read
+  for a normal person.</li>
+</ul>
+<p>Repository layout:</p>
+<div class="codehilite"><pre><span></span><code>[ROOT]/
+  memory/
+    [DIRECTORY-NAME]/
+      [OUTLINE-NAME].md                 ... Markdown is default MF format. Source code/markup free text can be inlined
+                                            using three back apostrophes. Intentionally there is no txt, TWiki, HTML
+                                            as outline format to keep focus (txt/.../HTML can be an attachment of empty
+                                            MD file).
+      [OUTLINE-NAME].[ATTACH-NAME].png  ... &#39;.&#39; is reserved character
+      [OUTLINE-NAME].[ATTACH-NAME].jpg
+      [OUTLINE-NAME].[ATTACH-NAME].gif
+    ...
+  limbo/
+  stencils/
+    ...
+  mind/                                 ... Git ignored directory w/ indexed knowledge base
+    index.mf                            ... MF&#39;s index can be fully rebuilt from
+                                            repository content (file internals and
+                                            Git index information), it is used by
+                                            MF runtime (navigation, ...)
+    fts/                                ... Lucene stores its files to here
+      ...
+  .gitignore
+  README.md                             ... MF generated info for nice Git repo
+                                            that can be customized by user
+</code></pre></div>
+
+<p>Example repository:</p>
+<div class="codehilite"><pre><span></span><code>ROOT/
+  outlines/
+    My Example/
+      frontend-design.twiki
+      frontend-design.mockup.jpg
+      repository-design.md
+      repository-design.overview.png
+      repository-design.structure.png
+      ideas.txt
+  mind/
+  .gitignore
+  index
+  README.md
+</code></pre></div>
+
+<p>Description:</p>
+<ul>
+<li>repository is Git repository</li>
+<li>.gitignore prevents storing of big attachments and indices to Git</li>
+<li>DIRECTORY-NAME ... A-Z a-z 0-9 SPACE - _</li>
+<li>OUTLINE-NAME   ... A-Z a-z 0-9 SPACE - _</li>
+<li>directory is outline <em>label</em> - name directories to be nice labels:</li>
+<li>do NOT use plurals: 'templates' is not good label &gt; use 'template' instead</li>
+<li>user lower case for normal adjectives (template, import) and upper case for
+     names like MindForger or Systinet</li>
+<li>MindForger home screen == cloud of is outline and/or note <em>labels</em> (split screen).</li>
+<li>Extensions:</li>
+<li>files w/ extensions that are not explicitly enumerated are ignored by Git (global ignore)</li>
+</ul>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="continuous-integration--ci">Continuous Integration (CI)</h2>
+<p>Multiple CI services are used to build, test and package MindForger.</p>
+<h3 id="github-actions">GitHub Actions</h3>
+<p>GitHub Actions are used to build macOS DiskImaGe packages and tarballs:</p>
+<ul>
+<li><a href="https://github.com/dvorka/mindforger/actions">GitHub Actions</a></li>
+</ul>
+<p>See also <a href="https://github.com/dvorka/mindforger/tree/dev/master/.github/workflows">.github/workflows</a>.</p>
+<h3 id="appveyor">AppVeyor</h3>
+<p>AppVeyor CI is used to build Windows installer:</p>
+<ul>
+<li><a href="https://ci.appveyor.com/project/dvorka/mindforger">AppVeyor</a></li>
+</ul>
+<p>See also <a href="https://github.com/dvorka/mindforger/blob/master/appveyor.yml">appveyor.yml</a>.</p>
+<h3 id="travis-ci--condemned">Travis CI (condemned)</h3>
+<p>Travis CI is no longer used due to (GitHub account related) privacy issues and coarse grained security:</p>
+<ul>
+<li><a href="https://travis-ci.org/dvorka/mindforger">Travis CI</a></li>
+</ul>
+<p>See also <a href="https://github.com/dvorka/mindforger/tree/master/build/travis-ci">.travis.yml</a>.</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="release-automation">Release automation</h2>
+<p>This is analysis of release automation making MindForger release much
+faster and less time consuming.</p>
+<p>Release artifacts:</p>
+<ul>
+<li><strong>PPA Launchpad</strong><ul>
+<li>State: fully scripted</li>
+<li>Todo:<ul>
+<li>Load version number from a central place (env script)</li>
+<li>Call this script from central release script.</li>
+<li>Add section to generated report of main release script w/ URLs of Launchpad distros.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>PPA Debian (private)</strong><ul>
+<li>State: text how to.</li>
+<li>Todo:<ul>
+<li>Load version number.</li>
+<li>Write script which automates OLD version removal and new version add.</li>
+<li>Write script which will upload and replace PPA over FTS/SFTP/scp</li>
+<li>Add section to generated report of main release</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>.deb</strong><ul>
+<li>...</li>
+</ul>
+</li>
+<li><strong>.rpm</strong><ul>
+<li>...</li>
+</ul>
+</li>
+<li><strong>tarball</strong><ul>
+<li>...</li>
+</ul>
+</li>
+</ul>
+</div></div>
+              </div>
+              <!-- END MAIN CONTENT -->
+              <!-- BEGIN TABLE OF CONTENTS -->
+              <div class="col-3 d-none d-xl-block">
+                <div class="mf-toc sticky-top">
+              <div class="mf-toc-title">On this page</div>
+              <div class="nav nav-vertical" id="toc">
+                <a href="#contribute" class="nav-link">Contribute</a>
+<a href="#linux-development-environment" class="nav-link">Linux development environment</a>
+<a href="#build" class="nav-link ms-3 small">Build</a>
+<a href="#tests" class="nav-link ms-3 small">Tests</a>
+<a href="#benchmarks" class="nav-link ms-3 small">Benchmarks</a>
+<a href="#packaging" class="nav-link ms-3 small">Packaging</a>
+<a href="#windows-development-environment" class="nav-link">Windows development environment</a>
+<a href="#install-prerequisites" class="nav-link ms-3 small">Install prerequisites</a>
+<a href="#build-dependencies" class="nav-link ms-3 small">Build dependencies</a>
+<a href="#build-mindforger" class="nav-link ms-3 small">Build MindForger</a>
+<a href="#running-mindforger" class="nav-link ms-3 small">Running MindForger</a>
+<a href="#creating-installer" class="nav-link ms-3 small">Creating installer</a>
+<a href="#building-unit-tests" class="nav-link ms-3 small">Building unit tests</a>
+<a href="#using-scripts" class="nav-link ms-3 small">Using scripts</a>
+<a href="#windows-continous-integration--ci" class="nav-link ms-3 small">Windows Continous Integration (CI)</a>
+<a href="#optional-qtcreator-build" class="nav-link ms-3 small">Optional QtCreator build</a>
+<a href="#conventions-and-bps" class="nav-link">Conventions and BPs</a>
+<a href="#git-and-branching-conventions" class="nav-link ms-3 small">Git and Branching Conventions</a>
+<a href="#source-documentation-conventions" class="nav-link ms-3 small">Source documentation conventions</a>
+<a href="#technical-architecture" class="nav-link">Technical Architecture</a>
+<a href="#library" class="nav-link ms-3 small">Library</a>
+<a href="#gui" class="nav-link ms-3 small">GUI</a>
+<a href="#benchmarks-1" class="nav-link ms-3 small">Benchmarks</a>
+<a href="#formats-specification" class="nav-link">Formats specification</a>
+<a href="#markdown-hosted-dsl" class="nav-link ms-3 small">Markdown hosted DSL</a>
+<a href="#repository-layout" class="nav-link ms-3 small">Repository layout</a>
+<a href="#continuous-integration--ci" class="nav-link">Continuous Integration (CI)</a>
+<a href="#github-actions" class="nav-link ms-3 small">GitHub Actions</a>
+<a href="#appveyor" class="nav-link ms-3 small">AppVeyor</a>
+<a href="#travis-ci--condemned" class="nav-link ms-3 small">Travis CI (condemned)</a>
+<a href="#release-automation" class="nav-link">Release automation</a>
+              </div>
+            </div>
+              </div>
+              <!-- END TABLE OF CONTENTS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- BEGIN FOOTER -->
+        <footer class="footer footer-transparent d-print-none">
+          <div class="container-xl">
+            <ul class="list-inline list-inline-dots mb-0 text-center">
+              <li class="list-inline-item">Copyright &copy; 2018-2026 MindForger </li>
+              <li class="list-inline-item">Thinking Notebook</li>
+              <li class="list-inline-item">Doc made with <a href="https://www.mindforger.com" target="_blank">MindForger</a></li>
+              <li class="list-inline-item"><a href="https://github.com/dvorka/mindforger-documentation/edit/main/memory/DEVELOPER_DOCUMENTATION.md" target="_blank">Edit on GitHub</a></li>
+              <li class="list-inline-item"><a href="https://github.com/dvorka/mindforger-documentation/blob/main/memory/DEVELOPER_DOCUMENTATION.md" target="_blank">Source</a></li>
+              <li class="list-inline-item"><a href="rss.xml">RSS</a></li>
+            </ul>
+          </div>
+        </footer>
+        <!-- END FOOTER -->
+      </div>
+    </div>
+    <script src="assets/tabler/js/tabler.min.js" defer></script>
+    
+  </body>
+</html>

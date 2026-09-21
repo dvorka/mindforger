@@ -1,14 +1,30 @@
 /* MindForger web CSS */
 
 /* download */
- 
-.mf-download-button {    
+
+.mf-download-button {
     background-color: #000;
     color: #FFF;
     margin: 10px;
     padding: 10px;
     float: left;
 }
+.mf-download-button-i {
+    background-color: #357EC7;
+    color: #FFF;
+    margin: 10px;
+    padding: 10px;
+    float: left;
+}
+.mf-download-button-ii {
+    background-color: #9d00a6;
+    color: #FFF;
+    margin: 10px;
+    padding: 10px;
+    float: left;
+}
+
+
 .mf-download-button:hover {
     background-color: #4CAF50;
     color: #FFF;
@@ -48,7 +64,7 @@ a.mf-download-link {
     content:"";
     display: table;
     clear: both;
-    
+
     width: 90%;
     margin-left: 5%;
 }
@@ -75,23 +91,23 @@ a.mf-download-link {
     content:"";
     display: table;
     clear: both;
-    
+
     width: 90%;
     margin-left: 5%;
 }
 
 .mfSlideThumbnail {
     font-size: smaller;
-    color: #888;	      
+    color: #888;
 }
 
 .mfGroupLeftText {
     font-size: x-large;
-    margin: 10px;    
+    margin: 10px;
 }
 
 @media screen and (max-width: 600px) {
-    .left, 
+    .left,
     .right,
     .mfDownloadLeft,
     .mfDownloadRight {

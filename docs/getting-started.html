@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Getting Started - MindForger Documentation</title>
+    <meta name="description" content="Let's describe basic terms in more detail." />
+    <meta name="author" content="Martin.Dvorak@mindforger.com" />
+    <link rel="canonical" href="https://www.mindforger.com/docs/getting-started.html" />
+    <link rel="alternate" type="application/rss+xml" title="MindForger Blog" href="rss.xml" />
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="assets/mind-forger.png" type="image/png" />
+    <meta name="theme-color" content="#008c00" />
+
+    <!-- BEGIN OPEN GRAPH -->
+    <meta property="og:site_name" content="MindForger Documentation" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Getting Started - MindForger Documentation" />
+    <meta property="og:description" content="Let's describe basic terms in more detail." />
+    <meta property="og:url" content="https://www.mindforger.com/docs/getting-started.html" />
+    <meta property="og:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Getting Started - MindForger Documentation" />
+    <meta name="twitter:description" content="Let's describe basic terms in more detail." />
+    <meta name="twitter:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
+    <!-- END OPEN GRAPH -->
+
+    <!-- BEGIN STYLES -->
+    <link href="assets/tabler/css/tabler.min.css" rel="stylesheet" />
+    <link href="assets/tabler/css/tabler-props.min.css" rel="stylesheet" />
+    <link href="assets/tabler/css/tabler-themes.min.css" rel="stylesheet" />
+    <link href="assets/pygments.css" rel="stylesheet" />
+    <link href="assets/mindforger-docs.css" rel="stylesheet" />
+    
+    <!-- END STYLES -->
+
+    <!-- BEGIN THEME SCRIPT: light/dark theme, must run before the page renders -->
+    <script src="assets/tabler/js/tabler-theme.min.js"></script>
+    <!-- END THEME SCRIPT -->
+  </head>
+  <body>
+    <div class="page">
+      <!-- BEGIN NAVBAR -->
+      <div class="sticky-top">
+        <header class="navbar navbar-expand-md d-print-none">
+          <div class="container-xl">
+            <!-- BEGIN NAVBAR TOGGLER -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbar-menu" aria-controls="navbar-menu"
+                    aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- END NAVBAR TOGGLER -->
+            <!-- BEGIN NAVBAR LOGO -->
+            <div class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+              <a href="index.html" class="mf-brand">
+                <img src="assets/mind-forger.png" alt="MindForger" class="mf-brand-logo">
+                <span class="mf-brand-text">MindForger</span>
+              </a><span style="font-weight: normal;">Docs</span>
+            </div>
+            <!-- END NAVBAR LOGO -->
+            <div class="navbar-nav flex-row order-md-last">
+              <div class="d-none d-md-flex">
+                <div class="nav-item">
+                  <a href="?theme=dark" class="nav-link px-0 hide-theme-dark"
+                     title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /></svg></a>
+                  <a href="?theme=light" class="nav-link px-0 hide-theme-light"
+                     title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <header class="navbar-expand-md">
+          <div class="collapse navbar-collapse" id="navbar-menu">
+            <div class="navbar">
+              <div class="container-xl">
+                <div class="row flex-column flex-md-row flex-fill align-items-center">
+                  <div class="col">
+                    <!-- BEGIN NAVBAR MENU -->
+                    <ul class="navbar-nav" id="navbar-base">
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg></span>
+                          <span class="nav-link-title">Home</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="index.html">Documentation</a>
+<a class="dropdown-item" href="toc.html">Table of Contents</a>
+<a class="dropdown-item" href="history.html">Project History</a>
+<a class="dropdown-item" href="credits.html">Credits</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="about.html">About</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg></span>
+                          <span class="nav-link-title">User Documentation</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="assets/comics/index.html">Comics</a>
+<a class="dropdown-item" href="installation.html">Installation</a>
+<a class="dropdown-item active" href="getting-started.html">Getting Started</a>
+<a class="dropdown-item" href="user-documentation.html">User Documentation</a>
+<a class="dropdown-item" href="note-taking-best-practices.html">Note Taking Best Practices</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="faqs.html">FAQs</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M7 8l-4 4l4 4" /><path d="M17 8l4 4l-4 4" /><path d="M14 4l-4 16" /></svg></span>
+                          <span class="nav-link-title">Technical Documentation</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="developer-documentation.html">Developer Guide</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#navbar-base"
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                           role="button" aria-expanded="false">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M12 17a3 3 0 0 0 -3 -3" /><path d="M15 17a6 6 0 0 0 -6 -6" /><path d="M9 17h.01" /></svg></span>
+                          <span class="nav-link-title">News</span>
+                        </a>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                              <a class="dropdown-item" href="blog.html">Blog</a>
+<a class="dropdown-item" href="releases.html">Releases</a>
+<a class="dropdown-item" href="https://github.com/dvorka/mindforger/blob/master/Changelog" target="_blank" rel="noopener">Changelog</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="rss.xml" target="_blank" rel="noopener">RSS</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                    <!-- END NAVBAR MENU -->
+                  </div>
+                  <div class="col col-md-auto">
+                    <ul class="navbar-nav">
+                      <li class="nav-item">
+                        <a class="nav-link" href="https://www.mindforger.com" target="_blank">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M3.6 9h16.8" /><path d="M3.6 15h16.8" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" /></svg></span>
+                          <span class="nav-link-title">mindforger.com</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+      </div>
+      <!-- END NAVBAR -->
+      <div class="page-wrapper">
+        <!-- BEGIN PAGE HEADER -->
+        <div class="page-header d-print-none" aria-label="Page header">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                <div class="page-pretitle">User Documentation</div>
+                <h1 class="page-title">Getting Started</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END PAGE HEADER -->
+
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="row">
+              <!-- BEGIN MAIN CONTENT -->
+              <div class="col-12 col-xl-9">
+                <div class="card mb-3"><div class="card-body">
+<p>Getting started with <strong>MindForger</strong>.</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="basics">Basics</h2>
+<p><img alt="desktop" src="GETTING_STARTED.basic-concepts-overview.png" / class="img-fluid rounded border my-2"></p>
+<p>This section aims to explain basic MindForger terminology:</p>
+<ul>
+<li><a href="#workspace">Workspace</a></li>
+<li><a href="#document---notebook">Notebook</a></li>
+<li><a href="#section---note">Note</a></li>
+</ul>
+<p>In short:</p>
+<ul>
+<li>The MindForger <a href="#workspace">workspace</a> is analogous <strong>the desktop</strong> of an office desk.<ul>
+<li>The MindForger <a href="#notebook">notebook</a> analogous to <strong>a notepad</strong> on the desktop.<ul>
+<li>A MindForger <a href="#note">note</a> is analogous to <strong>a page with the note</strong> from a <strong>notepad</strong>.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Let's describe basic terms in more detail.</p>
+<h3 id="workspace">Workspace</h3>
+<p><img alt="desktop" src="GETTING_STARTED.basic-concepts-workspace.png" / class="img-fluid rounded border my-2"></p>
+<p>MindForger <strong>workspace</strong>:</p>
+<ul>
+<li>... contains <a href="#notebook">notebooks</a></li>
+<li>... stored in a directory on the filesystem</li>
+<li>... has its own configuration</li>
+<li>... might be empty</li>
+</ul>
+<h3 id="notebook">Notebook</h3>
+<p><img alt="desktop" src="GETTING_STARTED.basic-concepts-notebook.png" / class="img-fluid rounded border my-2"></p>
+<p>MindForger <strong>notebook</strong>:</p>
+<ul>
+<li>contains <a href="#note">notes</a></li>
+<li>organizes notes in hierarchy - <a href="user-documentation.html#outliner">outline</a></li>
+<li>can be marked with <a href="user-documentation.html#tag">tags</a></li>
+<li>is typically devoted to a specific topic such as a project plan, family gifts or lessons learned</li>
+</ul>
+<h3 id="note">Note</h3>
+<p><img alt="desktop" src="GETTING_STARTED.basic-concepts-overview.png" / class="img-fluid rounded border my-2"></p>
+<p>MindForger <strong>note</strong>:</p>
+<ul>
+<li>contains text, images and links</li>
+<li>can link notebooks and notes (within the <a href="#workspace">Workspace</a>) and/or files and URLs</li>
+<li>can be marked with <a href="user-documentation.html#tag">tags</a></li>
+</ul>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="create-workspace">Create Workspace</h2>
+<p><a href="https://www.youtube.com/watch?v=ahThnkU9d90"><img alt="v" src="https://img.youtube.com/vi/ahThnkU9d90/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<p>Create <strong>new</strong> <a href="#workspace">workspace</a> as follows:</p>
+<ol>
+<li>open menu <code>Knowledge</code></li>
+<li>choose <code>New</code> menu item</li>
+<li>choose <code>Workspace</code> sub-menu item</li>
+<li><code>New Workspace</code> dialog is opened:
+   - type in workspace name 
+   - feel free to modify where to store the workspace on the filesystem</li>
+<li>click <kbd>New</kbd> to create the workspace</li>
+</ol>
+<h3 id="create-notebook">Create Notebook</h3>
+<p>Create <strong>new</strong> <a href="#notebook">notebook</a> as follows:</p>
+<ol>
+<li>open menu <code>Notebook</code><ul>
+<li>💡 if <code>Notebook</code> menu is disabled, 
+  then open list of notebooks (menu <code>View</code> / <code>Notebooks</code>) or notebooks tree
+  (menu <code>View</code> / <code>Notebook Shelves</code>)</li>
+</ul>
+</li>
+<li>choose <code>New</code> menu item</li>
+<li><code>New Notebook</code> dialog is opened:
+   - type in notebook name 
+   - feel free modify notebook creation options and tags</li>
+<li>click <kbd>OK</kbd> to create the notebook</li>
+</ol>
+<h4 id="create-note">Create Note</h4>
+<p>Create <strong>new</strong> <a href="#note">note</a> as follows:</p>
+<ol>
+<li>open menu <code>Note</code><ul>
+<li>💡 if <code>Note</code> menu might is disabled, 
+  then open the <a href="#notebook">notebook</a> in which you want to add the note</li>
+</ul>
+</li>
+<li>choose <code>New</code> menu item</li>
+<li><code>New Note</code> dialog is opened:
+   - type in note name 
+   - feel free modify note creation options and tags</li>
+<li>click <kbd>OK</kbd> to create the note</li>
+</ol>
+<h4 id="edit-note">Edit Note</h4>
+<p>When you are viewing a <a href="#note">note</a>, you can edit it using one of the options below:</p>
+<ul>
+<li><strong>Double click</strong> the mouse preview.</li>
+<li>Use <kbd>Ctrl-e</kbd> keyboard shortcut (Linux/Win).</li>
+<li>Use <kbd>Alt-n e</kbd> keyboard shortcut (Linux/Win).</li>
+</ul>
+<p>Once you finish editing the <a href="#note">note</a> you can save it and preview using one of the options below:</p>
+<ul>
+<li>Use <kbd>Alt-⬅</kbd> keyboard shortcut.</li>
+<li>Click <kbd>Save &amp; Leave</kbd> button at the bottom of the editor.</li>
+</ul>
+<h4 id="fix-grammar-with-wingman">Fix Grammar with Wingman</h4>
+<p><a href="https://www.youtube.com/watch?v=QLX9CWzzEa8"><img alt="v" src="https://img.youtube.com/vi/QLX9CWzzEa8/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<p>Wingman is MindForger's private AI assistant which runs a large language model on your computer - to set it up
+see <a href="user-documentation.html#llm-provider-configuration">LLM provider configuration</a>.
+While you are editing a <a href="#note">note</a>, you can <strong>fix grammar</strong> of the text as follows:</p>
+<ol>
+<li>select a text withing the note editor</li>
+<li>open Wingman chat window using <kbd>Ctrl-/</kbd> (Linux/Win)</li>
+<li>specify prompt:<ul>
+<li>custom prompt: type in <code>Fix grammar: #TEXT</code> (<code>#TEXT</code> is replaced by the text you selected in the note editor)</li>
+<li>predefined prompt: choose <code>Fix grammar: #TEXT</code> from the drop down</li>
+</ul>
+</li>
+<li>click <code>Run</code></li>
+<li>check LLM model answer</li>
+<li>if you are satisfied, then click <code>Replace</code> and the fixed text from the Wingman chat window
+   will replace the text in the note</li>
+</ol>
+<p>... Wingman can do <strong>much more</strong>:</p>
+<ul>
+<li>complete sentences, paragraphs or portions of the text</li>
+<li>reformulate / rewrite the text - formally, informally, in a slang, like a person (Kafka), etc.</li>
+<li>provide synonyms and antonyms</li>
+<li>explain </li>
+</ul>
+<p>... and much more - for more details see <a href="user-documentation.html#wingman">Wingman</a>.</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="notes-outliner">Notes Outliner</h2>
+<p><a href="https://www.youtube.com/watch?v=LUqavHfKhnc"><img alt="v" src="https://img.youtube.com/vi/LUqavHfKhnc/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<p>An <strong>outliner</strong> is a feature used in word processing, <strong>note-taking</strong>, and organizational software to help users outline and structure their ideas. Outlining actions in MindForger allow users to create <strong>hierarchies</strong> or levels of information by, making it easier to organize and navigate through a <a href="#notebook">Notebook</a>:</p>
+<ol>
+<li>open a <a href="#notebook">notebook</a></li>
+<li>choose and view a <a href="#note">note</a> in the note tree</li>
+<li>open menu <code>Note</code></li>
+<li>choose one of the <strong>outlining actions</strong><ul>
+<li><code>Promote</code><ul>
+<li>to move note one level <strong>up</strong> in hierarchy (depth)</li>
+</ul>
+</li>
+<li><code>Demote</code><ul>
+<li>to move note one level <strong>down</strong> in hierarchy (depth)</li>
+</ul>
+</li>
+<li><code>Move to first</code><ul>
+<li>move note to <strong>the first</strong> from the top on its level (depth)</li>
+</ul>
+</li>
+<li><code>Move up</code><ul>
+<li>move note one position <strong>up</strong> on its level (depth)</li>
+</ul>
+</li>
+<li><code>Move down</code><ul>
+<li>move note one position <strong>down</strong> on its level (depth)</li>
+</ul>
+</li>
+<li><code>Move to last</code><ul>
+<li>move note to <strong>the last</strong> from the top on its level (depth)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>Outlining is a powerful tool that allows you to organize your thoughts and make your remarks structured, comprehensible, and scalable.</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="find-note">Find Note</h2>
+<p><a href="https://www.youtube.com/watch?v=a-i7EU58H7Y"><img alt="v" src="https://img.youtube.com/vi/a-i7EU58H7Y/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<p>You can <strong>find</strong> <a href="#notebook">notebooks</a> and <a href="#note">notes</a> using the following attributes:</p>
+<ul>
+<li>name</li>
+<li>text phrase</li>
+<li>tag</li>
+</ul>
+<p>For instance, to find <a href="#note">notes</a> by text phrase:</p>
+<ol>
+<li>open menu <code>Find</code></li>
+<li>choose <code>Full-text Search</code> menu item</li>
+<li><code>Search</code> dialog is opened:
+   - type in <strong>search phrase</strong></li>
+<li>click <kbd>Search</kbd> to search for notes containing the phrase</li>
+<li>preview and select a note to open in the search results</li>
+</ol>
+<p>Similarly, for other search options.</p>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="delete-notebook">Delete Notebook</h2>
+<p><a href="https://www.youtube.com/watch?v=gtGbCdb_7c8"><img alt="v" src="https://img.youtube.com/vi/gtGbCdb_7c8/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<p><a href="#notebook">Notebook</a> can be ~~deleted~~ <strong>deprecated</strong> as follows:</p>
+<ol>
+<li>open the <a href="#notebook">notebook</a> you want to delete (be sure that you are not editing a note)</li>
+<li>open menu <code>Notebook</code></li>
+<li>choose <code>Deprecate</code> menu item</li>
+<li><code>Deprecate Notebook</code> dialog is opened</li>
+<li>click <kbd>Yes</kbd> to deprecate the notebook</li>
+</ol>
+<p>As you can see, <a href="#notebook">notebooks</a> in MindForger are not deleted,
+but <strong>deprecated</strong> - they are moved to a <strong>limbo</strong> directory. To
+purge or resurrect deprecated notebook:</p>
+<ol>
+<li>open menu <code>View</code></li>
+<li>choose <code>Limbo</code>menu item</li>
+<li>use you file manager to manipulate the notebook</li>
+</ol>
+
+</div></div>
+<div class="card mb-3"><div class="card-body">
+<h2 id="video-tutorials">Video tutorials</h2>
+<p>MindForger <strong>video</strong> tutorials:</p>
+<ul>
+<li>🎞 <a href="https://www.youtube.com/playlist?list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS">playlist</a> on YouTube</li>
+</ul>
+<h3 id="mindforger--from-markdown-editor-to-thinking-notebook">🎞 MindForger: From Markdown editor to thinking notebook</h3>
+<p><a href="https://www.youtube.com/watch?v=PlW2e1X3O-I"><img alt="v" src="https://img.youtube.com/vi/PlW2e1X3O-I/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+<h3 id="mindforger--first-steps">🎞 MindForger: First steps</h3>
+<p><a href="https://www.youtube.com/watch?v=UR49y3uNurs"><img alt="v" src="https://img.youtube.com/vi/UR49y3uNurs/0.jpg" / class="img-fluid rounded border my-2"></a></p>
+</div></div>
+              </div>
+              <!-- END MAIN CONTENT -->
+              <!-- BEGIN TABLE OF CONTENTS -->
+              <div class="col-3 d-none d-xl-block">
+                <div class="mf-toc sticky-top">
+              <div class="mf-toc-title">On this page</div>
+              <div class="nav nav-vertical" id="toc">
+                <a href="#basics" class="nav-link">Basics</a>
+<a href="#workspace" class="nav-link ms-3 small">Workspace</a>
+<a href="#notebook" class="nav-link ms-3 small">Notebook</a>
+<a href="#note" class="nav-link ms-3 small">Note</a>
+<a href="#create-workspace" class="nav-link">Create Workspace</a>
+<a href="#create-notebook" class="nav-link ms-3 small">Create Notebook</a>
+<a href="#notes-outliner" class="nav-link">Notes Outliner</a>
+<a href="#find-note" class="nav-link">Find Note</a>
+<a href="#delete-notebook" class="nav-link">Delete Notebook</a>
+<a href="#video-tutorials" class="nav-link">Video tutorials</a>
+<a href="#mindforger--from-markdown-editor-to-thinking-notebook" class="nav-link ms-3 small">🎞 MindForger: From Markdown editor to thinking notebook</a>
+<a href="#mindforger--first-steps" class="nav-link ms-3 small">🎞 MindForger: First steps</a>
+              </div>
+            </div>
+              </div>
+              <!-- END TABLE OF CONTENTS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- BEGIN FOOTER -->
+        <footer class="footer footer-transparent d-print-none">
+          <div class="container-xl">
+            <ul class="list-inline list-inline-dots mb-0 text-center">
+              <li class="list-inline-item">Copyright &copy; 2018-2026 MindForger </li>
+              <li class="list-inline-item">Thinking Notebook</li>
+              <li class="list-inline-item">Doc made with <a href="https://www.mindforger.com" target="_blank">MindForger</a></li>
+              <li class="list-inline-item"><a href="https://github.com/dvorka/mindforger-documentation/edit/main/memory/GETTING_STARTED.md" target="_blank">Edit on GitHub</a></li>
+              <li class="list-inline-item"><a href="https://github.com/dvorka/mindforger-documentation/blob/main/memory/GETTING_STARTED.md" target="_blank">Source</a></li>
+              <li class="list-inline-item"><a href="rss.xml">RSS</a></li>
+            </ul>
+          </div>
+        </footer>
+        <!-- END FOOTER -->
+      </div>
+    </div>
+    <script src="assets/tabler/js/tabler.min.js" defer></script>
+    
+  </body>
+</html>

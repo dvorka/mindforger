@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
-    <title>MindForger - Thinking Notebook</title>
+<html lang="zh-Hans">
+    <title>MindForger - 思考笔记本</title>
 
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 
     <meta name="DC.title" content="MindForger"/>
     <meta name="DC.creator" content="Martin.Dvorak@mindforger.com"/>
-    <meta name="DC.description" content="Thinking notebook and Markdown editor web site home page."/>
+    <meta name="DC.description" content="思考笔记本与 Markdown 编辑器 - 官方主页。"/>
 
     <meta name="Author" content="Martin.Dvorak@mindforger.com"/>
-    <meta name="Keywords" content="Markdown, notebook, editor, AI, ML, IDE, machine learning, ML, outliner, semantic web, coaching, GROW, SMART" lang="en"/>
-    <meta name="Description" content="Thinking notebook and Markdown editor web site home page" lang="en"/>
+    <meta name="Keywords" content="Markdown, 笔记本, 编辑器, AI, ML, IDE, 机器学习, 大纲, 知识, 语义网, 教练, GROW, SMART" lang="zh-Hans"/>
+    <meta name="Description" content="思考笔记本与 Markdown 编辑器 - 官方主页" lang="zh-Hans"/>
     <meta name="Robots" content="index,FOLLOW"/>
     <meta name="resource-type" content="document"/>
     <meta http-equiv="Cache-Control" content="public"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="canonical" href="https://www.mindforger.com/"/>
+    <link rel="canonical" href="https://www.mindforger.com/zh/"/>
     <link rel="alternate" hreflang="en" href="https://www.mindforger.com/"/>
     <link rel="alternate" hreflang="cs" href="https://www.mindforger.com/cs/"/>
     <link rel="alternate" hreflang="es" href="https://www.mindforger.com/es/"/>
@@ -24,10 +24,10 @@
     <link rel="alternate" hreflang="hi" href="https://www.mindforger.com/hi/"/>
     <link rel="alternate" hreflang="x-default" href="https://www.mindforger.com/"/>
 
-    <link rel="stylesheet" type="text/css" href="./css/w3.css"/>
-    <link rel="stylesheet" type="text/css" href="./css/stylesheet.css"/>
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
-    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" type="text/css" href="../css/w3.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/stylesheet.css"/>
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="../favicon.ico" type="image/x-icon"/>
     <link rel="alternate" type="application/atom+xml" title="MindForger Blog" href="https://blog.mindforger.com/atom.xml"/>
 
     <!-- parallax -->
@@ -51,7 +51,7 @@
 
     /* First image: Pinta/Adjustments/Brightness/-50 */
     .bgimg-1 {
-	background-image: url('./images/parallax/1-title-screen.jpg');
+	background-image: url('../images/parallax/1-title-screen.jpg');
 	min-height: 100%;
     }
 
@@ -1637,58 +1637,78 @@
     </style>
     <!-- END mfd: functional architecture diagram - head -->
 
+    <style>
+    /* localization tweaks - 中文 */
+    body, h1, h2, h3, h4, h5, h6 {
+        font-family: "Lato", "Noto Sans CJK SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    .w3-wide {
+        letter-spacing: 8px;
+    }
+    .mfd-stage,
+    .mfd-readout {
+        font-size: 12.5px;
+    }
+    .mfd-badge text {
+        font-size: 9px;
+    }
+    .mfd-graph text {
+        font-size: 8.5px;
+    }
+    </style>
+
 <body>
 
 <!-- Top Navbar -->
 <div class="w3-top">
   <div class="w3-bar w3-white" id="myNavbar">
-    <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
+    <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="显示或隐藏导航菜单">
       <i class="fa fa-bars"></i>
     </a>
     <!-- language switcher - one line per localized index.html, see l10n/build.py -->
     <div class="w3-dropdown-click w3-right">
       <button class="w3-button" onclick="toggleLangFunction()" title="Language">
-        <i class="fa fa-globe"></i> EN <i class="fa fa-caret-down"></i>
+        <i class="fa fa-globe"></i> ZH <i class="fa fa-caret-down"></i>
       </button>
       <div id="langDropdown" class="w3-dropdown-content w3-bar-block w3-white w3-card-4" style="right:0; min-width:150px;">
-        <a href="index.html" class="w3-bar-item w3-button" hreflang="en" lang="en" style="font-weight:bold;">English</a>
-        <a href="cs/index.html" class="w3-bar-item w3-button" hreflang="cs" lang="cs">Čeština</a>
-        <a href="es/index.html" class="w3-bar-item w3-button" hreflang="es" lang="es">Español</a>
-        <a href="zh/index.html" class="w3-bar-item w3-button" hreflang="zh-Hans" lang="zh-Hans">中文</a>
-        <a href="hi/index.html" class="w3-bar-item w3-button" hreflang="hi" lang="hi">हिन्दी</a>
+        <a href="../index.html" class="w3-bar-item w3-button" hreflang="en" lang="en">English</a>
+        <a href="../cs/index.html" class="w3-bar-item w3-button" hreflang="cs" lang="cs">Čeština</a>
+        <a href="../es/index.html" class="w3-bar-item w3-button" hreflang="es" lang="es">Español</a>
+        <a href="../zh/index.html" class="w3-bar-item w3-button" hreflang="zh-Hans" lang="zh-Hans" style="font-weight:bold;">中文</a>
+        <a href="../hi/index.html" class="w3-bar-item w3-button" hreflang="hi" lang="hi">हिन्दी</a>
       </div>
     </div>
     <!-- https://www.w3schools.com/icons/fontawesome_icons_webapp.asp -->
-    <a href="#download" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-download"></i> Download</a>
+    <a href="#download" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-download"></i> 下载</a>
     <a href="#home" class="w3-bar-item w3-button">MindForger</a>
-    <a href="#documentation" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-user"></i> Docs</a>
+    <a href="#documentation" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-user"></i> 文档</a>
     <a href="#overview" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-sitemap"></i> Nerdview</a>
-    <a href="#features" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-th"></i> Features</a>
+    <a href="#features" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-th"></i> 功能</a>
     <!-- a href="#you-mf" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-comments"></i> You&amp;MF</a -->
-    <a href="#vision" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-eye"></i> Vision</a>
+    <a href="#vision" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-eye"></i> 愿景</a>
   </div>
 
   <!-- Navbar on small screens -->
   <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium">
-    <a href="#vision" class="w3-bar-item w3-button" onclick="toggleFunction()">Vision</a>
+    <a href="#vision" class="w3-bar-item w3-button" onclick="toggleFunction()">愿景</a>
     <!-- a href="#you-mf" class="w3-bar-item w3-button" onclick="toggleFunction()">You&amp;MF</a -->
-    <a href="#features" class="w3-bar-item w3-button" onclick="toggleFunction()">Features</a>
+    <a href="#features" class="w3-bar-item w3-button" onclick="toggleFunction()">功能</a>
     <a href="#overview" class="w3-bar-item w3-button" onclick="toggleFunction()">Nerdview</a>
-    <a href="#documentation" class="w3-bar-item w3-button" onclick="toggleFunction()">Doc</a>
-    <a href="#download" class="w3-bar-item w3-button" onclick="toggleFunction()">Download</a>
+    <a href="#documentation" class="w3-bar-item w3-button" onclick="toggleFunction()">文档</a>
+    <a href="#download" class="w3-bar-item w3-button" onclick="toggleFunction()">下载</a>
   </div>
 </div>
 
 <!-- First Parallax Image with Logo Text -->
 <div class="bgimg-1 w3-display-container DISABLED_w3-opacity-min" id="home">
   <!-- https://github.blog/news-insights/the-library/github-ribbons/ -->
-  <a href="https://github.com/dvorka/mindforger" target="_blank"><img style="position: absolute; top: 30px; right: 0; border: 0;" decoding="async" width="149" height="149" src="./images/forkme_right_green.png" class="attachment-full size-full" alt="Fork me on GitHub" loading="lazy"></a>
-  <!-- a href="https://opencollective.com/mindforger" target="_blank"><img style="position: absolute; top: 30px; left: 0; border: 0;" decoding="async" width="149" height="149" src="./images/opencollective-ribbon-left.png" alt="&#9829; me on OC" loading="lazy"></a -->
+  <a href="https://github.com/dvorka/mindforger" target="_blank"><img style="position: absolute; top: 30px; right: 0; border: 0;" decoding="async" width="149" height="149" src="../images/forkme_right_green.png" class="attachment-full size-full" alt="Fork me on GitHub" loading="lazy"></a>
+  <!-- a href="https://opencollective.com/mindforger" target="_blank"><img style="position: absolute; top: 30px; left: 0; border: 0;" decoding="async" width="149" height="149" src="../images/opencollective-ribbon-left.png" alt="&#9829; me on OC" loading="lazy"></a -->
 
   <div class="w3-display-middle" style="white-space:nowrap;">
     <center>
-      <span id="mfPagetTitle" class="w3-center w3-padding-large w3-white w3-xxxlarge w3-wide w3-animate-opacity mfPagetTitle">Thinking Notebook</span>
-      <span class="w3-animate-opacity mfPageSubtitle">Privacy is your right, not a privilege.</span>
+      <span id="mfPagetTitle" class="w3-center w3-padding-large w3-white w3-xxxlarge w3-wide w3-animate-opacity mfPagetTitle">思考笔记本</span>
+      <span class="w3-animate-opacity mfPageSubtitle">隐私是权利，不是特权。</span>
       <!-- span class="ribbon">LLM</span -->
     </center>
   </div>
@@ -1699,25 +1719,25 @@
 <div class="w3-row w3-center mfStats">
   <div class="w3-col s4">
     <div class="mfStatNumber">8+</div>
-    <div class="mfStatLabel">Years Active</div>
-    <div class="mfStatNote">since Dec 2017</div>
+    <div class="mfStatLabel">年持续开发</div>
+    <div class="mfStatNote">始于 2017 年 12 月</div>
   </div>
   <div class="w3-col s4">
     <div class="mfStatNumber">2.7k+</div>
-    <div class="mfStatLabel">GitHub Stars</div>
-    <div class="mfStatNote">and 170+ forks</div>
+    <div class="mfStatLabel">GitHub 星标</div>
+    <div class="mfStatNote">以及 170+ 个 fork</div>
   </div>
   <div class="w3-col s4">
     <div class="mfStatNumber">35k+</div>
-    <div class="mfStatLabel">Downloads</div>
-    <div class="mfStatNote" title="Counts GitHub release assets only - Snap, distribution packages and PPA installs are not included.">from GitHub alone</div>
+    <div class="mfStatLabel">次下载</div>
+    <div class="mfStatNote" title="仅统计 GitHub 发行版文件 - 不包含 Snap、发行版软件包和 PPA 的安装量。">仅来自 GitHub</div>
   </div>
 </div>
 
 
 <div class="w3-row w3-center w3-black w3-padding-16" style="border-top: 3px solid white;">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Vision</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">愿景</span><br>
   </div>
 </div>
 
@@ -1726,51 +1746,51 @@
 <div class="w3-content w3-container w3-padding-64" id="vision">
 
    <div class="w3-container w3-center" style="margin-bottom: 30px;">
-      Are you <b>drowning</b> in <b>information</b>, but <b>starving</b> for <b>knowledge</b>?
+      你是否<b>淹没</b>在<b>信息</b>之中，却对<b>知识</b>依然<b>饥渴</b>？
       <br/><br/>
 
-      Where do you
-      keep your <b>private remarks</b> like ideas, personal plans, exam preparation notes, gift tips,
-      how-tos, dreams, business visions, finance strategies, meeting minutes and auto
-      coaching notes? Loads of documents, sketches and remarks spread
-      around the file system, cloud, web and Post-it notes? Are you afraid of your knowledge <b>privacy</b>? Are you able to
-      <b>find</b> particular remarks once you create them? Do you know how are the remarks
-      mutually <b>related</b> when you browse, read or write them? No?
+      你把自己的
+      <b>私人笔记</b>放在哪里？想法、个人计划、备考笔记、送礼灵感、
+      操作指南、梦境、商业构想、理财策略、会议纪要，还有写给自己的
+      教练笔记。成堆的文档、草图和随笔散落在文件系统、云端、网页
+      和便利贴上？你是否担心自己知识的<b>隐私</b>？写下来之后，你还能
+      <b>找到</b>某一条笔记吗？在浏览、阅读或书写时，你知道它们之间
+      如何<b>关联</b>吗？不知道？
    </div>
 
    <!-- screenshots -->
    <div class="w3-content" style="max-width:1200px">
-     <img class="mySlidesVision" src="images/screenshots/tayr.png" style="width:100%">
-     <img class="mySlidesVision" src="images/screenshots/knowledge-graph-navigator-light.png" style="width:100%">
-     <img class="mySlidesVision" src="images/screenshots/markdown-images.png" style="width:100%">
-     <img class="mySlidesVision" src="images/screenshots/hoisting.png" style="width:100%">
-     <img class="mySlidesVision" src="images/screenshots/i18n.png" style="width:100%">
-     <img class="mySlidesVision" src="images/screenshots/tayw.png" style="width:100%">
+     <img class="mySlidesVision" src="../images/screenshots/tayr.png" style="width:100%">
+     <img class="mySlidesVision" src="../images/screenshots/knowledge-graph-navigator-light.png" style="width:100%">
+     <img class="mySlidesVision" src="../images/screenshots/markdown-images.png" style="width:100%">
+     <img class="mySlidesVision" src="../images/screenshots/hoisting.png" style="width:100%">
+     <img class="mySlidesVision" src="../images/screenshots/i18n.png" style="width:100%">
+     <img class="mySlidesVision" src="../images/screenshots/tayw.png" style="width:100%">
 
      <div class="w3-row-padding w3-section">
        <div class="w3-col s2 mfSlideThumbnail">
-	 <img class="visionChoice w3-opacity" src="images/screenshots/tayr.png" style="width:100%" onclick="currentDivVision(1)">
-	 Think as you read
+	 <img class="visionChoice w3-opacity" src="../images/screenshots/tayr.png" style="width:100%" onclick="currentDivVision(1)">
+	 边读边想
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-	 <img class="visionChoice w3-opacity" src="images/screenshots/knowledge-graph-navigator-light.png" style="width:100%" onclick="currentDivVision(2)">
-	 Knowledge graph
+	 <img class="visionChoice w3-opacity" src="../images/screenshots/knowledge-graph-navigator-light.png" style="width:100%" onclick="currentDivVision(2)">
+	 知识图谱
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-	 <img class="visionChoice w3-opacity" src="images/screenshots/markdown-images.png" style="width:100%" onclick="currentDivVision(3)">
-	 Markdown with preview
+	 <img class="visionChoice w3-opacity" src="../images/screenshots/markdown-images.png" style="width:100%" onclick="currentDivVision(3)">
+	 带预览的 Markdown
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-	 <img class="visionChoice w3-opacity" src="images/screenshots/hoisting.png" style="width:100%" onclick="currentDivVision(4)">
+	 <img class="visionChoice w3-opacity" src="../images/screenshots/hoisting.png" style="width:100%" onclick="currentDivVision(4)">
 	 Hoisting
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-	 <img class="visionChoice w3-opacity" src="images/screenshots/i18n.png" style="width:100%" onclick="currentDivVision(5)">
-	 I18n
+	 <img class="visionChoice w3-opacity" src="../images/screenshots/i18n.png" style="width:100%" onclick="currentDivVision(5)">
+	 多语言
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-	 <img class="visionChoice w3-opacity" src="images/screenshots/tayw.png" style="width:100%" onclick="currentDivVision(6)">
-	 Think as you write
+	 <img class="visionChoice w3-opacity" src="../images/screenshots/tayw.png" style="width:100%" onclick="currentDivVision(6)">
+	 边写边想
        </div>
      </div>
    </div>
@@ -1805,63 +1825,63 @@
 
 
    <div class="w3-container w3-center" style="margin-top: 30px; margin-bottom: 30px;">
-     <b>MindForger</b> is
-     <a class="mf-link" href="#human-mind">human mind</a> inspired
-     <a class="mf-link" href="#personal">personal</a>
-     <a class="mf-link" href="#knowledge">knowledge</a>
-     <a class="mf-link" href="#management">management</a>
-     <a class="mf-link" href="#tool">tool</a>:
+     <b>MindForger</b> 是一款受
+     <a class="mf-link" href="#human-mind">人类心智</a>启发的
+     <a class="mf-link" href="#personal">个人</a>
+     <a class="mf-link" href="#knowledge">知识</a>
+     <a class="mf-link" href="#management">管理</a>
+     <a class="mf-link" href="#tool">工具</a>：
    </div>
 
 
    <div class="group">
      <div class="left">
-       <div class="mfGroupLeftText">Human&nbsp;Mind</div>
+       <div class="mfGroupLeftText">人类心智</div>
      </div>
      <div class="right" id="human-mind">
-       MindForger aims to mimic human mind - <b>learning</b>, <b>recalling</b>, <b>recognition</b>,
-       <b>associations</b>, <b>forgetting</b> - in order
-       to achieve <b>synergy</b> with your mind to make your searching,
-       reading and writing more productive.
+       MindForger 力求模仿人类心智 - <b>学习</b>、<b>回忆</b>、<b>识别</b>、
+       <b>联想</b>、<b>遗忘</b> - 以求
+       与你的心智形成<b>协同</b>，让你的检索、
+       阅读和写作更有效率。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Personal</div>
+       <div class="mfGroupLeftText">个人</div>
      </div>
      <div class="right" id="personal">
-       MindForger ensures that you <b>own</b> your <b>personal</b> data.
-       It respects <b>privacy</b> and enables <b>security</b> of your knowledge.
+       MindForger 确保你的<b>个人</b>数据由你自己<b>拥有</b>。
+       它尊重<b>隐私</b>，并让你的知识可以被<b>安全</b>保护。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Knowledge</div>
+       <div class="mfGroupLeftText">知识</div>
      </div>
      <div class="right" id="knowledge">
-       MindForger seeks <b>knowledge</b> hidden in your remarks
-       to enable its <b>mining</b>.
+       MindForger 发掘隐藏在你笔记中的<b>知识</b>，
+       让它可以被<b>挖掘</b>利用。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Management</div>
+       <div class="mfGroupLeftText">管理</div>
      </div>
      <div class="right" id="management">
-       MindForger starts where editors and search
-       engines end. It thinks as you search, browse, read and write. Once you <b>find</b>
-       a remark, MindForger brings its associations. As you <b>browse</b> notes and <b>read</b>
-       them it looks up related relevant knowledge in your notebooks.
-       If you <b>edit</b> a remark, MindForger brings associations as you <b>write</b>.
-       It reminds you about existing content related to the text being written.
+       MindForger 从编辑器和搜索引擎
+       止步的地方开始。你检索、浏览、阅读和书写时，它都在思考。当你<b>找到</b>
+       一条笔记，MindForger 会带来它的关联内容。当你<b>浏览</b>并<b>阅读</b>笔记时，
+       它会在你的笔记本中查找相关的知识。
+       当你<b>编辑</b>笔记时，MindForger 会在你<b>书写</b>的同时给出关联，
+       提醒你已经写过哪些与当前内容相关的东西。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Tool</div>
+       <div class="mfGroupLeftText">工具</div>
      </div>
      <div class="right" id="tool">
-       MindForger is a <b>desktop</b> application for Linux.
+       MindForger 是一款面向 Linux 的<b>桌面</b>应用程序。
      </div>
    </div>
 </div>
@@ -1871,7 +1891,7 @@
 
 <div class="w3-row w3-center w3-black w3-padding-16" style="border-top: 3px solid white;">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Features</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">功能</span><br>
   </div>
 </div>
 
@@ -1881,37 +1901,37 @@
 
    <!-- screenshots -->
    <div class="w3-content" style="max-width:1200px">
-     <img class="mySlidesFeatures" src="images/screenshots/wingman.png" style="width:100%">
-     <img class="mySlidesFeatures" src="images/screenshots/refactoring.png" style="width:100%">
-     <img class="mySlidesFeatures" src="images/screenshots/stencils.png" style="width:100%">
-     <img class="mySlidesFeatures" src="images/screenshots/knowledge-graph-navigator-tags.png" style="width:100%">
-     <img class="mySlidesFeatures" src="images/screenshots/math.png" style="width:100%">
-     <img class="mySlidesFeatures" src="images/screenshots/recent.png" style="width:100%">
+     <img class="mySlidesFeatures" src="../images/screenshots/wingman.png" style="width:100%">
+     <img class="mySlidesFeatures" src="../images/screenshots/refactoring.png" style="width:100%">
+     <img class="mySlidesFeatures" src="../images/screenshots/stencils.png" style="width:100%">
+     <img class="mySlidesFeatures" src="../images/screenshots/knowledge-graph-navigator-tags.png" style="width:100%">
+     <img class="mySlidesFeatures" src="../images/screenshots/math.png" style="width:100%">
+     <img class="mySlidesFeatures" src="../images/screenshots/recent.png" style="width:100%">
 
      <div class="w3-row-padding w3-section">
        <div class="w3-col s2 mfSlideThumbnail">
-      	 <img class="featuresChoice w3-opacity" src="images/screenshots/wingman.png" style="width:100%" onclick="currentDivFeatures(1)">
+      	 <img class="featuresChoice w3-opacity" src="../images/screenshots/wingman.png" style="width:100%" onclick="currentDivFeatures(1)">
 	        LLM
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-      	 <img class="featuresChoice w3-opacity" src="images/screenshots/refactoring.png" style="width:100%" onclick="currentDivFeatures(2)">
-	        Refactoring
+      	 <img class="featuresChoice w3-opacity" src="../images/screenshots/refactoring.png" style="width:100%" onclick="currentDivFeatures(2)">
+	        重构
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-          <img class="featuresChoice w3-opacity" src="images/screenshots/stencils.png" style="width:100%" onclick="currentDivFeatures(3)">
-          Stencils
+          <img class="featuresChoice w3-opacity" src="../images/screenshots/stencils.png" style="width:100%" onclick="currentDivFeatures(3)">
+          模板
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-         <img class="featuresChoice w3-opacity" src="images/screenshots/knowledge-graph-navigator-tags.png" style="width:100%" onclick="currentDivFeatures(4)">
-         Tag navigator
+         <img class="featuresChoice w3-opacity" src="../images/screenshots/knowledge-graph-navigator-tags.png" style="width:100%" onclick="currentDivFeatures(4)">
+         标签导航器
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-         <img class="featuresChoice w3-opacity" src="images/screenshots/math.png" style="width:100%" onclick="currentDivFeatures(5)">
-         Math
+         <img class="featuresChoice w3-opacity" src="../images/screenshots/math.png" style="width:100%" onclick="currentDivFeatures(5)">
+         数学公式
        </div>
        <div class="w3-col s2 mfSlideThumbnail">
-         <img class="featuresChoice w3-opacity" src="images/screenshots/recent.png" style="width:100%" onclick="currentDivFeatures(6)">
-         Recent notes
+         <img class="featuresChoice w3-opacity" src="../images/screenshots/recent.png" style="width:100%" onclick="currentDivFeatures(6)">
+         最近的笔记
        </div>
      </div>
    </div>
@@ -1946,128 +1966,128 @@
 
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Associations</div>
+       <div class="mfGroupLeftText">关联</div>
      </div>
      <div class="right" id="associations">
-       <b>MindForger thinks as you read and write.</b> While you work on a Note, MindForger
-       <b>associates</b> it with related Notes from your whole workspace - including those
-       you <b>forgot</b> you ever wrote. Associations are computed <b>locally</b>, with
-       no cloud and no LLM required.
+       <b>你读和写的时候，MindForger 也在思考。</b>当你编辑一条笔记时，MindForger 会把它
+       与整个工作区中<b>相关的</b>笔记<b>关联</b>起来 - 包括那些你早已
+       <b>遗忘</b>自己写过的内容。关联在<b>本地</b>计算，
+       不需要云端，也不需要任何 LLM。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Autolinking</div>
+       <div class="mfGroupLeftText">自动链接</div>
      </div>
      <div class="right" id="autolinking">
-       <b>Links that write themselves.</b> Names of Notebooks and Notes mentioned in your text
-       are <b>automatically</b> turned into links in the preview - your hand-written
-       links are rendered in blue, generated ones in green - so that your knowledge
-       gets interconnected without any extra effort - no need to manually creat links, Wiki camel case words or other linking conventions.
+       <b>会自己生成的链接。</b>文中提到的笔记本和笔记的名称，
+       会在预览中<b>自动</b>变成链接 - 你手写的链接显示为蓝色，
+       自动生成的显示为绿色 - 于是你的知识无需任何额外工夫
+       就彼此相连。不必手动建链接，不必使用 wiki 驼峰命名或其他约定。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Private&nbsp;AI</div>
+       <div class="mfGroupLeftText">私有 AI</div>
      </div>
      <div class="right" id="wingman">
-       <b>Assistant that doesn't send your notes anywhere.</b> Wingman runs open-weight
-       <b>Large Language Models</b> - like gpt-oss, Llama, GLM or Qwen - <b>privately on your machine</b>
-       via <a class="mf-link" target="_blank" href="https://ollama.com">ollama</a> to <b>summarize</b>,
-       <b>explain</b>, <b>translate</b>, <b>rewrite</b>, fix <b>grammar</b>, generate <b>tags</b> or find
-       <b>tasks</b> in the Notes you read and write.
+       <b>一个不会把你的笔记发往任何地方的助手。</b>AI 助手（Wingman）通过
+       <a class="mf-link" target="_blank" href="https://ollama.com">ollama</a> 在<b>你自己的机器上私密运行</b>
+       开放权重的<b>大语言模型</b> - 例如 gpt-oss、Llama、GLM 或 Qwen - 为你阅读和书写的笔记
+       <b>做摘要</b>、<b>做解释</b>、<b>做翻译</b>、<b>做改写</b>、修正<b>语法</b>、生成<b>标签</b>
+       或找出其中的<b>任务</b>。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Keyboard&nbsp;First</div>
+       <div class="mfGroupLeftText">键盘优先</div>
      </div>
      <div class="right" id="keyboard-first">
-       <b>Keep your hands on the keyboard.</b> MindForger is designed to be used
-       <b>without a mouse</b> - almost every action has a <b>keyboard shortcut</b> and every
-       menu item has an <b>accelerator</b>. Recall a Notebook or Note by name in a few
-       keystrokes, easily restructure the outline, complete links to
-       Notes as you type or run commands. Your thoughts flow
-       straight from your mind to your notes.
+       <b>双手无需离开键盘。</b>MindForger 的设计目标就是
+       <b>不用鼠标</b> - 几乎每个操作都有<b>快捷键</b>，每个
+       菜单项都有<b>助记键</b>。几次击键就能按名称唤回笔记本或笔记，
+       轻松重排大纲，在输入时补全指向
+       笔记的链接，或者执行命令。你的想法
+       可以直接从脑中流进笔记。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Stencils</div>
+       <div class="mfGroupLeftText">模板</div>
      </div>
      <div class="right" id="stencils">
-       <b>Start from structure, not from a blank page.</b> Create Notebooks from <b>stencils</b> -
-       meeting minutes, software analysis and design documents, <b>S.M.A.R.T.E.R.</b> goals or
-       the <b>GROW model</b> - and capture thoughts as one of 16 <b>typed Notes</b>
-       like idea, question, lesson, task or SWOT. Add your own stencils and Note types
-       to fit how you think.
+       <b>从结构开始，而不是从空白页开始。</b>用<b>模板</b>创建笔记本 -
+       会议纪要、软件分析与设计文档、<b>S.M.A.R.T.E.R.</b> 目标或
+       <b>GROW 模型</b> - 并把想法记录为 16 种<b>带类型的笔记</b>之一，
+       比如想法、问题、教训、任务或 SWOT。你也可以按自己的思考方式
+       添加专属模板和笔记类型。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Refactoring</div>
+       <div class="mfGroupLeftText">重构</div>
      </div>
      <div class="right" id="refactoring">
-       <b>Refactor your thinking</b> like source code. MindForger brings IDE&nbsp;style features to your notes -
-       <b>clone</b>, <b>promote</b>, <b>demote</b>, <b>move</b> and <b>extract</b> Notes
-       within one Markdown file or <b>across</b> many of them, using keyboard shortcuts
-       for extreme efficiency and speed.
+       像重构源代码那样<b>重构你的思路</b>。MindForger 把 IDE&nbsp;式的能力带进笔记 -
+       在同一个 Markdown 文件内或<b>跨</b>多个文件<b>克隆</b>、<b>升级</b>、<b>降级</b>、
+       <b>移动</b>和<b>提取</b>笔记，全部通过快捷键完成，
+       效率和速度都拉满。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Knowledge&nbsp;Graph</div>
+       <div class="mfGroupLeftText">知识图谱</div>
      </div>
      <div class="right" id="knowledge-graph">
-       <b>Walk through your knowledge.</b> The knowledge graph navigator renders Notebooks,
-       Notes, <b>tags</b> and their relationships as an interactive <b>force-directed graph</b>
-       which you can explore node by node - like implicit mind map.
+       <b>在自己的知识中漫步。</b>知识图谱导航器把笔记本、
+       笔记、<b>标签</b>及其关系绘制成可交互的<b>力导向图</b>，
+       你可以逐个节点地探索 - 就像一张隐式的思维导图。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Organizers</div>
+       <div class="mfGroupLeftText">组织器</div>
      </div>
      <div class="right" id="organizers">
-       <b>Know what to do next.</b> <b>Kanban</b> boards and <b>Eisenhower matrix</b>
-       organizers sort your Notebooks and Notes by their tags - TODO, WIP, DONE or urgent
-       and important - so you don't need another task management app.
-       <b>Notebook shelves</b> then let you group Notebooks to as many named
-       shelves as you need. <b>From Notes to Notebooks, from Notebooks to priorities and actions.</b>
+       <b>知道接下来该做什么。</b><b>看板</b>和<b>艾森豪威尔矩阵</b>
+       组织器会按标签整理你的笔记本和笔记 - TODO、WIP、DONE，或者紧急
+       与重要 - 于是你不再需要另一个待办应用。
+       <b>笔记本书架</b>则让你把笔记本分组到任意多个命名书架上。
+       <b>从笔记到笔记本，从笔记本到优先级和行动。</b>
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">No&nbsp;Lock-in</div>
+       <div class="mfGroupLeftText">无供应商锁定</div>
      </div>
      <div class="right" id="no-lock-in">
-       <b>Your files, your tools.</b> Everything is <b>plain Markdown</b> on your disk.
-       Open a MindForger workspace, <b>any</b> existing <b>Markdown directory</b> or just
-       a <b>single</b> Markdown <b>file</b>. Synchronize, share, back up and encrypt your
-       knowledge with the tools you trust - own Git server, private
-       <a class="mf-link" target="_blank" href="https://github.com/">GitHub</a> or
-       <a class="mf-link" target="_blank" href="https://bitbucket.org">Bitbucket</a> repository,
-       or cloud drive of your choice.
+       <b>你的文件，你的工具。</b>一切都是磁盘上的<b>纯 Markdown</b>。
+       打开一个 MindForger 工作区、<b>任意</b>已有的 <b>Markdown 目录</b>，
+       甚至只是<b>单个</b> Markdown <b>文件</b>。用你信任的工具同步、分享、备份和加密
+       你的知识 - 自建 Git 服务器、私有的
+       <a class="mf-link" target="_blank" href="https://github.com/">GitHub</a> 或
+       <a class="mf-link" target="_blank" href="https://bitbucket.org">Bitbucket</a> 仓库，
+       或者你喜欢的云盘。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Math & Diagrams</div>
+       <div class="mfGroupLeftText">数学与图表</div>
      </div>
      <div class="right" id="writing">
-       Markdown editor with <b>live preview</b>, <b>syntax highlighting</b>, offline <b>KaTeX</b> math and <b>Mermaid</b> diagrams,
-       <b>spell check</b>, <b>emojis</b>, Emacs keybindings,
-       paragraph rewrap, <b>hoist</b> mode and the option to edit a Note in your favorite external editor.
+       Markdown 编辑器，支持<b>实时预览</b>、<b>语法高亮</b>、离线 <b>KaTeX</b> 数学公式和 <b>Mermaid</b> 图表、
+       <b>拼写检查</b>、<b>表情符号</b>、Emacs 按键绑定、
+       段落重排、<b>hoist</b> 模式，也可以用你喜欢的外部编辑器编辑笔记。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Docs Library</div>
+       <div class="mfGroupLeftText">文档库</div>
      </div>
      <div class="right" id="library">
-       Index directories with <b>PDF</b> documents as Notebooks, keep them in sync
-       and detect <b>orphaned</b> documents. Study, read and annotate your PDFs conveniently
-       connected with your remarks.
+       把存放 <b>PDF</b> 文档的目录索引为笔记本，保持同步，
+       并检测<b>孤立</b>文档。让你在阅读、学习和批注 PDF 时，
+       始终与自己的笔记相连。
      </div>
    </div>
    <!-- div class="group" style="margin-top: 10px;">
@@ -2075,26 +2095,26 @@
        <div class="mfGroupLeftText">CLI</div>
      </div>
      <div class="right" id="cli">
-       Run <b>commands</b> without leaving MindForger or <b>search</b> for the current Note name or selected
-       text on <b>Wikipedia</b>, <b>arXiv</b> or <b>StackOverflow</b>.
+       无需离开 MindForger 即可运行<b>命令</b>，或把当前笔记名称或选中的
+       文本拿到 <b>维基百科</b>、<b>arXiv</b> 或 <b>StackOverflow</b> 上<b>搜索</b>。
      </div>
    </div -->
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Export</div>
+       <div class="mfGroupLeftText">导出</div>
      </div>
      <div class="right" id="export">
-       Export Notebooks to <b>HTML</b> or <b>Markdown</b>, or your whole workspace to <b>CSV</b>
-       with one-hot encoded tags - ready for your machine learning and analytics tools.
+       把笔记本导出为 <b>HTML</b> 或 <b>Markdown</b>，或把整个工作区导出为
+       带 one-hot 编码标签的 <b>CSV</b> - 可直接交给你的机器学习和分析工具。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Fast&nbsp;&amp;&nbsp;Native</div>
+       <div class="mfGroupLeftText">快速且原生</div>
      </div>
      <div class="right" id="native">
-       Written in <b>C++</b> and <b>Qt</b>, works completely <b>offline</b> and runs on
-       <b>Linux</b>, <b>macOS</b> and <b>Windows</b>.
+       使用 <b>C++</b> 和 <b>Qt</b> 编写，完全<b>离线</b>工作，可运行于
+       <b>Linux</b>、<b>macOS</b> 和 <b>Windows</b>。
      </div>
    </div>
 
@@ -2102,14 +2122,14 @@
 
 <div class="w3-row w3-center w3-black w3-padding-16" id="overview" style="scroll-margin-top: 44px;">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Nerdview</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Nerdview</span><br>
   </div>
 </div>
 
 
 <!-- Container: Overview -->
 <!-- BEGIN mfd: functional architecture diagram - markup -->
-<section class="mfd" id="mfd" aria-label="MindForger functional architecture diagram">
+<section class="mfd" id="mfd" aria-label="MindForger 功能架构图">
  <div class="mfd-frame">
   <div class="mfd-stage" id="mfd-stage">
     <svg class="mfd-wires mfd-wires-below" id="mfd-wires-below" aria-hidden="true"></svg>
@@ -2119,91 +2139,91 @@
     <div class="mfd-top">
       <div class="mfd-top-body">
         <div class="mfd-top-cell">
-          <ul class="mfd-types mfd-types-l" data-types="fact lesson experience conclusion"></ul>
+          <ul class="mfd-types mfd-types-l" data-types="事实 教训 经验 结论"></ul>
           <div class="mfd-node mfd-face" id="mfd-face-top" role="button" tabindex="0" data-face="writer"
-               data-title="YOU - RESEARCH, STUDY, BRAINSTORM, WRITE"
-               data-detail="Every thought you have becomes a typed Note - fact, lesson, idea, question, task, solution, strength, weakness, opportunity, threat and more. MindForger ontology ships with 16 Note types and you can add your own.">
-            <span class="mfd-legend">you</span>
+               data-title="你 - 调研、学习、头脑风暴、书写"
+               data-detail="你的每一个念头都会成为一条带类型的笔记 - 事实、教训、想法、问题、任务、解决方案、优势、弱点、机会、威胁等等。MindForger 的本体内置 16 种笔记类型，你也可以自行添加。">
+            <span class="mfd-legend">你</span>
             <svg class="mfd-pixface" viewBox="0 0 16 16" aria-hidden="true"></svg>
           </div>
-          <ul class="mfd-types" data-types="idea question task solution"></ul>
+          <ul class="mfd-types" data-types="想法 问题 任务 解决方案"></ul>
         </div>
       </div>
     </div>
 
     <div class="mfd-box" id="mfd-box">
       <span class="mfd-legend" role="button" tabindex="0"
-            data-title="MINDFORGER - PRIVACY FIRST THINKING NOTEBOOK"
-            data-detail="Your knowledge lives in plain Markdown files in a local repository - nothing is uploaded anywhere. Synchronize, back up and encrypt it with the tools you trust - Git, cloud drive of your choice, ecryptfs.">
-        <img src="./images/mind-forger.png" alt=""/><span><b>MindForger</b> - privacy first thinking notebook</span>
+            data-title="MINDFORGER - 隐私优先的思考笔记本"
+            data-detail="你的知识以纯 Markdown 文件的形式存放在本地仓库中 - 不会上传到任何地方。用你信任的工具同步、备份和加密它 - Git、你选择的云盘或 ecryptfs。">
+        <img src="../images/mind-forger.png" alt=""/><span><b>MindForger</b> - 隐私优先的思考笔记本</span>
       </span>
 
       <!-- upper level: write -->
       <div class="mfd-level">
-        <div class="mfd-level-label"><span>research / study / create / brainstorm / write</span></div>
+        <div class="mfd-level-label"><span>调研 / 学习 / 创作 / 头脑风暴 / 书写</span></div>
         <div class="mfd-level-body">
           <div class="mfd-row-forge">
             <div class="mfd-node mfd-page" id="mfd-note" role="button" tabindex="0"
-                 data-title="NOTE"
-                 data-detail="The atom of knowledge - a Markdown section with name, type, tags, progress and deadline. Write it in the Markdown editor with live preview, spell check, KaTeX math, Mermaid diagrams, emojis and autolinking to other Notes.">
-              <span class="mfd-legend">note</span>
-              <span class="mfd-doc-title">Retrieval failure</span>
+                 data-title="笔记"
+                 data-detail="知识的原子 - 一个带名称、类型、标签、进度和截止日期的 Markdown 小节。你在 Markdown 编辑器中书写它，可用实时预览、拼写检查、KaTeX 数学公式、Mermaid 图表、表情符号，以及指向其他笔记的自动链接。">
+              <span class="mfd-legend">笔记</span>
+              <span class="mfd-doc-title">提取失败</span>
               <ul class="mfd-lines" data-feed="0 1 2 1"></ul>
             </div>
 
             <div class="mfd-node" id="mfd-outline" role="button" tabindex="0"
-                 data-title="OUTLINE"
-                 data-detail="Notes form a hierarchy of Markdown sections. Refactor it IDE-style - promote, demote, move up and down, clone, extract Note to a new Notebook or move it to another Notebook.">
-              <span class="mfd-legend">outline</span>
+                 data-title="大纲"
+                 data-detail="笔记构成 Markdown 小节的层级结构。像在 IDE 中那样重构它 - 升级、降级、上移下移、克隆，把笔记提取为新笔记本，或移动到另一个笔记本。">
+              <span class="mfd-legend">大纲</span>
               <ul class="mfd-tree" data-outline></ul>
-              <div class="mfd-badges"><span class="mfd-badge-txt">promote</span><span class="mfd-badge-txt">demote</span><span class="mfd-badge-txt">refactor</span></div>
+              <div class="mfd-badges"><span class="mfd-badge-txt">升级</span><span class="mfd-badge-txt">降级</span><span class="mfd-badge-txt">重构</span></div>
             </div>
 
             <div class="mfd-node" id="mfd-notebook" role="button" tabindex="0"
-                 data-title="NOTEBOOK"
-                 data-detail="An outline of Notes with a description stored as a single plain Markdown file on your disk. Create it from stencils (like GROW model), or add PDF documents from a library. Notebook types: outline, GROW and PDF.">
-              <span class="mfd-legend">notebook</span>
-              <span class="mfd-doc-title">Cognition <em>- cognition.md</em></span>
+                 data-title="笔记本"
+                 data-detail="带描述的笔记大纲，在磁盘上保存为单个纯 Markdown 文件。可以从模板（例如 GROW 模型）创建，也可以从文档库加入 PDF 文档。笔记本类型：大纲、GROW 和 PDF。">
+              <span class="mfd-legend">笔记本</span>
+              <span class="mfd-doc-title">认知 <em>- 认知.md</em></span>
               <div class="mfd-window">
                 <ul class="mfd-tree" data-outline></ul>
                 <div class="mfd-pane">
-                  <span class="mfd-doc-title">Retrieval failure</span>
+<span class="mfd-doc-title">提取失败</span>
                   <ul class="mfd-lines" data-feed="0 1 1"></ul>
                 </div>
               </div>
-              <div class="mfd-badges"><span class="mfd-badge-txt">outline</span><span class="mfd-badge-txt">GROW</span><span class="mfd-badge-txt">PDF</span></div>
+              <div class="mfd-badges"><span class="mfd-badge-txt">大纲</span><span class="mfd-badge-txt">GROW</span><span class="mfd-badge-txt">PDF</span></div>
             </div>
           </div>
 
           <div class="mfd-row-views">
             <div class="mfd-node" id="mfd-shelves" role="button" tabindex="0"
-                 data-title="NOTEBOOK SHELVES"
-                 data-detail="Organize Notebooks to as many named shelves as you need - for instance my research or hobby shelf - and browse each of them as your custom Notebook tree.">
-              <span class="mfd-legend">notebook shelves</span>
+                 data-title="笔记本书架"
+                 data-detail="把笔记本整理到任意多个命名书架上 - 比如我的研究书架或兴趣书架 - 并把每个书架当作自定义的笔记本树来浏览。">
+              <span class="mfd-legend">笔记本书架</span>
               <div class="mfd-shelves" data-shelves></div>
             </div>
 
             <div class="mfd-node" id="mfd-kanban" role="button" tabindex="0"
-                 data-title="KANBAN AND EISENHOWER MATRIX"
-                 data-detail="Organizers sort Notebooks and Notes using their tags - to Kanban columns like TODO, WIP and DONE or to Eisenhower matrix quadrants (urgent, important, important &amp; urgent) - so that you know what to do next.">
+                 data-title="看板与艾森豪威尔矩阵"
+                 data-detail="组织器按标签整理笔记本和笔记 - 放进 TODO、WIP、DONE 这样的看板列，或艾森豪威尔矩阵的象限（紧急、重要、重要 &amp; 紧急）- 让你清楚接下来该做什么。">
               <span class="mfd-legend">kanban</span>
               <div class="mfd-board" data-kanban></div>
             </div>
 
             <div class="mfd-node" id="mfd-kgraph" role="button" tabindex="0"
-                 data-title="KNOWLEDGE GRAPH NAVIGATOR"
-                 data-detail="Map of your whole knowledge - Notebooks, Notes, tags and their relationships rendered as an interactive force-directed graph which you can walk node by node.">
-              <span class="mfd-legend">knowledge graph</span>
+                 data-title="知识图谱导航器"
+                 data-detail="你全部知识的地图 - 笔记本、笔记、标签及其关系被绘制成可交互的力导向图，你可以逐个节点地走下去。">
+              <span class="mfd-legend">知识图谱</span>
               <div class="mfd-graph-host" data-graph></div>
-              <span class="mfd-caption">Notebooks, Notes and tags</span>
+              <span class="mfd-caption">笔记本、笔记与标签</span>
             </div>
 
             <div class="mfd-node" id="mfd-wingman" role="button" tabindex="0"
-                 data-title="WINGMAN - LOCAL LLM"
-                 data-detail="Optional AI assistant powered by open-weight LLMs (like gpt-oss, Llama or GLM) running privately on your machine via ollama - summarize, explain, fix grammar, translate, rewrite, generate tags or find tasks. Remote OpenRouter and OpenAI providers are available only when you opt in.">
-              <span class="mfd-legend">wingman</span>
+                 data-title="AI 助手 - 本地 LLM"
+                 data-detail="可选的助手，由开放权重的 LLM（如 gpt-oss、Llama 或 GLM）驱动，通过 ollama 在你的机器上私密运行 - 做摘要、做解释、修正语法、翻译、改写、生成标签或查找任务。只有你主动启用时，才会使用 OpenRouter 和 OpenAI 这类远程服务。">
+              <span class="mfd-legend">AI 助手</span>
               <div class="mfd-term-mini">
-                <div class="mfd-term-head">ollama @ localhost<span class="mfd-dot" title="private"></span></div>
+                <div class="mfd-term-head">ollama @ localhost<span class="mfd-dot" title="私密"></span></div>
                 <div class="mfd-term-lines" data-wingman></div>
                 <div class="mfd-models" data-models><span>gpt-oss</span><span>llama</span><span>glm</span></div>
               </div>
@@ -2214,10 +2234,10 @@
 
       <!-- lower level: find -->
       <div class="mfd-level mfd-level-find">
-        <div class="mfd-level-label"><span>find / read / understand / learn</span></div>
+        <div class="mfd-level-label"><span>查找 / 阅读 / 理解 / 学习</span></div>
         <div class="mfd-level-body">
           <div class="mfd-node mfd-find" id="mfd-find">
-            <span class="mfd-legend">find by</span>
+            <span class="mfd-legend">查找方式</span>
             <div class="mfd-find-head">
               <span class="mfd-find-title" id="mfd-find-title"></span>
               <span class="mfd-find-sub" id="mfd-find-sub"></span>
@@ -2230,7 +2250,7 @@
               <div class="mfd-chevrons" aria-hidden="true"><span>&gt;</span><span>&gt;</span><span>&gt;</span></div>
               <div class="mfd-scene" id="mfd-scene" aria-live="polite"></div>
             </div>
-            <div class="mfd-tabs" id="mfd-tabs" role="tablist" aria-label="Find knowledge by"></div>
+            <div class="mfd-tabs" id="mfd-tabs" role="tablist" aria-label="查找知识的方式"></div>
           </div>
         </div>
       </div>
@@ -2238,16 +2258,16 @@
 
     <!-- you: seek knowledge -->
     <div class="mfd-node mfd-face mfd-seeker" id="mfd-face-bottom" role="button" tabindex="0" data-face="seeker"
-         data-title="YOU - SEEKING KNOWLEDGE"
-         data-detail="Weeks later you need the knowledge back. Ask - by name, tag, full-text, knowledge graph, Wingman, association or task - and MindForger finds, recalls and associates the relevant Notes.">
-      <span class="mfd-legend">you</span>
+         data-title="你 - 寻找知识"
+         data-detail="几周之后你需要把这份知识找回来。开口去问 - 按名称、标签、全文、知识图谱、AI 助手、关联或任务 - MindForger 就会找到、唤回并关联相关的笔记。">
+      <span class="mfd-legend">你</span>
       <svg class="mfd-pixface" viewBox="0 0 16 16" aria-hidden="true"></svg>
       <span class="mfd-asks" aria-hidden="true"><b>?</b><b>?</b><b>?</b></span>
     </div>
   </div>
 
   <div class="mfd-readout">
-    <div class="mfd-term-head"><span class="mfd-dot"></span>details</div>
+    <div class="mfd-term-head"><span class="mfd-dot"></span>详情</div>
     <div class="mfd-readout-body" id="mfd-readout" aria-live="polite"></div>
   </div>
  </div>
@@ -2327,42 +2347,42 @@
 
     // note types as defined by lib/src/mind/ontology/ontology.cpp - in the order they flow in
     var TYPES = [
-        ['fact', 'know', 'memory is stored, cue is missing'],
-        ['idea', 'spark', 'spaced repetition deck'],
-        ['question', 'open', 'why tip-of-the-tongue?'],
-        ['lesson', 'know', 'review notes within 24h'],
-        ['task', 'act', 'read Tulving on cues'],
-        ['solution', 'spark', 'active recall practice'],
-        ['experience', 'know', 'names slip under stress'],
-        ['opportunity', 'spark', 'link Notes to cues'],
-        ['weakness', 'open', 'cramming before exams'],
-        ['conclusion', 'know', 'context aids recall'],
-        ['action', 'act', 'self-test every evening'],
-        ['option', 'spark', 'try a memory palace'],
-        ['strength', 'spark', 'strong visual memory'],
-        ['threat', 'open', 'interference of similar facts'],
-        ['result', 'know', 'recall up 20% in a month'],
-        ['note', 'plain', 'Tulving and Pearlstone, 1966']
+        ['事实', 'know', '记忆已存储，缺少线索'],
+        ['想法', 'spark', '间隔重复卡组'],
+        ['问题', 'open', '为什么话到嘴边说不出？'],
+        ['教训', 'know', '24 小时内复习笔记'],
+        ['任务', 'act', '读 Tulving 关于线索的论文'],
+        ['解决方案', 'spark', '练习主动回忆'],
+        ['经验', 'know', '压力之下容易忘记名字'],
+        ['机会', 'spark', '把笔记和线索连起来'],
+        ['弱点', 'open', '考前临时抱佛脚'],
+        ['结论', 'know', '情境有助于回忆'],
+        ['行动', 'act', '每晚自测一次'],
+        ['选项', 'spark', '试试记忆宫殿'],
+        ['优势', 'spark', '视觉记忆很强'],
+        ['威胁', 'open', '相似事实互相干扰'],
+        ['结果', 'know', '一个月内回忆率提升 20%'],
+        ['笔记', 'plain', 'Tulving 与 Pearlstone，1966']
     ];
     var TYPE_BY_NAME = {};
     TYPES.forEach(function (t) {
         TYPE_BY_NAME[t[0]] = t;
     });
 
-    var OUTLINE = [[0, 'Memory'], [1, 'Working memory'], [2, 'Chunking'], [0, 'Attention'], [1, 'Retrieval failure']];
-    var OUTLINE_SELECTED = 'Retrieval failure';
-    var NOTEBOOK = 'Cognition';
-    var TAGGED = [['Memory', '#brain']];
+    var OUTLINE = [[0, '记忆'], [1, '工作记忆'], [2, '组块化'], [0, '注意力'], [1, '提取失败']];
+    var OUTLINE_SELECTED = '提取失败';
+    var NOTEBOOK = '认知';
+    var TAGGED = [['记忆', '#大脑']];
 
     // star layout of the knowledge graph navigator - name: [x, y, label below node];
     // like in MindForger only a neighbourhood is shown, so Notes missing here are hidden
     var GRAPH_LAYOUT = {
-        'Cognition': [100, 54, true],
-        'Memory': [42, 34],
-        'Attention': [158, 34],
-        'Working memory': [42, 90, true],
-        'Retrieval failure': [158, 90, true],
-        '#brain': [92, 14]
+        '认知': [100, 54, true],
+        '记忆': [42, 34],
+        '注意力': [158, 34],
+        '工作记忆': [42, 90, true],
+        '提取失败': [158, 90, true],
+        '#大脑': [92, 14]
     };
 
     // knowledge graph derived from the outline - Notebook is the center, each Note is linked
@@ -2389,26 +2409,26 @@
     }
 
     var SHELVES = [
-        ['my research shelf', [['Cognition', 'var(--mfd-yellow)', 100], ['Memory', 'var(--mfd-blue)', 84], ['Focus', 'var(--mfd-green)', 76], ['Sleep', 'var(--mfd-purple)', 70], ['Learning', 'var(--mfd-red)', 94]]],
-        ['hobby shelf', [['Running', 'var(--mfd-red)', 92], ['Chess', 'var(--mfd-purple)', 70], ['Cooking', 'var(--mfd-yellow)', 100], ['Travel', 'var(--mfd-blue)', 84], ['Guitar', 'var(--mfd-green)', 78]]]
+        ['我的研究书架', [['认知', 'var(--mfd-yellow)', 100], ['记忆', 'var(--mfd-blue)', 84], ['专注', 'var(--mfd-green)', 76], ['睡眠', 'var(--mfd-purple)', 70], ['学习', 'var(--mfd-red)', 94]]],
+        ['兴趣书架', [['跑步', 'var(--mfd-red)', 92], ['国际象棋', 'var(--mfd-purple)', 70], ['烹饪', 'var(--mfd-yellow)', 100], ['旅行', 'var(--mfd-blue)', 84], ['吉他', 'var(--mfd-green)', 78]]]
     ];
 
     var KANBAN = [
-        ['TODO', ['Retrieval failure', 'Sleep', 'Exam'], 'var(--mfd-yellow)'],
-        ['WIP', ['Focus', 'Rust'], 'var(--mfd-orange)'],
-        ['DONE', ['Chunking', 'Memory'], 'var(--mfd-green)']
+        ['TODO', ['提取失败', '睡眠', '考试'], 'var(--mfd-yellow)'],
+        ['WIP', ['专注', 'Rust'], 'var(--mfd-orange)'],
+        ['DONE', ['组块化', '记忆'], 'var(--mfd-green)']
     ];
-    var KANBAN_MOVING = 'Retrieval failure';
+    var KANBAN_MOVING = '提取失败';
 
     var GRAPH = buildGraph(NOTEBOOK, OUTLINE, TAGGED, GRAPH_LAYOUT);
 
     var WINGMAN_PROMPTS = [
-        ['summarize', '5 key points'],
-        ['explain like I\'m 5', 'done'],
-        ['fix grammar', '3 fixes'],
-        ['generate tags', '#memory #brain'],
-        ['find tasks', '2 tasks found'],
-        ['translate to English', 'done']
+        ['总结这条笔记', '5 个要点'],
+        ['像对五岁小孩那样解释', '完成'],
+        ['修正语法', '3 处修改'],
+        ['生成标签', '#记忆 #大脑'],
+        ['查找任务', '找到 2 个任务'],
+        ['翻译成英文', '完成']
     ];
 
     /* ================================================ renderers */
@@ -2481,19 +2501,19 @@
     }
 
     function kind(k) {
-        return '<b class="mfd-kind' + (k === 'NB' ? ' mfd-kind-nb' : '') + '">' + k + '</b>';
+        return '<b class="mfd-kind' + (k === '本' ? ' mfd-kind-nb' : '') + '">' + k + '</b>';
     }
 
     /* ================================================ search modes */
 
     var MODES = [
         {
-            id: 'name', tab: 'name', title: 'find by name', query: 'ret',
-            sub: 'Notebooks and Notes filtered as you type',
+            id: 'name', tab: '名称', title: '按名称查找', query: '提取',
+            sub: '笔记本和笔记随输入即时过滤',
             targets: ['mfd-shelves'],
-            detail: 'Find Notebook or Note by name - type a few letters and the list of names is filtered instantly. Open the hit and continue in its Notebook on a shelf.',
+            detail: '按名称查找笔记本或笔记 - 输入几个字，名称列表立刻被过滤。打开命中的条目，继续在它所在书架的笔记本中工作。',
             scene: function (m) {
-                var names = [['NB', 'Cognition'], ['N', 'Retrieval failure'], ['N', 'Memory'], ['N', 'Interpretation'], ['N', 'Chunking'], ['NB', 'Secrets']];
+                var names = [['本', '认知'], ['记', '提取失败'], ['记', '记忆'], ['记', '解释'], ['记', '组块化'], ['本', '秘密']];
                 return '<ul class="mfd-grid2">' + names.map(function (x, i) {
                     var hit = x[1].toLowerCase().indexOf(m.query) >= 0;
                     return item(i, hit, x[0], markMatch(x[1], m.query));
@@ -2501,83 +2521,83 @@
             }
         },
         {
-            id: 'tag', tab: 'tag', title: 'find by tag', query: '#memory',
-            sub: 'Notebooks and Notes carrying the selected tags',
+            id: 'tag', tab: '标签', title: '按标签查找', query: '#记忆',
+            sub: '带有所选标签的笔记本和笔记',
             targets: ['mfd-kgraph', 'mfd-kanban'],
-            detail: 'Find Notebooks and Notes by tags - pick one or more tags and get everything labeled with them. Tags are also nodes of the knowledge graph and columns of organizers.',
+            detail: '按标签查找笔记本和笔记 - 选中一个或多个标签，就能得到所有被它们标记的内容。标签同时也是知识图谱的节点和组织器的列。',
             scene: function () {
-                var tags = ['cognition', 'memory', 'todo', 'ml', 'brain'];
-                var cards = [['Retrieval failure', ['memory', 'brain']], ['Gradient', ['ml']], ['Sleep', ['memory']], ['Focus', ['todo']], ['Chunking', ['memory']], ['Travel', ['todo']]];
+                var tags = ['认知', '记忆', 'todo', 'ml', '大脑'];
+                var cards = [['提取失败', ['记忆', '大脑']], ['梯度', ['ml']], ['睡眠', ['记忆']], ['专注', ['todo']], ['组块化', ['记忆']], ['旅行', ['todo']]];
                 return '<div class="mfd-tagcloud">' + tags.map(function (t) {
-                    return '<span class="mfd-tag' + (t === 'memory' ? ' mfd-tag-sel' : '') + '">#' + t + '</span>';
+                    return '<span class="mfd-tag' + (t === '记忆' ? ' mfd-tag-sel' : '') + '">#' + t + '</span>';
                 }).join('') + '</div><ul class="mfd-grid3">' + cards.map(function (c, i) {
-                    return item(i, c[1].indexOf('memory') >= 0, 'N', c[0]);
+                    return item(i, c[1].indexOf('记忆') >= 0, '记', c[0]);
                 }).join('') + '</ul>';
             }
         },
         {
-            id: 'fts', tab: 'full-text', title: 'full-text search', query: 'gradient',
-            sub: 'exact, ignore case or regular expression',
+            id: 'fts', tab: '全文', title: '全文搜索', query: '梯度',
+            sub: '精确匹配、忽略大小写或使用正则表达式',
             targets: ['mfd-shelves'],
-            detail: 'Full-text search scans the text of all Notes in all Notebooks - match exact phrase, ignore case or use a regular expression.',
+            detail: '全文搜索会扫描所有笔记本中所有笔记的正文 - 可以匹配精确短语、忽略大小写，或使用正则表达式。',
             scene: function (m) {
-                var lines = ['## Deep learning', 'gradient descent minimizes loss', 'vanishing gradient in deep nets', '## Optimizers', 'Adam adapts gradient step size', '## Cognition', 'memory follows a learning curve'];
+                var lines = ['## 深度学习', '梯度下降最小化损失', '深层网络中的梯度消失', '## 优化器', 'Adam 自适应调整梯度步长', '## 认知', '记忆遵循学习曲线'];
                 return '<div class="mfd-doc" style="--mfd-lines:' + lines.length + ';--mfd-scan-step:180ms"><ul>' + lines.map(function (l, i) {
                     return '<li style="--i:' + i + '"' + (l.indexOf('#') === 0 ? ' class="mfd-h"' : '') + '>' + markMatch(l, m.query) + '</li>';
                 }).join('') + '</ul><span class="mfd-scan"></span></div>' +
-                    '<span class="mfd-summary" style="--mfd-lines:' + lines.length + ';--mfd-scan-step:180ms">3 matches in 2 Notes</span>';
+                    '<span class="mfd-summary" style="--mfd-lines:' + lines.length + ';--mfd-scan-step:180ms">在 2 条笔记中找到 3 处匹配</span>';
             }
         },
         {
-            id: 'graph', tab: 'knowledge graph', title: 'knowledge graph', query: 'Cognition',
-            sub: 'walk the knowledge graph navigator',
+            id: 'graph', tab: '知识图谱', title: '知识图谱', query: '认知',
+            sub: '在知识图谱导航器中漫步',
             targets: ['mfd-kgraph'],
-            detail: 'Knowledge graph navigator lets you walk your knowledge graph - from a Notebook to its Notes, from Notes to tags and on to related Notes.',
+            detail: '知识图谱导航器让你在自己的知识图谱中行走 - 从笔记本到它的笔记，从笔记到标签，再到相关的笔记。',
             scene: function () {
-                var walk = [NOTEBOOK, 'Attention', OUTLINE_SELECTED];
+                var walk = [NOTEBOOK, '注意力', OUTLINE_SELECTED];
                 return renderGraph('mfd-graph-scene', walk) + '<div class="mfd-crumbs">' + walk.map(function (id, i) {
                     return '<span style="--w:' + i + '">' + id + '</span>';
                 }).join('') + '</div>';
             }
         },
         {
-            id: 'wingman', tab: 'wingman', title: 'wingman', query: 'summarize this Note',
-            sub: 'ask local LLM - your Notes never leave your machine',
+            id: 'wingman', tab: 'AI 助手', title: 'AI 助手', query: '总结这条笔记',
+            sub: '询问本地 LLM - 你的笔记永远不会离开你的机器',
             targets: ['mfd-wingman'],
-            detail: 'Ask Wingman - a local LLM served by ollama - to summarize, explain or find tasks in the Note you read. Your Notes never leave your machine.',
+            detail: '让 AI 助手 - 由 ollama 提供的本地 LLM - 为你正在阅读的笔记做摘要、做解释或找出其中的任务。你的笔记永远不会离开你的机器。',
             scene: function () {
-                return '<div class="mfd-chat"><div class="mfd-term-head">wingman - llama @ ollama<span class="mfd-private">local - private</span></div><p data-answer></p></div>';
+                return '<div class="mfd-chat"><div class="mfd-term-head">AI 助手 - llama @ ollama<span class="mfd-private">本地 - 私密</span></div><p data-answer></p></div>';
             },
             play: function (scene, delayMs) {
                 typeInto(scene.querySelector('[data-answer]'),
-                    'Retrieval failure in short: the memory is stored, but the cue to reach it is missing. Practice active recall, reinstate the context and use spaced repetition.',
+                    '提取失败，简而言之：记忆已经存储，只是缺少通往它的线索。请练习主动回忆、重建当时的情境，并使用间隔重复。',
                     delayMs);
             }
         },
         {
-            id: 'association', tab: 'association', title: 'associations', query: 'reading this Note',
-            sub: 'MindForger thinks as you read and write',
+            id: 'association', tab: '关联', title: '关联', query: '正在读这条笔记',
+            sub: '你读和写的时候，MindForger 也在思考',
             targets: ['mfd-kgraph'],
-            detail: 'As you read or write a Note, MindForger thinks along and suggests associated Notes - relevant knowledge you might have forgotten you have.',
+            detail: '当你阅读或书写一条笔记时，MindForger 会一同思考，并推荐关联的笔记 - 那些你或许早已忘记自己拥有的相关知识。',
             scene: function () {
-                var assoc = [['Memory', 87], ['Retrieval cues', 74], ['Forgetting curve', 61], ['Chunking', 52]];
-                return '<div class="mfd-assoc"><span class="mfd-item" style="--i:0">' + kind('N') + '<span>Retrieval failure</span></span><ul>' + assoc.map(function (a, i) {
+                var assoc = [['记忆', 87], ['提取线索', 74], ['遗忘曲线', 61], ['组块化', 52]];
+                return '<div class="mfd-assoc"><span class="mfd-item" style="--i:0">' + kind('记') + '<span>提取失败</span></span><ul>' + assoc.map(function (a, i) {
                     return '<li style="--i:' + i + '"><span>' + a[0] + '</span><span class="mfd-bar"><i style="--v:' + a[1] + '%"></i></span><b>' + a[1] + '%</b></li>';
                 }).join('') + '</ul></div>';
             }
         },
         {
-            id: 'task', tab: 'task', title: 'tasks', query: '#important #urgent',
-            sub: 'Eisenhower matrix and Kanban organizers',
+            id: 'task', tab: '任务', title: '任务', query: '#重要 #紧急',
+            sub: '艾森豪威尔矩阵与看板组织器',
             targets: ['mfd-kanban'],
-            detail: 'Organizers turn tagged Notebooks and Notes into Eisenhower matrix quadrants or Kanban columns - see what is urgent, what is important and what is done.',
+            detail: '组织器把打了标签的笔记本和笔记变成艾森豪威尔矩阵的象限或看板的列 - 让你看清什么紧急、什么重要、什么已经完成。',
             scene: function () {
                 // quadrant names follow lib/src/model/eisenhower_matrix.cpp
                 var quadrants = [
-                    ['urgent', 'var(--mfd-yellow)', ['Pay bill']],
-                    ['important & urgent', 'var(--mfd-red)', ['Retrieval failure', 'Exam']],
-                    ['not important', 'var(--mfd-muted)', ['Sort photos']],
-                    ['important', 'var(--mfd-green)', ['Learn Rust', 'Sleep']]
+                    ['紧急', 'var(--mfd-yellow)', ['付账单']],
+                    ['重要且紧急', 'var(--mfd-red)', ['提取失败', '考试']],
+                    ['不重要', 'var(--mfd-muted)', ['整理照片']],
+                    ['重要', 'var(--mfd-green)', ['学习 Rust', '睡眠']]
                 ];
                 var i = 0;
                 return '<div class="mfd-matrix">' + quadrants.map(function (q) {
@@ -2795,16 +2815,16 @@
 
     var LINKS = [
         { from: 'mfd-face-top', to: 'mfd-note', kind: 'in', labels: TYPES.map(function (t) { return t[0]; }), count: 2, lap: 3.4, onArrive: addToFeed },
-        { from: 'mfd-note', to: 'mfd-outline', fromSide: 'right', toSide: 'left', labels: ['N'] },
-        { from: 'mfd-outline', to: 'mfd-notebook', fromSide: 'right', toSide: 'left', labels: ['O'] }
+        { from: 'mfd-note', to: 'mfd-outline', fromSide: 'right', toSide: 'left', labels: ['记'] },
+        { from: 'mfd-outline', to: 'mfd-notebook', fromSide: 'right', toSide: 'left', labels: ['纲'] }
     ];
     VIEW_IDS.forEach(function (id) {
-        LINKS.push({ from: 'mfd-notebook', to: id, labels: ['NB'], count: 1, lap: 2.8, bus: true });
+        LINKS.push({ from: 'mfd-notebook', to: id, labels: ['本'], count: 1, lap: 2.8, bus: true });
     });
     MODES.forEach(function (m) {
         LINKS.push({ from: 'mfd-face-bottom', to: 'mfd-tab-' + m.id, fromSide: 'top', toSide: 'bottom', kind: 'ask', labels: ['?'], mode: m.id, gate: 'mfd-idle', lap: 1.8, bus: true });
         m.targets.forEach(function (id) {
-            LINKS.push({ from: 'mfd-find', to: id, fromSide: 'top', toSide: 'bottom', kind: 'hit', labels: ['N'], mode: m.id, gate: 'mfd-off', lap: 1.8, bus: true });
+            LINKS.push({ from: 'mfd-find', to: id, fromSide: 'top', toSide: 'bottom', kind: 'hit', labels: ['记'], mode: m.id, gate: 'mfd-off', lap: 1.8, bus: true });
         });
     });
 
@@ -3096,7 +3116,7 @@
     setMode(0);
     layout();
     requestAnimationFrame(tick);
-    showDetail('MINDFORGER', 'Knowledge flows in from the top, questions come from the bottom. Click any box or tab to learn more.');
+    showDetail('MINDFORGER', '知识自上而入，问题自下而来。点击任意方框或标签页即可了解更多。');
 })();
 </script>
 <!-- END mfd: functional architecture diagram - script -->
@@ -3104,22 +3124,22 @@
 
 <div class="w3-row w3-center w3-black w3-padding-16" id="llm" style="border-top: 3px solid white;">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">LLM</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">LLM</span><br>
   </div>
 </div>
 
 <!-- Container: LLM -->
 <div class="w3-content w3-container w3-padding-64">
-  Optional MindForger's <a class="mf-link" target="_blank" href="docs/user-documentation.html#wingman">Wingman</a> can use
-  either local (privacy - <a  class="mf-link" target="_blank" href="https://ollama.com">Ollama</a>)
-  or remote (SOTA - <a class="mf-link" target="_blank" href="https://openrouter.ai">OpenRouter</a>
-  or <a class="mf-link" target="_blank" href="https://openai.com">OpenAI</a>) <b>Large Language Model (LLM)</b>
-  to provide <b>semantic</b> and <b>syntactic</b> assistance when you <b>read</b> and <b>write</b> your
-  notes - with Wingman you can:
+  MindForger 可选的 <a class="mf-link" target="_blank" href="../docs/user-documentation.html#wingman">AI 助手</a>
+  既可以使用本地（注重隐私 - <a  class="mf-link" target="_blank" href="https://ollama.com">Ollama</a>）
+  的<b>大语言模型（LLM）</b>，也可以使用远程（最强 - <a class="mf-link" target="_blank" href="https://openrouter.ai">OpenRouter</a>
+  或 <a class="mf-link" target="_blank" href="https://openai.com">OpenAI</a>）的模型，
+  在你<b>阅读</b>和<b>书写</b>笔记时提供<b>语义</b>与<b>语法</b>上的帮助。
+  借助 AI 助手，你可以：
 
   <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Fix&nbsp;grammar</div>
+       <div class="mfGroupLeftText">修正语法</div>
      </div>
      <div class="right" id="open-source">
       <iframe width="280" height="158" src="https://www.youtube.com/embed/QLX9CWzzEa8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -3127,7 +3147,7 @@
    </div>
   <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Summarize</div>
+       <div class="mfGroupLeftText">做摘要</div>
      </div>
      <div class="right" id="open-source">
       <iframe width="280" height="158" src="https://www.youtube.com/embed/TAV8tHajjeg" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -3135,7 +3155,7 @@
    </div>
   <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Explain</div>
+       <div class="mfGroupLeftText">做解释</div>
      </div>
      <div class="right" id="open-source">
        <iframe width="280" height="158" src="https://www.youtube.com/embed/fln4XdnlR0A" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -3143,7 +3163,7 @@
    </div>
   <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Translate</div>
+       <div class="mfGroupLeftText">做翻译</div>
      </div>
      <div class="right" id="open-source">
       <iframe width="280" height="158" src="https://www.youtube.com/embed/akesdLhWZ-I" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -3151,7 +3171,7 @@
    </div>
   <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Complete&nbsp;text</div>
+       <div class="mfGroupLeftText">续写文本</div>
      </div>
      <div class="right" id="open-source">
       <iframe width="280" height="158" src="https://www.youtube.com/embed/eyLV5P_Bujs" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -3159,19 +3179,19 @@
    </div>
   <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Get&nbsp;synonyms&nbsp;&&nbsp;antonyms</div>
+       <div class="mfGroupLeftText">查找近义词与反义词</div>
      </div>
      <div class="right" id="open-source">
        <iframe width="280" height="158" src="https://www.youtube.com/embed/Xj0wZz2vBSw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
      </div>
    </div>
 
-   ... and much more.
+   ... 以及更多。
 </div>
 
 <div class="w3-row w3-center w3-black w3-padding-16" id="floss">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">FLOSS</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">FLOSS</span><br>
   </div>
 </div>
 
@@ -3180,37 +3200,37 @@
 
   <!-- screenshots -->
    <div class="w3-content" style="max-width:1200px">
-     <img class="mySlidesFloss" src="images/screenshots/fts.png" style="width:100%">
-     <img class="mySlidesFloss" src="images/screenshots/eisenhower-matrix.png" style="width:100%">
-     <img class="mySlidesFloss" src="images/screenshots/grow-model.png" style="width:100%">
-     <img class="mySlidesFloss" src="images/screenshots/task-lists.png" style="width:100%">
-     <img class="mySlidesFloss" src="images/screenshots/library-add.png" style="width:100%">
-     <img class="mySlidesFloss" src="images/screenshots/multiple-documents.png" style="width:100%">
+     <img class="mySlidesFloss" src="../images/screenshots/fts.png" style="width:100%">
+     <img class="mySlidesFloss" src="../images/screenshots/eisenhower-matrix.png" style="width:100%">
+     <img class="mySlidesFloss" src="../images/screenshots/grow-model.png" style="width:100%">
+     <img class="mySlidesFloss" src="../images/screenshots/task-lists.png" style="width:100%">
+     <img class="mySlidesFloss" src="../images/screenshots/library-add.png" style="width:100%">
+     <img class="mySlidesFloss" src="../images/screenshots/multiple-documents.png" style="width:100%">
 
      <div class="w3-row-padding w3-section">
       <div class="w3-col s2 mfSlideThumbnail">
-        <img class="flossChoice w3-opacity" src="images/screenshots/fts.png" style="width:100%" onclick="currentDivFloss(1)">
-        Full-text search
+        <img class="flossChoice w3-opacity" src="../images/screenshots/fts.png" style="width:100%" onclick="currentDivFloss(1)">
+        全文搜索
       </div>
       <div class="w3-col s2 mfSlideThumbnail">
-	      <img class="flossChoice w3-opacity" src="images/screenshots/eisenhower-matrix.png" style="width:100%" onclick="currentDivFloss(2)">
-	      Eisenhower matrix
+	      <img class="flossChoice w3-opacity" src="../images/screenshots/eisenhower-matrix.png" style="width:100%" onclick="currentDivFloss(2)">
+	      艾森豪威尔矩阵
       </div>
       <div class="w3-col s2 mfSlideThumbnail">
-	      <img class="flossChoice w3-opacity" src="images/screenshots/grow-model.png" style="width:100%" onclick="currentDivFloss(3)">
-	      G.R.O.W. model
+	      <img class="flossChoice w3-opacity" src="../images/screenshots/grow-model.png" style="width:100%" onclick="currentDivFloss(3)">
+	      G.R.O.W. 模型
       </div>
       <div class="w3-col s2 mfSlideThumbnail">
-	      <img class="flossChoice w3-opacity" src="images/screenshots/task-lists.png" style="width:100%" onclick="currentDivFloss(4)">
-	      Task lists
+	      <img class="flossChoice w3-opacity" src="../images/screenshots/task-lists.png" style="width:100%" onclick="currentDivFloss(4)">
+	      任务清单
       </div>
       <div class="w3-col s2 mfSlideThumbnail">
-	      <img class="flossChoice w3-opacity" src="images/screenshots/library-add.png" style="width:100%" onclick="currentDivFloss(5)">
-	      PDF library
+	      <img class="flossChoice w3-opacity" src="../images/screenshots/library-add.png" style="width:100%" onclick="currentDivFloss(5)">
+	      PDF 文档库
       </div>
       <div class="w3-col s2 mfSlideThumbnail">
-	      <img class="flossChoice w3-opacity" src="images/screenshots/multiple-documents.png" style="width:100%" onclick="currentDivFloss(6)">
-	      Multiple documents
+	      <img class="flossChoice w3-opacity" src="../images/screenshots/multiple-documents.png" style="width:100%" onclick="currentDivFloss(6)">
+	      多文档
       </div>
     </div>
    </div>
@@ -3245,80 +3265,80 @@
 
 
    <div class="w3-container w3-center" style="margin-top: 30px; margin-bottom: 30px;">
-     <b>MindForger</b> is
-     <a class="mf-link" href="#open-source">open</a>,
-     <a class="mf-link" href="#free">free</a> and
-     <a class="mf-link" href="#performance">fast</a> -
-     a thinking notebook and Markdown editor which respects your
-     <a class="mf-link" href="#privacy">privacy</a> and your
-     <a class="mf-link" href="#security">security</a>:
+     <b>MindForger</b> 是
+     <a class="mf-link" href="#open-source">开放的</a>、
+     <a class="mf-link" href="#free">自由的</a>、
+     <a class="mf-link" href="#performance">快速的</a> -
+     一款尊重你的
+     <a class="mf-link" href="#privacy">隐私</a>与
+     <a class="mf-link" href="#security">安全</a>的思考笔记本和 Markdown 编辑器：
    </div>
 
 
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Open</div>
+       <div class="mfGroupLeftText">开放</div>
      </div>
      <div class="right" id="open-source">
-       MindForger is <b>open source</b> software
-       (<a class="mf-link" target="_blank" href="https://en.wikipedia.org/wiki/Free_and_open-source_software">FLOSS</a>) -
-       anyone can download, review and audit
-       <a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger">its source code</a>.
-       Your Notes use an <b>open format</b> - plain
+       MindForger 是<b>开源</b>软件
+       （<a class="mf-link" target="_blank" href="https://en.wikipedia.org/wiki/Free_and_open-source_software">FLOSS</a>）-
+       任何人都可以下载、审阅并审计
+       <a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger">它的源代码</a>。
+       你的笔记采用<b>开放格式</b> - 就是普通的
        <a class="mf-link" target="_blank" href="https://github.github.com/gfm/">GitHub Flavored Markdown</a>
-       files which you can edit in any text or Markdown editor like
+       文件，可以用任何文本或 Markdown 编辑器编辑，例如
        <a class="mf-link" target="_blank" href="https://code.visualstudio.com/">VS Code</a>,
        <a class="mf-link" target="_blank" href="https://obsidian.md/">Obsidian</a>,
-       <a class="mf-link" target="_blank" href="https://typora.io/">Typora</a> or
-       <a class="mf-link" target="_blank" href="https://www.vim.org/">Vim</a>.
+       <a class="mf-link" target="_blank" href="https://typora.io/">Typora</a> 或
+       <a class="mf-link" target="_blank" href="https://www.vim.org/">Vim</a>。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Free</div>
+       <div class="mfGroupLeftText">自由</div>
      </div>
      <div class="right" id="free">
-       Free software is a matter of <b>liberty</b>, not price - you are free to run, study,
-       change and share your copy of MindForger. It is licensed under the
+       自由软件关乎<b>自由</b>，而非价格 - 你可以自由地运行、研究、
+       修改和分享你的 MindForger 副本。它以
        <a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger/blob/master/LICENSE">GNU GPL</a>
-       and it <b>costs nothing</b> to download and use. No account, no subscription.
+       授权，下载和使用<b>不收取任何费用</b>。无需账号，也没有订阅。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Performance</div>
+       <div class="mfGroupLeftText">性能</div>
      </div>
      <div class="right" id="performance">
-       MindForger is a <b>native C++/Qt</b> application. Workspaces with <b>1000s</b> of Notes
-       and <b>100s</b> of Markdown files are parsed and indexed in moments, and then
-       searched, viewed and edited without delay.
+       MindForger 是一款 <b>C++/Qt 原生</b>应用。包含<b>数千</b>条笔记
+       和<b>数百</b>个 Markdown 文件的工作区可以在瞬间完成解析和索引，
+       之后的搜索、浏览和编辑都毫无延迟。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Privacy</div>
+       <div class="mfGroupLeftText">隐私</div>
      </div>
      <div class="right" id="privacy">
-       Your Notes live <b>locally on your machine</b>. MindForger has no account and no
-       telemetry and it <b>uploads nothing</b> - neither your data nor an anonymized digest
-       of it. With a local ollama model, even AI assistance stays offline.
+       你的笔记<b>就存放在你自己的机器上</b>。MindForger 没有账号，没有
+       遥测，<b>不会上传任何东西</b> - 既不上传你的数据，也不上传它的匿名摘要。
+       只要使用本地的 ollama 模型，连 AI 辅助也完全离线。
      </div>
    </div>
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Security</div>
+       <div class="mfGroupLeftText">安全</div>
      </div>
      <div class="right" id="security">
-       Your workspace is just a directory, so you can <b>encrypt</b> it with the tool you trust -
-       full disk encryption like
+       你的工作区只是一个目录，因此可以用你信任的工具<b>加密</b>它 -
+       比如全盘加密的
        <a class="mf-link" target="_blank" href="https://gitlab.com/cryptsetup/cryptsetup">LUKS</a>,
-       <a class="mf-link" target="_blank" href="https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/">BitLocker</a> or
-       <a class="mf-link" target="_blank" href="https://support.apple.com/guide/mac-help/protect-data-on-your-mac-with-filevault-mh11785/mac">FileVault</a>,
-       or an encrypted folder with
+       <a class="mf-link" target="_blank" href="https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/">BitLocker</a>、
+       <a class="mf-link" target="_blank" href="https://support.apple.com/guide/mac-help/protect-data-on-your-mac-with-filevault-mh11785/mac">FileVault</a>，
+       或者用下列工具创建加密文件夹：
        <a class="mf-link" target="_blank" href="https://nuetzlich.net/gocryptfs/">gocryptfs</a>,
-       <a class="mf-link" target="_blank" href="https://veracrypt.io/">VeraCrypt</a> or
-       <a class="mf-link" target="_blank" href="https://cryptomator.org/">Cryptomator</a>.
-       Found a vulnerability? Please <a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger/blob/master/SECURITY.md">report</a> it!
+       <a class="mf-link" target="_blank" href="https://veracrypt.io/">VeraCrypt</a> 或
+       <a class="mf-link" target="_blank" href="https://cryptomator.org/">Cryptomator</a>。
+       发现了漏洞？请<a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger/blob/master/SECURITY.md">报告</a>给我们！
      </div>
    </div>
 
@@ -3328,7 +3348,7 @@
 
 <div class="w3-row w3-center w3-black w3-padding-16" id="documentation">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Documentation</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">文档</span><br>
   </div>
 </div>
 
@@ -3358,45 +3378,45 @@
 
     <div class="group" style="margin-top: 10px;">
       <div class="left">
-        <div class="mfGroupLeftText"><a class="mf-link" target="_blank" href="docs/index.html">Documentation</a></div>
+        <div class="mfGroupLeftText"><a class="mf-link" target="_blank" href="../docs/index.html">文档</a></div>
       </div>
       <div class="right" id="doc-wiki">
-          MindForger <a class="mf-link" target="_blank" href="docs/index.html">documentation</a> is
-          the primary source of information about MindForger. It contains getting started, user guide, installation instructions, release notes,
-          developer guide, FAQ and more.
+          MindForger <a class="mf-link" target="_blank" href="../docs/index.html">文档</a>是
+          了解 MindForger 的首要信息来源。其中包含快速上手、用户指南、安装说明、版本说明、
+          开发者指南、常见问题等内容。（目前仅有英文版。）
       </div>
     </div>
     <div class="group" style="margin-top: 10px;">
       <div class="left">
-        <div class="mfGroupLeftText"><a class="mf-link" target="_blank" href="https://www.youtube.com/playlist?list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS">YouTube Tutorials</a></div>
+        <div class="mfGroupLeftText"><a class="mf-link" target="_blank" href="https://www.youtube.com/playlist?list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS">YouTube 教程</a></div>
       </div>
       <div class="right" id="doc-wiki">
-        MindForger <b>tutorials</b> on <a class="mf-link" target="_blank" href="https://www.youtube.com/playlist?list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS">YouTube</a> are a great way to learn how to use MindForger. They cover various topics from
-        installation, basic usage, advanced features to tips and tricks.
+        <a class="mf-link" target="_blank" href="https://www.youtube.com/playlist?list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS">YouTube</a> 上的 MindForger <b>教程</b>是学习使用它的好办法。内容涵盖
+        安装、基础用法、进阶功能，直到各种技巧与窍门。
       </div>
     </div>
 
 
    <div id="community" class="w3-container w3-center w3-margin-top">
      <br>
-     <b>Follow</b>
-     @mindforger on
-     <a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger on GitHub">GitHub</a>,
-     <a href="https://x.com/mindforger" target="_blank" title="@mindforger on X">X</a>,
+     <b>关注</b>
+     @mindforger：
+     <a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger 的 GitHub">GitHub</a>、
+     <a href="https://x.com/mindforger" target="_blank" title="@mindforger 的 X">X</a>、
      <!--
      <a href="https://www.instagram.com/mindforger" target="_blank" title="@mindforger on Instagram">Instagram</a>,
      <a href="https://groups.google.com/forum/#!forum/mindforger" target="_blank" title="@mindforger on Google Groups">Google Groups</a>,
      -->
-     <a href="https://www.facebook.com/pages/MindForger/172099806154112" target="_blank" title="MindForger on Facebook">Facebook</a>
-     and
-     <a href="https://www.youtube.com/user/MindForgerChannel" target="_blank" title="MindForger on YouTube">YouTube</a>.
+     <a href="https://www.facebook.com/pages/MindForger/172099806154112" target="_blank" title="MindForger 的 Facebook">Facebook</a>
+     和
+     <a href="https://www.youtube.com/user/MindForgerChannel" target="_blank" title="MindForger 的 YouTube">YouTube</a>。
    </div>
 </div>
 
 
 <div class="w3-row w3-center w3-black w3-padding-16">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Contribute</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">参与贡献</span><br>
   </div>
 </div>
 
@@ -3404,9 +3424,9 @@
 <!-- Container: Contribute -->
 <div class="w3-content w3-container w3-padding-64" id="contribute">
    <div class="w3-container w3-center" style="margin-bottom: 30px; width: 80%; margin-left: 10%">
-     Current <b>MindForger</b> implementation is just an initial imperfect sketch of much broader
-     <b>vision</b>. It's purpose is to <b>demonstrate</b> viability of thinking notebook idea and to <b>show</b>
-     possible research directions.
+     目前的 <b>MindForger</b> 实现只是一幅更宏大<b>愿景</b>的
+     初步且不完美的草图。它的目的是<b>证明</b>思考笔记本这个想法可行，并<b>指出</b>
+     可能的研究方向。
    </div>
 
 
@@ -3416,25 +3436,25 @@
 
 
    <div id="contribute" class="w3-container w3-center" style="margin-top: 30px; margin-bottom: 30px; width: 50%; margin-left: 25%">
-       Feel free to <a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger on GitHub" class="mf-link"><b>contribute</b></a>!
-       Don't hesitate to contact <a href="mailto:martin.dvorak@mindforger.com" class="mf-link">me</a>.
+       欢迎<a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger 的 GitHub" class="mf-link"><b>参与贡献</b></a>！
+       也欢迎随时<a href="mailto:martin.dvorak@mindforger.com" class="mf-link">联系我</a>。
    </div>
 
 
    <div class="group" style="margin-top: 10px;">
      <div class="left">
-       <div class="mfGroupLeftText">Contribute</div>
+       <div class="mfGroupLeftText">参与贡献</div>
      </div>
      <div class="right" style="text-align: left;">
        <ul>
-	 <li><b>Bugs and suggestions</b> ... <a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger on GitHub" class="mf-link">submit</a> bugs, issues, ideas and enhancements.
-	 <li><b>Translations</b> ... translate MindForger to your language.
-	 <li><b>Platform support</b> ... port MindForger to your favorite OS or distribution.
-	 <li><b>Code</b> ... <a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger on GitHub" class="mf-link">submit pull request</a> or patch with implementation of a feature you missed.
-	 <li><b>Research</b> ... consider making your AI/ML, NLP, data mining, ... research on top of (your) documents indexed to MindForger ontology.
-	 <li><b>Integration</b> ... how-to or code enabling integration with your (favorite) project.
-	 <li><b>Enhancements</b> ... submit performance, efficiency and/or productivity enhancements.
-	 <li><b>Documentation</b> ... write a document, blog post or tweet, create YouTube video, ...
+	 <li><b>缺陷与建议</b> ... <a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger 的 GitHub" class="mf-link">提交</a>缺陷、问题、想法和改进建议。
+	 <li><b>翻译</b> ... 把 MindForger 翻译成你的语言。
+	 <li><b>平台支持</b> ... 把 MindForger 移植到你喜欢的操作系统或发行版。
+	 <li><b>代码</b> ... 提交<a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger 的 GitHub" class="mf-link">拉取请求</a>或补丁，实现你想要却还没有的功能。
+	 <li><b>研究</b> ... 不妨把你的 AI/ML、NLP、数据挖掘研究，建立在（你自己的）已索引进 MindForger 本体的文档之上。
+	 <li><b>集成</b> ... 提供与你（喜欢的）项目集成的说明或代码。
+	 <li><b>改进</b> ... 提交性能、效率或生产力方面的改进。
+	 <li><b>文档</b> ... 写一篇文档、博客或推文，录一段 YouTube 视频，...
        </ul>
      </div>
    </div>
@@ -3442,7 +3462,7 @@
 
 <div class="w3-row w3-center w3-black w3-padding-16">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Releases</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">版本</span><br>
   </div>
 </div>
 
@@ -3451,24 +3471,24 @@
    <div class="w3-container w3-center" style="width: 80%; margin-left: 10%">
      <br/>
 
-     MindForger releases:<br/>
+     MindForger 各版本：<br/>
      <br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/2.2.0" target="_blank">Rewrap, Snap, WebEngine (Linux), KaTeX and Mermaid (2.2.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/2.1.0" target="_blank">Ollama/OpenRouter/OpenAI LLM providers, library mgmt (2.1.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/2.0.0" target="_blank">LLM integration, Notebook tree, Libraries (2.0.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.54.0" target="_blank">Smart(er) editor and improved macOS version (1.54.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.53.0" target="_blank">Spell check, Kanban and Eisenhower Matrix on tags (1.53.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.52.0" target="_blank">Autolinking (1.52.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.51.0" target="_blank">Live preview (1.51.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.50.0" target="_blank">Dashboard, Link Completion, Image Drag&amp;Drop, FTS (1.50.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.49.0" target="_blank">Microsoft Windows and GitHub Flavored Markdown (1.49.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.48.0" target="_blank">CSV export and MathJax Menu (1.48.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.47.0" target="_blank">Knowledge Graph Navigator (1.47.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.46.0" target="_blank">Standard Terminology and Toolbar (1.46.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.43.0" target="_blank">Eisenhower Matrix, Tags View and Recent Notes (1.43.0)</a><br/>
-     <a href="https://github.com/dvorka/mindforger/releases/tag/1.42.0" target="_blank">Initial Release (1.42.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/2.2.0" target="_blank">段落重排、Snap、WebEngine（Linux）、KaTeX 和 Mermaid（2.2.0）</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/2.1.0" target="_blank">Ollama/OpenRouter/OpenAI 大模型服务商、文档库管理（2.1.0）</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/2.0.0" target="_blank">LLM 集成、笔记本树、文档库（2.0.0）</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.54.0" target="_blank">更聪明的编辑器与改进的 macOS 版本（1.54.0）</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.53.0" target="_blank">拼写检查、基于标签的看板与艾森豪威尔矩阵（1.53.0）</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.52.0" target="_blank">自动链接（1.52.0）</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.51.0" target="_blank">实时预览（1.51.0）</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.50.0" target="_blank">仪表盘、链接补全、图片拖放、全文搜索（1.50.0）</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.49.0" target="_blank">Microsoft Windows 与 GitHub Flavored Markdown（1.49.0）</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.48.0" target="_blank">CSV 导出与 MathJax 菜单（1.48.0）</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.47.0" target="_blank">知识图谱导航器（1.47.0）</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.46.0" target="_blank">标准术语与工具栏（1.46.0）</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.43.0" target="_blank">艾森豪威尔矩阵、标签视图与最近的笔记（1.43.0）</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.42.0" target="_blank">首个版本（1.42.0）</a><br/>
      <br/>
-     [<a href="https://raw.githubusercontent.com/dvorka/mindforger/master/Changelog" target="_blank">changelog</a>]
+     [<a href="https://raw.githubusercontent.com/dvorka/mindforger/master/Changelog" target="_blank">更新日志</a>]
 
      <br/>
    </div>
@@ -3476,7 +3496,7 @@
 
 <div class="w3-row w3-center w3-black w3-padding-16" id="praise">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Praise</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">用户评价</span><br>
   </div>
 </div>
 
@@ -3486,64 +3506,64 @@
 
      <div class="mfQuoteCard mySlidesQuotes">
        <div class="mfQuoteText">
-         I do think it is wonderful that you have built MindForger and made it available
-         as an open source application!
+         你做出了 MindForger，还把它作为开源应用提供给大家，
+         我觉得这真是太棒了！
        </div>
        <div class="mfQuoteBy">
          <span class="mfQuoteWho">&mdash; M.F.</span><br/>
-         open source evangelist &middot; November 2023
+         开源布道者 &middot; 2023 年 11 月
        </div>
      </div>
 
      <div class="mfQuoteCard mySlidesQuotes">
        <div class="mfQuoteText">
-         God DAMN I think I have an estranged twin somewhere that decided to make the (Markdown) IDE of my dreams!
+         我的天，我觉得自己在某个地方有个失散的双胞胎，他决定做出我梦想中的那款（Markdown）IDE！
        </div>
        <div class="mfQuoteBy">
          <span class="mfQuoteWho">&mdash; S.J.</span><br/>
-         avid note-taker &middot; June 2025
+         资深笔记爱好者 &middot; 2025 年 6 月
        </div>
      </div>
 
      <div class="mfQuoteCard mySlidesQuotes">
        <div class="mfQuoteText">
-         I am using MindForger everyday... mostly as a Markdown editor to maintain
-         a journal (one note per day) and a few notebooks for specific topics or events. Thank you for the app!
+         我每天都在用 MindForger……主要是当作 Markdown 编辑器来写
+         日记（每天一条笔记），再加上几个针对特定主题或事件的笔记本。谢谢你做的这个应用！
        </div>
        <div class="mfQuoteBy">
          <span class="mfQuoteWho">&mdash; L.O.</span><br/>
-         journal keeper &middot; May 2026
+         日记作者 &middot; 2026 年 5 月
        </div>
      </div>
 
      <div class="mfQuoteCard mySlidesQuotes">
        <div class="mfQuoteText">
-         I recognize that it&rsquo;s a great idea, with huge application potential to many purposes,
-         far beyond an IDE to be used as a thinking aid or a text editor&hellip; The applications?
-         Well, as with your MindForger concept, there are many.
+         我认为这是个了不起的想法，在许多方面都有巨大的应用潜力，
+         远远超出了把 IDE 当作思考辅助工具或文本编辑器的范畴&hellip;具体能用在哪里？
+         嗯，就像你的 MindForger 概念本身一样，用处多得很。
        </div>
        <div class="mfQuoteBy">
          <span class="mfQuoteWho">&mdash; I.A.J.</span><br/>
-         academic &middot; September 2020
+         学者 &middot; 2020 年 9 月
        </div>
      </div>
 
      <div class="mfQuoteCard mySlidesQuotes">
        <div class="mfQuoteText">
-          MindForger looks like an amazing tool.
+          MindForger 看起来是个了不起的工具。
        </div>
        <div class="mfQuoteBy">
          <span class="mfQuoteWho">&mdash; B.V.H.</span><br/>
-         writer &middot; March 2017
+         作家 &middot; 2017 年 3 月
        </div>
      </div>
 
      <div class="mfQuoteDots">
-       <span class="mfQuoteDot" onclick="currentDivQuotes(1)" title="Quote 1"></span>
-       <span class="mfQuoteDot" onclick="currentDivQuotes(2)" title="Quote 2"></span>
-       <span class="mfQuoteDot" onclick="currentDivQuotes(3)" title="Quote 3"></span>
-       <span class="mfQuoteDot" onclick="currentDivQuotes(4)" title="Quote 4"></span>
-       <span class="mfQuoteDot" onclick="currentDivQuotes(5)" title="Quote 5"></span>
+       <span class="mfQuoteDot" onclick="currentDivQuotes(1)" title="评价 1"></span>
+       <span class="mfQuoteDot" onclick="currentDivQuotes(2)" title="评价 2"></span>
+       <span class="mfQuoteDot" onclick="currentDivQuotes(3)" title="评价 3"></span>
+       <span class="mfQuoteDot" onclick="currentDivQuotes(4)" title="评价 4"></span>
+       <span class="mfQuoteDot" onclick="currentDivQuotes(5)" title="评价 5"></span>
      </div>
 
    </div>
@@ -3595,7 +3615,7 @@
 
 <div class="w3-row w3-center w3-black w3-padding-16">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Download</span><br>
+    <img src="../images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">下载</span><br>
   </div>
 </div>
 
@@ -3603,23 +3623,23 @@
 <div class="w3-container w3-padding-64" id="download">
    <div class="mfDownloadGroup">
      <div class="mfDownloadLeft">
-       <div class="mfGroupLeftText">Install:</div>
+       <div class="mfGroupLeftText">安装：</div>
      </div>
      <div class="mfDownloadRight">
       <div class="mf-download-button"><a href="https://snapcraft.io/mindforger" target="_blank" class="mf-download-link">Snap</a></div>
-      <div class="mf-download-button"><a href="docs/installation.html#ubuntu" target="_blank" class="mf-download-link">Ubuntu</a></div>
-      <div class="mf-download-button"><a href="docs/installation.html#debian" target="_blank" class="mf-download-link">Debian</a></div>
-      <div class="mf-download-button"><a href="docs/installation.html#fedora" target="_blank" class="mf-download-link">Fedora</a></div>
-      <div class="mf-download-button"><a href="docs/installation.html#arch-linux" target="_blank" class="mf-download-link">Arch</a></div>
-      <div class="mf-download-button-i"><a href="docs/installation.html#windows" target="_blank" class="mf-download-link">Windows</a></div>
-      <div class="mf-download-button-i"><a href="docs/installation.html#wsl" target="_blank" class="mf-download-link">Windows WSL</a></div>
-      <div class="mf-download-button-ii"><a href="docs/installation.html#macos" target="_blank" class="mf-download-link">macOS</a></div>
-      <div class="mf-download-button-ii"><a href="docs/installation.html#docker" target="_blank" class="mf-download-link">Docker</a></div>
+      <div class="mf-download-button"><a href="../docs/installation.html#ubuntu" target="_blank" class="mf-download-link">Ubuntu</a></div>
+      <div class="mf-download-button"><a href="../docs/installation.html#debian" target="_blank" class="mf-download-link">Debian</a></div>
+      <div class="mf-download-button"><a href="../docs/installation.html#fedora" target="_blank" class="mf-download-link">Fedora</a></div>
+      <div class="mf-download-button"><a href="../docs/installation.html#arch-linux" target="_blank" class="mf-download-link">Arch</a></div>
+      <div class="mf-download-button-i"><a href="../docs/installation.html#windows" target="_blank" class="mf-download-link">Windows</a></div>
+      <div class="mf-download-button-i"><a href="../docs/installation.html#wsl" target="_blank" class="mf-download-link">Windows WSL</a></div>
+      <div class="mf-download-button-ii"><a href="../docs/installation.html#macos" target="_blank" class="mf-download-link">macOS</a></div>
+      <div class="mf-download-button-ii"><a href="../docs/installation.html#docker" target="_blank" class="mf-download-link">Docker</a></div>
      </div>
    </div>
    <div class="mfDownloadGroup">
      <div class="mfDownloadLeft">
-       <div class="mfGroupLeftText">Download:</div>
+       <div class="mfGroupLeftText">下载：</div>
      </div>
      <div class="mfDownloadRight">
       <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.snap</a></div>
@@ -3632,20 +3652,20 @@
    </div>
    <div class="mfDownloadGroup">
      <div class="mfDownloadLeft">
-       <div class="mfGroupLeftText">Build:</div>
+       <div class="mfGroupLeftText">构建：</div>
      </div>
      <div class="mfDownloadRight">
-      <div class="mf-download-button"><a href="docs/installation.html#build-on-ubuntu" target="_blank" class="mf-download-link">Ubuntu</a></div>
-      <div class="mf-download-button"><a href="docs/installation.html#build-on-debian" target="_blank" class="mf-download-link">Debian</a></div>
-      <div class="mf-download-button"><a href="docs/installation.html#build-on-fedora" target="_blank" class="mf-download-link">Fedora</a></div>
-      <div class="mf-download-button-i"><a href="docs/installation.html#build-on-windows" target="_blank" class="mf-download-link">Windows</a></div>
-      <div class="mf-download-button-i"><a href="docs/installation.html#build-on-wsl" target="_blank" class="mf-download-link">Windows WSL</a></div>
-      <div class="mf-download-button-ii"><a href="docs/installation.html#build-on-macos" target="_blank" class="mf-download-link">macOS</a></div>
+      <div class="mf-download-button"><a href="../docs/installation.html#build-on-ubuntu" target="_blank" class="mf-download-link">Ubuntu</a></div>
+      <div class="mf-download-button"><a href="../docs/installation.html#build-on-debian" target="_blank" class="mf-download-link">Debian</a></div>
+      <div class="mf-download-button"><a href="../docs/installation.html#build-on-fedora" target="_blank" class="mf-download-link">Fedora</a></div>
+      <div class="mf-download-button-i"><a href="../docs/installation.html#build-on-windows" target="_blank" class="mf-download-link">Windows</a></div>
+      <div class="mf-download-button-i"><a href="../docs/installation.html#build-on-wsl" target="_blank" class="mf-download-link">Windows WSL</a></div>
+      <div class="mf-download-button-ii"><a href="../docs/installation.html#build-on-macos" target="_blank" class="mf-download-link">macOS</a></div>
      </div>
    </div>
    <div class="mfDownloadGroup">
      <div class="mfDownloadLeft">
-       <div class="mfGroupLeftText">Source:</div>
+       <div class="mfGroupLeftText">源代码：</div>
      </div>
      <div class="mfDownloadRight">
       <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger" target="_blank" class="mf-download-link">GitHub</a></div>
@@ -3657,11 +3677,11 @@
 <!-- Footer -->
 <footer class="w3-center w3-black w3-padding-64">
    <div class="w3-container w3-center w3-margin" style="padding-top: 20px;">
-     Created with passion for my personal pleasure.<br/>
-     Released on the day of my <a class="mf-link" target="_blank" href="https://en.wikipedia.org/wiki/42_(number)#The_Hitchhiker's_Guide_to_the_Galaxy">42nd</a> birthday to
-     confirm <a class="mf-link" target="_blank" href="https://www.youtube.com/watch?v=aboZctrHfK8">answer</a>
-     to the Ultimate Question of life, the Universe, and Everything.<br/>
-     <a class="mf-link" target="_blank" href="https://github.com/dvorka/">Martin&nbsp;Dvorak</a> and <a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger/blob/master/CREDITS.md">contributors</a><br/>
+     出于热爱，为了自己的乐趣而创造。<br/>
+     发布于我 <a class="mf-link" target="_blank" href="https://en.wikipedia.org/wiki/42_(number)#The_Hitchhiker's_Guide_to_the_Galaxy">42</a> 岁生日那天，
+     以印证那个关于生命、宇宙以及一切终极问题的
+     <a class="mf-link" target="_blank" href="https://www.youtube.com/watch?v=aboZctrHfK8">答案</a>。<br/>
+     <a class="mf-link" target="_blank" href="https://github.com/dvorka/">Martin&nbsp;Dvorak</a> 与<a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger/blob/master/CREDITS.md">贡献者们</a><br/>
      2018-2026
    </div>
 </footer>
