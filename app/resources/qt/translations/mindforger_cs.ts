@@ -1065,37 +1065,37 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::FindOutlineByNameDialog</name>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="72"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="68"/>
         <source>&amp;Notebook name:</source>
         <translation>Název &amp;zápisníku:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="76"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="72"/>
         <source>&amp;ignore case</source>
         <translation>&amp;ignorovat velikost písmen</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="78"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="74"/>
         <source>&amp;keywords match</source>
         <translation>shoda &amp;klíčových slov</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="80"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="76"/>
         <source>&amp;current Notebook&apos;s Notes only</source>
         <translation>pouze poznámky &amp;aktuálního zápisníku</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="85"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="81"/>
         <source>&amp;Open Notebook</source>
         <translation>&amp;Otevřít zápisník</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="89"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="85"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Zrušit</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="123"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="118"/>
         <source>Find Notebook by Name</source>
         <translation>Najít zápisník podle názvu</translation>
     </message>
