@@ -34,33 +34,14 @@ class FindOutlineByNameDialog : public QDialog
     class MyLineEdit : public QLineEdit
     {
     private:
+        FindOutlineByNameDialog* dialog;
         QListView* target;
     public:
-        explicit MyLineEdit(QListView* t, QWidget* parent)
-            : QLineEdit(parent), target(t)
-        {}
-        void keyPressEvent(QKeyEvent* event) override {
-            if(event->key() == Qt::Key_Down) {
-                // give focus to the 1st (only visible rows remain in the filtered proxy
-                // model) row - consume the event so that it is NOT also handled by
-                // QLineEdit which would scroll the list view instead
-                if(target->model()->rowCount()>0) {
-                    QModelIndex index = target->model()->index(0,0);
-                    target->setCurrentIndex(index);
-                    target->scrollTo(index, QAbstractItemView::PositionAtTop);
-                }
-                target->setFocus();
-                event->accept();
-                return;
-            }
-            QLineEdit::keyPressEvent(event);
-        }
+        explicit MyLineEdit(QListView* t, FindOutlineByNameDialog* parent);
+        void keyPressEvent(QKeyEvent* event) override;
     };
 
-    // filters listViewModel's rows against 'names' (things' names, kept in lockstep with
-    // listViewModel's rows by show()) instead of QListView::setRowHidden() being called
-    // once per row from C++ - hiding/showing thousands of rows via per-row widget calls
-    // is what made backspacing over a long query noticeably slower than typing it
+    // filters listViewModel's rows against 'names' for efficient searching
     class NameFilterProxyModel : public QSortFilterProxyModel
     {
     public:
@@ -97,13 +78,15 @@ private:
 
     Thing* choice;
     std::vector<Thing*> things;
-    // things' names as QStrings, precomputed once in show() so that the filter pass in
-    // filterNow() doesn't reallocate a QString from std::string for every one of e.g.
-    // 21k notes on every keystroke; also what NameFilterProxyModel filters against
+    // things' names as QStrings, precomputed once in show()
     QVector<QString> cachedNames;
-    // debounces filterNow() so that rapid typing/backspacing (incl. key-repeat) triggers
-    // a single filter pass instead of one full O(things) pass per keystroke
+    // debounces filterNow() so that rapid typing/backspacing triggers 1 filter pass
     QTimer* filterDebounceTimer;
+
+    // maps a source model row to the Thing behind it (nullptr if there is none)
+    Thing* getThing(const QModelIndex& sourceIndex) const;
+    // runs a pending debounced filter pass so that the proxy model is up to date
+    void flushPendingFilter();
 
 protected:
     QLabel* label;
