@@ -30,7 +30,10 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
     // widgets
     listView = new QListView(this);
     // list view model must be set - use of this type of mode enable the use of string lists controlling its content
-    listView->setModel(&listViewModel);
+    proxyModel = new NameFilterProxyModel(this);
+    proxyModel->setSourceModel(&listViewModel);
+    proxyModel->setNames(&cachedNames);
+    listView->setModel(proxyModel);
     // disable editation of the list item on doble click
     listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
@@ -54,8 +57,15 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
 
     closeButton = new QPushButton{tr("&Cancel")};
 
+    // debounce the (potentially expensive) filter pass so that fast typing/backspacing
+    // (incl. OS key-repeat) collapses to a single pass instead of one per keystroke
+    filterDebounceTimer = new QTimer(this);
+    filterDebounceTimer->setSingleShot(true);
+    filterDebounceTimer->setInterval(60);
+
     // signals
     connect(lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(enableFindButton(const QString&)));
+    connect(filterDebounceTimer, SIGNAL(timeout()), this, SLOT(filterNow()));
     connect(lineEdit, SIGNAL(returnPressed()), this, SLOT(handleReturn()));
     connect(findButton, SIGNAL(clicked()), this, SLOT(handleChoice()));
     connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
@@ -113,86 +123,91 @@ void FindOutlineByNameDialog::show(
 
     things.clear();
     listViewStrings.clear();
+    cachedNames.clear();
     bool useCustomNames = customizedNames!=nullptr && customizedNames->size()>0;
     if(ts.size()) {
         for(size_t i=0; i<ts.size(); i++) {
             things.push_back(ts[i]);
+            // name used for filtering (see filterNow()) - cached once here rather than
+            // re-derived from std::string on every keystroke
+            QString name = ts.at(i)->getName().size()
+                ? QString::fromStdString(ts[i]->getName())
+                : QString{};
+            cachedNames.push_back(name);
             if(useCustomNames) {
                 listViewStrings << QString::fromStdString(customizedNames->at(i));
             } else {
-                if(ts.at(i)->getName().size()) {
-                    listViewStrings << QString::fromStdString(ts[i]->getName());
-                } else {
-                    listViewStrings << "";
-                }
+                listViewStrings << name;
             }
         }
-        ((QStringListModel*)listView->model())->setStringList(listViewStrings);
+        listViewModel.setStringList(listViewStrings);
     }
 
     findButton->setEnabled(things.size());
 
+    // filter pass is run synchronously (not debounced) here - it's driven by show(), not
+    // by a user keystroke, and must be applied immediately so the dialog opens in a
+    // consistent state
+    filterDebounceTimer->stop();
     if(init) {
         lineEdit->clear();
+        filterNow();
         lineEdit->setFocus();
     } else {
-        enableFindButton(lineEdit->text());
+        filterNow();
     }
 
     QDialog::show();
 }
 
-void FindOutlineByNameDialog::enableFindButton(const QString& text)
+void FindOutlineByNameDialog::enableFindButton(const QString&)
 {
-    listViewStrings.clear();
-    if(!text.isEmpty()) {
-        if(keywordsCheckBox->isEnabled() && keywordsCheckBox->isChecked()) {
-            int visible = 0;
-            int row = 0;
-            for(Thing* e:things) {
-                QString s = QString::fromStdString(e->getName());
-                if(stringMatchByKeywords(text, s, caseCheckBox->isChecked())) {
-                    listView->setRowHidden(row, false);
-                    visible++;
-                } else {
-                    listView->setRowHidden(row, true);
-                }
-                row++;
-            }
-            findButton->setEnabled(visible);
-        } else {
-            Qt::CaseSensitivity c = caseCheckBox->isChecked()?Qt::CaseInsensitive:Qt::CaseSensitive;
-            // IMPROVE find a list view method giving # of visible rows
-            int visible = 0;
-            int row = 0;
-            for(Thing* e:things) {
-                QString s = QString::fromStdString(e->getName());
-                if(s.startsWith(text,c)) {
-                    listView->setRowHidden(row, false);
-                    visible++;
-                } else {
-                    listView->setRowHidden(row, true);
-                }
-                row++;
-            }
-            findButton->setEnabled(visible);
-        }
+    // restart the debounce timer on every keystroke (typing and backspacing alike) so
+    // that the O(things) filterNow() pass below runs once after the user pauses, rather
+    // than once per keystroke/key-repeat event
+    filterDebounceTimer->start();
+}
+
+void FindOutlineByNameDialog::filterNow()
+{
+    // filtering happens in NameFilterProxyModel::filterAcceptsRow() below - a single
+    // invalidateFilter() call replaces what used to be up to things.size() individual
+    // QListView::setRowHidden() calls, which is what made showing/hiding thousands of
+    // rows at once (e.g. backspacing a long query back to a short one) slow
+    bool keywords = keywordsCheckBox->isEnabled() && keywordsCheckBox->isChecked();
+    proxyModel->setFilterState(lineEdit->text(), keywords, caseCheckBox->isChecked());
+    findButton->setEnabled(proxyModel->rowCount());
+}
+
+bool FindOutlineByNameDialog::NameFilterProxyModel::filterAcceptsRow(
+    int sourceRow, const QModelIndex& sourceParent) const
+{
+    Q_UNUSED(sourceParent);
+
+    if(filterText.isEmpty() || names==nullptr || sourceRow>=names->size()) {
+        return true;
+    }
+
+    const QString& s = names->at(sourceRow);
+    if(keywordsMode) {
+        return stringMatchByKeywords(filterText, s, caseSensitivity==Qt::CaseInsensitive);
     } else {
-        for(size_t row = 0; row<things.size(); row++) {
-            listView->setRowHidden(row, false);
-        }
-        findButton->setEnabled(things.size());
+        return s.startsWith(filterText, caseSensitivity);
     }
 }
 
 void FindOutlineByNameDialog::handleReturn()
 {
+    // flush a pending debounced filter so the proxy model below is up to date
+    if(filterDebounceTimer->isActive()) {
+        filterDebounceTimer->stop();
+        filterNow();
+    }
+
     if(findButton->isEnabled()) {
-        for(size_t row = 0; row<things.size(); row++) {
-            if(!listView->isRowHidden(row)) {
-                choice = things[row];
-                break;
-            }
+        if(proxyModel->rowCount()>0) {
+            QModelIndex sourceIndex = proxyModel->mapToSource(proxyModel->index(0,0));
+            choice = things[sourceIndex.row()];
         }
 
         QDialog::close();
@@ -202,8 +217,15 @@ void FindOutlineByNameDialog::handleReturn()
 
 void FindOutlineByNameDialog::handleChoice()
 {
+    // flush a pending debounced filter so the proxy model below is up to date
+    if(filterDebounceTimer->isActive()) {
+        filterDebounceTimer->stop();
+        filterNow();
+    }
+
     if(listView->currentIndex().isValid()) {
-        choice = things[listView->currentIndex().row()];
+        QModelIndex sourceIndex = proxyModel->mapToSource(listView->currentIndex());
+        choice = things[sourceIndex.row()];
 
         QDialog::close();
         emit searchFinished();

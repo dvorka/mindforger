@@ -3,6 +3,11 @@
     * Released v2.3.0 - Source code syntax highlighting.
     * Feature: Notebook/Export/Markdown - export a Notebook to a file in Markdown format.
     * Enhancement: changed in-app diagram support from dropdown to checkbox.
+    * Enhancement: improved performance of Find Note/Notebook by Name dialog on large
+      (e.g. 20k+ notes) repositories - filtering as you type is debounced and no longer
+      reallocates Qt strings per keystroke, and the list is filtered via a proxy model
+      instead of per-row widget calls, which fixed a serious lag when using backspace
+      to clear a long search query.
     * Fix: source code syntax highlighting no longer crashes MindForger thanks to
       the migration to Qt WebEngine + upgraded the offline highlight.js library
       to new version.

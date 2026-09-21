@@ -41,15 +41,13 @@ class FindOutlineByNameDialog : public QDialog
         {}
         void keyPressEvent(QKeyEvent* event) override {
             if(event->key() == Qt::Key_Down) {
-                // find 1st visible row and give it focus - consume the event so that it
-                // is NOT also handled by QLineEdit which would scroll the list view instead
-                for(int row = 0; row<target->model()->rowCount(); row++) {
-                    if(!target->isRowHidden(row)) {
-                        QModelIndex index = target->model()->index(row,0);
-                        target->setCurrentIndex(index);
-                        target->scrollTo(index, QAbstractItemView::PositionAtTop);
-                        break;
-                    }
+                // give focus to the 1st (only visible rows remain in the filtered proxy
+                // model) row - consume the event so that it is NOT also handled by
+                // QLineEdit which would scroll the list view instead
+                if(target->model()->rowCount()>0) {
+                    QModelIndex index = target->model()->index(0,0);
+                    target->setCurrentIndex(index);
+                    target->scrollTo(index, QAbstractItemView::PositionAtTop);
                 }
                 target->setFocus();
                 event->accept();
@@ -59,17 +57,53 @@ class FindOutlineByNameDialog : public QDialog
         }
     };
 
+    // filters listViewModel's rows against 'names' (things' names, kept in lockstep with
+    // listViewModel's rows by show()) instead of QListView::setRowHidden() being called
+    // once per row from C++ - hiding/showing thousands of rows via per-row widget calls
+    // is what made backspacing over a long query noticeably slower than typing it
+    class NameFilterProxyModel : public QSortFilterProxyModel
+    {
+    public:
+        explicit NameFilterProxyModel(QObject* parent) : QSortFilterProxyModel(parent) {}
+
+        void setNames(const QVector<QString>* n) { names = n; }
+
+        void setFilterState(const QString& text, bool keywords, bool ignoreCase) {
+            filterText = text;
+            keywordsMode = keywords;
+            caseSensitivity = ignoreCase ? Qt::CaseInsensitive : Qt::CaseSensitive;
+            invalidateFilter();
+        }
+
+    protected:
+        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
+
+    private:
+        const QVector<QString>* names{};
+        QString filterText{};
+        bool keywordsMode{true};
+        Qt::CaseSensitivity caseSensitivity{Qt::CaseInsensitive};
+    };
+
 private:
     MyLineEdit* lineEdit;
     QListView* listView;
     QStringList listViewStrings;
     QStringListModel listViewModel;
+    NameFilterProxyModel* proxyModel;
     QCheckBox* caseCheckBox;
     QCheckBox* keywordsCheckBox;
     QPushButton* closeButton;
 
     Thing* choice;
     std::vector<Thing*> things;
+    // things' names as QStrings, precomputed once in show() so that the filter pass in
+    // filterNow() doesn't reallocate a QString from std::string for every one of e.g.
+    // 21k notes on every keystroke; also what NameFilterProxyModel filters against
+    QVector<QString> cachedNames;
+    // debounces filterNow() so that rapid typing/backspacing (incl. key-repeat) triggers
+    // a single filter pass instead of one full O(things) pass per keystroke
+    QTimer* filterDebounceTimer;
 
 protected:
     QLabel* label;
@@ -103,6 +137,7 @@ signals:
 
 private slots:
     void enableFindButton(const QString &text);
+    void filterNow();
     void handleChoice();
     void handleReturn();
 };
