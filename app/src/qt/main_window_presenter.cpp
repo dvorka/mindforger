@@ -4206,7 +4206,7 @@ void MainWindowPresenter::doActionViewLimbo()
 
 void MainWindowPresenter::doActionHelpDocumentation()
 {
-    QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger/wiki"});
+    QDesktopServices::openUrl(QUrl{"https://www.mindforger.com/docs/index.html"});
 }
 
 void MainWindowPresenter::doActionHelpSponsor()
