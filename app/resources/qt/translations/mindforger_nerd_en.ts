@@ -450,7 +450,7 @@ Choose new library source:</source>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="474"/>
-        <source>Spell check dictionaries &lt;a href=&apos;https://github.com/dvorka/mindforger/wiki/Installation#spell-check&apos;&gt;configuration documentation&lt;/a&gt;</source>
+        <source>Spell check dictionaries &lt;a href=&apos;https://www.mindforger.com/docs/installation.html#spell-check&apos;&gt;configuration documentation&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

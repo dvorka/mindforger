@@ -18,6 +18,9 @@
     * Enhancement: improved Emoji insert dialog so that it can be used w/o mouse,
       emojis can be filtered by name, selected using arrows and inserted
       w/ Enter or Ctrl-[number] shortcuts.
+    * Enhancement: binary localization catalogs (.qm) are newly generated from their
+      .ts sources by the build (qmake/lrelease) and they are no longer stored in the
+      repository - this avoids unresolvable conflicts of generated binary files.
     * Enhancement: changed in-app diagram support configuration from dropdown to checkbox.
     * Enhancement: CSV export no longer freezes UI on big repo and/or slow(er) HW as
       export newly runs in the modal dialog w/ progress bar and it can be cancelled.
@@ -28,7 +31,7 @@
     * Fix: source code syntax highlighting no longer crashes MindForger thanks to
       the migration to Qt WebEngine + upgraded the offline highlight.js library
       to new version.
-    * <build: l10n of all languages can be updated, checked and compiled by a single
+    * Build: l10n of all languages can be updated, checked and compiled by a single
       non-interactive 'make l10n' build target.
     * Cleanup: hid not-yet-ready Workspace/Semantic Search menu item from production builds.
 

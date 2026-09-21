@@ -493,6 +493,12 @@ TRANSLATIONS = \
     ./resources/qt/translations/mindforger_nerd_zh_cn.ts \
     ./resources/qt/translations/mindforger_zh_cn.ts
 
+# compile .ts translation files to binary .qm catalogs on every build - .qm
+# files are generated (they are NOT stored in the repository), lrelease
+# rebuilds them whenever they are missing or older than their .ts source
+CONFIG += lrelease
+LRELEASE_DIR = ./resources/qt/translations
+
 RESOURCES += \
     ./mf-resources.qrc
 
