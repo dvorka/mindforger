@@ -857,49 +857,87 @@ Choose new library source:</source>
 <context>
     <name>m8r::EmojisDialog</name>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="26"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="29"/>
         <source>Emojis</source>
         <translation>表情符号</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="31"/>
         <source>Click a character to insert it to the currently edited name or description:</source>
-        <translation>单击字符，将其插入当前正在编辑的名称或描述中：</translation>
+        <translation type="vanished">单击字符，将其插入当前正在编辑的名称或描述中：</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="48"/>
+        <source>&lt;b&gt;Enter&lt;/b&gt; inserts the first character, &lt;b&gt;Ctrl+1&lt;/b&gt; to &lt;b&gt;Ctrl+9&lt;/b&gt; the numbered ones, &lt;b&gt;arrows&lt;/b&gt; move the choice and &lt;b&gt;Esc&lt;/b&gt; closes the dialog.</source>
+        <translation type="vanished">&lt;b&gt;Enter&lt;/b&gt; 插入第一个字符，&lt;b&gt;Ctrl+1&lt;/b&gt; 至 &lt;b&gt;Ctrl+9&lt;/b&gt; 插入带编号的字符，&lt;b&gt;方向键&lt;/b&gt; 移动选择，&lt;b&gt;Esc&lt;/b&gt; 关闭对话框。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="34"/>
+        <source>Type to filter, insert with Enter or Ctrl+[number]:</source>
+        <translation>输入以筛选，用 Enter 或 Ctrl+[数字] 插入：</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="104"/>
         <source>Emoji</source>
         <translation>表情符号</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="62"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="105"/>
         <source>Greek alphabet</source>
         <translation>希腊字母</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="71"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="106"/>
         <source>Math and statistics</source>
         <translation>数学与统计</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="72"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="107"/>
         <source>Physics</source>
         <translation>物理</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="77"/>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="159"/>
+        <source>Insert &apos;%1&apos; - Ctrl+%2</source>
+        <translation>插入 &apos;%1&apos; - Ctrl+%2</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="59"/>
         <source>More special unicode characters: &lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;Unicode Table&lt;/a&gt;, &lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</source>
         <translation>更多特殊 Unicode 字符：&lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;Unicode 表&lt;/a&gt;，&lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="86"/>
+        <source>Type to filter the characters and then insert the one you pick to the name or description which was edited last:</source>
+        <translation type="vanished">输入以筛选字符，然后将选中的字符插入到最后编辑的名称或描述中：</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="41"/>
+        <source>Emoji name or keyword like &apos;rocket&apos;</source>
+        <translation>表情符号名称或关键字，例如 &apos;rocket&apos;</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Enter&lt;/b&gt; inserts the first character, &lt;b&gt;Alt+1&lt;/b&gt; to &lt;b&gt;Alt+9&lt;/b&gt; the numbered ones, &lt;b&gt;arrows&lt;/b&gt; move the choice and &lt;b&gt;Esc&lt;/b&gt; closes the dialog.</source>
+        <translation type="vanished">&lt;b&gt;Enter&lt;/b&gt; 插入第一个字符，&lt;b&gt;Alt+1&lt;/b&gt; 至 &lt;b&gt;Alt+9&lt;/b&gt; 插入带编号的字符，&lt;b&gt;方向键&lt;/b&gt; 移动选择，&lt;b&gt;Esc&lt;/b&gt; 关闭对话框。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="68"/>
         <source>&amp;Close</source>
         <translation>关闭(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="118"/>
+        <source>Insert &apos;%1&apos; - Alt+%2</source>
+        <translation type="vanished">插入 &apos;%1&apos; - Alt+%2</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="162"/>
+        <source>Insert &apos;%1&apos;</source>
+        <translation>插入 &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Characters: %1</source>
+        <translation type="vanished">字符：%1</translation>
+    </message>
+    <message>
         <source>Click to insert &apos;%1&apos;</source>
-        <translation>单击插入 &apos;%1&apos;</translation>
+        <translation type="vanished">单击插入 &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -4086,7 +4124,7 @@ Choose new library source:</source>
         <translation>包含已删除笔记本的 Limbo 目录仅在 MindForger 工作区中可用，编辑 Markdown 文件或打开 Markdown 目录时不可用。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4316"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4320"/>
         <source>About MindForger</source>
         <translation>关于 MindForger</translation>
     </message>

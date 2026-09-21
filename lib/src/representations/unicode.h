@@ -41,6 +41,9 @@ constexpr const auto U_CODE_IMPORTANCE_OFF = 0x2606;
     // 0x2606 ... star (empty)
     // 0x00B7 ... middle dot
 
+constexpr const auto U_CODE_SUBSCRIPT_ONE = 0x2081;
+    // 0x2081 ... subscript one - 0x2081 to 0x2089 are subscript 1 to 9
+
 constexpr const auto U_CODE_PARAGRAPH_NL = 0x2029;
     // 0x2029 ... used by Qt as paragraph delimiter
     //   From Qt selectedText() documentation: If the selection obtained from
