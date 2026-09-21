@@ -1065,37 +1065,37 @@ Choose new library source:</source>
 <context>
     <name>m8r::FindOutlineByNameDialog</name>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="38"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="72"/>
         <source>&amp;Notebook name:</source>
         <translation>笔记本名称(&amp;N)：</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="42"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="76"/>
         <source>&amp;ignore case</source>
         <translation>忽略大小写(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="44"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="78"/>
         <source>&amp;keywords match</source>
         <translation>关键词匹配(&amp;K)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="46"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="80"/>
         <source>&amp;current Notebook&apos;s Notes only</source>
         <translation>仅当前笔记本的笔记(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="51"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="85"/>
         <source>&amp;Open Notebook</source>
         <translation>打开笔记本(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="55"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="89"/>
         <source>&amp;Cancel</source>
         <translation>取消(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="82"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="123"/>
         <source>Find Notebook by Name</source>
         <translation>按名称查找笔记本</translation>
     </message>

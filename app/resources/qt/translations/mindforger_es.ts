@@ -1065,37 +1065,37 @@ Elija la nueva fuente de la biblioteca:</translation>
 <context>
     <name>m8r::FindOutlineByNameDialog</name>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="38"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="72"/>
         <source>&amp;Notebook name:</source>
         <translation>&amp;Nombre del cuaderno:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="42"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="76"/>
         <source>&amp;ignore case</source>
         <translation>&amp;ignorar mayúsculas</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="44"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="78"/>
         <source>&amp;keywords match</source>
         <translation>&amp;coincidencia de palabras clave</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="46"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="80"/>
         <source>&amp;current Notebook&apos;s Notes only</source>
         <translation>solo notas del &amp;cuaderno actual</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="51"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="85"/>
         <source>&amp;Open Notebook</source>
         <translation>Abrir cuadern&amp;o</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="55"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="89"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Cancelar</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="82"/>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="123"/>
         <source>Find Notebook by Name</source>
         <translation>Buscar cuaderno por nombre</translation>
     </message>
