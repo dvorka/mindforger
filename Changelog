@@ -1,7 +1,7 @@
 2026-09-21  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.3.0 - Notebook shelves, localization to 4 languates, lines sorting,
-      Markdown export, non-ASCII links navigation, source code syntax highlighting.
+      winget packaging, Markdown export, non-ASCII links navigation.
     * Feature: Notebook shelves - single notebook tree was rewritten to custom notebook
       shelves - create as many named notebook shelves for notebooks you want to group
       as needed and add Notebooks to them explicitly.
@@ -33,6 +33,8 @@
     * Fix: source code syntax highlighting no longer crashes MindForger thanks to
       the migration to Qt WebEngine + upgraded the offline highlight.js library
       to new version.
+    * Distribution: added winget distribution tooling to generate and submit
+      MindForger.MindForger manifests to microsoft/winget-pkgs.
     * Build: l10n of all languages can be updated, checked and compiled by a single
       non-interactive 'make l10n' build target.
     * Build: .qm - binary localization catalogs are newly generated from their .ts

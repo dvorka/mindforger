@@ -205,7 +205,7 @@ Emojis::Emojis()
     // share the name, so that typing e.g. "alpha" offers both of them
     struct GreekLetter {
         const char* capital;
-        const char* small;
+        const char* lower;
         const char* name;
     };
     static const GreekLetter GREEK_ALPHABET[] = {
@@ -226,7 +226,7 @@ Emojis::Emojis()
             string{"capital "}.append(letter.name),
             "greek letter uppercase");
         greek.addEmoji(
-            letter.small,
+            letter.lower,
             letter.name,
             "greek letter lowercase small");
         // sigma has an extra glyph which is used at the end of a word

@@ -62,6 +62,7 @@ Install:
 
 * [macOS](https://www.mindforger.com/docs/installation.html#macos)
 * [Windows](https://www.mindforger.com/docs/installation.html#windows)
+* [Winget](https://github.com/microsoft/winget-pkgs/tree/master/manifests/m/MindForger/MindForger)
 * [Ubuntu](https://www.mindforger.com/docs/installation.html#ubuntu)
 * [Snap](https://snapcraft.io/mindforger)
 * [Debian](https://www.mindforger.com/docs/installation.html#debian)
