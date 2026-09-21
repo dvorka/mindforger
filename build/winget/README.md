@@ -7,23 +7,11 @@ winget install MindForger.MindForger
 ```
 
 Packages are distributed through the community repository
-[microsoft/winget-pkgs](https://github.com/microsoft/winget-pkgs) - there is no
-"upload" step like the Snap Store; instead a pull request with YAML manifests is
-opened against that repository, and a bot (`wingetbot`) validates the installer
-before a Microsoft/community moderator merges it.
+[microsoft/winget-pkgs](https://github.com/microsoft/winget-pkgs) - a pull
+request with YAML manifests is opened against that repository, and a bot
+(`wingetbot`) validates the installer before a Microsoft/community moderator
+merges it.
 
-This directory contains the tooling used to generate and submit those manifests:
-
-| File | Purpose |
-|---|---|
-| `generate-from-release.ps1` | Looks up the Windows installer on a GitHub release, downloads it, hashes it, and writes the three manifest YAML files |
-| `sha256-from-url.ps1` | Prints just the SHA256 of a published installer (no manifest generation) |
-| `submit-pr.ps1` | Copies generated manifests into a local `winget-pkgs` fork, commits, pushes, and opens the PR |
-| `resolve-release-asset.ps1` | Shared helper that resolves the installer asset of a release - dot-sourced by the two scripts above so both always pick the same binary |
-
-The scripts are driven through `make` targets defined in `build/Makefile`
-(see the `winget` section there) and **must run on Windows** - `winget validate`
-and `winget install` are Windows-only, and the scripts are PowerShell.
 
 ## Package identity
 
@@ -36,9 +24,8 @@ and `winget install` are Windows-only, and the scripts are PowerShell.
 | **AppId (Inno Setup)** | `{A1A3DAE4-FD5C-4600-B75D-D8895AA99693}` - from `build/windows/installer/mindforger-setup.iss`; must stay unchanged across releases |
 
 Generated manifests are written to
-`distro/winget/manifests/m/MindForger/MindForger/<version>/` (gitignored - this is
-scratch output, not something this repository tracks; the real target of a
-release is the PR opened against `winget-pkgs`).
+`distro/winget/manifests/m/MindForger/MindForger/<version>/` - the real target of a release is the PR opened against `winget-pkgs`.
+
 
 ## One-time setup
 
