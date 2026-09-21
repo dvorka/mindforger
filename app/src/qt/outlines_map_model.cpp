@@ -39,7 +39,7 @@ void OutlinesMapModel::removeAllRows()
 
     QStringList tableHeader;
     tableHeader
-            << tr("Notebooks Tree") // tree of Notebooks ~ mind map of Notebooks
+            << tr("Notebooks Shelf") // tree of Notebooks ~ mind map of Notebooks
             << tr("Done")
             << tr("Rs")
             << tr("Ws")

@@ -45,7 +45,7 @@ Mind::Mind(Configuration &configuration)
 #else
       autolinking{nullptr},
 #endif
-      outlinesMap{},
+      notebookTreeCache{},
       exclusiveMind{},
       wingman{nullptr},
       timeScopeAspect{},
@@ -84,8 +84,8 @@ Mind::~Mind()
     delete autolinking;
     delete stats;
 
-    if(this->outlinesMap) {
-        delete this->outlinesMap;
+    for(auto& entry:notebookTreeCache) {
+        delete entry.second;
     }
 
     // - Memory destruct outlines
@@ -965,6 +965,10 @@ bool Mind::outlineForget(string outlineKey)
     if(o) {
         deleteWatermark++;
 
+        // remove the Outline from every Notebook tree BEFORE it's forgotten
+        // so that no tree keeps a dangling reference to a deleted Notebook
+        notebookTreeRemoveOutlineFromAll(outlineKey);
+
         forget(o);
         auto k = memory.createLimboKey(&o->getName());
         o->setKey(k);
@@ -996,55 +1000,41 @@ string Mind::outlineMapKey2Absolute(const string& outlineKey) const
     return resolvedKey;
 }
 
-Outline* Mind::outlinesMapNew(string outlineKey)
+Outline* Mind::notebookTreeNew(const string& treeKey, const string& name)
 {
-    MF_DEBUG("Creating Os map:" << endl);
-    Outline* newOutlinesMap = new Outline{
+    MF_DEBUG("Creating new Notebook tree: " << name << endl);
+
+    // NOTE: unlike the legacy, singleton Outlines map, a new Notebook
+    // tree starts EMPTY - Notebooks are added to it by explicit user
+    // action only (Mind::notebookTreeAddOutline)
+    Outline* notebookTree = new Outline{
         memory.getOntology().getDefaultOutlineType()};
 
-    for(Outline* o:getOutlines()) {
-        Note* n = o->getOutlineDescriptorAsNote();
-        newOutlinesMap->addNote(n);
+    notebookTree->setName(name);
+    notebookTree->setKey(treeKey);
+    notebookTree->completeProperties(datetimeNow());
 
-        n->addLink(
-            new Link{
-                LINK_NAME_OUTLINE_KEY,
-                o->getKey()
-            }
-        );
-        n->addLink(
-            new Link{
-                LINK_NAME_OUTLINE_PATH,
-                Mind::outlineMapKey2Relative(o->getKey())
-            }
-        );
-    }
+    // cache it immediately so that a subsequent notebookTreeGet(treeKey)
+    // returns this SAME instance rather than re-parsing it from disk
+    notebookTreeCache[treeKey] = notebookTree;
 
-    newOutlinesMap->setName("Notebooks Map");
-    newOutlinesMap->setKey(outlineKey);
-    newOutlinesMap->sortNotesByRead();
-
-    newOutlinesMap->completeProperties(datetimeNow());
-
-    return newOutlinesMap;
+    return notebookTree;
 }
 
-void Mind::outlinesMapSynchronize(Outline* outlinesMap)
+void Mind::notebookTreeRemoveStaleEntries(Outline* notebookTree)
 {
+    // ensure that the tree contains only Notes which still link to
+    // an existing Outline - drop the rest (Outline was deleted/renamed)
     vector<Note*> osToRemove{};
 
-    // ensure that map contains only valid Os
-    //   - remove from map: map O NOT in runtime O
-    //   - add at the top of map: runtime Os NOT in mapOs
-    MF_DEBUG("Map O links validity check:");
-    vector<string> mapOsKeys{};
-    for(Note* n:outlinesMap->getNotes()) {
+    MF_DEBUG("Notebook tree links validity check:");
+    for(Note* n:notebookTree->getNotes()) {
         Link* oLink = n->getLinkByName(LINK_NAME_OUTLINE_KEY);
         if(oLink) {
             string oKey{oLink->getUrl()};
             Outline* o = findOutlineByKey(oKey);
             if(o) {
-                // valid O in MF & map
+                // valid O in MF & tree
                 #ifdef MF_DEBUG_LIBRARY
                 MF_DEBUG(
                     "  VALID  : " << n->getName() << endl <<
@@ -1057,7 +1047,6 @@ void Mind::outlinesMapSynchronize(Outline* outlinesMap)
                 n->setModifiedPretty();
                 n->setRead(o->getRead());
                 n->setReadPretty();
-                mapOsKeys.push_back(oKey);
             } else {
                 MF_DEBUG("  INVALID (no O for link): " << n->getName() << endl);
                 osToRemove.push_back(n);
@@ -1067,74 +1056,44 @@ void Mind::outlinesMapSynchronize(Outline* outlinesMap)
             osToRemove.push_back(n);
         }
     }
-    MF_DEBUG("DONE O links validity check" << endl);
+    MF_DEBUG("DONE Notebook tree links validity check" << endl);
 
     if(osToRemove.size()) {
         MF_DEBUG("Removing Ns with INVALID O key:" << endl);
         for(auto oToRemove:osToRemove) {
-            MF_DEBUG("  " << oToRemove->getName() << endl);
-            delete oToRemove;
-            outlinesMap->removeNote(oToRemove);
-        }
-        osToRemove.clear();
-    }
-
-    // find mind keys which are NOT in map > prepend them to map
-    vector<Outline*> osToAdd{};
-    MF_DEBUG("Finding mind keys to be ADDED to map:" << endl);
-    for(auto mindO: getOutlines()) {
-        if(find(mapOsKeys.begin(), mapOsKeys.end(), mindO->getKey()) == mapOsKeys.end()) {
-            MF_DEBUG("  " << mindO->getKey() << endl);
-
-            // TODO skip keys w/ "," ~ https://github.com/dvorka/mindforger/issues/1518 workaround
-            // TODO remove this code once #1518 is fixed
-            if(find(mindO->getKey().begin(), mindO->getKey().end(), ',') == mindO->getKey().end()) {
-                osToAdd.push_back(mindO);
-            } else {
-                MF_DEBUG("    SKIPPING key w/ ','" << endl);
+            // forgetNote() removes AND deallocates a Note's WHOLE
+            // subtree (every descendant of greater depth) - if
+            // oToRemove was itself a descendant of an earlier,
+            // also-stale entry in this list, it was already freed as
+            // a side effect of that removal, so skip it here, else
+            // this dereferences/double-frees already-freed memory
+            const auto& currentNotes = notebookTree->getNotes();
+            if(std::find(currentNotes.begin(), currentNotes.end(), oToRemove)
+                == currentNotes.end()
+            ) {
                 continue;
             }
 
+            MF_DEBUG("  " << oToRemove->getName() << endl);
+            notebookTree->forgetNote(oToRemove);
         }
-    }
-    MF_DEBUG("ADDING mind keys to map:" << endl);
-    for(auto o:osToAdd) {
-        MF_DEBUG("  " << o->getKey() << endl);
-        // clone O's descriptor to get N which might be deleted later
-        Note* n = new Note(*o->getOutlineDescriptorAsNote());
-
-        n->clearLinks();
-        n->addLink(
-            new Link{
-                LINK_NAME_OUTLINE_KEY,
-                o->getKey()
-            }
-        );
-        n->addLink(
-            new Link{
-                LINK_NAME_OUTLINE_PATH,
-                Mind::outlineMapKey2Relative(o->getKey())
-            }
-        );
-
-        outlinesMap->addNote(n , 0);
     }
 }
 
-Outline* Mind::outlinesMapLearn(string outlineKey)
+Outline* Mind::notebookTreeLearn(const string& treeKey)
 {
     #ifdef MF_DEBUG_LIBRARY
-    MF_DEBUG("Learning Os map from " << outlineKey << endl);
+    MF_DEBUG("Learning Notebook tree from " << treeKey << endl);
     #endif
-    Outline* outlinesMap = memory.learnOutlinesMap(outlineKey);
+    Outline* notebookTree = memory.learnNotebookTree(treeKey);
 
     vector<Note*> osToRemove{};
 
     // normalization: set Ns types to O + resolve O links to absolute
     #ifdef MF_DEBUG_LIBRARY
-    MF_DEBUG("Setting map's Ns type O" << endl);
+    MF_DEBUG("Setting tree's Ns type O" << endl);
     #endif
-    for(auto n:outlinesMap->getNotes()) {
+    for(auto n:notebookTree->getNotes()) {
         #ifdef MF_DEBUG_LIBRARY
         MF_DEBUG(
             "  Setting '" << n->getName()
@@ -1170,50 +1129,140 @@ Outline* Mind::outlinesMapLearn(string outlineKey)
     if(osToRemove.size()) {
         MF_DEBUG("Removing Ns with MISSING relative O key:" << endl);
         for(auto oToRemove:osToRemove) {
+            // see the matching guard in notebookTreeRemoveStaleEntries()
+            // for why this membership check is needed
+            const auto& currentNotes = notebookTree->getNotes();
+            if(std::find(currentNotes.begin(), currentNotes.end(), oToRemove)
+                == currentNotes.end()
+            ) {
+                continue;
+            }
+
             MF_DEBUG("  " << oToRemove->getName() << endl);
-            delete oToRemove;
-            outlinesMap->removeNote(oToRemove);
+            notebookTree->forgetNote(oToRemove);
         }
         osToRemove.clear();
     }
 
-    // synchronize map's Os with mind's Os
-    outlinesMapSynchronize(outlinesMap);
+    // drop entries whose Outline no longer exists in the Mind
+    notebookTreeRemoveStaleEntries(notebookTree);
 
-    return outlinesMap;
+    return notebookTree;
 }
 
-Outline* Mind::outlinesMapGet()
+Outline* Mind::notebookTreeGet(const string& treeKey)
 {
-    if(this->outlinesMap) {
-        // ensure consistency between mind's and map's Os
-        outlinesMapSynchronize(this->outlinesMap);
+    auto cached = notebookTreeCache.find(treeKey);
+    if(cached != notebookTreeCache.end()) {
+        // ensure consistency between mind's Os and tree's Os
+        notebookTreeRemoveStaleEntries(cached->second);
 
-        return this->outlinesMap;
+        return cached->second;
     }
 
-    string outlinesMapPath{config.getOutlinesMapPath()};
-
-    if(isFile(outlinesMapPath.c_str())) {
-        // load existing Os map
-        this->outlinesMap = outlinesMapLearn(outlinesMapPath);
+    Outline* notebookTree;
+    if(isFile(treeKey.c_str())) {
+        // load existing tree
+        notebookTree = notebookTreeLearn(treeKey);
     } else {
-        // create new Os map
-        this->outlinesMap = outlinesMapNew(outlinesMapPath);
-
-        outlinesMapRemember();
+        // tree registered, but its file is missing (e.g. deleted
+        // externally) - self-heal by (re)creating an empty tree
+        notebookTree = notebookTreeNew(treeKey, "Notebook Tree");
+        notebookTreeRemember(notebookTree);
     }
 
-    return this->outlinesMap;
+    notebookTreeCache[treeKey] = notebookTree;
+
+    return notebookTree;
 }
 
-Outline* Mind::outlinesMapRemember()
+Outline* Mind::notebookTreeRemember(Outline* notebookTree)
 {
-    if(this->outlinesMap) {
-        remind().getPersistence().save(this->outlinesMap);
+    if(notebookTree) {
+        remind().getPersistence().save(notebookTree);
     }
 
-    return this->outlinesMap;
+    return notebookTree;
+}
+
+void Mind::notebookTreeAddOutline(Outline* notebookTree, Outline* outlineToAdd)
+{
+    if(!notebookTree || !outlineToAdd) {
+        return;
+    }
+
+    // a Notebook may be organized to multiple trees, but not added
+    // to the SAME tree twice
+    for(Note* n:notebookTree->getNotes()) {
+        Link* oLink = n->getLinkByName(LINK_NAME_OUTLINE_KEY);
+        if(oLink && oLink->getUrl() == outlineToAdd->getKey()) {
+            return;
+        }
+    }
+
+    // clone O's descriptor to get N which might be deleted later
+    Note* n = new Note(*outlineToAdd->getOutlineDescriptorAsNote());
+
+    n->clearLinks();
+    n->addLink(
+        new Link{
+            LINK_NAME_OUTLINE_KEY,
+            outlineToAdd->getKey()
+        }
+    );
+    n->addLink(
+        new Link{
+            LINK_NAME_OUTLINE_PATH,
+            Mind::outlineMapKey2Relative(outlineToAdd->getKey())
+        }
+    );
+
+    notebookTree->addNote(n, 0);
+}
+
+void Mind::notebookTreeRemoveOutlineFromAll(const string& outlineKey)
+{
+    for(NotebookTree* t:config.getRepositoryConfiguration().getNotebookTrees()) {
+        Outline* notebookTree = notebookTreeGet(t->getKey());
+        if(!notebookTree) {
+            continue;
+        }
+
+        Note* toRemove = nullptr;
+        for(Note* n:notebookTree->getNotes()) {
+            Link* oLink = n->getLinkByName(LINK_NAME_OUTLINE_KEY);
+            if(oLink && oLink->getUrl() == outlineKey) {
+                toRemove = n;
+                break;
+            }
+        }
+
+        if(toRemove) {
+            MF_DEBUG(
+                "Removing forgotten Outline '" << outlineKey
+                << "' from Notebook tree '" << t->getName() << "'" << endl);
+            notebookTree->forgetNote(toRemove);
+            notebookTreeRemember(notebookTree);
+        }
+    }
+}
+
+bool Mind::notebookTreeForget(const string& treeKey)
+{
+    // ensure it's loaded (self-heals if its file is already missing) so
+    // its name is available to derive the Limbo file name from
+    Outline* notebookTree = notebookTreeGet(treeKey);
+    if(!notebookTree) {
+        return false;
+    }
+
+    auto k = memory.createLimboKey(&notebookTree->getName());
+    moveFile(treeKey, k);
+
+    notebookTreeCache.erase(treeKey);
+    delete notebookTree;
+
+    return true;
 }
 
 Note* Mind::noteNew(

@@ -163,11 +163,16 @@ vector<string> stringSplit(const string s, const string regexDelimiter)
 string normalizeToNcName(string name, char quoteChar) {
     string result = name;
     if(!result.empty()) {
-        if(!isalnum(result[0], locale())) {
+        // a non-ASCII (UTF-8, >=0x80) leading byte is part of a Unicode letter/digit,
+        // which the XML NCName spec permits as NameStartChar - only an ASCII char
+        // that is not alpha numerical needs the safe '_' prefix
+        unsigned char first = static_cast<unsigned char>(result[0]);
+        if(first < 0x80 && !isalnum(result[0], locale())) {
             result.insert(0, 1, '_');
         }
         for(size_t i=0; i<result.size(); i++) {
-            if(!isalnum(result[i],locale())) {
+            unsigned char c = static_cast<unsigned char>(result[i]);
+            if(c < 0x80 && !isalnum(result[i],locale())) {
                 result[i] = quoteChar;
             }
         }
@@ -255,6 +260,20 @@ static size_t utf8Length(const string& s)
     return length;
 }
 
+static string asciiToLower(const string& s)
+{
+    // fold A-Z only - unlike std::tolower() this neither depends on the global
+    // locale, nor it touches the bytes of non-ASCII UTF-8 characters
+
+    string lower{s};
+    for(char& c: lower) {
+        if(c>='A' && c<='Z') {
+            c += 'a'-'A';
+        }
+    }
+    return lower;
+}
+
 vector<string> rewrapParagraphLines(const vector<string>& lines, unsigned width)
 {
     // hard break (two trailing spaces or backslash) aware word ensuring
@@ -319,6 +338,27 @@ vector<string> rewrapParagraphLines(const vector<string>& lines, unsigned width)
     if(!currentLine.empty()) {
         result.push_back(currentLine);
     }
+
+    return result;
+}
+
+vector<string> sortLinesAlphabetically(const vector<string>& lines)
+{
+    vector<string> result{lines};
+
+    sort(
+        result.begin(),
+        result.end(),
+        [](const string& l, const string& r) {
+            const string lowerL{asciiToLower(l)}, lowerR{asciiToLower(r)};
+            // case sensitive tie break makes the ordering of the lines which
+            // differ in the case only deterministic
+            if(lowerL == lowerR) {
+                return l < r;
+            }
+            return lowerL < lowerR;
+        }
+    );
 
     return result;
 }

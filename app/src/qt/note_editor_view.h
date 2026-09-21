@@ -108,6 +108,7 @@ public:
     void removeSelectedText() { textCursor().removeSelectedText(); }
     void insertMarkdownText(const QString &text, bool newLine=true, int offset=0);
     void rewrapParagraph();
+    void sortLines();
 
     // drag & drop
     void dropEvent(QDropEvent* event) override;

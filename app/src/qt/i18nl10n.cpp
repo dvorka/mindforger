@@ -30,8 +30,12 @@ void l10n(QApplication& mindforgerApplication)
     if(Configuration::getInstance().isUiNerdTargetAudience()) {
         translatorTargetAudience.append("nerd_");
     }
+    QString configuredLocale = QString::fromStdString(Configuration::getInstance().getUiLocale());
+    QString localeName = (configuredLocale.isEmpty() || configuredLocale == QString{UI_LOCALE_SYSTEM})
+        ? QLocale::system().name()
+        : configuredLocale;
     // loader does fallback: :/translations/mindforger_us_EN.qm > :/translations/mindforger_us.qm
-    QString translationPath{":/translations/mindforger_"+translatorTargetAudience+QLocale::system().name()+".qm"};
+    QString translationPath{":/translations/mindforger_"+translatorTargetAudience+localeName+".qm"};
     MF_DEBUG("Loading locale " << translationPath.toStdString() << endl);
     if(mfTranslator->load(translationPath)) {
         if(!mindforgerApplication.installTranslator(mfTranslator)) {
