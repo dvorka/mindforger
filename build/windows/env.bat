@@ -20,11 +20,10 @@ rem This script copies nice and safe Outlines from personal repository
 rem to demo repository used for creation of screenshots and videos.
 @echo on
 
-:: auxiliary var
-set "MF_BASE=%~dp0%.."
-:: call MSVC 2017 Development Environment Setup
-:: call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
-call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.29.30133\vcredist_x64.exe"
+:: auxiliary var (build/windows/ -> repo root is two levels up)
+set "MF_BASE=%~dp0%..\.."
+:: call MSVC 2017 Development Environment Setup (cl.exe/nmake on PATH)
+call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
 :: call Qt Development Environment Setup
 :: call "C:\software\Qt\5.12.0\msvc2017_64\bin\qtenv2.bat"
 :: call "C:\Qt\5.12.1\msvc2017_64\bin\qtenv2.bat"

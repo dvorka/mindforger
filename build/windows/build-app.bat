@@ -25,31 +25,47 @@ call "%~dp0%\env.bat"
 
 
 cd "%MF_BASE%"
-if exist "lib\test\src\debug" rmdir /q/s "lib\test\src\debug"
-if exist "lib\debug" rmdir /q/s "lib\debug"
+if exist "app\release" rmdir /q/s "app\release"
+if exist "lib\release" rmdir /q/s "lib\release"
 
 echo ====================================
-echo Generating MindForger unit test build files
+echo Generating MindForger build files
 echo ====================================
-cd "%MF_BASE%\lib\test"
-qmake -r mindforger-lib-unit-tests.pro "CONFIG+=debug" "CONFIG+=mfdebug"
+qmake -r mindforger.pro
 if "%ERRORLEVEL%" neq "0" goto :err
 
 echo ====================================
-echo Building MindForger unit tests
+echo Building MindForger application
 echo ====================================
 nmake
 if "%ERRORLEVEL%" neq "0" goto :err
 
 echo ====================================
-echo MindForger unit tests has been built successfully
+echo Deploying Qt DLLs next to mindforger.exe (so it can be run in place)
 echo ====================================
+windeployqt app\release\mindforger.exe --no-compiler-runtime
+if "%ERRORLEVEL%" neq "0" goto :err
+
+echo ====================================
+echo Copying additional runtime DLLs (zlib, OpenSSL) next to mindforger.exe
+echo ====================================
+copy /y "deps\zlib-win\lib\zlibwapi.dll" "app\release\"
+copy /y "deps\openssl-win\ms-vs-2017\libeay32.dll" "app\release\"
+copy /y "deps\openssl-win\ms-vs-2017\ssleay32.dll" "app\release\"
+copy /y "deps\openssl-win\openssl-1.1.1\capi.dll" "app\release\"
+copy /y "deps\openssl-win\openssl-1.1.1\dasync.dll" "app\release\"
+copy /y "deps\openssl-win\openssl-1.1.1\libcrypto-1_1-x64.dll" "app\release\"
+copy /y "deps\openssl-win\openssl-1.1.1\libssl-1_1-x64.dll" "app\release\"
+if "%ERRORLEVEL%" neq "0" goto :err
+
+echo ===================================================
+echo MindForger application has been built successfully
+echo ==================================================
 goto :end
 :err
 echo ====================================
-echo MindForger unit tests build error! Check log above
+echo MindForger application build error! Check log above
 echo ====================================
 :end
 endlocal
-pause
 
