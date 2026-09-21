@@ -15,9 +15,17 @@
     * Feature: Spanish (es_ES) localization (LLM - not reviewed by native speaker)..
     * Feature: Edit/Sort Lines - sorts the selected lines - or the lines of the block
       under the cursor - alphabetically.
+    * Enhancement: improved Emoji insert dialog so that it can be used w/o mouse,
+      emojis can be filtered by name, selected using arrows - which move by the
+      visual rows across the dialog sections - and inserted w/ Enter
+      or Ctrl-[number] shortcuts.
     * Enhancement: changed in-app diagram support configuration from dropdown to checkbox.
     * Enhancement: CSV export no longer freezes UI on big repo and/or slow(er) HW as
       export newly runs in the modal dialog w/ progress bar and it can be cancelled.
+    * Enhancement: improved performance of the find Note/Notebook by Name dialog on large
+      repositories - filtering as you type is debounced and no longer reallocates
+	    Qt strings per keystroke. The list is newly filtered via a proxy/cache model
+	    which fixed a serious lag when using backspace.
     * Fix:CSV export reported success even when the CSV file could not be written
       and it did not check whether the target CSV file already exists.
     * Fix: navigation of links to Notebooks/Notes whose names contain non-ASCII
@@ -29,6 +37,8 @@
       MindForger.MindForger manifests to microsoft/winget-pkgs.
     * Build: l10n of all languages can be updated, checked and compiled by a single
       non-interactive 'make l10n' build target.
+    * Build: .qm - binary localization catalogs are newly generated from their .ts
+      sources and no longer stored in the Git repo to avoid unresolvable conflicts.
     * Cleanup: hid not-yet-ready Workspace/Semantic Search menu item from production builds.
 
 2026-09-13  Martin Dvorak  <martin.dvorak@mindforger.com>

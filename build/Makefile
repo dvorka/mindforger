@@ -236,6 +236,50 @@ run-production: build-rc ## run MindForger on the production knowledge base
 
 
 #
+# Windows
+#
+# Targets below wrap the .bat scripts in build/windows/ (env.bat, build-*.bat,
+# run-*.bat). They only work when run on Windows (e.g. from Git Bash with GNU
+# Make installed via Chocolatey/winget) since they invoke MSVC/qmake/nmake.
+#
+
+.PHONY: win-build-cmake
+win-build-cmake: ## Windows: build the cmark-gfm dependency (Release+Debug)
+	cd windows && ./build-cmake.bat
+	@echo "If build succeeded, then cmark-gfm libs can be found in:\n  ../deps/cmark-gfm/build/src/{Release,Debug}\n  ../deps/cmark-gfm/build/extensions/{Release,Debug}"
+
+.PHONY: win-build-app
+win-build-app: ## Windows: build MindForger release application (qmake + nmake)
+	cd windows && ./build-app.bat
+	@echo "If build succeeded, then MindForger executable can be found in:\n  ../app/release/mindforger.exe"
+	@echo ""
+	ls -al ../app/release/mindforger.exe
+
+.PHONY: win-build-installer
+win-build-installer: win-build-app ## Windows: build MindForger installer (windeployqt + Inno Setup)
+	cd windows && ./build-installer.bat
+	@echo "If build succeeded, then MindForger installer can be found in:\n  ../app/release/installer/mindforger-setup.exe"
+	@echo ""
+	ls -al ../app/release/installer/mindforger-setup.exe
+
+.PHONY: win-build-unit-tests
+win-build-unit-tests: ## Windows: build MindForger lib unit tests
+	cd windows && ./build-unit-tests.bat
+	@echo "If build succeeded, then unit tests executable can be found in:\n  ../lib/test/src/debug/mindforger-lib-unit-tests.exe"
+	@echo ""
+	ls -al ../lib/test/src/debug/mindforger-lib-unit-tests.exe
+
+.PHONY: win-run-app
+win-run-app: ## Windows: run the already-built MindForger release application
+	@echo "Running:\n  ../app/release/mindforger.exe"
+	cd windows && ./run-app.bat
+
+.PHONY: win-run-unit-tests
+win-run-unit-tests: win-build-unit-tests ## Windows: build and run MindForger lib unit tests
+	cd windows && ./run-unit-tests.bat
+
+
+#
 # install
 #
 

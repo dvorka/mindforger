@@ -6,6 +6,7 @@
 *.o
 *.pro.user
 *.pro.user.*
+*.qm
 *.sln
 *.snap
 *.stash

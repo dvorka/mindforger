@@ -4206,7 +4206,7 @@ void MainWindowPresenter::doActionViewLimbo()
 
 void MainWindowPresenter::doActionHelpDocumentation()
 {
-    QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger/wiki"});
+    QDesktopServices::openUrl(QUrl{"https://www.mindforger.com/docs/index.html"});
 }
 
 void MainWindowPresenter::doActionHelpSponsor()
@@ -4280,10 +4280,14 @@ void MainWindowPresenter::slotApplicationFocusChanged(QWidget* old, QWidget* now
 {
     Q_UNUSED(old);
 
+    // emojisDialog has an input of its own (the emojis filter) which must
+    // never become the target of the characters it inserts
+    if(now && emojisDialog->isAncestorOf(now)) {
+        return;
+    }
+
     // remember the last name/description input widget which had focus so
-    // that emojisDialog's emojiSelected() knows where to insert a character -
-    // clicks within emojisDialog itself do not overwrite this, as none of
-    // its widgets are QLineEdit/QTextEdit/QPlainTextEdit
+    // that emojisDialog's emojiSelected() knows where to insert a character
     if(qobject_cast<QLineEdit*>(now)
        || qobject_cast<QTextEdit*>(now)
        || qobject_cast<QPlainTextEdit*>(now))

@@ -119,6 +119,7 @@ SOURCES += \
     src/config/repository_configuration.cpp \
     src/gear/async_utils.cpp \
     src/gear/math_utils.cpp \
+    src/gear/grid_navigator.cpp \
     src/mind/ai/llm/wingman.cpp \
     src/mind/ai/llm/mock_wingman.cpp \
     src/mind/ai/llm/openai_wingman.cpp \
@@ -164,7 +165,8 @@ SOURCES += \
     src/representations/markdown/cmark_gfm_markdown_transcoder.cpp \
     src/mind/ai/autolinking/autolinking_mind.cpp \
     src/mind/limbo.cpp \
-    src/representations/unicode.cpp
+    src/representations/unicode.cpp \
+    src/representations/emoji.cpp
 
 !mfnomd2html {
     SOURCES += \
@@ -231,6 +233,7 @@ HEADERS += \
     ./src/config/repository_configuration.h \
     ./src/gear/async_utils.h \
     ./src/gear/math_utils.h \
+    ./src/gear/grid_navigator.h \
     ./src/mind/dikw/dikw_pyramid.h \
     ./src/mind/dikw/filesystem_information.h \
     src/mind/ai/llm/wingman.h \
@@ -249,6 +252,7 @@ HEADERS += \
     src/representations/markdown/markdown_document_representation.h \
     src/representations/markdown/markdown_repository_configuration_representation.h \
     src/representations/unicode.h \
+    src/representations/emoji.h \
     src/version.h \
     src/mind/ai/ai.h \
     src/mind/ai/nlp/markdown_tokenizer.h \
