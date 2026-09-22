@@ -355,6 +355,7 @@ releng-version-set: ## propagate lib/src/app_info.h version to all release/packa
 	sed -i "s/export MFVERSION=\"[0-9.]*\"/export MFVERSION=\"$(MINDFORGER_VERSION)\"/" fedora/fedora-rpm-from-deb.sh
 	sed -i "s/^export MINDFORGER_VERSION=.*/export MINDFORGER_VERSION=\"$(MINDFORGER_VERSION)\"/" macos/env.sh
 	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" snap/snapcraft.yaml
+	sed -i -E "s|<release version=\"[^\"]+\" date=\"[^\"]+\"|<release version=\"$(MINDFORGER_VERSION)\" date=\"$$(date +%Y-%m-%d)\"|" flatpak/com.mindforger.MindForger.metainfo.xml
 	sed -i "s/^export ARG_VERSION=.*/export ARG_VERSION=\"$(MINDFORGER_VERSION)\"/" tarball/tarball-build.sh
 	sed -i -E "s/^mindforger \([0-9]+\.[0-9]+\.[0-9]+(-[^)]*)\)/mindforger ($(MINDFORGER_VERSION)\1)/" ubuntu/debian/changelog
 	@echo "Done. Review changes with: git diff"
@@ -578,6 +579,64 @@ distro-snap-upload: distro-snap ## upload strict Snap package to the Snap Store 
 
 
 #
+# DISTRIBUTION: Flatpak package (local builds only)
+#
+# The bundle built here is the one uploaded to a GitHub Release - it is NOT the
+# Flathub-hosted build.
+#
+# Prerequisites:
+#   sudo apt install flatpak flatpak-builder   # or dnf/pacman/zypper equivalent
+#   flatpak remote-add --if-not-exists --user flathub \
+#       https://flathub.org/repo/flathub.flatpakrepo
+#   flatpak install --user flathub \
+#       org.kde.Platform//5.15-24.08 org.kde.Sdk//5.15-24.08 \
+#       io.qt.qtwebengine.BaseApp//5.15-24.08
+#
+# build/flatpak/com.mindforger.MindForger.yaml is the manifest - Qt 5.15 comes from
+# the KDE runtime, Qt WebEngine from Flathub's shared Qt WebEngine base app.
+#
+
+.PHONY: distro-flatpak-clean
+distro-flatpak-clean: ## remove locally built Flatpak relics (build dir, OSTree repo, bundle) so a stale one is never picked up by mistake
+	./flatpak/clean.sh
+
+
+.PHONY: distro-flatpak-build
+distro-flatpak-build: ## build Flatpak bundle for downloadable GitHub Release (flatpak-builder required)
+	@echo "Building Flatpak $(MINDFORGER_VERSION) ..."
+	./flatpak/build-flatpak.sh
+
+
+.PHONY: distro-flatpak-path
+distro-flatpak-path: ## show path to the last built Flatpak bundle
+	@ls -1 ../distro/flatpak/mindforger-*.flatpak 2>/dev/null || echo "No Flatpak bundle built yet"
+
+
+.PHONY: distro-flatpak-remove
+distro-flatpak-remove: ## remove locally installed Flatpak
+	@echo "Removing Flatpak package..."
+	flatpak uninstall --user -y com.mindforger.MindForger || true
+	@echo "DONE Flatpak removed"
+
+
+.PHONY: distro-flatpak-install
+distro-flatpak-install: distro-flatpak-build ## build and install the Flatpak locally (user scope, for testing)
+	@echo "Installing Flatpak bundle locally..."
+	@BUNDLE="../distro/flatpak/mindforger-$(MINDFORGER_VERSION).flatpak"; \
+	if [ ! -f "$$BUNDLE" ]; then \
+		echo "Error: Flatpak bundle $$BUNDLE not found. Run 'make distro-flatpak-build' first."; \
+		exit 1; \
+	fi; \
+	flatpak install --user --reinstall -y "$$BUNDLE"; \
+	echo "DONE Flatpak installed. Run with: flatpak run com.mindforger.MindForger"
+
+
+.PHONY: distro-flatpak-run
+distro-flatpak-run: ## run the locally installed Flatpak
+	flatpak run com.mindforger.MindForger
+
+
+#
 # winget (Windows Package Manager)
 #
 # Prerequisites and full walkthrough: see build/winget/README.md
@@ -591,19 +650,19 @@ distro-snap-upload: distro-snap ## upload strict Snap package to the Snap Store 
 
 .PHONY: distro-winget-from-release
 distro-winget-from-release: ## look up the Windows installer on a GitHub release, hash it, and generate winget manifests (VERSION required)
-	powershell.exe -NoProfile -ExecutionPolicy Bypass -File build/winget/generate-from-release.ps1 -Version $(VERSION)
+	powershell.exe -NoProfile -ExecutionPolicy Bypass -File winget/generate-from-release.ps1 -Version $(VERSION)
 
 .PHONY: distro-winget-validate
 distro-winget-validate: ## validate generated winget manifests locally (VERSION required)
-	winget validate --manifest distro/winget/manifests/m/MindForger/MindForger/$(VERSION)
+	winget validate --manifest ../distro/winget/manifests/m/MindForger/MindForger/$(VERSION)
 
 .PHONY: distro-winget-submit-pr
 distro-winget-submit-pr: ## copy manifests to winget-pkgs fork, commit signed, push, open PR (VERSION and WINGET_PKGS_DIR required)
-	powershell.exe -NoProfile -ExecutionPolicy Bypass -File build/winget/submit-pr.ps1 -Version $(VERSION) -WingetPkgsDir "$(WINGET_PKGS_DIR)"
+	powershell.exe -NoProfile -ExecutionPolicy Bypass -File winget/submit-pr.ps1 -Version $(VERSION) -WingetPkgsDir "$(WINGET_PKGS_DIR)"
 
 .PHONY: distro-winget-hash-url
 distro-winget-hash-url: ## print SHA256 of the published Windows installer without generating manifests (VERSION required)
-	powershell.exe -NoProfile -ExecutionPolicy Bypass -File build/winget/sha256-from-url.ps1 -Version $(VERSION)
+	powershell.exe -NoProfile -ExecutionPolicy Bypass -File winget/sha256-from-url.ps1 -Version $(VERSION)
 
 #
 # ^ winget

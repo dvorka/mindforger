@@ -119,7 +119,7 @@ function buildGitHubTarball {
 # # Main #
 # ############################################################################
 
-export ARG_VERSION="2.3.0"
+export ARG_VERSION="2.4.0"
 export ARG_BAZAAR_MSG="MindForger ${ARG_VERSION} release."
 
 buildGitHubTarball "${ARG_VERSION}" "${ARG_BAZAAR_MSG}" ${1}

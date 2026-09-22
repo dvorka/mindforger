@@ -1,3 +1,16 @@
+2026-09-22  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v2.4.0 - Flatpak.
+    * Feature: Flatpak distribution - single-file .flatpak bundle downloadable from
+      the GitHub release (not hosted on Flathub).
+    * Fix: winget Makefile target paths.
+    * Change: line endings are newly pinned repository wide by .gitattributes - text
+      files are stored and checked out w/ LF on every platform, while Windows only
+      scripts (.bat, .cmd, .ps1, .iss) and the vendored stemmer library keep CRLF.
+      A clone made w/ core.autocrlf=true no longer rewrites the shell scripts to CRLF,
+      which made them unrunnable and shipped a broken launcher inside the Snap and
+      Flatpak packages.
+
 2026-09-21  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.3.0 - Notebook shelves, localization to 4 languages, lines sorting,
