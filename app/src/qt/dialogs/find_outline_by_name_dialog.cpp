@@ -168,6 +168,7 @@ void FindOutlineByNameDialog::show(
         }
     }
     // model must be refreshed even when there is nothing to show - avoid displaying old rows
+    listViewModel.setStringList(listViewStrings);
     findButton->setEnabled(things.size());
 
     // filter pass is run synchronously (not debounced) here
