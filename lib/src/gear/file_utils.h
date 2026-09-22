@@ -232,7 +232,8 @@ std::string getNewTempFilePath(const std::string& extension);
 bool stringToLines(const std::string* text, std::vector<std::string*>& lines);
 bool fileToLines(const std::string* filename, std::vector<std::string*>& lines, size_t& filesize);
 std::string* fileToString(const std::string& filename);
-void stringToFile(const std::string& filename, const std::string& content);
+// writes content to file - returns `false` if the file cannot be written
+bool stringToFile(const std::string& filename, const std::string& content);
 time_t fileModificationTime(const std::string* filename);
 bool copyFile(const std::string& from, const std::string& to);
 bool moveFile(const std::string& from, const std::string& to);

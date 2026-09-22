@@ -157,3 +157,30 @@ TEST(FileGearTestCase, DeepCopyToExisting)
     p.assign(dstRepositoryDir); p.append("/stencils/notebooks/s-o1.md");
     ASSERT_TRUE(m8r::isDirectoryOrFileExists(p.c_str()));
 }
+
+TEST(FileGearTestCase, StringToFileReportsWriteFailure)
+{
+    // GIVEN a writeable path and a path which CANNOT be written - its
+    // parent directory does not exist (unlike a read-only location, this
+    // fails for any user, so the test stays deterministic)
+    string writeableFile{"/tmp/mf-unit-string-to-file.md"};
+    std::remove(writeableFile.c_str());
+    string unwriteableFile{"/tmp/mf-unit-string-to-file-no-such-dir/file.md"};
+    m8r::removeDirectoryRecursively("/tmp/mf-unit-string-to-file-no-such-dir");
+    string content{"# Notebook\n\nText.\n"};
+
+    // WHEN
+    bool written = m8r::stringToFile(writeableFile, content);
+    bool notWritten = m8r::stringToFile(unwriteableFile, content);
+
+    // THEN: the successful write is reported and round-trips
+    EXPECT_TRUE(written);
+    string* readBack = m8r::fileToString(writeableFile);
+    ASSERT_NE(nullptr, readBack);
+    EXPECT_EQ(content, *readBack);
+    delete readBack;
+
+    // AND: the failed write is reported instead of being swallowed
+    EXPECT_FALSE(notWritten);
+    EXPECT_FALSE(m8r::isFile(unwriteableFile.c_str()));
+}

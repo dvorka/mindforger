@@ -149,13 +149,15 @@ public:
 
     /**
      * @brief Export Outline to HTML.
+     * @return `true` on success.
      */
-    void exportToHtml(Outline* outline, const std::string& fileName);
+    bool exportToHtml(Outline* outline, const std::string& fileName);
 
     /**
      * @brief Export Outline to Markdown.
+     * @return `true` on success.
      */
-    void exportToMarkdown(Outline* outline, const std::string& fileName);
+    bool exportToMarkdown(Outline* outline, const std::string& fileName);
 
     /**
      * @brief Export memory to CSV (blocking).

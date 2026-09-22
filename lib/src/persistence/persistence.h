@@ -38,8 +38,16 @@ public:
     virtual void load(Stencil* stencil) = 0;
     virtual bool isWriteable(const std::string& outlineKey) = 0;
     virtual void save(Outline* outline) = 0;
-    virtual void saveAsHtml(Outline* outline, const std::string& fileName) = 0;
-    virtual void saveAsMarkdown(Outline* outline, const std::string& fileName) = 0;
+    /**
+     * @brief Export Outline to an HTML file.
+     * @return `false` if the file cannot be written, else `true`.
+     */
+    virtual bool saveAsHtml(Outline* outline, const std::string& fileName) = 0;
+    /**
+     * @brief Export Outline to a Markdown file.
+     * @return `false` if the file cannot be written, else `true`.
+     */
+    virtual bool saveAsMarkdown(Outline* outline, const std::string& fileName) = 0;
 };
 
 }

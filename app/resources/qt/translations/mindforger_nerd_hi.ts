@@ -4,22 +4,22 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1906"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1908"/>
         <source>Empty Phrase</source>
         <translation>खाली वाक्यांश</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1907"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1909"/>
         <source>Phrase to search/explain/process is empty.</source>
         <translation>खोजने/समझाने/संसाधित करने के लिए वाक्यांश खाली है।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2045"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2047"/>
         <source>Wingman Not Available</source>
         <translation>AI साथी उपलब्ध नहीं है</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2046"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2048"/>
         <source>Wingman provider is either not configured or initialized - see MindForger Preferences (Wingman tab).</source>
         <translation>AI साथी प्रदाता या तो कॉन्फ़िगर नहीं है या आरंभ नहीं हुआ है - MindForger प्राथमिकताएँ (AI साथी टैब) देखें।</translation>
     </message>
@@ -3333,9 +3333,9 @@ Choose new library source:</source>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="613"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2611"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2640"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2677"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2614"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2652"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2697"/>
         <source>Specified file path already exists!</source>
         <translation>निर्दिष्ट फ़ाइल पथ पहले से मौजूद है!</translation>
     </message>
@@ -3390,689 +3390,707 @@ Choose new library source:</source>
         <translation>Markdown फ़ाइल सीखें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="852"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="854"/>
         <source>Learn</source>
         <translation>सीखें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="853"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="855"/>
         <source>This is neither valid MindForger/Markdown workspace nor file.</source>
         <translation>यह न तो मान्य MindForger/Markdown वर्कस्पेस है और न ही फ़ाइल।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="874"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="876"/>
         <source>Notebook Full-text Search</source>
         <translation>नोटबुक पूर्ण-पाठ खोज</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="879"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="881"/>
         <source>Note Full-text Search</source>
         <translation>नोट पूर्ण-पाठ खोज</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="884"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="886"/>
         <source>Full-text Search</source>
         <translation>पूर्ण-पाठ खोज</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="957"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="968"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="993"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2430"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="959"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="970"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="995"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2432"/>
         <source>Notebook </source>
         <translation>नोटबुक </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="959"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="995"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="961"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="997"/>
         <source>Notebook not found</source>
         <translation>नोटबुक नहीं मिली</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="971"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1064"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1133"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="973"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1066"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1135"/>
         <source>Note </source>
         <translation>नोट </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="974"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="976"/>
         <source>Thing not found</source>
         <translation>वस्तु नहीं मिली</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1003"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1005"/>
         <source>Find Note by Tags in Notebook</source>
         <translation>नोटबुक में टैग से नोट खोजें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1008"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1018"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1010"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1020"/>
         <source>Find Note by Tags</source>
         <translation>टैग से नोट खोजें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1066"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1135"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1068"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1137"/>
         <source>Note not found</source>
         <translation>नोट नहीं मिला</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1092"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1094"/>
         <source>Refactored Note to Notebook &apos;</source>
         <translation>नोट को नोटबुक में रीफ़ैक्टर किया गया &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1094"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1096"/>
         <source>Target Notebook not found</source>
         <translation>लक्ष्य नोटबुक नहीं मिली</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1097"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1099"/>
         <source>Refactor Note</source>
         <translation>नोट रीफ़ैक्टर करें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1097"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1099"/>
         <source>Note to be refactored not specified!</source>
         <translation>रीफ़ैक्टर किया जाने वाला नोट निर्दिष्ट नहीं है!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1105"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1107"/>
         <source>Find Note by Name in Notebook</source>
         <translation>नोटबुक में नाम से नोट खोजें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1111"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1113"/>
         <source>Find Note by Name</source>
         <translation>नाम से नोट खोजें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1188"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1190"/>
         <source>Home Notebook not set - use menu &apos;Notebooks/Make Home&apos;</source>
         <translation>होम नोटबुक सेट नहीं है - मेनू &apos;नोटबुक/होम बनाएँ&apos; का उपयोग करें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1704"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1706"/>
         <source>image</source>
         <translation>छवि</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1779"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1781"/>
         <source>File copied to workspace path &apos;%1&apos;</source>
         <translation>फ़ाइल वर्कस्पेस पथ &apos;%1&apos; में कॉपी की गई</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1784"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1786"/>
         <source>Given path &apos;%1&apos; doesn&apos;t exist - target will not be copied, but link will be created</source>
         <translation>दिया गया पथ &apos;%1&apos; मौजूद नहीं है - लक्ष्य कॉपी नहीं किया जाएगा, लेकिन लिंक बनाया जाएगा</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1813"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1815"/>
         <source>Saving pasted image data to file: &apos;%1&apos;</source>
         <translation>चिपकाया गया छवि डेटा फ़ाइल में सहेजा जा रहा है: &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1872"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1874"/>
         <source>Run Knowledge Tool Error</source>
         <translation>ज्ञान टूल चलाने में त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1873"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1875"/>
         <source>Unknown tool to run &apos;%1&apos;.</source>
         <translation>चलाने के लिए अज्ञात टूल &apos;%1&apos;।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1883"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1885"/>
         <source>Open Knowledge Tool Dialog Error</source>
         <translation>ज्ञान टूल संवाद खोलने में त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1884"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1886"/>
         <source>Unable to construct URL to open for unknown tool &apos;%1&apos;.</source>
         <translation>अज्ञात टूल &apos;%1&apos; के लिए खोलने हेतु URL नहीं बनाया जा सका।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1929"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1931"/>
         <source>HTML Note preview flickering can be eliminated by setting Math support and Diagram support to disable in Preferences menu</source>
         <translation>प्राथमिकता मेनू में गणित समर्थन और आरेख समर्थन अक्षम करके HTML नोट पूर्वावलोकन की झिलमिलाहट दूर की जा सकती है</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2195"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2197"/>
         <source>Wingman is runnning inferences...</source>
         <translation>AI साथी अनुमान चला रहा है...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2252"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2254"/>
         <source>Wingman received an answer from the LLM provider</source>
         <translation>AI साथी को LLM प्रदाता से उत्तर मिला</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2254"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2256"/>
         <source>Wingman failed to receive an answer from the LLM provider</source>
         <translation>AI साथी को LLM प्रदाता से उत्तर नहीं मिल सका</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2312"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2314"/>
         <source>Wingman&apos;s answer appended after selected text in the Notebook header.</source>
         <translation>AI साथी का उत्तर नोटबुक हेडर में चयनित पाठ के बाद जोड़ा गया।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2316"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2318"/>
         <source>Wingman&apos;s answer appended after the cursor in the Notebook header.</source>
         <translation>AI साथी का उत्तर नोटबुक हेडर में कर्सर के बाद जोड़ा गया।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2324"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2326"/>
         <source>Wingman&apos;s answer appended after selected text in the Note editor.</source>
         <translation>AI साथी का उत्तर नोट संपादक में चयनित पाठ के बाद जोड़ा गया।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2328"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2330"/>
         <source>Wingman&apos;s answer appended after the cursor in the Note editor.</source>
         <translation>AI साथी का उत्तर नोट संपादक में कर्सर के बाद जोड़ा गया।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2335"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2337"/>
         <source>Unable to append after selected text with Wingman&apos;s answer in non-edit perspective.</source>
         <translation>गैर-संपादन दृश्य में चयनित पाठ के बाद AI साथी का उत्तर नहीं जोड़ा जा सकता।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2339"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2341"/>
         <source>No answer from Wingman to append after selected text - run a prompt.</source>
         <translation>चयनित पाठ के बाद जोड़ने के लिए AI साथी का कोई उत्तर नहीं है - प्रॉम्प्ट चलाएँ।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2349"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2351"/>
         <source>Wingman&apos;s answer replaced selected text in Notebook header.</source>
         <translation>AI साथी के उत्तर ने नोटबुक हेडर में चयनित पाठ को बदल दिया।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2354"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2368"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2356"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2370"/>
         <source>Wingman Action Error</source>
         <translation>AI साथी क्रिया त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2355"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2357"/>
         <source>Unable to replace Notebook header text - no text selected.</source>
         <translation>नोटबुक हेडर का पाठ नहीं बदला जा सकता - कोई पाठ चयनित नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2363"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2365"/>
         <source>Wingman&apos;s answer replaced selected text in Note text.</source>
         <translation>AI साथी के उत्तर ने नोट के पाठ में चयनित पाठ को बदल दिया।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2369"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2371"/>
         <source>Unable to replace Note text - no text selected.</source>
         <translation>नोट का पाठ नहीं बदला जा सकता - कोई पाठ चयनित नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2376"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2378"/>
         <source>Unable to replace selected text with Wingman&apos;s answer in non-edit perspective.</source>
         <translation>गैर-संपादन दृश्य में चयनित पाठ को AI साथी के उत्तर से नहीं बदला जा सकता।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2380"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2382"/>
         <source>No answer from Wingman to replace selected text - run a prompt.</source>
         <translation>चयनित पाठ बदलने के लिए AI साथी का कोई उत्तर नहीं है - प्रॉम्प्ट चलाएँ।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2452"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2454"/>
         <source>Edit Notebook</source>
         <translation>नोटबुक संपादित करें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2452"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2454"/>
         <source>Please open an Notebook to edit.</source>
         <translation>कृपया संपादित करने के लिए कोई नोटबुक खोलें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2465"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2467"/>
         <source>🔒 Notebook Write Error</source>
         <translation>🔒 नोटबुक लेखन त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2466"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2468"/>
         <source>Notebook file is read-only and cannot be written:
 &apos;%1&apos; </source>
         <translation>नोटबुक फ़ाइल केवल-पठनीय है और उसमें लिखा नहीं जा सकता:
 &apos;%1&apos; </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2525"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2752"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2527"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2772"/>
         <source>New Note</source>
         <translation>नया नोट</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2525"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2527"/>
         <source>Failed to create new Note!</source>
         <translation>नया नोट बनाने में विफल!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2538"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2541"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2540"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2543"/>
         <source>Clone Notebook</source>
         <translation>नोटबुक का प्रतिरूप बनाएँ</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2538"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2540"/>
         <source>Failed to clone Notebook!</source>
         <translation>नोटबुक का प्रतिरूप बनाने में विफल!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2541"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2543"/>
         <source>Please open and Notebook to be cloned.</source>
         <translation>कृपया प्रतिरूप बनाने के लिए कोई नोटबुक खोलें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2555"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2557"/>
         <source>Home tag toggled/removed - Notebook &apos;%1&apos; is no longer home</source>
         <translation>होम टैग बदला/हटाया गया - नोटबुक &apos;%1&apos; अब होम नहीं है</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2558"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2560"/>
         <source>Notebook &apos;%1&apos; successfully marked as home</source>
         <translation>नोटबुक &apos;%1&apos; को सफलतापूर्वक होम के रूप में चिह्नित किया गया</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2563"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2565"/>
         <source>Make Notebook home</source>
         <translation>नोटबुक को होम बनाएँ</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2563"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2565"/>
         <source>Notebook can be marked as home only when viewed.</source>
         <translation>नोटबुक को केवल देखते समय ही होम के रूप में चिह्नित किया जा सकता है।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2574"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2599"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2576"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2601"/>
         <source>Forget Notebook</source>
         <translation>नोटबुक भूलें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2575"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2577"/>
         <source>Do you really want to deprecate &apos;</source>
         <translation>क्या आप वाकई &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2577"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2579"/>
         <source>&apos; Notebook?</source>
         <translation>&apos; नोटबुक को अप्रचलित करना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2599"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2601"/>
         <source>Notebook can be forgotten only when viewed.</source>
         <translation>नोटबुक को केवल देखते समय ही भुलाया जा सकता है।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2611"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2628"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2640"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2657"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2676"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2614"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2632"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2639"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2652"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2670"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2677"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2696"/>
         <source>Export Error</source>
         <translation>निर्यात त्रुटि</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2628"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2657"/>
+        <source>Notebook exported to HTML file &apos;%1&apos;</source>
+        <translation>नोटबुक HTML फ़ाइल &apos;%1&apos; में निर्यात की गई</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2633"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2671"/>
+        <source>Unable to write file &apos;%1&apos;!</source>
+        <translation>फ़ाइल &apos;%1&apos; नहीं लिखी जा सकी!</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2639"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2677"/>
         <source>Unable to find Notebook to export!</source>
         <translation>निर्यात करने के लिए नोटबुक नहीं मिली!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2711"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2666"/>
+        <source>Notebook exported to Markdown file &apos;%1&apos;</source>
+        <translation>नोटबुक Markdown फ़ाइल &apos;%1&apos; में निर्यात की गई</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2731"/>
         <source>Import TWiki File</source>
         <translation>TWiki फ़ाइल आयात करें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2752"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2772"/>
         <source>Open and view a Notebook to create new Note.</source>
         <translation>नया नोट बनाने के लिए कोई नोटबुक खोलें और देखें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2796"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2816"/>
         <source>Edit Note</source>
         <translation>नोट संपादित करें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2796"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2924"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2816"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2944"/>
         <source>Please select a Note to edit in the Notebook.</source>
         <translation>कृपया नोटबुक में संपादित करने के लिए कोई नोट चुनें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2814"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2870"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2834"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2890"/>
         <source>Edit Note with External Editor Error</source>
         <translation>बाहरी संपादक से नोट संपादन त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2815"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2835"/>
         <source>External editor command is not configured in preferences (Editor tab).</source>
         <translation>बाहरी संपादक आदेश प्राथमिकताओं (संपादक टैब) में कॉन्फ़िगर नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2840"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2923"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2860"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2943"/>
         <source>Edit Note with External Editor</source>
         <translation>बाहरी संपादक से नोट संपादित करें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2841"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2861"/>
         <source>Running command: &apos;%1&apos;</source>
         <translation>आदेश चलाया जा रहा है: &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2854"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2874"/>
         <source>Running command: &apos;%1&apos;. Close external editor to return control back to MindForger.</source>
         <translation>आदेश चलाया जा रहा है: &apos;%1&apos;। नियंत्रण वापस MindForger को देने के लिए बाहरी संपादक बंद करें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2962"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2982"/>
         <source>Delete Note</source>
         <translation>नोट हटाएँ</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2963"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2983"/>
         <source>Do you really want to delete note &apos;</source>
         <translation>क्या आप वाकई नोट &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2965"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2985"/>
         <source>&apos; along with its child notes?</source>
         <translation>&apos; को उसके चाइल्ड नोट सहित हटाना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3015"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3035"/>
         <source>Forget Note</source>
         <translation>नोट भूलें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3015"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3035"/>
         <source>Please select a Note to forget.</source>
         <translation>कृपया भूलने के लिए कोई नोट चुनें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3035"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3063"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3067"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3055"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3083"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3087"/>
         <source>Extract Note</source>
         <translation>नोट निकालें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3035"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3055"/>
         <source>Please select a text to extract.</source>
         <translation>कृपया निकालने के लिए कोई पाठ चुनें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3063"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3083"/>
         <source>Failed to extract new Note!</source>
         <translation>नया नोट निकालने में विफल!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3067"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3087"/>
         <source>Please select a Note, edit it and select a text to extract.</source>
         <translation>कृपया कोई नोट चुनें, उसे संपादित करें और निकालने के लिए पाठ चुनें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3093"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3110"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3114"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3113"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3130"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3134"/>
         <source>Clone Note</source>
         <translation>नोट का प्रतिरूप बनाएँ</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3094"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3114"/>
         <source>Do you want to clone Note &apos;</source>
         <translation>क्या आप नोट &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3094"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3114"/>
         <source>&apos; including its child notes?&apos;?</source>
         <translation>&apos; का उसके चाइल्ड नोट सहित प्रतिरूप बनाना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3110"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3130"/>
         <source>Failed to clone Note!</source>
         <translation>नोट का प्रतिरूप बनाने में विफल!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3114"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3134"/>
         <source>Please select a Note to be cloned.</source>
         <translation>कृपया प्रतिरूप बनाने के लिए कोई नोट चुनें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3173"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3193"/>
         <source>Moved Note &apos;%1&apos; to be the first child</source>
         <translation>नोट &apos;%1&apos; को पहली संतान बनाया गया</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3176"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3212"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3248"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3284"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3196"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3232"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3268"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3304"/>
         <source>Move Note</source>
         <translation>नोट ले जाएँ</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3176"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3212"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3248"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3284"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3196"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3232"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3268"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3304"/>
         <source>Please select a Note to be moved.</source>
         <translation>कृपया ले जाने के लिए कोई नोट चुनें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3209"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3229"/>
         <source>Moved up Note &apos;%1&apos;</source>
         <translation>नोट &apos;%1&apos; ऊपर ले जाया गया</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3245"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3265"/>
         <source>Moved down Note &apos;%1&apos;</source>
         <translation>नोट &apos;%1&apos; नीचे ले जाया गया</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3281"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3301"/>
         <source>Moved Note &apos;%1&apos; to be the last child</source>
         <translation>नोट &apos;%1&apos; को अंतिम संतान बनाया गया</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3315"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3335"/>
         <source>Promoted Note &apos;%1&apos;</source>
         <translation>नोट &apos;%1&apos; का स्तर बढ़ाया गया</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3318"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3338"/>
         <source>Promote Note</source>
         <translation>नोट का स्तर बढ़ाएँ</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3318"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3338"/>
         <source>Please select a Note to be promoted.</source>
         <translation>कृपया स्तर बढ़ाने के लिए कोई नोट चुनें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3349"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3369"/>
         <source>Demoted Note &apos;%1&apos;</source>
         <translation>नोट &apos;%1&apos; का स्तर घटाया गया</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3352"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3372"/>
         <source>Demote Note</source>
         <translation>नोट का स्तर घटाएँ</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3352"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3372"/>
         <source>Please select a Note to be demoted.</source>
         <translation>कृपया स्तर घटाने के लिए कोई नोट चुनें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3517"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3538"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3546"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3537"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3558"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3566"/>
         <source>Add Library Error</source>
         <translation>लाइब्रेरी जोड़ने में त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3518"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3538"/>
         <source>Library directory doesn&apos;t exist!</source>
         <translation>लाइब्रेरी निर्देशिका मौजूद नहीं है!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3539"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3559"/>
         <source>Library already indexed - use &apos;Update library&apos; action to synchronize documents.</source>
         <translation>लाइब्रेरी पहले से अनुक्रमित है - दस्तावेज़ सिंक्रनाइज़ करने के लिए &apos;लाइब्रेरी अपडेट करें&apos; क्रिया का उपयोग करें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3547"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3567"/>
         <source>Unable to index documents on library path - either memory directory doesn&apos;t exist or not in MindForger workspace mode.</source>
         <translation>लाइब्रेरी पथ पर दस्तावेज़ अनुक्रमित नहीं किए जा सकते - या तो स्मृति निर्देशिका मौजूद नहीं है या MindForger वर्कस्पेस मोड में नहीं हैं।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3584"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3604"/>
         <source>Library synchronization</source>
         <translation>लाइब्रेरी सिंक्रनाइज़ेशन</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3585"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3605"/>
         <source>There are no libraries - nothing to synchronize.</source>
         <translation>कोई लाइब्रेरी नहीं है - सिंक्रनाइज़ करने को कुछ नहीं।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3616"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3626"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3648"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3656"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3636"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3646"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3668"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3676"/>
         <source>Library Orphans</source>
         <translation>लाइब्रेरी अनाथ</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3617"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3637"/>
         <source>Found %1 library Notebooks with orphaned documents. Notebooks were tagged with &apos;library-orphan-document&apos; tag. Use scopes to filter them out.</source>
         <translation>अनाथ दस्तावेज़ों वाली %1 लाइब्रेरी नोटबुक मिलीं। नोटबुक को &apos;library-orphan-document&apos; टैग दिया गया। उन्हें छाँटने के लिए दायरे का उपयोग करें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3627"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3647"/>
         <source>No Notebooks with orphaned documents found.</source>
         <translation>अनाथ दस्तावेज़ों वाली कोई नोटबुक नहीं मिली।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3649"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3669"/>
         <source>%1 Notebooks tagged as library orphans were deprecated.</source>
         <translation>लाइब्रेरी अनाथ के रूप में टैग की गई %1 नोटबुक अप्रचलित की गईं।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3657"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3677"/>
         <source>No Notebooks with library orphan tag found.</source>
         <translation>लाइब्रेरी अनाथ टैग वाली कोई नोटबुक नहीं मिली।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3682"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3702"/>
         <source>Library deletion</source>
         <translation>लाइब्रेरी हटाना</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3683"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3703"/>
         <source>There are no libraries - nothing to delete.</source>
         <translation>कोई लाइब्रेरी नहीं है - हटाने को कुछ नहीं।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3698"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3718"/>
         <source>Delete Library</source>
         <translation>लाइब्रेरी हटाएँ</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3699"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3719"/>
         <source>Do you really want to delete Notebooks which represent the library documents?</source>
         <translation>क्या आप वाकई लाइब्रेरी दस्तावेज़ों को दर्शाने वाली नोटबुक हटाना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3839"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3859"/>
         <source>Organizer Update Error</source>
         <translation>ऑर्गनाइज़र अपडेट त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3840"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3860"/>
         <source>Eisenhower Matrix organizer is built-in and cannot be edited - please create or update a custom organizer.</source>
         <translation>आइज़नहावर मैट्रिक्स ऑर्गनाइज़र अंतर्निहित है और संपादित नहीं किया जा सकता - कृपया कस्टम ऑर्गनाइज़र बनाएँ या अपडेट करें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3867"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3887"/>
         <source>Organizer Clone Error</source>
         <translation>ऑर्गनाइज़र प्रतिरूप त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3868"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3888"/>
         <source>Eisenhower Matrix organizer is built-in and cannot be cloned - please create or update a custom organizer.</source>
         <translation>आइज़नहावर मैट्रिक्स ऑर्गनाइज़र अंतर्निहित है और उसका प्रतिरूप नहीं बनाया जा सकता - कृपया कस्टम ऑर्गनाइज़र बनाएँ या अपडेट करें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4023"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4043"/>
         <source>Forget Organizer</source>
         <translation>ऑर्गनाइज़र भूलें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4024"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4044"/>
         <source>Do you really want to forget &apos;</source>
         <translation>क्या आप वाकई &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4025"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4045"/>
         <source>&apos; Organizer?</source>
         <translation>&apos; ऑर्गनाइज़र को भूलना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4036"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4056"/>
         <source>Delete Organizer</source>
         <translation>ऑर्गनाइज़र हटाएँ</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4037"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4057"/>
         <source>Eisenhower Matrix is built-in and cannot be deleted - only custom organizers can.</source>
         <translation>आइज़नहावर मैट्रिक्स अंतर्निहित है और हटाया नहीं जा सकता - केवल कस्टम ऑर्गनाइज़र हटाए जा सकते हैं।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4113"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4133"/>
         <source>Delete Notebook Tree</source>
         <translation>नोटबुक वृक्ष हटाएँ</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4114"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4134"/>
         <source>Do you really want to delete &apos;</source>
         <translation>क्या आप वाकई &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4116"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4136"/>
         <source>&apos; Notebook tree? Notebooks organized in it will NOT be deleted.</source>
         <translation>&apos; नोटबुक वृक्ष हटाना चाहते हैं? इसमें व्यवस्थित नोटबुक नहीं हटाई जाएँगी।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4160"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4180"/>
         <source>Notebook &apos;%1&apos; added to tree &apos;%2&apos;</source>
         <translation>नोटबुक &apos;%1&apos; को वृक्ष &apos;%2&apos; में जोड़ा गया</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4180"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4200"/>
         <source>Entry removed from Notebook tree (Notebook itself was NOT deleted)</source>
         <translation>प्रविष्टि नोटबुक वृक्ष से हटाई गई (नोटबुक स्वयं नहीं हटाई गई)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4198"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4218"/>
         <source>View Limbo</source>
         <translation>Limbo देखें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4199"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4219"/>
         <source>Limbo directory with deleted Notebooks is available in the MindForger workspace, not if a Markdown is edited or a directory with markdowns is opened.</source>
         <translation>हटाई गई नोटबुक वाली Limbo निर्देशिका MindForger वर्कस्पेस में उपलब्ध है, Markdown संपादित करते समय या Markdown निर्देशिका खोलने पर नहीं।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4320"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4340"/>
         <source>About MindForger</source>
         <translation>MindForger के बारे में</translation>
     </message>
@@ -5074,79 +5092,79 @@ Choose new library source:</source>
         <translation>कानबान: </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="421"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="429"/>
         <source>Notebook Tree: &apos;%1&apos;</source>
         <translation>नोटबुक वृक्ष: &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="425"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="433"/>
         <source>Selected Notebook Tree not found!</source>
         <translation>चयनित नोटबुक वृक्ष नहीं मिला!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="428"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="436"/>
         <source>No Notebook Tree selected!</source>
         <translation>कोई नोटबुक वृक्ष चयनित नहीं है!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="491"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="499"/>
         <source>Organizer: &apos;</source>
         <translation>ऑर्गनाइज़र: &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="501"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="509"/>
         <source>Selected Organizer not found!</source>
         <translation>चयनित ऑर्गनाइज़र नहीं मिला!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="504"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="512"/>
         <source>No Organizer selected!</source>
         <translation>कोई ऑर्गनाइज़र चयनित नहीं है!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="551"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="556"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="583"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="559"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="564"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="591"/>
         <source>Selected Notebook not found!</source>
         <translation>चयनित नोटबुक नहीं मिली!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="559"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="586"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="611"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="567"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="594"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="619"/>
         <source>No Notebook selected!</source>
         <translation>कोई नोटबुक चयनित नहीं है!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="647"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="655"/>
         <source>Selected Tag not found!</source>
         <translation>चयनित टैग नहीं मिला!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="650"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="668"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="658"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="676"/>
         <source>No Tag selected!</source>
         <translation>कोई टैग चयनित नहीं है!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="701"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="709"/>
         <source>Note &apos;%1&apos;   %2</source>
         <translation>नोट &apos;%1&apos;   %2</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1002"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1030"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1010"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1038"/>
         <source>Note </source>
         <translation>नोट </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1004"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1012"/>
         <source>Selected Notebook/Note not found!</source>
         <translation>चयनित नोटबुक/नोट नहीं मिला!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1007"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1032"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1015"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1040"/>
         <source>No Note selected!</source>
         <translation>कोई नोट चयनित नहीं है!</translation>
     </message>

@@ -2609,7 +2609,8 @@ void MainWindowPresenter::doActionOutlineHtmlExport()
 
 void MainWindowPresenter::handleOutlineHtmlExport()
 {
-    if(isDirectoryOrFileExists(newFileDialog->getFilePath().toStdString().c_str())) {
+    QString filePath = exportOutlineToHtmlDialog->getFilePath();
+    if(isDirectoryOrFileExists(filePath.toStdString().c_str())) {
         QMessageBox::critical(&view, tr("Export Error"), tr("Specified file path already exists!"));
     } else {
         if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
@@ -2622,7 +2623,15 @@ void MainWindowPresenter::handleOutlineHtmlExport()
         ) {
             Outline* o = orloj->getOutlineView()->getCurrentOutline();
             if(o) {
-                mind->remind().exportToHtml(o, exportOutlineToHtmlDialog->getFilePath().toStdString());
+                if(mind->remind().exportToHtml(o, filePath.toStdString())) {
+                    statusBar->showInfo(
+                        QString(tr("Notebook exported to HTML file '%1'")).arg(filePath));
+                } else {
+                    QMessageBox::critical(
+                        &view,
+                        tr("Export Error"),
+                        QString(tr("Unable to write file '%1'!")).arg(filePath));
+                }
                 return;
             }
         }
@@ -2638,7 +2647,8 @@ void MainWindowPresenter::doActionOutlineMarkdownExport()
 
 void MainWindowPresenter::handleOutlineMarkdownExport()
 {
-    if(isDirectoryOrFileExists(exportOutlineToMarkdownDialog->getFilePath().toStdString().c_str())) {
+    QString filePath = exportOutlineToMarkdownDialog->getFilePath();
+    if(isDirectoryOrFileExists(filePath.toStdString().c_str())) {
         QMessageBox::critical(&view, tr("Export Error"), tr("Specified file path already exists!"));
     } else {
         if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
@@ -2651,7 +2661,15 @@ void MainWindowPresenter::handleOutlineMarkdownExport()
         ) {
             Outline* o = orloj->getOutlineView()->getCurrentOutline();
             if(o) {
-                mind->remind().exportToMarkdown(o, exportOutlineToMarkdownDialog->getFilePath().toStdString());
+                if(mind->remind().exportToMarkdown(o, filePath.toStdString())) {
+                    statusBar->showInfo(
+                        QString(tr("Notebook exported to Markdown file '%1'")).arg(filePath));
+                } else {
+                    QMessageBox::critical(
+                        &view,
+                        tr("Export Error"),
+                        QString(tr("Unable to write file '%1'!")).arg(filePath));
+                }
                 return;
             }
         }

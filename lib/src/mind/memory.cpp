@@ -260,14 +260,14 @@ void Memory::remember(Outline* outline)
     }
 }
 
-void Memory::exportToHtml(Outline* outline, const string& fileName)
+bool Memory::exportToHtml(Outline* outline, const string& fileName)
 {
-    persistence->saveAsHtml(outline, fileName);
+    return persistence->saveAsHtml(outline, fileName);
 }
 
-void Memory::exportToMarkdown(Outline* outline, const string& fileName)
+bool Memory::exportToMarkdown(Outline* outline, const string& fileName)
 {
-    persistence->saveAsMarkdown(outline, fileName);
+    return persistence->saveAsMarkdown(outline, fileName);
 }
 
 bool Memory::exportToCsv(

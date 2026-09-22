@@ -493,6 +493,14 @@ TRANSLATIONS = \
     ./resources/qt/translations/mindforger_nerd_zh_cn.ts \
     ./resources/qt/translations/mindforger_zh_cn.ts
 
+# lupdate (see the l10n targets of build/Makefile) must NOT scan bundled 3rd
+# party code - neither the minified JavaScript libraries referred to by
+# mf-resources.qrc, nor the C/C++ dependencies. None of them is translatable
+# and lupdate parses them as QML/JS resp. C++, which floods every l10n run w/
+# megabytes of diagnostics - and buries the warnings about our OWN sources.
+TR_EXCLUDE += $$PWD/resources/qt/js/*
+TR_EXCLUDE += $$PWD/../deps/*
+
 # compile .ts translation files to binary .qm catalogs on every build - the .qm
 # catalogs are generated files (they are NOT stored in the repository) and lrelease
 # is run whenever a catalog is missing or older than its .ts source

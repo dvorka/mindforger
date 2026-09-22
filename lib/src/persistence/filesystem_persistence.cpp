@@ -109,28 +109,22 @@ void FilesystemPersistence::save(Outline* outline)
             createDirectory(directory);
         }
 
-        ofstream out(outline->getKey());
-        MF_DEBUG("  O opened: " << boolalpha << out.is_open() << endl);
-        if(out.is_open()) {
-            out << *text;
-            MF_DEBUG("  O written: " << &out << endl);
-            out.close();
-            MF_DEBUG("O saved: " << &out << endl);
+        if(stringToFile(outline->getKey(), *text)) {
+            MF_DEBUG("O saved: " << outline->getKey() << endl);
 
             outline->clearDirty();
         } else {
-            cerr
-                << "Error: unable to save O '" << outline->getKey()
-                << "' - file cannot be opened for writing" << endl;
+            // stringToFile() reports the reason
+            cerr << "Error: unable to save O '" << outline->getKey() << "'" << endl;
         }
         delete text;
     }
 }
 
-void FilesystemPersistence::saveAsHtml(Outline* outline, const string& fileName)
+bool FilesystemPersistence::saveAsHtml(Outline* outline, const string& fileName)
 {
     string* text = new string{};
-        htmlRepresentation.to(
+    htmlRepresentation.to(
         outline,
         text,
         true,
@@ -138,21 +132,26 @@ void FilesystemPersistence::saveAsHtml(Outline* outline, const string& fileName)
         true,
         false
     );
-    ofstream out(fileName);
-    out << *text;
-    out.close();
+    bool saved = stringToFile(fileName, *text);
     delete text;
+
+    return saved;
 }
 
-void FilesystemPersistence::saveAsMarkdown(Outline* outline, const string& fileName)
+bool FilesystemPersistence::saveAsMarkdown(Outline* outline, const string& fileName)
 {
     string* text = mdRepresentation.to(outline);
-    if(text!=nullptr) {
-        ofstream out(fileName);
-        out << *text;
-        out.close();
-        delete text;
+    if(text == nullptr) {
+        cerr
+            << "Error: unable to serialize O '" << outline->getKey()
+            << "' to Markdown" << endl;
+        return false;
     }
+
+    bool saved = stringToFile(fileName, *text);
+    delete text;
+
+    return saved;
 }
 
 } // m8r namespace
