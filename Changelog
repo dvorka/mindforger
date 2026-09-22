@@ -3,6 +3,7 @@
     * Released v2.4.0 - Flatpak.
     * Feature: Flatpak distribution - single-file .flatpak bundle downloadable from
       the GitHub release (not hosted on Flathub).
+    * Fix: winget Makefile target paths.
     * Change: line endings are newly pinned repository wide by .gitattributes - text
       files are stored and checked out w/ LF on every platform, while Windows only
       scripts (.bat, .cmd, .ps1, .iss) and the vendored stemmer library keep CRLF.
