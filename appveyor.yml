@@ -85,12 +85,15 @@ test_script:
        -RedirectStandardOutput "mindforger-unit-tests.log" `
        -RedirectStandardError "mindforger-unit-tests-err.log" `
        -NoNewWindow -PassThru
+     # the process handle MUST be cached - w/o touching it .NET does not keep the
+     # handle open and $proc.ExitCode stays $null even after a clean exit
+     $null = $proc.Handle
      $TestTimedOut = -not $proc.WaitForExit($TestTimeoutMs)
      if ($TestTimedOut) {
        Write-Output "Tests did NOT finish in $($TestTimeoutMs/1000)s - killing them"
        $proc.Kill()
-       $proc.WaitForExit()
      }
+     $proc.WaitForExit()
      $TestExitCode=$proc.ExitCode
      Write-Output "--- mindforger-unit-tests.log (tail) ---"
      Get-Content mindforger-unit-tests.log -Tail 40 -ErrorAction SilentlyContinue
@@ -107,6 +110,9 @@ test_script:
      Write-Output "Test exit code: $TestExitCode"
      if ($TestTimedOut) {
        throw "Exec: tests timed out"
+     }
+     if ($null -eq $TestExitCode) {
+       throw "Exec: tests exit code could not be read"
      }
      if ($TestExitCode -ne 0) {
        throw "Exec: tests failed"
