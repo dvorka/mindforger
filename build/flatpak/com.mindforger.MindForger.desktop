@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=MindForger
+GenericName=Thinking Notebook
+Comment=Thinking notebook and Markdown IDE
+Exec=mindforger-flatpak-launcher %f
+Icon=com.mindforger.MindForger
+Terminal=false
+Type=Application
+Categories=Office;
+StartupNotify=true
+Keywords=markdown;notes;notebook;knowledge;mind;editor;IDE;

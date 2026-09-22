@@ -1,0 +1,113 @@
+# MindForger Flatpak manifest
+#
+# This bundle is meant to be DOWNLOADED from a GitHub Release - it is not the
+# Flathub-hosted build, so the single-file .flatpak bundle produced from this
+# manifest must be self-contained (see build/flatpak/build-flatpak.sh).
+#
+# Build:   cd build && make distro-flatpak-build
+# Install: flatpak install --user ../distro/flatpak/mindforger-<version>.flatpak
+# Run:     flatpak run com.mindforger.MindForger
+#
+app-id: com.mindforger.MindForger
+
+# org.kde.Platform (rather than org.freedesktop.Platform) is the runtime that ships
+# Qt 5.15 - MindForger is a Qt 5 application and is NOT ported to Qt 6 yet.
+runtime: org.kde.Platform
+runtime-version: '5.15-24.08'
+sdk: org.kde.Sdk
+
+# Qt WebEngine is MindForger's HTML rendering backend (see app/app.pro), but the KDE
+# 5.15 runtime does NOT ship it - only its translation catalogs. Flathub's shared
+# Qt WebEngine base app provides the libraries, QtWebEngineProcess and the Chromium
+# resource/locale data, all built with the /app prefix they are looked up at runtime.
+base: io.qt.qtwebengine.BaseApp
+base-version: '5.15-24.08'
+
+command: mindforger-flatpak-launcher
+
+finish-args:
+  # Qt WebEngine (Chromium) spawns QtWebEngineProcess and talks to it over shared memory
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  # Wingman: ollama / OpenAI / OpenRouter LLM providers
+  - --share=network
+  # open Markdown repositories anywhere under $HOME - this also covers the ~/mindforger-repository
+  # default and the ~/.mindforger.md configuration file
+  - --filesystem=home
+  # open Markdown repositories on external/mounted media
+  - --filesystem=/media
+  - --filesystem=/run/media
+
+modules:
+  - name: mindforger
+    buildsystem: simple
+    build-options:
+      env:
+        # qmake resolves 'QT += webengine webenginewidgets' through the module .pri
+        # files the Qt WebEngine base app installed into /app/lib/mkspecs/modules
+        QMAKEPATH: /app/lib
+    build-commands:
+      # 'type: dir' copies the WHOLE working tree, including any locally built
+      # artifacts left over from unrelated host builds (a stale app/mindforger,
+      # lib/libmindforger.a, qmake-generated Makefiles, ...). If make's timestamp
+      # check considers those already up to date, the bundle ships that stale
+      # artifact instead of a fresh production build - drop them from the build's
+      # OWN copy of the tree (the real checkout is never touched).
+      - find app lib deps \( -name '*.o' -o -name '*.a' -o -name 'moc_*.cpp' -o -name 'qrc_*.cpp' \) -delete
+      - rm -rf deps/cmark-gfm/build app/mindforger Makefile app/Makefile lib/Makefile .qmake.stash
+      # cmark-gfm (deps/cmark-gfm, a git submodule) is a separate CMake project that
+      # app.pro statically links against via a plain relative path - it is NOT built by
+      # qmake and must exist before qmake runs.
+      - cmake -S deps/cmark-gfm -B deps/cmark-gfm/build -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+      - cmake --build deps/cmark-gfm/build -j ${FLATPAK_BUILDER_N_JOBS}
+      # app.pro links spell checking with a plain '-lhunspell'. The SDK ships the library
+      # versioned only (libhunspell-1.7.so), with no unversioned development symlink, so
+      # provide one - it is removed again by 'cleanup' below, the linked SONAME
+      # (libhunspell-1.7.so.0) is part of the runtime.
+      - ln -sf /usr/lib/$(gcc -print-multiarch)/libhunspell-1.7.so ${FLATPAK_DEST}/lib/libhunspell.so
+      - qmake -r PREFIX=${FLATPAK_DEST} LIBS+=-L${FLATPAK_DEST}/lib CONFIG+=mfnoccache mindforger.pro
+      - make -j ${FLATPAK_BUILDER_N_JOBS}
+      # installs bin/mindforger, the default repository content (share/doc/mindforger)
+      # seeded by bin/mindforger-flatpak-launcher, the man page and the icons
+      - make install
+      # bin/mindforger-flatpak-launcher seeds a fresh ~/mindforger-repository with the
+      # default memory/stencils content before exec'ing the real bin/mindforger - see
+      # build/flatpak/mindforger-flatpak-launcher for why the application itself cannot
+      # do this inside the sandbox
+      - install -Dm755 build/flatpak/mindforger-flatpak-launcher ${FLATPAK_DEST}/bin/mindforger-flatpak-launcher
+      # Flatpak exports only those desktop/metainfo/icon files whose name is prefixed
+      # with the app ID - the ones installed by 'make install' (correct for a regular
+      # Linux install) are named 'mindforger*' instead and are dropped by 'cleanup'
+      - install -Dm644 build/flatpak/com.mindforger.MindForger.desktop ${FLATPAK_DEST}/share/applications/com.mindforger.MindForger.desktop
+      - install -Dm644 build/flatpak/com.mindforger.MindForger.metainfo.xml ${FLATPAK_DEST}/share/metainfo/com.mindforger.MindForger.metainfo.xml
+      - install -Dm644 app/resources/icons/mindforger128x128.png ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/com.mindforger.MindForger.png
+      - install -Dm644 app/resources/icons/mindforger.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/com.mindforger.MindForger.svg
+    cleanup:
+      # build-time only - see the hunspell symlink remark above
+      - /lib/libhunspell.so
+      # non-exportable duplicates installed by 'make install', see above
+      - /share/applications/mindforger.desktop
+      - /share/metainfo/com.mindforger.mindforger.metainfo.xml
+      - /share/icons/mindforger
+      - /share/icons/hicolor/128x128/apps/mindforger128x128.png
+      - /share/icons/hicolor/scalable/apps/mindforger.svg
+    sources:
+      - type: dir
+        path: ../..
+        # exclude artifacts and directories not needed to build the application
+        skip:
+          - .git
+          - distro
+          - lib/test
+          - build/flatpak/build-dir
+          - build/flatpak/repo
+          - build/flatpak/.flatpak-builder
+
+cleanup-commands:
+  # removes the Qt WebEngine base app's development files (headers, cmake/pkgconfig
+  # metadata, mkspecs, ...) from the bundle - shipped by the base app for our build only
+  - /app/cleanup-BaseApp.sh
+
+# eof
