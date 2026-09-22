@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  AppStream metadata of the MindForger FLATPAK bundle.
+
+  Unlike app/resources/linux/com.mindforger.mindforger.metainfo.xml (shipped by the
+  .deb/tarball installs), the component ID, the launchable and the icon name must all
+  match the Flatpak app ID - Flatpak exports only app-ID-prefixed files.
+
+  The <release> entry is kept in sync with lib/src/app_info.h by the
+  'releng-version-set' target of build/Makefile - do not edit the version by hand.
+-->
+<component type="desktop-application">
+  <id>com.mindforger.MindForger</id>
+
+  <name>MindForger</name>
+  <summary>Thinking notebook and Markdown IDE</summary>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0-or-later</project_license>
+  <developer id="com.mindforger">
+    <name>Martin Dvorak</name>
+  </developer>
+
+  <url type="homepage">https://www.mindforger.com/</url>
+  <url type="bugtracker">https://github.com/dvorka/mindforger/issues</url>
+  <url type="faq">https://www.mindforger.com/docs/faqs.html</url>
+  <url type="help">https://www.mindforger.com/docs/index.html</url>
+  <url type="vcs-browser">https://github.com/dvorka/mindforger</url>
+
+  <recommends>
+    <display_length compare="ge">768</display_length>
+  </recommends>
+
+  <description>
+    <p>
+      Are you drowning in information, but starving for knowledge?
+    </p>
+    <p>
+      MindForger is a human-mind-inspired personal knowledge management tool and
+      Markdown IDE. Search, browse, view and edit your Markdown files and get the
+      most out of the knowledge in your notes with associations, auto linking and
+      powerful full-text and Wingman (LLM-assisted) search.
+    </p>
+    <p>Key features:</p>
+    <ul>
+      <li>Markdown IDE: view, edit and organize your notebooks and notes with live HTML preview, math, diagrams and syntax highlighting.</li>
+      <li>Thinking notebook: associations, auto linking and the knowledge graph navigator show how your remarks are mutually related.</li>
+      <li>Powerful search: full-text search, scoping, tags and the Wingman LLM-assisted search.</li>
+      <li>Your files, your disk: plain Markdown files in a directory of your choice - no proprietary format, no mandatory account, no cloud.</li>
+    </ul>
+  </description>
+
+  <content_rating type="oars-1.1"/>
+
+  <launchable type="desktop-id">com.mindforger.MindForger.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://www.mindforger.com/images/screenshots/tayr.png</image>
+      <caption>Notebook and note view</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://www.mindforger.com/images/screenshots/knowledge-graph-navigator-light.png</image>
+      <caption>Knowledge graph navigator</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://www.mindforger.com/images/screenshots/tayw.png</image>
+      <caption>Markdown editor with live preview</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://www.mindforger.com/images/screenshots/markdown-images.png</image>
+      <caption>Images rendered in a note</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://www.mindforger.com/images/screenshots/hoisting.png</image>
+      <caption>Note hoisting</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://www.mindforger.com/images/screenshots/i18n.png</image>
+      <caption>Localized user interface</caption>
+    </screenshot>
+  </screenshots>
+
+  <releases>
+    <release version="2.3.0" date="2026-09-22"/>
+  </releases>
+</component>
