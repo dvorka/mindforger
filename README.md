@@ -65,7 +65,7 @@ Install:
 * [Winget](https://github.com/microsoft/winget-pkgs/tree/master/manifests/m/MindForger/MindForger)
 * [Ubuntu](https://www.mindforger.com/docs/installation.html#ubuntu)
 * [Snap](https://snapcraft.io/mindforger)
-* [Flatpak](https://github.com/dvorka/mindforger/releases)
+* [Flatpak](https://www.mindforger.com/docs/installation.html#flatpak)
 * [Debian](https://www.mindforger.com/docs/installation.html#debian)
 * [Fedora](https://www.mindforger.com/docs/installation.html#fedora)
 * [FreeBSD](https://www.mindforger.com/docs/installation.html#freebsd)

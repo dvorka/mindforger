@@ -1,0 +1,51 @@
+name: Flatpak build
+
+# build the Flatpak bundle downloadable from the GitHub release only for release
+# pull requests:
+#   - target (base) branch must be master
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    # the KDE runtime/SDK and the Qt WebEngine base app are ~4GB of downloads and
+    # the application itself is a full Qt build - the default 6h limit is far more
+    # than this ever needs, fail fast instead if something hangs
+    timeout-minutes: 90
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # deps/cmark-gfm (built by the manifest) and doc/ (the default repository
+          # content shipped as share/doc/mindforger) are Git submodules - the Flatpak
+          # manifest builds from the working tree, so they must be checked out
+          submodules: recursive
+
+      - name: Install flatpak and flatpak-builder
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y flatpak flatpak-builder
+
+      - name: Install Qt 5.15 runtime, SDK and the Qt WebEngine base app
+        # MindForger is a Qt 5 application, hence the KDE (not the freedesktop)
+        # runtime - see build/flatpak/com.mindforger.MindForger.yaml for why Qt
+        # WebEngine comes from a separate base app
+        run: |
+          flatpak remote-add --if-not-exists --user flathub \
+              https://flathub.org/repo/flathub.flatpakrepo
+          flatpak install --user -y flathub \
+              org.kde.Platform//5.15-24.08 \
+              org.kde.Sdk//5.15-24.08 \
+              io.qt.qtwebengine.BaseApp//5.15-24.08
+
+      - name: Build Flatpak bundle
+        run: cd build && make distro-flatpak-build
+
+      - name: Archive push build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mindforger-flatpak
+          path: distro/flatpak/mindforger-*.flatpak
+          if-no-files-found: error
