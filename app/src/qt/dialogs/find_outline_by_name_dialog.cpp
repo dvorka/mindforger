@@ -24,14 +24,44 @@ namespace m8r {
 
 using namespace std;
 
+FindOutlineByNameDialog::MyLineEdit::MyLineEdit(
+        QListView* t,
+        FindOutlineByNameDialog* parent)
+    : QLineEdit(parent), dialog(parent), target(t)
+{
+}
+
+void FindOutlineByNameDialog::MyLineEdit::keyPressEvent(QKeyEvent* event)
+{
+    if(event->key() == Qt::Key_Down) {
+        // debounced filter pass may still be pending -> must be run first otherwise
+        // the 1st row might not match what has just been typed
+        dialog->flushPendingFilter();
+
+        // give focus to the 1st
+        if(target->model()->rowCount()>0) {
+            QModelIndex index = target->model()->index(0,0);
+            target->setCurrentIndex(index);
+            target->scrollTo(index, QAbstractItemView::PositionAtTop);
+        }
+        target->setFocus();
+        event->accept();
+        return;
+    }
+
+    QLineEdit::keyPressEvent(event);
+}
+
 FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
     : QDialog(parent)
 {
     // widgets
     listView = new QListView(this);
-    // list view model must be set - use of this type of mode enable the use of string lists controlling its content
-    listView->setModel(&listViewModel);
-    // disable editation of the list item on doble click
+    // list view model must be set - enables the use of string lists controlling its content
+    proxyModel = new NameFilterProxyModel(this);
+    proxyModel->setSourceModel(&listViewModel);
+    proxyModel->setNames(&cachedNames);
+    listView->setModel(proxyModel);
     listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 
@@ -54,8 +84,14 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
 
     closeButton = new QPushButton{tr("&Cancel")};
 
+    // debounce expensive filter pass so that fast typing/backspacing collapses to 1 pass
+    filterDebounceTimer = new QTimer(this);
+    filterDebounceTimer->setSingleShot(true);
+    filterDebounceTimer->setInterval(60);
+
     // signals
     connect(lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(enableFindButton(const QString&)));
+    connect(filterDebounceTimer, SIGNAL(timeout()), this, SLOT(filterNow()));
     connect(lineEdit, SIGNAL(returnPressed()), this, SLOT(handleReturn()));
     connect(findButton, SIGNAL(clicked()), this, SLOT(handleChoice()));
     connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
@@ -113,86 +149,105 @@ void FindOutlineByNameDialog::show(
 
     things.clear();
     listViewStrings.clear();
+    cachedNames.clear();
     bool useCustomNames = customizedNames!=nullptr && customizedNames->size()>0;
     if(ts.size()) {
         for(size_t i=0; i<ts.size(); i++) {
             things.push_back(ts[i]);
+            // name used for filtering (see filterNow()) - cached once here rather than
+            // re-derived from std::string on every keystroke
+            QString name = ts.at(i)->getName().size()
+                ? QString::fromStdString(ts[i]->getName())
+                : QString{};
+            cachedNames.push_back(name);
             if(useCustomNames) {
                 listViewStrings << QString::fromStdString(customizedNames->at(i));
             } else {
-                if(ts.at(i)->getName().size()) {
-                    listViewStrings << QString::fromStdString(ts[i]->getName());
-                } else {
-                    listViewStrings << "";
-                }
+                listViewStrings << name;
             }
         }
-        ((QStringListModel*)listView->model())->setStringList(listViewStrings);
     }
-
+    // model must be refreshed even when there is nothing to show - avoid displaying old rows
+    listViewModel.setStringList(listViewStrings);
     findButton->setEnabled(things.size());
 
+    // filter pass is run synchronously (not debounced) here
     if(init) {
         lineEdit->clear();
         lineEdit->setFocus();
-    } else {
-        enableFindButton(lineEdit->text());
     }
+    filterDebounceTimer->stop();
+    filterNow();
 
     QDialog::show();
 }
 
-void FindOutlineByNameDialog::enableFindButton(const QString& text)
+void FindOutlineByNameDialog::enableFindButton(const QString&)
 {
-    listViewStrings.clear();
-    if(!text.isEmpty()) {
-        if(keywordsCheckBox->isEnabled() && keywordsCheckBox->isChecked()) {
-            int visible = 0;
-            int row = 0;
-            for(Thing* e:things) {
-                QString s = QString::fromStdString(e->getName());
-                if(stringMatchByKeywords(text, s, caseCheckBox->isChecked())) {
-                    listView->setRowHidden(row, false);
-                    visible++;
-                } else {
-                    listView->setRowHidden(row, true);
-                }
-                row++;
-            }
-            findButton->setEnabled(visible);
-        } else {
-            Qt::CaseSensitivity c = caseCheckBox->isChecked()?Qt::CaseInsensitive:Qt::CaseSensitive;
-            // IMPROVE find a list view method giving # of visible rows
-            int visible = 0;
-            int row = 0;
-            for(Thing* e:things) {
-                QString s = QString::fromStdString(e->getName());
-                if(s.startsWith(text,c)) {
-                    listView->setRowHidden(row, false);
-                    visible++;
-                } else {
-                    listView->setRowHidden(row, true);
-                }
-                row++;
-            }
-            findButton->setEnabled(visible);
-        }
-    } else {
-        for(size_t row = 0; row<things.size(); row++) {
-            listView->setRowHidden(row, false);
-        }
-        findButton->setEnabled(things.size());
+    filterDebounceTimer->start();
+}
+
+void FindOutlineByNameDialog::filterNow()
+{
+    bool keywords = keywordsCheckBox->isEnabled() && keywordsCheckBox->isChecked();
+    proxyModel->setFilterState(lineEdit->text(), keywords, caseCheckBox->isChecked());
+    findButton->setEnabled(proxyModel->rowCount());
+}
+
+bool FindOutlineByNameDialog::NameFilterProxyModel::filterAcceptsRow(
+    int sourceRow, const QModelIndex& sourceParent) const
+{
+    Q_UNUSED(sourceParent);
+
+    if(names==nullptr || sourceRow<0 || sourceRow>=names->size()) {
+        return false;
     }
+    if(filterText.isEmpty()) {
+        return true;
+    }
+
+    const QString& s = names->at(sourceRow);
+    if(keywordsMode) {
+        return stringMatchByKeywords(filterText, s, caseSensitivity==Qt::CaseInsensitive);
+    } else {
+        return s.startsWith(filterText, caseSensitivity);
+    }
+}
+
+void FindOutlineByNameDialog::flushPendingFilter()
+{
+    if(filterDebounceTimer->isActive()) {
+        filterDebounceTimer->stop();
+        filterNow();
+    }
+}
+
+Thing* FindOutlineByNameDialog::getThing(const QModelIndex& sourceIndex) const
+{
+    // the proxy model's source rows and things are kept in lockstep by show()
+    if(!sourceIndex.isValid()
+        || sourceIndex.row()<0
+        || static_cast<size_t>(sourceIndex.row())>=things.size()
+    ) {
+        MF_DEBUG(
+            "FindOutlineByNameDialog: no thing for source row "
+            << sourceIndex.row() << " of " << things.size() << endl
+        );
+        return nullptr;
+    }
+
+    return things[sourceIndex.row()];
 }
 
 void FindOutlineByNameDialog::handleReturn()
 {
+    // flush a pending debounced filter so the proxy model below is up to date
+    flushPendingFilter();
+
     if(findButton->isEnabled()) {
-        for(size_t row = 0; row<things.size(); row++) {
-            if(!listView->isRowHidden(row)) {
-                choice = things[row];
-                break;
-            }
+        if(proxyModel->rowCount()>0) {
+            QModelIndex sourceIndex = proxyModel->mapToSource(proxyModel->index(0,0));
+            choice = getThing(sourceIndex);
         }
 
         QDialog::close();
@@ -202,8 +257,12 @@ void FindOutlineByNameDialog::handleReturn()
 
 void FindOutlineByNameDialog::handleChoice()
 {
+    // flush a pending debounced filter so the proxy model below is up to date
+    flushPendingFilter();
+
     if(listView->currentIndex().isValid()) {
-        choice = things[listView->currentIndex().row()];
+        QModelIndex sourceIndex = proxyModel->mapToSource(listView->currentIndex());
+        choice = getThing(sourceIndex);
 
         QDialog::close();
         emit searchFinished();

@@ -19,18 +19,23 @@
 
 # Hints:
 # - nerd English is OOTB ~ strings in the source code
-# - en ... user friendly English translation
+# - cn ... user friendly Chinese translation
 # - cs ... user friendly Czech translation
+# - en ... user friendly English translation
+# - hi ... user friendly Hindi translation
+# - sp ... user friendly Spanish translation
 
-MF_LANG="en"
+MF_LANG="cs"
 
 if [[ "${1}" ]]
 then
     MF_LANG="${1}"
 fi
 
-echo "Running Qt Linquist for language: ${MF_LANG} (options: en, cs)"
+echo "Running Qt Linguist for language: ${MF_LANG} (options: cs, en, es, hi, zh_cn)"
 
-pushd . && cd ../../app/resources/qt/translations && linguist mindforger_en.ts && popd && lrelease ../../app/app.pro
+# edit ONE language in Qt Linguist, then compile ALL languages to .qm catalogs
+pushd . && cd ../../app/resources/qt/translations && linguist mindforger_${MF_LANG}.ts && popd \
+&& ./l10n-release-strings.sh
 
 # eof

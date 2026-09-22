@@ -2,19 +2,19 @@
 #
 # This is the STRICT manifest, published to the Snap Store.
 #
-# Build (strict):  cd build && make dist-snap
+# Build (strict):  cd build && make distro-snap
 # Install (strict): sudo snap install --dangerous mindforger_*.snap
 # Run: mindforger
 #
 # A CLASSIC variant (full host access, for the downloadable GitHub Release build - no
 # 'home' interface restrictions on hidden files or paths outside $HOME) is derived from
 # this file by build/snap/apply-classic.sh - never edit a classic manifest by hand.
-# Build (classic): cd build && make dist-snap-classic
+# Build (classic): cd build && make distro-snap-classic
 
 name: mindforger
 title: MindForger
 base: core24
-version: '2.2.0'
+version: '2.3.0'
 summary: Thinking notebook and Markdown IDE
 description: |
   MindForger is a human-mind-inspired personal knowledge management tool and

@@ -90,8 +90,8 @@ DEPENDPATH += $$PWD/../lib/src
 
 # MindForger lib
 win32 {
-    CONFIG(release, debug|release): LIBS += -L$$PWD/../lib/release -lmindforger
-    else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/debug -lmindforger
+    CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../lib/release -lmindforger
+    else:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../lib/debug -lmindforger
 } else {
     # Linux and macOS
     # TODO split macOS
@@ -288,6 +288,7 @@ HEADERS += \
     src/qt/dialogs/add_library_dialog.h \
     src/qt/dialogs/export_csv_file_dialog.h \
     src/qt/dialogs/organizer_new_dialog.h \
+    src/qt/dialogs/notebook_tree_new_dialog.h \
     src/qt/dialogs/rm_library_dialog.h \
     src/qt/dialogs/run_tool_dialog.h \
     src/qt/dialogs/wingman_dialog.h \
@@ -314,6 +315,9 @@ HEADERS += \
     src/qt/outlines_map_model.h \
     src/qt/outlines_map_presenter.h \
     src/qt/outlines_map_view.h \
+    src/qt/notebook_trees_table_model.h \
+    src/qt/notebook_trees_table_presenter.h \
+    src/qt/notebook_trees_table_view.h \
     src/qt/qt_commons.h \
     src/qt/spelling/abstract_dictionary.h \
     src/qt/spelling/abstract_dictionary_provider.h \
@@ -414,6 +418,7 @@ SOURCES += \
     src/qt/dialogs/add_library_dialog.cpp \
     src/qt/dialogs/export_csv_file_dialog.cpp \
     src/qt/dialogs/organizer_new_dialog.cpp \
+    src/qt/dialogs/notebook_tree_new_dialog.cpp \
     src/qt/dialogs/rm_library_dialog.cpp \
     src/qt/dialogs/run_tool_dialog.cpp \
     src/qt/dialogs/wingman_dialog.cpp \
@@ -440,6 +445,9 @@ SOURCES += \
     src/qt/outlines_map_model.cpp \
     src/qt/outlines_map_presenter.cpp \
     src/qt/outlines_map_view.cpp \
+    src/qt/notebook_trees_table_model.cpp \
+    src/qt/notebook_trees_table_presenter.cpp \
+    src/qt/notebook_trees_table_view.cpp \
     src/qt/spelling/dictionary_manager.cpp \
     src/qt/spelling/spell_checker.cpp \
     src/qt/tags_table_model.cpp \
@@ -473,13 +481,44 @@ win32 {
 # L10n
 #./resources/qt/translations/mindforger_de.ts
 #./resources/qt/translations/mindforger_fr.ts
-#./resources/qt/translations/mindforger_es.ts
 TRANSLATIONS = \
     ./resources/qt/translations/mindforger_nerd_en.ts \
     ./resources/qt/translations/mindforger_nerd_cs.ts \
     ./resources/qt/translations/mindforger_en.ts \
     ./resources/qt/translations/mindforger_cs.ts \
+    ./resources/qt/translations/mindforger_nerd_hi.ts \
+    ./resources/qt/translations/mindforger_hi.ts \
+    ./resources/qt/translations/mindforger_nerd_es.ts \
+    ./resources/qt/translations/mindforger_es.ts \
+    ./resources/qt/translations/mindforger_nerd_zh_cn.ts \
     ./resources/qt/translations/mindforger_zh_cn.ts
+
+# lupdate (see the l10n targets of build/Makefile) must NOT scan bundled 3rd
+# party code - neither the minified JavaScript libraries referred to by
+# mf-resources.qrc, nor the C/C++ dependencies. None of them is translatable
+# and lupdate parses them as QML/JS resp. C++, which floods every l10n run w/
+# megabytes of diagnostics - and buries the warnings about our OWN sources.
+TR_EXCLUDE += $$PWD/resources/qt/js/*
+TR_EXCLUDE += $$PWD/../deps/*
+
+# compile .ts translation files to binary .qm catalogs on every build - the .qm
+# catalogs are generated files (they are NOT stored in the repository) and lrelease
+# is run whenever a catalog is missing or older than its .ts source
+#
+# an explicit extra compiler is used instead of Qt's CONFIG+=lrelease feature as
+# that feature requires Qt 5.13+, while MindForger is built w/ older Qt as well
+# (AppVeyor CI for Windows uses Qt 5.9)
+#
+# the catalogs MUST be generated next to mf-resources.qrc which refers to them using
+# paths relative to itself - catalogs generated to the build directory would break
+# shadow builds (Qt Creator, snapcraft qmake plugin, ...) as rcc would not find them
+qtPrepareTool(QMAKE_LRELEASE, lrelease)
+lrelease.name = lrelease
+lrelease.input = TRANSLATIONS
+lrelease.output = $$PWD/resources/qt/translations/${QMAKE_FILE_BASE}.qm
+lrelease.commands = $$QMAKE_LRELEASE ${QMAKE_FILE_IN} -qm ${QMAKE_FILE_OUT}
+lrelease.CONFIG += no_link target_predeps
+QMAKE_EXTRA_COMPILERS += lrelease
 
 RESOURCES += \
     ./mf-resources.qrc

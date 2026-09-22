@@ -17,6 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-cd ../.. && lupdate mindforger.pro && cd build
+# lupdate is run on app/app.pro - the app is the ONLY subproject w/ translatable
+# strings (TRANSLATIONS) and running it on the top level, subdirs mindforger.pro
+# only adds a 'no TS files specified' warning for the projects w/o catalogs
+cd ../.. && lupdate app/app.pro && cd build
 
 # eof

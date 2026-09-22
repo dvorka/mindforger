@@ -64,6 +64,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="ConfigurationTestCase.Save*"
 #export OPTION_TEST="ConfigurationTestCase.SaveAndLoad"
 export OPTION_TEST="ConfigurationTestCase.SaveDefaultConfig"
+#export OPTION_TEST="CsvTestCase.*"
 #export OPTION_TEST="DateTimeGearTestCase.*"
 #export OPTION_TEST="DateTimeGearTestCase.Immutability"
 #export OPTION_TEST="FileGearTestCase.DeepCopy"

@@ -60,32 +60,33 @@ If you have any ideas, suggestions, news to share, or constructive criticism to 
 ## Installation
 Install:
 
-* [macOS](https://github.com/dvorka/mindforger/wiki/Installation#macos)
-* [Windows](https://github.com/dvorka/mindforger/wiki/Installation#windows)
-* [Ubuntu](https://github.com/dvorka/mindforger/wiki/Installation#ubuntu)
+* [macOS](https://www.mindforger.com/docs/installation.html#macos)
+* [Windows](https://www.mindforger.com/docs/installation.html#windows)
+* [Winget](https://github.com/microsoft/winget-pkgs/tree/master/manifests/m/MindForger/MindForger)
+* [Ubuntu](https://www.mindforger.com/docs/installation.html#ubuntu)
 * [Snap](https://snapcraft.io/mindforger)
-* [Debian](https://github.com/dvorka/mindforger/wiki/Installation#debian)
-* [Fedora](https://github.com/dvorka/mindforger/wiki/Installation#fedora)
-* [FreeBSD](https://github.com/dvorka/mindforger/wiki/Installation#freebsd)
-* [Arch Linux](https://github.com/dvorka/mindforger/wiki/Installation#arch-linux)
-* [NixOS](https://github.com/dvorka/mindforger/wiki/Installation#nixos)
-* [openSUSE](https://github.com/dvorka/mindforger/wiki/Installation#opensuse)
-* [WSL](https://github.com/dvorka/mindforger/wiki/Installation#wsl)
+* [Debian](https://www.mindforger.com/docs/installation.html#debian)
+* [Fedora](https://www.mindforger.com/docs/installation.html#fedora)
+* [FreeBSD](https://www.mindforger.com/docs/installation.html#freebsd)
+* [Arch Linux](https://www.mindforger.com/docs/installation.html#arch-linux)
+* [NixOS](https://www.mindforger.com/docs/installation.html#nixos)
+* [openSUSE](https://www.mindforger.com/docs/installation.html#opensuse)
+* [WSL](https://www.mindforger.com/docs/installation.html#wsl)
 
 Build:
 
-* [build on macOS](https://github.com/dvorka/mindforger/wiki/Installation#build-on-macos)
-* [build on Windows](https://github.com/dvorka/mindforger/wiki/Installation#build-on-windows)
-* [build on Ubuntu](https://github.com/dvorka/mindforger/wiki/Installation#build-on-ubuntu)
-* [build on Debian](https://github.com/dvorka/mindforger/wiki/Installation#build-on-debian)
-* [build on Fedora](https://github.com/dvorka/mindforger/wiki/Installation#build-on-fedora)
-* [build on Gentoo](https://github.com/dvorka/mindforger/wiki/Installation#build-on-gentoo)
-* [build on NixOS](https://github.com/dvorka/mindforger/wiki/Installation#build-on-nixos)
-* [build on WSL](https://github.com/dvorka/mindforger/wiki/Installation#build-on-wsl)
+* [build on macOS](https://www.mindforger.com/docs/installation.html#build-on-macos)
+* [build on Windows](https://www.mindforger.com/docs/installation.html#build-on-windows)
+* [build on Ubuntu](https://www.mindforger.com/docs/installation.html#build-on-ubuntu)
+* [build on Debian](https://www.mindforger.com/docs/installation.html#build-on-debian)
+* [build on Fedora](https://www.mindforger.com/docs/installation.html#build-on-fedora)
+* [build on Gentoo](https://www.mindforger.com/docs/installation.html#build-on-gentoo)
+* [build on NixOS](https://www.mindforger.com/docs/installation.html#build-on-nixos)
+* [build on WSL](https://www.mindforger.com/docs/installation.html#build-on-wsl)
 
 Docker:
 
-* [build and run container](https://github.com/dvorka/mindforger/wiki/Installation#build-and-run-in-container)
+* [build and run container](https://www.mindforger.com/docs/installation.html#build-and-run-in-container)
 
 Tarball:
 
@@ -104,12 +105,12 @@ Check also [packages](https://pkgs.org/search/?q=mindforger) for Linux and Unix.
 ## Documentation
 Read:
 
-* [Getting started](https://github.com/dvorka/mindforger/wiki/Getting-started)
-* [Installation](https://github.com/dvorka/mindforger/wiki/Installation)
-* [User documentation](https://github.com/dvorka/mindforger/wiki/User-documentation)
-* [Developer documentation](https://github.com/dvorka/mindforger/wiki/Developer-documentation)
-* [Project history](https://github.com/dvorka/mindforger/wiki/History)
-* [FAQs](https://github.com/dvorka/mindforger/wiki/FAQs)
+* [Getting started](https://www.mindforger.com/docs/getting-started.html)
+* [Installation](https://www.mindforger.com/docs/installation.html)
+* [User documentation](https://www.mindforger.com/docs/user-documentation.html)
+* [Developer documentation](https://www.mindforger.com/docs/developer-documentation.html)
+* [Project history](https://www.mindforger.com/docs/history.html)
+* [FAQs](https://www.mindforger.com/docs/faqs.html)
 
 Watch:
 
@@ -118,7 +119,6 @@ Watch:
 Check:
 
 * `man mindforger`
-
 
 
 ## Bugs and Feature Requests

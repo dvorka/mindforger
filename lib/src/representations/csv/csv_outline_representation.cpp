@@ -18,6 +18,9 @@
 */
 #include "csv_outline_representation.h"
 
+#include <algorithm>
+#include <cstdio>
+
 using namespace std;
 using namespace m8r::filesystem;
 
@@ -46,66 +49,24 @@ bool CsvOutlineRepresentation::to(
     int oheTagEncodingCardinality,
     ProgressCallbackCtx* callbackCtx
 ) {
-    MF_DEBUG("Exporting Memory to CSV "
-        << sourceFile.getName()
-        << " with OHE " << oheTagEncodingCardinality << " ..."
-        << endl
-    );
+    static const size_t ROWS_PER_STEP = 1000;
 
-    if(sourceFile.getName().size()) {
-        if(os.size()) {
-            // prepare top tags: filter out entries w/ low cardinality
-            vector<const Tag*> oheTags{};
-            if(oheTagEncodingCardinality > -1) {
-                for(auto t:tagsCardinality) {
-                    if(t.second >= oheTagEncodingCardinality) {
-                        oheTags.push_back(t.first);
-                    }
-                }
-            }
-            vector<string> escapedOheTags{};
-            for(auto t:oheTags) {
-                escapedOheTags.push_back(normalizeToNcName(t->getName(), '_'));
-            }
-
-            std::ofstream out{};
-            try {
-                out.open(sourceFile.getName());
-
-                float exported{0.0};
-                toHeader(out, escapedOheTags);
-                for(Outline* o:os) {
-                    MF_DEBUG("  Exporting O: " << o->getName() << " / " << o->getKey() << endl);
-                    to(o, oheTags, out);
-
-                    if(callbackCtx) {
-                        callbackCtx->updateProgress(++exported/(float)os.size());
-                    }
-                }
-            } catch(const std::ofstream::failure& e) {
-                cerr << "Error: unable to open/write file "
-                     << sourceFile.getName()
-                     << " " << e.what();
-                try {
-                    out.close();
-                } catch(const std::ofstream::failure& e) {}
-
-                return false;
-            }
-            out.flush();
-            out.close();
-
-            MF_DEBUG("FINISHED export of MIND to CSV " << sourceFile.getName() << endl);
-            return true;
+    CsvOutlinesExport csvExport{
+        os, tagsCardinality, sourceFile.getName(), oheTagEncodingCardinality
+    };
+    if(!csvExport.start()) {
+        return false;
+    }
+    while(csvExport.step(ROWS_PER_STEP)) {
+        if(callbackCtx) {
+            callbackCtx->updateProgress(csvExport.getProgress());
         }
-    } else {
-        cerr << "Error: target file name is empty";
     }
 
-    return false;
+    return csvExport.getStatus() == CsvOutlinesExport::Status::FINISHED;
 }
 
-void CsvOutlineRepresentation::toHeader(std::ofstream& out, vector<string>& extraColumns)
+void CsvOutlineRepresentation::toHeader(std::ofstream& out, const vector<string>& extraColumns)
 {
 
     // O/N CSV line
@@ -142,16 +103,27 @@ void CsvOutlineRepresentation::toHeader(std::ofstream& out, vector<string>& extr
 }
 
 void CsvOutlineRepresentation::to(
-    Outline* o, vector<const Tag*> oheTags, ofstream& out
+    Outline* o, const vector<const Tag*>& oheTags, ofstream& out
 ) {
-    MF_DEBUG("\n  " << o->getName());
+    toOutlineRow(o, oheTags, out);
+
+    // Ns: offset <1,inf>
+    const vector<Note*>& ns = o->getNotes();
+    for(size_t i = 0; i < ns.size(); i++) {
+        toNoteRow(ns[i], i+1, oheTags, out);
+    }
+}
+
+void CsvOutlineRepresentation::toOutlineRow(
+    Outline* o, const vector<const Tag*>& oheTags, ofstream& out
+) {
+    MF_DEBUG("  Exporting O to CSV: " << o->getName() << " / " << o->getKey() << endl);
 
     string s{};
 
-    // O
     out << o->getKey() << ",";
     out << "o,";
-    s.clear(); quoteValue(o->getName(), s);
+    quoteValue(o->getName(), s);
     out << s << ",";
     // O's offset and depth == 0
     out << "0,";
@@ -164,50 +136,46 @@ void CsvOutlineRepresentation::to(
     s.clear(); quoteValue(o->getDescriptionAsString(" "), s);
     out << s;
 
+    toOheTags(oheTags, o->getTags(), out);
+
+    out << "\n";
+}
+
+void CsvOutlineRepresentation::toNoteRow(
+    Note* n, int offset, const vector<const Tag*>& oheTags, ofstream& out
+) {
+    string s{};
+
+    out << n->getKey() << ",";
+    out << "n,";
+    quoteValue(n->getName(), s);
+    out << s << ",";
+    // N's offset: <1,inf>
+    out << offset << ",";
+    // N's depth: <1,inf>
+    out << (n->getDepth()+1) << ",";
+    out << n->getReads() << ",";
+    out << n->getRevision() << ",";
+    out << n->getCreated() << ",";
+    out << n->getModified() << ",";
+    out << n->getRead() << ",";
+    s.clear(); quoteValue(n->getDescriptionAsString(" "), s);
+    out << s;
+
+    toOheTags(oheTags, n->getTags(), out);
+
+    out << "\n";
+}
+
+void CsvOutlineRepresentation::toOheTags(
+    const vector<const Tag*>& oheTags, const vector<const Tag*>* tags, ofstream& out
+) {
     for(auto t:oheTags) {
-        if(o->hasTag(t)) {
+        if(tags && std::find(tags->begin(), tags->end(), t) != tags->end()) {
             out << ",1";
         } else {
             out << ",0";
         }
-    }
-
-    out << "\n";
-
-    // Ns
-    const vector<Note*>& ns = o->getNotes();
-    int offset = 1;
-    for(Note* n:ns) {
-        MF_DEBUG("    " << n->getName());
-        out << n->getKey() << ",";
-        out << "n,";
-        s.clear(); quoteValue(n->getName(), s);
-        out << s << ",";
-        // N's offset: <1,inf>
-        out << offset++ << ",";
-        // N's depth: <1,inf>
-        out << (n->getDepth()+1) << ",";
-        out << n->getReads() << ",";
-        out << n->getRevision() << ",";
-        out << n->getCreated() << ",";
-        out << n->getModified() << ",";
-        out << n->getRead() << ",";
-        MF_DEBUG(" B ");
-        s.clear(); quoteValue(n->getDescriptionAsString(" "), s);
-        MF_DEBUG(" F ");
-        out << s;
-
-        for(auto t:oheTags) {
-            if(n->hasTag(t)) {
-                out << ",1";
-            } else {
-                out << ",0";
-            }
-        }
-
-        out << "\n";
-        MF_DEBUG(" ... DONE" << endl);
-        out.flush();
     }
 }
 
@@ -221,6 +189,170 @@ void CsvOutlineRepresentation::quoteValue(const std::string& is, std::string& os
 
         os[0] = '\"';
         os.append("\"");
+    }
+}
+
+/*
+ * CsvOutlinesExport
+ */
+
+CsvOutlinesExport::CsvOutlinesExport(
+    const vector<Outline*>& os,
+    const map<const Tag*,int>& tagsCardinality,
+    const string& fileName,
+    int oheTagEncodingCardinality
+)
+    : outlines{os},
+      fileName{fileName},
+      oheTags{},
+      escapedOheTags{},
+      out{},
+      status{Status::READY},
+      outlineIndex{0},
+      rowInOutline{0},
+      exportedRows{0},
+      totalRows{0}
+{
+    // prepare top tags: filter out entries w/ low cardinality
+    if(oheTagEncodingCardinality > -1) {
+        for(auto t:tagsCardinality) {
+            if(t.second >= oheTagEncodingCardinality) {
+                oheTags.push_back(t.first);
+            }
+        }
+    }
+    for(auto t:oheTags) {
+        escapedOheTags.push_back(normalizeToNcName(t->getName(), '_'));
+    }
+
+    // O row + N rows
+    for(Outline* o:outlines) {
+        totalRows += 1 + o->getNotesCount();
+    }
+}
+
+CsvOutlinesExport::~CsvOutlinesExport()
+{
+    // never leave incomplete CSV behind
+    if(status == Status::RUNNING) {
+        cancel();
+    }
+}
+
+bool CsvOutlinesExport::start()
+{
+    if(status != Status::READY) {
+        return false;
+    }
+
+    MF_DEBUG("Exporting Memory to CSV " << fileName << " with " << oheTags.size() << " OHE tags ..." << endl);
+
+    if(fileName.empty()) {
+        cerr << "Error: target CSV file name is empty" << endl;
+        status = Status::FAILED;
+        return false;
+    }
+
+    out.open(fileName);
+    if(!out.is_open()) {
+        cerr << "Error: unable to open CSV file " << fileName << " for writing" << endl;
+        status = Status::FAILED;
+        return false;
+    }
+
+    status = Status::RUNNING;
+    representation.toHeader(out, escapedOheTags);
+    if(!out) {
+        fail();
+        return false;
+    }
+
+    // nothing to export > finish immediately
+    step(0);
+    return true;
+}
+
+bool CsvOutlinesExport::step(size_t maxRows)
+{
+    if(status != Status::RUNNING) {
+        return false;
+    }
+
+    size_t rows{0};
+    while(rows < maxRows && outlineIndex < outlines.size()) {
+        Outline* o = outlines[outlineIndex];
+        const vector<Note*>& ns = o->getNotes();
+        if(rowInOutline == 0) {
+            representation.toOutlineRow(o, oheTags, out);
+        } else if(rowInOutline <= ns.size()) {
+            // N's offset: <1,inf>
+            representation.toNoteRow(ns[rowInOutline-1], rowInOutline, oheTags, out);
+        }
+        rows++;
+
+        // move to the next Outline once the last N was exported
+        if(++rowInOutline > ns.size()) {
+            outlineIndex++;
+            rowInOutline = 0;
+        }
+    }
+    exportedRows += rows;
+
+    if(!out) {
+        fail();
+        return false;
+    }
+
+    if(outlineIndex >= outlines.size()) {
+        out.flush();
+        out.close();
+        if(!out) {
+            fail();
+            return false;
+        }
+        status = Status::FINISHED;
+        MF_DEBUG("FINISHED export of Memory to CSV " << fileName << endl);
+        return false;
+    }
+
+    return true;
+}
+
+void CsvOutlinesExport::cancel()
+{
+    if(status == Status::READY || status == Status::RUNNING) {
+        MF_DEBUG("CANCELLED export of Memory to CSV " << fileName << endl);
+        closeAndRemoveFile();
+        status = Status::CANCELLED;
+    }
+}
+
+float CsvOutlinesExport::getProgress() const
+{
+    if(status == Status::FINISHED) {
+        return 1.0f;
+    }
+    if(totalRows == 0) {
+        return 0.0f;
+    }
+    return static_cast<float>(exportedRows)/static_cast<float>(totalRows);
+}
+
+void CsvOutlinesExport::fail()
+{
+    cerr << "Error: unable to write CSV file " << fileName << endl;
+    closeAndRemoveFile();
+    status = Status::FAILED;
+}
+
+void CsvOutlinesExport::closeAndRemoveFile()
+{
+    if(out.is_open()) {
+        out.close();
+    }
+    // remove only the file created by this export
+    if(status == Status::RUNNING && isFile(fileName.c_str())) {
+        std::remove(fileName.c_str());
     }
 }
 

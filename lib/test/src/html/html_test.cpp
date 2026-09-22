@@ -291,6 +291,108 @@ TEST(HtmlTestCase, DiagramSupportOfflineMermaidIsFixed)
     EXPECT_EQ(std::string::npos, html.find("https://cdnjs.cloudflare.com"));
 }
 
+TEST(HtmlTestCase, SrcHighlightDisabledByDefault)
+{
+    // GIVEN: source code syntax highlighting disabled (the default)
+    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-hl-no.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
+    m8r::Mind mind(config);
+    m8r::HtmlColorsMock dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(), dummyColors, nullptr};
+    mind.learn();
+    mind.think().get();
+    string markdown{"# Test\n\n```cpp\nint i = 0;\n```\n"};
+
+    // WHEN
+    string html{};
+    htmlRepresentation.to(&markdown, &html);
+
+    // THEN: no highlight.js JS/CSS is injected at all
+    EXPECT_EQ(std::string::npos, html.find("highlight.js"));
+    EXPECT_EQ(std::string::npos, html.find("highlight.css"));
+    EXPECT_EQ(std::string::npos, html.find("hljs."));
+}
+
+TEST(HtmlTestCase, SrcHighlightEnabledUsesOfflineQrcBundle)
+{
+    // GIVEN: source code syntax highlighting enabled on the default (Qt
+    // WebEngine) rendering backend
+    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-hl-yes.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
+    config.setUiEnableSrcHighlightInMd(true);
+    config.setHtmlRenderingWebEngineBackend(true);
+    m8r::Mind mind(config);
+    m8r::HtmlColorsMock dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(), dummyColors, nullptr};
+    mind.learn();
+    mind.think().get();
+    string markdown{"# Test\n\n```cpp\nint i = 0;\n```\n"};
+
+    // WHEN
+    string html{};
+    htmlRepresentation.to(&markdown, &html);
+
+    // THEN: highlight.js is loaded exclusively from bundled Qt resources - never the network
+    EXPECT_NE(std::string::npos, html.find("qrc:/js/highlight.js"));
+    EXPECT_NE(std::string::npos, html.find("qrc:/html-css/highlight.css"));
+    EXPECT_NE(std::string::npos, html.find("hljs.highlightAll();"));
+    EXPECT_EQ(std::string::npos, html.find("http://"));
+    EXPECT_EQ(std::string::npos, html.find("https://"));
+}
+
+TEST(HtmlTestCase, SrcHighlightDisabledOnLegacyWebKitBackend)
+{
+    // GIVEN: source code syntax highlighting enabled in config, but rendering
+    // via the legacy Qt WebKit (mfwebkit) backend, whose JS engine cannot
+    // safely run the ES2015+ highlight.js bundle
+    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-hl-webkit.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
+    config.setUiEnableSrcHighlightInMd(true);
+    config.setHtmlRenderingWebEngineBackend(false);
+    m8r::Mind mind(config);
+    m8r::HtmlColorsMock dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(), dummyColors, nullptr};
+    mind.learn();
+    mind.think().get();
+    string markdown{"# Test\n\n```cpp\nint i = 0;\n```\n"};
+
+    // WHEN
+    string html{};
+    htmlRepresentation.to(&markdown, &html);
+
+    // THEN: highlight.js is NOT injected despite being enabled in config
+    EXPECT_EQ(std::string::npos, html.find("highlight.js"));
+    EXPECT_EQ(std::string::npos, html.find("highlight.css"));
+    EXPECT_EQ(std::string::npos, html.find("hljs."));
+
+    // cleanup
+    config.setHtmlRenderingWebEngineBackend(true);
+}
+
 TEST(HtmlTestCase, DiagramSupportOnlineIsNoLongerOffered)
 {
     // GIVEN: ONLINE explicitly set (no longer reachable from the Preferences UI,

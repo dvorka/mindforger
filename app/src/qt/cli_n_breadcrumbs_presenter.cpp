@@ -65,22 +65,21 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
                     "<br>? ... help"
                     "<br>/ ... find"
                     "<br>@ ... knowledge recherche"
-                    "<br>> ... run a command"
+                    "<br>! ... run a command"
                     //"<br>: ... chat with workspace, Notebook or Note"
-                    "<br>&nbsp;&nbsp;... or full-text search phrase"
                     "</pre>"
                     "<br>Examples:"
                     "<pre>"
                     "<br>/ find notebook by tag TODO"
                     "<br>@arxiv LLM"
-                    "<br>> emojis"
+                    "<br>! emojis"
                     //"<br>: explain in simple terms SELECTED"
                     "</pre>"
                 )
             );
             view->setCommand("");
             mainPresenter->getStatusBar()->showInfo(
-                tr("Wingman: ? for help, / search, @ knowledge, > command, or type FTS phrase"));
+                tr("Wingman: ? for help, / search, @ knowledge, ! command, or type FTS phrase"));
             return;
         } else if(command.startsWith(CliAndBreadcrumbsView::CHAR_FIND)) {
             MF_DEBUG("    / HELP find" << endl);
@@ -95,7 +94,7 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
             }
             return;
         } else if(command.startsWith(CliAndBreadcrumbsView::CHAR_CMD)) {
-            MF_DEBUG("    > HELP command" << endl);
+            MF_DEBUG("    ! HELP command" << endl);
             if(command.size()<=2) {
                 view->updateCompleterModel(CliAndBreadcrumbsView::HELP_CMD_CMDS);
             }

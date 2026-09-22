@@ -73,7 +73,7 @@ void StatusBarPresenter::showMindStatistics()
     }
     switch(Configuration::getInstance().getActiveRepository()->getMode()) {
     case Repository::RepositoryMode::REPOSITORY:
-        status += " repository   ";
+        status += " workspace   ";
         break;
     case Repository::RepositoryMode::FILE:
         status += " file   ";

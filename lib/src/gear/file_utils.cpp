@@ -321,11 +321,23 @@ string* fileToString(const string& filename)
     return s;
 }
 
-void stringToFile(const string& filename, const string& content)
+bool stringToFile(const string& filename, const string& content)
 {
     ofstream out(filename);
+    if(!out.is_open()) {
+        cerr << "Error: unable to open file for writing: '" << filename << "'" << endl;
+        return false;
+    }
+
     out << content;
     out.close();
+    // failures like a full disk or an I/O error are reported on flush/close only
+    if(!out.good()) {
+        cerr << "Error: unable to write file: '" << filename << "'" << endl;
+        return false;
+    }
+
+    return true;
 }
 
 time_t fileModificationTime(const string* filename)

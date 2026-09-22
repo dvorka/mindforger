@@ -312,6 +312,72 @@ void NoteEditorView::rewrapParagraph()
     setFocus();
 }
 
+void NoteEditorView::sortLines()
+{
+    QTextCursor cursor = textCursor();
+    QTextDocument* doc = document();
+
+    QTextBlock startBlock{}, endBlock{};
+    if(cursor.hasSelection()) {
+        startBlock = doc->findBlock(cursor.selectionStart());
+        endBlock = doc->findBlock(cursor.selectionEnd());
+        // selection ending at the very beginning of a line does not make that line sorted
+        if(startBlock != endBlock && cursor.selectionEnd() == endBlock.position()) {
+            endBlock = endBlock.previous();
+        }
+    } else {
+        // no selection - sort the block of consecutive non-blank lines under the cursor
+        startBlock = endBlock = cursor.block();
+        if(startBlock.text().trimmed().isEmpty()) {
+            return;
+        }
+        while(startBlock.previous().isValid()
+              && !startBlock.previous().text().trimmed().isEmpty()
+        ) {
+            startBlock = startBlock.previous();
+        }
+        while(endBlock.next().isValid()
+              && !endBlock.next().text().trimmed().isEmpty()
+        ) {
+            endBlock = endBlock.next();
+        }
+    }
+
+    std::vector<std::string> lines{};
+    for(QTextBlock b = startBlock; ; b = b.next()) {
+        lines.push_back(b.text().toStdString());
+        if(b == endBlock) {
+            break;
+        }
+    }
+    if(lines.size() < 2) {
+        return;
+    }
+
+    std::vector<std::string> sorted = sortLinesAlphabetically(lines);
+
+    QString replacement{};
+    for(size_t i = 0; i < sorted.size(); i++) {
+        if(i) {
+            replacement += QChar::LineFeed;
+        }
+        replacement += QString::fromStdString(sorted[i]);
+    }
+
+    QTextCursor editCursor{startBlock};
+    editCursor.movePosition(QTextCursor::StartOfBlock);
+    QTextCursor endCursor{endBlock};
+    endCursor.movePosition(QTextCursor::EndOfBlock);
+    editCursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
+
+    editCursor.beginEditBlock();
+    editCursor.insertText(replacement);
+    editCursor.endEditBlock();
+
+    setTextCursor(editCursor);
+    setFocus();
+}
+
 void NoteEditorView::insertMarkdownText(const QString& text, bool newLine, int offset)
 {
     QTextCursor cursor = textCursor();

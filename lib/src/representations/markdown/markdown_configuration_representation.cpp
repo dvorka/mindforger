@@ -42,6 +42,7 @@ constexpr const auto CONFIG_SETTING_MIND_WINGMAN_PROVIDER_ITEM = "* Wingman LLM 
 // application
 constexpr const auto CONFIG_SETTING_STARTUP_VIEW_LABEL = "* Startup view: ";
 constexpr const auto CONFIG_SETTING_UI_THEME_LABEL = "* Theme: ";
+constexpr const auto CONFIG_SETTING_UI_LOCALE_LABEL = "* Locale: ";
 constexpr const auto CONFIG_SETTING_UI_APP_FONT_SIZE = "* Application font size: ";
 constexpr const auto CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL = "* Markdown CSS theme: ";
 constexpr const auto CONFIG_SETTING_UI_HTML_ZOOM_LABEL = "* Markdown HTML zoom: ";
@@ -197,6 +198,12 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         if(t.size()) {
                             c.setUiThemeName(t);
                         }
+                    } else if(line->find(CONFIG_SETTING_UI_LOCALE_LABEL) != std::string::npos) {
+                        string t = line->substr(strlen(CONFIG_SETTING_UI_LOCALE_LABEL));
+                        // NOTE: locale is NOT validated
+                        if(t.size()) {
+                            c.setUiLocale(t);
+                        }
                     } else if(line->find(CONFIG_SETTING_UI_APP_FONT_SIZE) != std::string::npos) {
                         string t = line->substr(strlen(CONFIG_SETTING_UI_APP_FONT_SIZE));
                         std::string::size_type st;
@@ -336,10 +343,7 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         }
                     } else if(line->find(CONFIG_SETTING_MD_HIGHLIGHT_LABEL) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
-                            // BUG: there is a bug @ Ubuntu 24.04 and newer that crashes MF if src highlight is on >
-                            //   before it is fixed, this settting must be reset & disabled
-                            c.setUiEnableSrcHighlightInMd(false);
-                            //c.setUiEnableSrcHighlightInMd(true);
+                            c.setUiEnableSrcHighlightInMd(true);
                         } else {
                             c.setUiEnableSrcHighlightInMd(false);
                         }
@@ -675,6 +679,8 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: outlines, tags, recent, home" << endl <<
          CONFIG_SETTING_UI_THEME_LABEL << (c?c->getUiThemeName():Configuration::DEFAULT_UI_THEME_NAME) << endl <<
          "    * Examples: dark, light, native" << endl <<
+         CONFIG_SETTING_UI_LOCALE_LABEL << (c?c->getUiLocale():Configuration::DEFAULT_UI_LOCALE_NAME) << endl <<
+         "    * Examples: system, en_US, cs_CZ" << endl <<
          CONFIG_SETTING_UI_APP_FONT_SIZE << (c?c->getUiAppFontSize():Configuration::DEFAULT_UI_APP_FONT_SIZE) << endl <<
          "    * Examples: 0 (default - auto), 10, 42" << endl <<
          CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL << (c?c->getUiHtmlCssPath():Configuration::DEFAULT_UI_HTML_CSS_THEME) << endl <<
@@ -745,7 +751,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Enable offline KaTeX or MathJax (legacy) JavaScript library to show math expressions in HTML generated from Markdown." << endl <<
          "    * Examples: katex, mathjax, no" << endl <<
          CONFIG_SETTING_MD_DIAGRAM_LABEL << (c?c->getJsLibSupportAsString(c->getUiEnableDiagramsInMd()):UI_JS_LIB_NO) << endl <<
-         "    * Enable online or offline Mermaid JavaScript library to show diagrams in HTML generated from Markdown." << endl <<
+         "    * Enable offline Mermaid JavaScript library to show diagrams in HTML generated from Markdown." << endl <<
          "    * Examples: offline, no" << endl <<
          CONFIG_SETTING_NAVIGATOR_MAX_GRAPH_NODES_LABEL << (c?c->getNavigatorMaxNodes():Configuration::DEFAULT_NAVIGATOR_MAX_GRAPH_NODES) << endl <<
          "    * Maximum number of knowledge graph navigator nodes (performance vs. readability trade-off)." << endl <<

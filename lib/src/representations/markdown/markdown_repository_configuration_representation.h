@@ -27,6 +27,7 @@
 #include "markdown_document.h"
 #include "../../model/eisenhower_matrix.h"
 #include "../../model/kanban.h"
+#include "../../model/notebook_tree.h"
 #include "../../mind/ontology/ontology.h"
 #include "../../persistence/configuration_persistence.h"
 
@@ -93,6 +94,10 @@ private:
         std::vector<std::string*>* body, Configuration& c);
     Organizer* repositoryConfigurationSectionOrganizerAdd(
         Organizer* o, std::set<std::string>& keys, Configuration& c);
+    void repositoryConfigurationSectionNotebookTrees(
+        std::vector<std::string*>* body, Configuration& c);
+    NotebookTree* repositoryConfigurationSectionNotebookTreeAdd(
+        NotebookTree* t, std::set<std::string>& keys, Configuration& c);
     std::string& to(Configuration* c, std::string& md);
     void save(const filesystem::File* file, Configuration* c);
 };

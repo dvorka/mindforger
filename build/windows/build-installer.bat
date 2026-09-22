@@ -23,37 +23,29 @@ rem to demo repository used for creation of screenshots and videos.
 setlocal
 call "%~dp0%\env.bat"
 
-:: build cmark
-cd "%MF_BASE%\deps\cmark-gfm"
-if exist build rmdir /q/s build
-mkdir build
-cd build
+
+cd "%MF_BASE%"
 
 echo ====================================
-echo Cmake: Generating build files
+echo Gathering MindForger dependencies
 echo ====================================
-cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF ..
+windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
 if "%ERRORLEVEL%" neq "0" goto :err
 
 echo ====================================
-echo Cmake: Building Release
+echo Building MindForger installer
 echo ====================================
-cmake --build . --config Release -- /m
+"%MF_ICSS%" /Qp /DVcRedistPath="%VC_REDIST_PATH%" build\windows\installer\mindforger-setup.iss
 if "%ERRORLEVEL%" neq "0" goto :err
 
-echo ====================================
-echo Cmake: Building Debug
-echo ====================================
-cmake --build . --config Debug -- /m
-if "%ERRORLEVEL%" neq "0" goto :err
-echo ====================================
-echo cmark-gfm has been built  successfully
-echo ====================================
+echo ================================================
+echo MindForger installer has been built successfully
+echo ===============================================
 goto :end
 :err
 echo ====================================
-echo cmark-gfm build error! Check log above
+echo MindForger installer build error! Check log above
 echo ====================================
 :end
 endlocal
-pause
+

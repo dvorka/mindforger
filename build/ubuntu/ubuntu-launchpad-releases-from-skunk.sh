@@ -130,8 +130,8 @@ if [[ ${#} == 1 ]]
 then
     export UBUNTU_VERSIONS=(${1})
 else
-    # export UBUNTU_VERSIONS=(jammy noble resolute)
-    export UBUNTU_VERSIONS=(noble resolute)
+    export UBUNTU_VERSIONS=(jammy noble resolute)
+    # export UBUNTU_VERSIONS=(noble resolute)
     # export UBUNTU_VERSIONS=(jammy)
     # export UBUNTU_VERSIONS=(noble)
     # export UBUNTU_VERSIONS=(resolute)
@@ -139,8 +139,8 @@ fi
 
 # environment variables
 export MAJOR_VERSION=2
-export MINOR_VERSION=2
-export PATCH_VERSION=1 # patch version is incremented for every Ubuntu build @ Launchpad
+export MINOR_VERSION=3
+export PATCH_VERSION=0 # patch version is incremented for every Ubuntu build @ Launchpad
 export MF_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" # semantic version
 export RM_CMD="rm -vrf "
 export CP_CMD="cp -vrf "
@@ -212,8 +212,11 @@ function checkoutMindforger {
     rm -rf${OPT_VERBOSE} ./lib/.qmake.stash ./lib/lib.pro.user ./lib/src/mindforger-lib-unit-tests
     rm -rf${OPT_VERBOSE} ./deps/cmark-gfm/.github
     rm -rf${OPT_VERBOSE} ./deps/mitie
+    # remove stray packaging artifacts (e.g. locally built .snap) that may be
+    # sitting in MFSRC working directory - cp above does NOT respect .gitignore
+    rm -rf${OPT_VERBOSE} ./*.snap
     # IMPROVE: static libraries lib*.a are NOT deleted to keep cmark-gfm dependency libs
-    find . -type f \( -name "*moc_*.cpp" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
+    find . -type f \( -name "*moc_*.cpp" -or -name "*.o" -or -name "*.*~" -or -name "*.snap" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
 
     cd ..
 }

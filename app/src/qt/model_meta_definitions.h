@@ -29,6 +29,7 @@
 #include "../../lib/src/model/note_type.h"
 #include "../../lib/src/model/organizer.h"
 #include "../../lib/src/model/kanban.h"
+#include "../../lib/src/model/notebook_tree.h"
 
 /*
  * Registration of custom Qt types allowing to use them in QVariant and Qt's widget models:
@@ -57,5 +58,8 @@ Q_DECLARE_METATYPE(const m8r::Stencil*)
 
 Q_DECLARE_METATYPE(m8r::Organizer*)
 Q_DECLARE_METATYPE(const m8r::Organizer*)
+
+Q_DECLARE_METATYPE(m8r::NotebookTree*)
+Q_DECLARE_METATYPE(const m8r::NotebookTree*)
 
 #endif // M8RUI_MODEL_META_DEFINITIONS_H

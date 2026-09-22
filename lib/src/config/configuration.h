@@ -92,6 +92,13 @@ constexpr const auto UI_THEME_BLACK_WITH_FIXED_FONT = "black with fixed font";
 constexpr const auto UI_THEME_NATIVE = "native";
 constexpr const auto UI_THEME_NATIVE_WITH_FIXED_FONT = "native with fixed font";
 
+constexpr const auto UI_LOCALE_SYSTEM = "system";
+constexpr const auto UI_LOCALE_EN_US = "en_US";
+constexpr const auto UI_LOCALE_CS_CZ = "cs_CZ";
+constexpr const auto UI_LOCALE_ZH_CN = "zh_CN";
+constexpr const auto UI_LOCALE_HI_IN = "hi_IN";
+constexpr const auto UI_LOCALE_ES_ES = "es_ES";
+
 constexpr const auto START_TO_OUTLINES_TREE = "outlines tree";
 constexpr const auto START_TO_OUTLINES = "outlines";
 constexpr const auto START_TO_TAGS = "tags";
@@ -321,6 +328,7 @@ public:
     static constexpr const bool UI_DEFAULT_NERD_TARGET_AUDIENCE = true;
     static const std::string DEFAULT_STARTUP_VIEW_NAME;
     static const std::string DEFAULT_UI_THEME_NAME;
+    static const std::string DEFAULT_UI_LOCALE_NAME;
     static constexpr const bool DEFAULT_UI_SHOW_TOOLBAR = true;
     static constexpr const bool DEFAULT_UI_EXPERT_MODE = false;
     static constexpr const int DEFAULT_UI_APP_FONT_SIZE = 0;
@@ -396,6 +404,7 @@ private:
     std::string timeScopeAsString;
     std::vector<std::string> tagsScope;
     unsigned int md2HtmlOptions;
+    bool htmlRenderingWebEngineBackend;
     AssociationAssessmentAlgorithm aaAlgorithm;
     int distributorSleepInterval;
 
@@ -413,6 +422,7 @@ private:
     bool uiNerdTargetAudience;
     std::string startupView;
     std::string uiThemeName;
+    std::string uiLocale;
     std::string uiHtmlCssPath; // use a CSS (size>0) or render raw MD (size==0)
     int uiHtmlZoom;
     std::string externalEditorCmd;
@@ -636,6 +646,8 @@ public:
     void setStartupView(const std::string view) { startupView = view; }
     const std::string& getUiThemeName() const { return uiThemeName; }
     void setUiThemeName(const std::string theme) { uiThemeName = theme; }
+    const std::string& getUiLocale() const { return uiLocale; }
+    void setUiLocale(const std::string locale) { uiLocale = locale; }
     bool isUiEditorShowLineNumbers() const { return uiEditorLineNumbers; }
     void setUiEditorShowLineNumbers(bool show) { uiEditorLineNumbers = show; }
     bool isUiEditorEnableSyntaxHighlighting() const { return uiEditorSyntaxHighlighting; }
@@ -721,6 +733,19 @@ public:
             md2HtmlOptions &= ~MdToHtmlOption::CodeHighlighting;
         }
     }
+
+    /**
+     * @brief Check if HTML rendering uses the WebEngine backend.
+     *
+     * Legacy Qt WebKit's JS engine cannot safely run the ES2015+ -> JS libs which are
+     * used by Markdown viewer,like highlight.js/mermaid/MathJax, may crash - this
+     * function is used to control the rendering.
+     *
+     * @return true if WebEngine backend is used, false otherwise.
+     */
+    bool isHtmlRenderingWebEngineBackend() const { return htmlRenderingWebEngineBackend; }
+    void setHtmlRenderingWebEngineBackend(bool enable) { htmlRenderingWebEngineBackend = enable; }
+
     MathJsLibSupport getUiEnableMathInMd() { return uiEnableMathInMd; }
     void setUiEnableMathInMd(MathJsLibSupport mode) { uiEnableMathInMd = mode; }
 

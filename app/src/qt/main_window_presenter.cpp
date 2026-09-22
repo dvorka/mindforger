@@ -18,6 +18,8 @@
 */
 #include "main_window_presenter.h"
 
+#include <set>
+
 #include <QShortcut>
 
 #include "kanban_column_presenter.h"
@@ -60,6 +62,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     wingmanDialog = new WingmanDialog{&view};
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
     newOrganizerDialog = new OrganizerNewDialog{mind->getOntology(), &view};
+    newNotebookTreeDialog = new NotebookTreeNewDialog{&view};
+    findOutlineForNotebookTreeDialog = new FindOutlineByNameDialog{&view};
     newOutlineDialog = new OutlineNewDialog{
         QString::fromStdString(config.getMemoryPath()), mind->getOntology(), &view};
     newNoteDialog = new NoteNewDialog{mind->remind().getOntology(), &view};
@@ -84,6 +88,13 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
              tr("Export Notebook to HTML"),
              tr("Export"),
              QString::fromStdString(File::EXTENSION_HTML),
+             &view
+    );
+    exportOutlineToMarkdownDialog
+       = new ExportFileDialog(
+             tr("Export Notebook to Markdown"),
+             tr("Export"),
+             QString::fromStdString(File::EXTENSION_MD_MD),
              &view
     );
     exportMemoryToCsvDialog
@@ -157,6 +168,11 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(
         newOrganizerDialog, SIGNAL(createFinished()), this, SLOT(handleCreateOrganizer()));
     QObject::connect(
+        newNotebookTreeDialog, SIGNAL(createFinished()), this, SLOT(handleCreateOrRenameNotebookTree()));
+    QObject::connect(
+        findOutlineForNotebookTreeDialog, SIGNAL(searchFinished()),
+        this, SLOT(handleNotebookTreeAddOutlineChoice()));
+    QObject::connect(
         refactorNoteToOutlineDialog, SIGNAL(searchFinished()), this, SLOT(handleRefactorNoteToOutline()));
     QObject::connect(
         insertImageDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatImage()));
@@ -171,7 +187,12 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(
         exportOutlineToHtmlDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleOutlineHtmlExport()));
     QObject::connect(
+        exportOutlineToMarkdownDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleOutlineMarkdownExport()));
+    QObject::connect(
         exportMemoryToCsvDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindCsvExport()));
+    QObject::connect(
+        exportMemoryToCsvDialog, SIGNAL(signalExportFinished(bool, QString)),
+        this, SLOT(handleMindCsvExportFinished(bool, QString)));
     QObject::connect(
         orloj->getNoteEdit()->getView()->getNoteEditor(), SIGNAL(signalDnDropUrl(QString)),
         this, SLOT(doActionFormatLinkOrImage(QString))
@@ -283,7 +304,10 @@ void MainWindowPresenter::showInitialView()
                 if(!string{START_TO_OUTLINES}.compare(config.getStartupView())) {
                     orloj->showFacetOutlineList(mind->getOutlines());
                 } else if(!string{START_TO_OUTLINES_TREE}.compare(config.getStartupView())) {
-                    orloj->showFacetOutlinesMap(mind->outlinesMapGet());
+                    // no single implicit tree anymore - open the Notebook Trees list
+                    orloj->showFacetNotebookTreeList(
+                        config.getRepositoryConfiguration().getNotebookTrees()
+                    );
                 } else if(!string{START_TO_TAGS}.compare(config.getStartupView())) {
                     orloj->showFacetTagCloud();
                 } else if(!string{START_TO_RECENT}.compare(config.getStartupView())) {
@@ -620,7 +644,7 @@ void MainWindowPresenter::doActionMindThink()
             statusBar->showError(
                 tr(
                     "Cannot think - either Mind already dreaming or "
-                    "repository has too many notes: %1 > %2")
+                    "workspace has too many notes: %1 > %2")
                     .arg(mind->remind().getNotesCount()).arg(config.getAsyncMindThreshold())
             );
         }
@@ -819,7 +843,9 @@ void MainWindowPresenter::doActionMindRelearn(QString path)
         );
         // remember new repository
         mdConfigRepresentation->save(config);
-        // learn and show
+        // learn and show - views must forget Notebook trees of the previous
+        // workspace BEFORE the Mind deletes them
+        orloj->forgetNotebookTrees();
         mind->learn();
         showInitialView();
     } else {
@@ -1176,13 +1202,15 @@ void MainWindowPresenter::doActionViewOutlines()
     }
 }
 
-void MainWindowPresenter::doActionViewOutlinesMap()
+void MainWindowPresenter::doActionViewNotebookTrees()
 {
     if(config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER
          &&
        config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY)
     {
-        orloj->showFacetOutlinesMap(mind->outlinesMapGet());
+        orloj->showFacetNotebookTreeList(
+            config.getRepositoryConfiguration().getNotebookTrees()
+        );
     }
 }
 
@@ -2581,7 +2609,8 @@ void MainWindowPresenter::doActionOutlineHtmlExport()
 
 void MainWindowPresenter::handleOutlineHtmlExport()
 {
-    if(isDirectoryOrFileExists(newFileDialog->getFilePath().toStdString().c_str())) {
+    QString filePath = exportOutlineToHtmlDialog->getFilePath();
+    if(isDirectoryOrFileExists(filePath.toStdString().c_str())) {
         QMessageBox::critical(&view, tr("Export Error"), tr("Specified file path already exists!"));
     } else {
         if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
@@ -2594,7 +2623,53 @@ void MainWindowPresenter::handleOutlineHtmlExport()
         ) {
             Outline* o = orloj->getOutlineView()->getCurrentOutline();
             if(o) {
-                mind->remind().exportToHtml(o, exportOutlineToHtmlDialog->getFilePath().toStdString());
+                if(mind->remind().exportToHtml(o, filePath.toStdString())) {
+                    statusBar->showInfo(
+                        QString(tr("Notebook exported to HTML file '%1'")).arg(filePath));
+                } else {
+                    QMessageBox::critical(
+                        &view,
+                        tr("Export Error"),
+                        QString(tr("Unable to write file '%1'!")).arg(filePath));
+                }
+                return;
+            }
+        }
+
+        QMessageBox::critical(&view, tr("Export Error"), tr("Unable to find Notebook to export!"));
+    }
+}
+
+void MainWindowPresenter::doActionOutlineMarkdownExport()
+{
+    exportOutlineToMarkdownDialog->show();
+}
+
+void MainWindowPresenter::handleOutlineMarkdownExport()
+{
+    QString filePath = exportOutlineToMarkdownDialog->getFilePath();
+    if(isDirectoryOrFileExists(filePath.toStdString().c_str())) {
+        QMessageBox::critical(&view, tr("Export Error"), tr("Specified file path already exists!"));
+    } else {
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+             ||
+           orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+             ||
+           orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
+             ||
+           orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+        ) {
+            Outline* o = orloj->getOutlineView()->getCurrentOutline();
+            if(o) {
+                if(mind->remind().exportToMarkdown(o, filePath.toStdString())) {
+                    statusBar->showInfo(
+                        QString(tr("Notebook exported to Markdown file '%1'")).arg(filePath));
+                } else {
+                    QMessageBox::critical(
+                        &view,
+                        tr("Export Error"),
+                        QString(tr("Unable to write file '%1'!")).arg(filePath));
+                }
                 return;
             }
         }
@@ -2610,30 +2685,40 @@ void MainWindowPresenter::doActionMindCsvExport()
 
 void MainWindowPresenter::handleMindCsvExport()
 {
-    if(isDirectoryOrFileExists(newFileDialog->getFilePath().toStdString().c_str())) {
+    if(exportMemoryToCsvDialog->isExportRunning()) {
+        return;
+    }
+
+    string filePath = exportMemoryToCsvDialog->getFilePath().toStdString();
+    if(isDirectoryOrFileExists(filePath.c_str())) {
         QMessageBox::critical(
-            &view,
+            exportMemoryToCsvDialog,
             tr("Export Error"),
             tr("Specified file path already exists!")
         );
-    } else {
-        StatusBarProgressCallbackCtx callbackCtx{statusBar};
-        map<const Tag*,int> tagsCardinality{};
-        mind->getTagsCardinality(tagsCardinality);
-        mind->remind().exportToCsv(
-            exportMemoryToCsvDialog->getFilePath().toStdString(),
+        return;
+    }
+
+    map<const Tag*,int> tagsCardinality{};
+    mind->getTagsCardinality(tagsCardinality);
+    // dialog takes ownership and runs the export w/o blocking UI event loop
+    exportMemoryToCsvDialog->runExport(
+        mind->remind().createCsvExport(
+            filePath,
             tagsCardinality,
             exportMemoryToCsvDialog->isOheTags()
             ?exportMemoryToCsvDialog->getOheTagsCardinality()
-            :-1,
-            &callbackCtx
-            //[](float progress){ cout << "Export progress: " << progress << endl; }
-        );
-        statusBar->showInfo(
-            "Export to CSV file '"
-            + exportMemoryToCsvDialog->getFilePath().toStdString()
-            + "' successfully finished"
-        );
+            :-1
+        )
+    );
+}
+
+void MainWindowPresenter::handleMindCsvExportFinished(bool success, QString message)
+{
+    if(success) {
+        statusBar->showInfo(message);
+    } else {
+        statusBar->showError(message);
     }
 }
 
@@ -3092,7 +3177,7 @@ void MainWindowPresenter::doActionNoteFirst()
         mind->noteFirst(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
             if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
-                mind->outlinesMapRemember();
+                mind->notebookTreeRemember(note->getOutline());
             } else {
                 mind->remind().remember(note->getOutline());
             }
@@ -3128,7 +3213,7 @@ void MainWindowPresenter::doActionNoteUp()
         mind->noteUp(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
             if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
-                mind->outlinesMapRemember();
+                mind->notebookTreeRemember(note->getOutline());
             } else {
                 mind->remind().remember(note->getOutline());
             }
@@ -3164,7 +3249,7 @@ void MainWindowPresenter::doActionNoteDown()
         mind->noteDown(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
             if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
-                mind->outlinesMapRemember();
+                mind->notebookTreeRemember(note->getOutline());
             } else {
                 mind->remind().remember(note->getOutline());
             }
@@ -3200,7 +3285,7 @@ void MainWindowPresenter::doActionNoteLast()
         mind->noteLast(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
             if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
-                mind->outlinesMapRemember();
+                mind->notebookTreeRemember(note->getOutline());
             } else {
                 mind->remind().remember(note->getOutline());
             }
@@ -3236,7 +3321,7 @@ void MainWindowPresenter::doActionNotePromote()
         mind->notePromote(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
             if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
-                mind->outlinesMapRemember();
+                mind->notebookTreeRemember(note->getOutline());
             } else {
                 mind->remind().remember(note->getOutline());
             }
@@ -3270,7 +3355,7 @@ void MainWindowPresenter::doActionNoteDemote()
         mind->noteDemote(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
             if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
-                mind->outlinesMapRemember();
+                mind->notebookTreeRemember(note->getOutline());
             } else {
                 mind->remind().remember(note->getOutline());
             }
@@ -3332,6 +3417,20 @@ void MainWindowPresenter::doActionEditRewrapParagraph()
     }
 
     editor->rewrapParagraph();
+}
+
+void MainWindowPresenter::doActionEditSortLines()
+{
+    NoteEditorView* editor{};
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        editor = orloj->getNoteEdit()->getView()->getNoteEditor();
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        editor = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor();
+    } else {
+        return;
+    }
+
+    editor->sortLines();
 }
 
 void MainWindowPresenter::doActionMindRemember()
@@ -3962,6 +4061,146 @@ void MainWindowPresenter::doActionOrganizerForget()
     }
 }
 
+void MainWindowPresenter::doActionNotebookTreeNew()
+{
+    newNotebookTreeDialog->show();
+}
+
+void MainWindowPresenter::handleCreateOrRenameNotebookTree()
+{
+    NotebookTree* editingTree = newNotebookTreeDialog->getNotebookTreeToEdit();
+    NotebookTree* t = editingTree;
+
+    if(t) {
+        // rename
+        t->setName(newNotebookTreeDialog->getNotebookTreeName().toStdString());
+
+        // keep the underlying tree Outline's own name in sync too
+        Outline* tree = mind->notebookTreeGet(t->getKey());
+        tree->setName(t->getName());
+        mind->notebookTreeRemember(tree);
+    } else {
+        // create
+        set<string> keys{};
+        for(NotebookTree* existing:config.getRepositoryConfiguration().getNotebookTrees()) {
+            keys.insert(existing->getKey());
+        }
+        string key = NotebookTree::createNotebookTreeKey(
+            keys, config.getMindPath(), FILE_PATH_SEPARATOR);
+
+        t = new NotebookTree(
+            newNotebookTreeDialog->getNotebookTreeName().toStdString(), key);
+        config.getRepositoryConfiguration().addNotebookTree(t);
+
+        Outline* tree = mind->notebookTreeNew(key, t->getName());
+        mind->notebookTreeRemember(tree);
+    }
+
+    // move created/renamed tree to the top of the Notebook Trees
+    config.getRepositoryConfiguration().touchNotebookTree(t);
+    getConfigRepresentation()->save(config);
+
+    newNotebookTreeDialog->hide();
+
+    if(!editingTree) {
+        // brand new tree: back to the list so the user can open it
+        orloj->showFacetNotebookTreeList(
+            config.getRepositoryConfiguration().getNotebookTrees());
+    } else {
+        // renamed tree: stay in its detail view
+        orloj->setCurrentNotebookTree(t);
+        orloj->showFacetOutlinesMap(mind->notebookTreeGet(t->getKey()));
+    }
+}
+
+void MainWindowPresenter::doActionNotebookTreeRename()
+{
+    // available only when a Notebook tree is opened
+    NotebookTree* t = orloj->getCurrentNotebookTree();
+    if(t) {
+        newNotebookTreeDialog->show(t);
+    }
+}
+
+void MainWindowPresenter::doActionNotebookTreeDelete()
+{
+    // available only when a Notebook tree is opened
+    NotebookTree* t = orloj->getCurrentNotebookTree();
+    if(t) {
+        QMessageBox::StandardButton choice;
+        choice = QMessageBox::question(
+            &view,
+            tr("Delete Notebook Tree"),
+            tr("Do you really want to delete '")
+                + QString::fromStdString(t->getName())
+                + tr("' Notebook tree? Notebooks organized in it will NOT be deleted.")
+        );
+        if(choice == QMessageBox::Yes) {
+            // move the tree's own backing file to Limbo (like outlineForget())
+            // BEFORE the registry entry (which owns t) is deleted below -
+            // otherwise its file would be left orphaned in mind/
+            mind->notebookTreeForget(t->getKey());
+
+            config.getRepositoryConfiguration().removeNotebookTree(t);
+            getConfigRepresentation()->save(config);
+
+            orloj->setCurrentNotebookTree(nullptr);
+            orloj->showFacetNotebookTreeList(
+                config.getRepositoryConfiguration().getNotebookTrees());
+        } // else do nothing
+    }
+}
+
+void MainWindowPresenter::doActionNotebookTreeAddOutline()
+{
+    // available only when a Notebook tree is opened
+    NotebookTree* t = orloj->getCurrentNotebookTree();
+    if(t) {
+        vector<Outline*> os{mind->getOutlines()};
+        Outline::sortByRead(os);
+        vector<Thing*> es{os.begin(), os.end()};
+
+        findOutlineForNotebookTreeDialog->show(es);
+    }
+}
+
+void MainWindowPresenter::handleNotebookTreeAddOutlineChoice()
+{
+    NotebookTree* t = orloj->getCurrentNotebookTree();
+    if(t && findOutlineForNotebookTreeDialog->getChoice()) {
+        Outline* o = (Outline*)findOutlineForNotebookTreeDialog->getChoice();
+        Outline* tree = mind->notebookTreeGet(t->getKey());
+
+        mind->notebookTreeAddOutline(tree, o);
+        mind->notebookTreeRemember(tree);
+
+        orloj->getOutlinesMap()->refresh(tree);
+
+        statusBar->showInfo(
+            QString(tr("Notebook '%1' added to tree '%2'"))
+                .arg(o->getName().c_str())
+                .arg(t->getName().c_str())
+        );
+    }
+}
+
+void MainWindowPresenter::doActionNotebookTreeRemoveEntry()
+{
+    // available only when a Notebook tree is opened
+    NotebookTree* t = orloj->getCurrentNotebookTree();
+    if(t) {
+        Note* note = orloj->getOutlinesMap()->getCurrentNote();
+        if(note) {
+            Outline* tree = mind->notebookTreeGet(t->getKey());
+            tree->forgetNote(note);
+
+            mind->notebookTreeRemember(tree);
+            orloj->getOutlinesMap()->refresh(tree);
+
+            statusBar->showInfo(tr("Entry removed from Notebook tree (Notebook itself was NOT deleted)"));
+        }
+    }
+}
 
 void MainWindowPresenter::doActionViewLimbo()
 {
@@ -3987,7 +4226,7 @@ void MainWindowPresenter::doActionViewLimbo()
 
 void MainWindowPresenter::doActionHelpDocumentation()
 {
-    QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger/wiki"});
+    QDesktopServices::openUrl(QUrl{"https://www.mindforger.com/docs/index.html"});
 }
 
 void MainWindowPresenter::doActionHelpSponsor()
@@ -4061,10 +4300,14 @@ void MainWindowPresenter::slotApplicationFocusChanged(QWidget* old, QWidget* now
 {
     Q_UNUSED(old);
 
+    // emojisDialog has an input of its own (the emojis filter) which must
+    // never become the target of the characters it inserts
+    if(now && emojisDialog->isAncestorOf(now)) {
+        return;
+    }
+
     // remember the last name/description input widget which had focus so
-    // that emojisDialog's emojiSelected() knows where to insert a character -
-    // clicks within emojisDialog itself do not overwrite this, as none of
-    // its widgets are QLineEdit/QTextEdit/QPlainTextEdit
+    // that emojisDialog's emojiSelected() knows where to insert a character
     if(qobject_cast<QLineEdit*>(now)
        || qobject_cast<QTextEdit*>(now)
        || qobject_cast<QPlainTextEdit*>(now))

@@ -141,6 +141,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
 
     string backupFile = c.getConfigFilePath();
     string backupTheme = c.getUiThemeName();
+    string backupLocale = c.getUiLocale();
     m8r::TimeScope backupTimeScope = c.getTimeScope();
     bool backupReadsMetadata = c.isSaveReadsMetadata();
     bool backupNotebookButton = c.isUiEditorEnableSyntaxHighlighting();
@@ -157,6 +158,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
 
     c.setConfigFilePath(box.configPath);
     c.setUiThemeName("CRAZYCOLORS");
+    c.setUiLocale(m8r::UI_LOCALE_ZH_CN);
     m8r::TimeScope ts{1,2,33,4,55};
     c.setTimeScope(ts);
     c.setSaveReadsMetadata(false);
@@ -179,6 +181,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     // asserts
     std::unique_ptr<string> asString{m8r::fileToString(c.getConfigFilePath())};
     EXPECT_NE(std::string::npos, asString.get()->find("Theme: CRAZYCOLORS"));
+    EXPECT_NE(std::string::npos, asString.get()->find("Locale: zh_CN"));
     EXPECT_NE(std::string::npos, asString.get()->find("Time scope: 1y2m33d4h55m"));
     EXPECT_NE(std::string::npos, asString.get()->find("Editor syntax highlighting: no"));
     EXPECT_NE(std::string::npos, asString.get()->find("Save reads metadata: no"));
@@ -204,6 +207,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     // asserts
     ASSERT_TRUE(loaded);
     EXPECT_EQ("CRAZYCOLORS", c.getUiThemeName());
+    EXPECT_EQ("zh_CN", c.getUiLocale());
     c.getTimeScope().toString(timeScopeAsString);
     EXPECT_EQ("1y2m33d4h55m", timeScopeAsString);
     EXPECT_FALSE(c.isSaveReadsMetadata());
@@ -228,6 +232,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     // configuration cleanup
     c.setConfigFilePath(backupFile);
     c.setUiThemeName(backupTheme);
+    c.setUiLocale(backupLocale);
     c.setTimeScope(backupTimeScope);
     c.setSaveReadsMetadata(backupReadsMetadata);
     c.setUiEditorEnableSyntaxHighlighting(backupNotebookButton);
@@ -271,6 +276,44 @@ TEST(ConfigurationTestCase, MathSupportSaveAndLoad)
     // cleanup
     c.setConfigFilePath(backupConfigPath);
     c.setUiEnableMathInMd(backupMath);
+}
+
+TEST(ConfigurationTestCase, UiLocaleSaveAndLoad)
+{
+    // GIVEN
+    string configPath{"/tmp/cfg-ui-locale-save-and-load.md"};
+    m8r::MarkdownConfigurationRepresentation configRepresentation{};
+    m8r::Configuration& c = m8r::Configuration::getInstance();
+    string backupConfigPath = c.getConfigFilePath();
+    string backupLocale = c.getUiLocale();
+    c.setConfigFilePath(configPath);
+    vector<string> locales{
+        m8r::UI_LOCALE_SYSTEM,
+        m8r::UI_LOCALE_EN_US,
+        m8r::UI_LOCALE_CS_CZ,
+        m8r::UI_LOCALE_ZH_CN,
+        m8r::UI_LOCALE_HI_IN,
+        m8r::UI_LOCALE_ES_ES
+    };
+
+    for(const string& locale:locales) {
+        // WHEN: locale is selected, saved and reloaded
+        c.setUiLocale(locale);
+        configRepresentation.save(c);
+        std::unique_ptr<string> asString{m8r::fileToString(c.getConfigFilePath())};
+        c.setUiLocale("");
+        bool loaded = configRepresentation.load(c);
+
+        // THEN
+        cout << "Locale '" << locale << "' saved and loaded as '" << c.getUiLocale() << "'" << endl;
+        EXPECT_NE(std::string::npos, asString.get()->find("Locale: " + locale));
+        ASSERT_TRUE(loaded);
+        EXPECT_EQ(locale, c.getUiLocale());
+    }
+
+    // cleanup
+    c.setConfigFilePath(backupConfigPath);
+    c.setUiLocale(backupLocale);
 }
 
 TEST(ConfigurationTestCase, MathSupportBackwardCompatibleYes)
@@ -337,4 +380,22 @@ TEST(ConfigurationTestCase, DiagramSupportOnlineMigratesToOffline)
     // cleanup
     c.setConfigFilePath(backupConfigPath);
     c.setUiEnableDiagramsInMd(backupDiagram);
+}
+
+TEST(ConfigurationTestCase, HtmlRenderingWebEngineBackendCanBeToggled)
+{
+    // GIVEN: a configuration instance
+    m8r::Configuration& c = m8r::Configuration::getInstance();
+    bool backup = c.isHtmlRenderingWebEngineBackend();
+
+    // WHEN: the legacy Qt WebKit (mfwebkit) build is simulated
+    c.setHtmlRenderingWebEngineBackend(false);
+
+    // THEN: the flag reflects the legacy backend so that callers (e.g.
+    // HtmlOutlineRepresentation) can skip injecting the ES2015+ highlight.js
+    // bundle that the legacy WebKit JS engine cannot safely run
+    EXPECT_FALSE(c.isHtmlRenderingWebEngineBackend());
+
+    // cleanup
+    c.setHtmlRenderingWebEngineBackend(backup);
 }
