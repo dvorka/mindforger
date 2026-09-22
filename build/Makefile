@@ -591,19 +591,19 @@ distro-snap-upload: distro-snap ## upload strict Snap package to the Snap Store 
 
 .PHONY: distro-winget-from-release
 distro-winget-from-release: ## look up the Windows installer on a GitHub release, hash it, and generate winget manifests (VERSION required)
-	powershell.exe -NoProfile -ExecutionPolicy Bypass -File build/winget/generate-from-release.ps1 -Version $(VERSION)
+	powershell.exe -NoProfile -ExecutionPolicy Bypass -File winget/generate-from-release.ps1 -Version $(VERSION)
 
 .PHONY: distro-winget-validate
 distro-winget-validate: ## validate generated winget manifests locally (VERSION required)
-	winget validate --manifest distro/winget/manifests/m/MindForger/MindForger/$(VERSION)
+	winget validate --manifest ../distro/winget/manifests/m/MindForger/MindForger/$(VERSION)
 
 .PHONY: distro-winget-submit-pr
 distro-winget-submit-pr: ## copy manifests to winget-pkgs fork, commit signed, push, open PR (VERSION and WINGET_PKGS_DIR required)
-	powershell.exe -NoProfile -ExecutionPolicy Bypass -File build/winget/submit-pr.ps1 -Version $(VERSION) -WingetPkgsDir "$(WINGET_PKGS_DIR)"
+	powershell.exe -NoProfile -ExecutionPolicy Bypass -File winget/submit-pr.ps1 -Version $(VERSION) -WingetPkgsDir "$(WINGET_PKGS_DIR)"
 
 .PHONY: distro-winget-hash-url
 distro-winget-hash-url: ## print SHA256 of the published Windows installer without generating manifests (VERSION required)
-	powershell.exe -NoProfile -ExecutionPolicy Bypass -File build/winget/sha256-from-url.ps1 -Version $(VERSION)
+	powershell.exe -NoProfile -ExecutionPolicy Bypass -File winget/sha256-from-url.ps1 -Version $(VERSION)
 
 #
 # ^ winget
