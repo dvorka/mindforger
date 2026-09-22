@@ -1,11 +1,16 @@
 2026-09-21  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.3.0 - Notebook shelves, localization to 4 languages, lines sorting,
-      winget packaging, Markdown export, non-ASCII links navigation.
+      winget and Flatpak packaging, Markdown export, non-ASCII links navigation.
     * Feature: Notebook shelves - single notebook tree was rewritten to custom notebook
       shelves - create as many named notebook shelves for notebooks you want to group
       as needed and add Notebooks to them explicitly.
     * Feature: Notebook/Export/Markdown - export a Notebook to a file in Markdown format.
+    * Feature: Flatpak distribution - a single-file .flatpak bundle downloadable from
+      the GitHub release (not hosted on Flathub) which is built by the
+      distro-flatpak-build target of build/Makefile from the manifest in build/flatpak.
+      Qt 5.15 comes from the KDE runtime, Qt WebEngine from the Flathub Qt WebEngine
+      base app.
     * Feature: Preferences now let you pick the UI language - System default,
       English, Czech, Spanish or other available translation instead of following
       the OS locale.
