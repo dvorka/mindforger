@@ -23,6 +23,28 @@ jobs:
           cp -vf build/snap/snapcraft.yaml snapcraft.yaml
           build/snap/apply-classic.sh snapcraft.yaml
 
+      - name: Install LXD
+        # snapcore/action-build installs LXD itself, but w/o any retry: a Snap
+        # Store CDN hiccup (HTTP 5xx while downloading) then fails the whole
+        # build. Install LXD here instead - w/ retries - so that the action
+        # finds it in place and only refreshes it, which it DOES tolerate
+        # failing (see its ensureLXD()).
+        run: |
+          if [ -x /snap/bin/lxd ]; then
+            echo "DONE: LXD is already installed"
+            exit 0
+          fi
+          for attempt in 1 2 3; do
+            if sudo snap install lxd; then
+              echo "DONE: LXD installed on attempt ${attempt}"
+              exit 0
+            fi
+            echo "WARNING: LXD installation attempt ${attempt} failed - retrying in 30s"
+            sleep 30
+          done
+          echo "ERROR: unable to install LXD"
+          exit 1
+
       - name: Build Snap package
         id: snapcraft
         uses: snapcore/action-build@v1
