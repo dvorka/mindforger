@@ -77,38 +77,13 @@ test_script:
      $env:M8R_GIT_PATH=$env:M8R_HOME
      $env:PATH+=";$env:M8R_HOME\deps\zlib-win\lib"
      cd $env:M8R_HOME
-     # the tests run w/ a bounded timeout - a hung test must not silently consume
-     # the whole CI job time budget and leave the build w/o any diagnostics
-     $TestTimeoutMs=600000
-     $proc = Start-Process -FilePath "lib\test\src\debug\mindforger-lib-unit-tests.exe" `
-       -ArgumentList "--gtest_output=xml:tests.xml" `
-       -RedirectStandardOutput "mindforger-unit-tests.log" `
-       -RedirectStandardError "mindforger-unit-tests-err.log" `
-       -NoNewWindow -PassThru
-     $TestTimedOut = -not $proc.WaitForExit($TestTimeoutMs)
-     if ($TestTimedOut) {
-       Write-Output "Tests did NOT finish in $($TestTimeoutMs/1000)s - killing them"
-       $proc.Kill()
-       $proc.WaitForExit()
-     }
-     $TestExitCode=$proc.ExitCode
-     Write-Output "--- mindforger-unit-tests.log (tail) ---"
-     Get-Content mindforger-unit-tests.log -Tail 40 -ErrorAction SilentlyContinue
-     Write-Output "--- mindforger-unit-tests-err.log (tail) ---"
-     Get-Content mindforger-unit-tests-err.log -Tail 40 -ErrorAction SilentlyContinue
-     # logs are kept always - not just on failure - so that a build can be analyzed
-     Push-AppveyorArtifact mindforger-unit-tests.log -Type zip -DeploymentName tests-stdout
-     Push-AppveyorArtifact mindforger-unit-tests-err.log -Type zip -DeploymentName tests-stderr
-     if (Test-Path .\tests.xml) {
-       (new-object net.webclient).UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\tests.xml))
-     } else {
-       Write-Output "WARNING: tests.xml not created - the tests did not finish"
-     }
+     & lib\test\src\debug\mindforger-lib-unit-tests.exe --gtest_output=xml:tests.xml >mindforger-unit-tests.log 2>&1
+     $TestExitCode=$LastExitCode
+     Get-Content mindforger-unit-tests.log -Tail 20
+     (new-object net.webclient).UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\tests.xml))
      Write-Output "Test exit code: $TestExitCode"
-     if ($TestTimedOut) {
-       throw "Exec: tests timed out"
-     }
      if ($TestExitCode -ne 0) {
+       Push-AppveyorArtifact mindforger-unit-tests.log -Type zip
        throw "Exec: tests failed"
      }
 
