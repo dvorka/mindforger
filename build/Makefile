@@ -622,9 +622,9 @@ distro-flatpak-remove: ## remove locally installed Flatpak
 .PHONY: distro-flatpak-install
 distro-flatpak-install: distro-flatpak-build ## build and install the Flatpak locally (user scope, for testing)
 	@echo "Installing Flatpak bundle locally..."
-	@BUNDLE=$$(ls -1 ../distro/flatpak/mindforger-*.flatpak 2>/dev/null | head -1); \
-	if [ -z "$$BUNDLE" ]; then \
-		echo "Error: Flatpak bundle not found. Run 'make distro-flatpak-build' first."; \
+	@BUNDLE="../distro/flatpak/mindforger-$(MINDFORGER_VERSION).flatpak"; \
+	if [ ! -f "$$BUNDLE" ]; then \
+		echo "Error: Flatpak bundle $$BUNDLE not found. Run 'make distro-flatpak-build' first."; \
 		exit 1; \
 	fi; \
 	flatpak install --user --reinstall -y "$$BUNDLE"; \

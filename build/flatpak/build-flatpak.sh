@@ -66,6 +66,14 @@ fi
 
 mkdir -p "${OUT_DIR}"
 
+# drop bundles left over from previous builds so that a stale one is never picked
+# up by mistake - neither by 'make distro-flatpak-install' nor by whoever uploads
+# the artifact to a GitHub release. The Snap build gets this from its own
+# distro-snap-clean dependency, which the Flatpak build deliberately does NOT
+# reuse: clean.sh also drops the flatpak-builder cache, which would force a full
+# rebuild every single time.
+rm -vf "${OUT_DIR}"/mindforger-*.flatpak
+
 echo "Building Flatpak application..."
 flatpak-builder --user --force-clean \
     --state-dir="${SCRIPT_DIR}/.flatpak-builder" \
