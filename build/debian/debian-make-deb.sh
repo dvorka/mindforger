@@ -156,7 +156,7 @@ function buildDebPackage() {
 # # Main #
 # ############################################################################
 
-export ARG_VERSION="2.2.0"
+export ARG_VERSION="2.3.0"
 export ARG_BAZAAR_MSG="MindForger ${ARG_VERSION} release."
 
 # Debian releases: https://www.debian.org/releases/

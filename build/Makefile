@@ -345,8 +345,8 @@ releng-rel-version: ## pre-version update finder
 	cd .. && git grep -n "2\.1\."
 
 
-.PHONY: releng-ver-set
-releng-ver-set: ## propagate lib/src/app_info.h version to all release/packaging files
+.PHONY: releng-version-set
+releng-version-set: ## propagate lib/src/app_info.h version to all release/packaging files
 	@echo "Setting version $(MINDFORGER_VERSION) ($(MINDFORGER_VERSION_MAJOR_MINOR)) in release/packaging files..."
 	sed -i "s/^version: .*/version: $(MINDFORGER_VERSION_MAJOR_MINOR).{build}/" ../appveyor.yml
 	sed -i "s/^export NEW_VERSION_NAME=.*/export NEW_VERSION_NAME=\"$(MINDFORGER_VERSION)\"/" debian/debian-aptly-add-deb.sh
