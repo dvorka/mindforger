@@ -210,6 +210,14 @@ public:
     void showFacetOutlineList(const std::vector<Outline*>& outlines);
     void showFacetOutlinesMap(Outline* outlinesMap);
     void showFacetNotebookTreeList(const std::vector<NotebookTree*>& notebookTrees);
+    /**
+     * @brief Drop every reference to the Notebook trees shown by this Orloj.
+     *
+     * To be called BEFORE the Mind relearns (and thus deletes both the
+     * registered NotebookTrees and their cached Outlines) so that no
+     * view is left holding a dangling pointer to them.
+     */
+    void forgetNotebookTrees();
     void showFacetRecentNotes(const std::vector<Note*>& notes);
     void showFacetKnowledgeGraphNavigator();
     void showFacetFtsResult(std::vector<Note*>* result);

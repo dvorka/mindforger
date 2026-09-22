@@ -843,7 +843,9 @@ void MainWindowPresenter::doActionMindRelearn(QString path)
         );
         // remember new repository
         mdConfigRepresentation->save(config);
-        // learn and show
+        // learn and show - views must forget Notebook trees of the previous
+        // workspace BEFORE the Mind deletes them
+        orloj->forgetNotebookTrees();
         mind->learn();
         showInitialView();
     } else {

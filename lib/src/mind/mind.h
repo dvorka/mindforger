@@ -174,6 +174,10 @@ private:
     std::string outlineMapKey2Relative(const std::string& outlineKey) const;
     std::string outlineMapKey2Absolute(const std::string& outlineKey) const;
     void notebookTreeRemoveStaleEntries(Outline* notebookTree);
+    /**
+     * @brief Delete cached Notebook trees and empty the cache.
+     */
+    void notebookTreeCacheClear();
 
     /**
      * Atomic mind state changes and asynchronous computations synchronization

@@ -1,6 +1,6 @@
 2026-09-21  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v2.3.0 - Notebook shelves, localization to 4 languates, lines sorting,
+    * Released v2.3.0 - Notebook shelves, localization to 4 languages, lines sorting,
       winget packaging, Markdown export, non-ASCII links navigation.
     * Feature: Notebook shelves - single notebook tree was rewritten to custom notebook
       shelves - create as many named notebook shelves for notebooks you want to group

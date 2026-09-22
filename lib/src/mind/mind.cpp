@@ -84,9 +84,7 @@ Mind::~Mind()
     delete autolinking;
     delete stats;
 
-    for(auto& entry:notebookTreeCache) {
-        delete entry.second;
-    }
+    notebookTreeCacheClear();
 
     // - Memory destruct outlines
     // - allNotesCache Notes is just container referencing Memory's Outlines
@@ -268,6 +266,7 @@ bool Mind::mindAmnesia()
 
         // forget EVERYTHING
         memory.amnesia();
+        notebookTreeCacheClear();
 #ifdef MF_MD_2_HTML_CMARK
         autolinking->clear();
 #endif
@@ -998,6 +997,16 @@ string Mind::outlineMapKey2Absolute(const string& outlineKey) const
     MF_DEBUG("  " << resolvedKey << endl);
 
     return resolvedKey;
+}
+
+void Mind::notebookTreeCacheClear()
+{
+    MF_DEBUG("Clearing cache of " << notebookTreeCache.size() << " Notebook tree(s)" << endl);
+
+    for(auto& entry:notebookTreeCache) {
+        delete entry.second;
+    }
+    notebookTreeCache.clear();
 }
 
 Outline* Mind::notebookTreeNew(const string& treeKey, const string& name)

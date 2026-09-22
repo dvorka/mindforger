@@ -398,6 +398,14 @@ void OrlojPresenter::showFacetNotebookTreeList(const vector<NotebookTree*>& note
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
+void OrlojPresenter::forgetNotebookTrees()
+{
+    currentNotebookTree = nullptr;
+    // rows reference Notes of a cached tree Outline which is about to be deleted
+    outlinesMapPresenter->getModel()->removeAllRows();
+    notebookTreesTablePresenter->getModel()->removeAllRows();
+}
+
 void OrlojPresenter::slotShowSelectedNotebookTree()
 {
     if(activeFacet == OrlojPresenterFacets::FACET_LIST_NOTEBOOK_TREES) {

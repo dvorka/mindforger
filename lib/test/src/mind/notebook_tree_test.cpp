@@ -602,3 +602,66 @@ TEST(NotebookTreeTestCase, StaleEntriesCleanupSurvivesStaleParentAndChild)
     ASSERT_EQ(tree, reGotten);
     EXPECT_EQ(0, reGotten->getNotes().size());
 }
+
+TEST(NotebookTreeTestCase, RelearnInvalidatesTreeCache)
+{
+    // GIVEN a MindForger repository w/ a Notebook tree/shelf which was
+    // opened, and therefore cached by the Mind
+    string repositoryPath{"/tmp/mf-unit-notebook-tree-relearn"};
+    m8r::removeDirectoryRecursively(repositoryPath.c_str());
+    map<string,string> pathToContent{};
+    m8r::createEmptyRepository(repositoryPath, pathToContent);
+
+    m8r::Repository* repository = new m8r::Repository(
+        repositoryPath,
+        m8r::Repository::RepositoryType::MINDFORGER,
+        m8r::Repository::RepositoryMode::REPOSITORY,
+        "",
+        false);
+
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/mf-unit-notebook-tree-relearn-cfg.md");
+    config.setActiveRepository(
+        config.addRepository(repository), repositoryConfigRepresentation
+    );
+
+    m8r::Mind mind(config);
+    mind.learn();
+    mind.think().get();
+
+    set<string> existingKeys{};
+    string treeKey = m8r::NotebookTree::createNotebookTreeKey(
+        existingKeys, config.getMindPath(), FILE_PATH_SEPARATOR);
+    m8r::Outline* tree = mind.notebookTreeNew(treeKey, "Cached Tree");
+    mind.notebookTreeRemember(tree);
+    ASSERT_TRUE(m8r::isFile(treeKey.c_str()));
+    ASSERT_EQ("Cached Tree", mind.notebookTreeGet(treeKey)->getName());
+
+    // AND: its file is changed behind MindForger's back - which is what a
+    // workspace closed, changed elsewhere (another MindForger instance, a
+    // Git pull, an editor) and opened again later looks like
+    string* treeMd = m8r::fileToString(treeKey);
+    ASSERT_NE(nullptr, treeMd);
+    size_t namePosition = treeMd->find("Cached Tree");
+    ASSERT_NE(std::string::npos, namePosition);
+    treeMd->replace(namePosition, string{"Cached Tree"}.size(), "Externally Edited Tree");
+    m8r::stringToFile(treeKey, *treeMd);
+    delete treeMd;
+
+    // WHEN: the Mind relearns - as it does on a workspace switch/reopen,
+    // see MainWindowPresenter::doActionMindRelearn()
+    ASSERT_TRUE(mind.learn());
+    mind.think().get();
+
+    // THEN: the tree is re-read from its file - w/o cache invalidation the
+    // STALE instance is returned instead (and the next save of the tree
+    // silently overwrites the changed file w/ the stale content)
+    m8r::Outline* reGotten = mind.notebookTreeGet(treeKey);
+    ASSERT_NE(nullptr, reGotten);
+    EXPECT_EQ("Externally Edited Tree", reGotten->getName());
+
+    // AND: the freshly loaded tree is cached again
+    EXPECT_EQ(reGotten, mind.notebookTreeGet(treeKey));
+}
