@@ -46,7 +46,7 @@ The **MindForger** project **is perfect to me**. Even if project's main developm
 If you have any ideas, suggestions, news to share, or constructive criticism to share, **do not hesitate to contact me**! Please do not be offended if your GitHub issue or bug report is not implemeted - IAGNI.
 
 
-
+<!--
 ## Packages
 
 <table><tr><td>
@@ -54,7 +54,7 @@ If you have any ideas, suggestions, news to share, or constructive criticism to 
     <img src="https://repology.org/badge/vertical-allrepos/mindforger.svg?columns=1" alt="Packaging status" align="left">
   </a>
 </td></tr></table>
-
+-->
 
 
 ## Installation
