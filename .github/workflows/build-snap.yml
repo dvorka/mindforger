@@ -39,8 +39,8 @@ jobs:
               echo "DONE: LXD installed on attempt ${attempt}"
               exit 0
             fi
-            echo "WARNING: LXD installation attempt ${attempt} failed - retrying in 30s"
-            sleep 30
+            echo "WARNING: LXD installation attempt ${attempt} failed - retrying in 60s"
+            sleep 60
           done
           echo "ERROR: unable to install LXD"
           exit 1
