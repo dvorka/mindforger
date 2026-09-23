@@ -6006,73 +6006,77 @@ descartarán para proteger sus notas relacionadas. Puede descartarlos usted mism
 <context>
     <name>main</name>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="121"/>
         <source>MindForger CANNOT be run from text console - set DISPLAY environment variable or run MindForger from GUI.</source>
-        <translation>MindForger NO se puede ejecutar desde una consola de texto - defina la variable de entorno DISPLAY o ejecute MindForger desde la interfaz gráfica.</translation>
+        <translation type="vanished">MindForger NO se puede ejecutar desde una consola de texto - defina la variable de entorno DISPLAY o ejecute MindForger desde la interfaz gráfica.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="219"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="123"/>
+        <source>MindForger CANNOT be run from text console - set DISPLAY or WAYLAND_DISPLAY environment variable or run MindForger from GUI.</source>
+        <translation>MindForger NO se puede ejecutar desde una consola de texto - defina la variable de entorno DISPLAY o WAYLAND_DISPLAY, o ejecute MindForger desde la interfaz gráfica.</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/mindforger.cpp" line="221"/>
         <source>MindForger workspace or directory/file with Markdown(s) to open</source>
         <translation>Espacio de trabajo de MindForger o directorio/archivo con Markdown(s) a abrir</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="225"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="227"/>
         <source>Use &apos;dark&apos;, &apos;light&apos; or other GUI &lt;theme&gt;.</source>
         <translation>Use &apos;dark&apos;, &apos;light&apos; u otro &lt;theme&gt; de la interfaz gráfica.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="228"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="230"/>
         <source>theme</source>
         <translation>theme</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="232"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="234"/>
         <source>Load configuration from given &lt;file&gt;.</source>
         <translation>Cargar la configuración desde el &lt;file&gt; indicado.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="235"/>
-        <location filename="../../../src/qt/mindforger.cpp" line="257"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="237"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="259"/>
         <source>file</source>
         <translation>file</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="242"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="244"/>
         <source>Disable WebEngine security to allow loading of images on macOS.</source>
         <translation>Desactivar la seguridad de WebEngine para permitir cargar imágenes en macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="248"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="250"/>
         <source>Disable WebEngine security by running single process on macOS.</source>
         <translation>Desactivar la seguridad de WebEngine ejecutando un único proceso en macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="252"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="254"/>
         <source>Disable WebEngine security by disabling sandbox on macOS.</source>
         <translation>Desactivar la seguridad de WebEngine desactivando el sandbox en macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="256"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="258"/>
         <source>Disable WebEngine security by user data dir specification on macOS.</source>
         <translation>Desactivar la seguridad de WebEngine especificando el directorio de datos de usuario en macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="262"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="264"/>
         <source>Disable WebEngine security via site isolation trials on macOS.</source>
         <translation>Desactivar la seguridad de WebEngine mediante las pruebas de aislamiento de sitios en macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="266"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="268"/>
         <source>Disable WebEngine security via acess file from file on macOS.</source>
         <translation>Desactivar la seguridad de WebEngine mediante el acceso a archivos desde archivos en macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="346"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="348"/>
         <source>Error: Unable to find given workspace/file to open - open MindForger without parameters and create it from menu Mind/New: &apos;</source>
         <translation>Error: no se encuentra el espacio de trabajo/archivo indicado - abra MindForger sin parámetros y créelo desde el menú Mente/Nuevo: &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="370"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="372"/>
         <source>Ignoring unknown GUI theme: &apos;</source>
         <translation>Ignorando el tema de interfaz desconocido: &apos;</translation>
     </message>
