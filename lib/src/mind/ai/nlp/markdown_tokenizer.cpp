@@ -263,6 +263,7 @@ string MarkdownTokenizer::stripNonAlpha(CharProvider& md)
                 w += md.get();
                 break;
             }
+            MF_FALL_THROUGH;
         case '\n':
         case '\r':
         case ' ':

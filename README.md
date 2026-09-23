@@ -84,6 +84,8 @@ Build:
 * [build on Gentoo](https://www.mindforger.com/docs/installation.html#build-on-gentoo)
 * [build on NixOS](https://www.mindforger.com/docs/installation.html#build-on-nixos)
 * [build on WSL](https://www.mindforger.com/docs/installation.html#build-on-wsl)
+* [build Flatpak](https://www.mindforger.com/docs/installation.html#build-flatpak)
+* [build Snap](https://www.mindforger.com/docs/installation.html#build-snap)
 
 Docker:
 

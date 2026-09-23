@@ -259,6 +259,16 @@ bool createDirectories(const std::string& path);
  */
 char* getExecutablePath();
 
+/**
+ * @brief Is a GUI session available i.e. is either X11 or Wayland display set?
+ *
+ * Accept both X11 (DISPLAY) and Wayland (WAYLAND_DISPLAY) environment variable values.
+ *
+ * @param displayEnvValue          value of the DISPLAY environment variable (may be nullptr)
+ * @param waylandDisplayEnvValue   value of the WAYLAND_DISPLAY environment variable (may be nullptr)
+ */
+bool isGuiSessionAvailable(const char* displayEnvValue, const char* waylandDisplayEnvValue);
+
 } // m8r namespace
 
 #endif /* M8R_FILE_UTILS_H_ */
