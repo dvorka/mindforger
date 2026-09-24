@@ -941,4 +941,15 @@ char* getExecutablePath() {
 
 }
 
+bool isGuiSessionAvailable(const char* displayEnvValue, const char* waylandDisplayEnvValue)
+{
+    if(displayEnvValue && strlen(displayEnvValue)) {
+        return true;
+    }
+    if(waylandDisplayEnvValue && strlen(waylandDisplayEnvValue)) {
+        return true;
+    }
+    return false;
+}
+
 } // m8r namespace

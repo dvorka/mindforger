@@ -184,3 +184,28 @@ TEST(FileGearTestCase, StringToFileReportsWriteFailure)
     EXPECT_FALSE(notWritten);
     EXPECT_FALSE(m8r::isFile(unwriteableFile.c_str()));
 }
+
+TEST(FileGearTestCase, GuiSessionAvailableForX11OrWayland)
+{
+    // GIVEN the four combinations of DISPLAY (X11) and WAYLAND_DISPLAY
+    // values seen across desktop sessions - including a Flatpak sandbox
+    // on a native Wayland compositor, where only WAYLAND_DISPLAY is set
+    // and DISPLAY is deliberately left empty by the sandbox
+
+    // WHEN neither is set (plain text console/tty)
+    // THEN no GUI session is detected
+    EXPECT_FALSE(m8r::isGuiSessionAvailable(nullptr, nullptr));
+    EXPECT_FALSE(m8r::isGuiSessionAvailable("", ""));
+
+    // WHEN only DISPLAY is set (X11 session)
+    // THEN a GUI session is detected
+    EXPECT_TRUE(m8r::isGuiSessionAvailable(":0", nullptr));
+
+    // WHEN only WAYLAND_DISPLAY is set (native Wayland session, e.g. Flatpak)
+    // THEN a GUI session is detected
+    EXPECT_TRUE(m8r::isGuiSessionAvailable(nullptr, "wayland-0"));
+
+    // WHEN both are set (XWayland session)
+    // THEN a GUI session is detected
+    EXPECT_TRUE(m8r::isGuiSessionAvailable(":0", "wayland-0"));
+}

@@ -31,7 +31,7 @@ echo "==============================================================="
 
 if [[ -z "${1}" ]]
 then
-    export MFVERSION="2.4.0"
+    export MFVERSION="2.4.1"
 else
     export MFVERSION="${1}"
 fi

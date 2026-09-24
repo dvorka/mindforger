@@ -68,6 +68,7 @@ constexpr const auto DEFAULT_OPENROUTER_API_URL = "https://openrouter.ai/api/v1"
 // const in constexpr makes value const
 constexpr const auto ENV_VAR_HOME = "HOME";
 constexpr const auto ENV_VAR_DISPLAY = "DISPLAY";
+constexpr const auto ENV_VAR_WAYLAND_DISPLAY = "WAYLAND_DISPLAY";
 constexpr const auto ENV_VAR_M8R_REPOSITORY = "MINDFORGER_REPOSITORY";
 constexpr const auto ENV_VAR_M8R_EDITOR = "MINDFORGER_EDITOR";
 
