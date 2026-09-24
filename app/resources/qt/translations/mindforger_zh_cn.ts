@@ -6057,73 +6057,77 @@ notes. Feel free to deprecate such notebook(s) yourself.
 <context>
     <name>main</name>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="121"/>
         <source>MindForger CANNOT be run from text console - set DISPLAY environment variable or run MindForger from GUI.</source>
-        <translation>MindForger 无法在文本控制台中运行 - 请设置 DISPLAY 环境变量，或在图形界面中运行 MindForger。</translation>
+        <translation type="vanished">MindForger 无法在文本控制台中运行 - 请设置 DISPLAY 环境变量，或在图形界面中运行 MindForger。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="219"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="123"/>
+        <source>MindForger CANNOT be run from text console - set DISPLAY or WAYLAND_DISPLAY environment variable or run MindForger from GUI.</source>
+        <translation>MindForger 无法在文本控制台中运行 - 请设置 DISPLAY 或 WAYLAND_DISPLAY 环境变量，或在图形界面中运行 MindForger。</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/mindforger.cpp" line="221"/>
         <source>MindForger workspace or directory/file with Markdown(s) to open</source>
         <translation>要打开的 MindForger 工作区或包含 Markdown 的目录/文件</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="225"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="227"/>
         <source>Use &apos;dark&apos;, &apos;light&apos; or other GUI &lt;theme&gt;.</source>
         <translation>使用 &apos;dark&apos;、&apos;light&apos; 或其他图形界面主题 &lt;theme&gt;。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="228"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="230"/>
         <source>theme</source>
         <translation>theme</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="232"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="234"/>
         <source>Load configuration from given &lt;file&gt;.</source>
         <translation>从给定的 &lt;file&gt; 加载配置。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="235"/>
-        <location filename="../../../src/qt/mindforger.cpp" line="257"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="237"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="259"/>
         <source>file</source>
         <translation>file</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="242"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="244"/>
         <source>Disable WebEngine security to allow loading of images on macOS.</source>
         <translation>在 macOS 上禁用 WebEngine 安全机制以允许加载图片。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="248"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="250"/>
         <source>Disable WebEngine security by running single process on macOS.</source>
         <translation>在 macOS 上通过单进程运行禁用 WebEngine 安全机制。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="252"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="254"/>
         <source>Disable WebEngine security by disabling sandbox on macOS.</source>
         <translation>在 macOS 上通过禁用沙箱禁用 WebEngine 安全机制。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="256"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="258"/>
         <source>Disable WebEngine security by user data dir specification on macOS.</source>
         <translation>在 macOS 上通过指定用户数据目录禁用 WebEngine 安全机制。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="262"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="264"/>
         <source>Disable WebEngine security via site isolation trials on macOS.</source>
         <translation>在 macOS 上通过站点隔离试验禁用 WebEngine 安全机制。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="266"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="268"/>
         <source>Disable WebEngine security via acess file from file on macOS.</source>
         <translation>在 macOS 上通过允许文件访问文件禁用 WebEngine 安全机制。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="346"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="348"/>
         <source>Error: Unable to find given workspace/file to open - open MindForger without parameters and create it from menu Mind/New: &apos;</source>
         <translation>错误：找不到要打开的给定工作区/文件 - 请不带参数启动 MindForger，并通过菜单“心智/新建”创建：&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="370"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="372"/>
         <source>Ignoring unknown GUI theme: &apos;</source>
         <translation>忽略未知的图形界面主题：&apos;</translation>
     </message>

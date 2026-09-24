@@ -113,16 +113,18 @@ using namespace m8r::filesystem;
  */
 int main(int argc, char* argv[])
 {
-    // check whether running in GUI (and not in text console tty)
+    // check whether running in GUI (and not in text console tty) - accept
+    // either X11 (DISPLAY) or Wayland (WAYLAND_DISPLAY) as a GUI session
 #if !defined(__APPLE__) && !defined(_WIN32)
-    char* term = getenv(m8r::ENV_VAR_DISPLAY);
-    if(!term || !strlen(term)) {
+    if(!m8r::isGuiSessionAvailable(
+        getenv(m8r::ENV_VAR_DISPLAY), getenv(m8r::ENV_VAR_WAYLAND_DISPLAY))
+    ) {
         cerr << endl
              << QCoreApplication::translate(
                     "main",
                     "MindForger CANNOT be run from text console "
-                    "- set DISPLAY environment variable or run "
-                    "MindForger from GUI."
+                    "- set DISPLAY or WAYLAND_DISPLAY environment "
+                    "variable or run MindForger from GUI."
                 ).toUtf8().constData()
              << endl;
         exit(1);

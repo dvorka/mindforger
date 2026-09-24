@@ -24,7 +24,13 @@
 # uploaded to a GitHub Release (this is NOT the Flathub-hosted build).
 #
 # Prerequisites:
-#   sudo apt install flatpak flatpak-builder   # or dnf/pacman/zypper equivalent
+#   sudo apt install flatpak flatpak-builder elfutils appstream-compose
+#   # on some distros the package installs the binary as
+#   # /usr/libexec/appstreamcli-compose instead of `appstream-compose` on PATH - link it
+#   command -v appstream-compose >/dev/null || \
+#       sudo ln -s /usr/libexec/appstreamcli-compose /usr/local/bin/appstream-compose
+#
+#   # the Flatpak SDK/runtime/base-app pin
 #   flatpak remote-add --if-not-exists --user flathub \
 #       https://flathub.org/repo/flathub.flatpakrepo
 #   flatpak install --user flathub \

@@ -24,9 +24,17 @@ jobs:
           submodules: recursive
 
       - name: Install flatpak and flatpak-builder
+        # elfutils (eu-strip/eu-elfcompress) and appstream-compose are what
+        # flatpak-builder shells out to for stripping debug info and composing
+        # AppStream metadata - see build/flatpak/build-flatpak.sh prerequisites
         run: |
           sudo apt-get update
-          sudo apt-get install -y flatpak flatpak-builder
+          sudo apt-get install -y flatpak flatpak-builder elfutils appstream-compose
+          # some distros install the binary as /usr/libexec/appstreamcli-compose
+          # instead of `appstream-compose` on PATH, which flatpak-builder 1.2.x
+          # hardcodes the name of
+          command -v appstream-compose >/dev/null || \
+              sudo ln -s /usr/libexec/appstreamcli-compose /usr/local/bin/appstream-compose
 
       - name: Install Qt 5.15 runtime, SDK and the Qt WebEngine base app
         # MindForger is a Qt 5 application, hence the KDE (not the freedesktop)
