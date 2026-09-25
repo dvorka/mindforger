@@ -150,6 +150,7 @@ SOURCES += \
     src/mind/ai/nlp/stemmer/stemmer.cpp \
     src/mind/ai/ai_aa_bow.cpp \
     src/mind/ai/ai_aa_weighted_fts.cpp \
+    src/mind/ai/ai_aa_bm25.cpp \
     src/mind/ai/aa_notes_feature.cpp \
     src/mind/ai/nlp/common_words_blacklist.cpp \
     src/mind/aspect/tag_scope_aspect.cpp \
@@ -286,6 +287,7 @@ HEADERS += \
     src/mind/ai/nlp/stemmer/utilities/utilities.h \
     src/mind/ai/ai_aa_bow.h \
     src/mind/ai/ai_aa_weighted_fts.h \
+    src/mind/ai/ai_aa_bm25.h \
     src/mind/ai/aa_model.h \
     src/mind/ai/aa_notes_feature.h \
     src/mind/ai/ai_aa.h \

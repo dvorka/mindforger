@@ -61,33 +61,24 @@ void AssocLeaderboardModel::addRow(Note* note, float associativity)
     html += QString::fromStdString(note->getOutline()->getName());
     html += ")";
 
+    // tooltip: name w/ precise score
+    QString tooltip{html};
+    tooltip += " (";
+    tooltip += QString::number(associativity*100., 'f', 5);
+    tooltip += ")";
+
     // item
     item = new QStandardItem(html);
-    item->setToolTip(html);
+    item->setToolTip(tooltip);
     // TODO under which ROLE this is > I should declare CUSTOM role (user+1 as constant)
     item->setData(QVariant::fromValue(note));
     items += item;
 
-    html.clear();
-    if(associativity>0.29) {
-        html += "<span style='color: #00";
-        if(associativity>0.69) {
-            html += "CC";
-        } else if(associativity>0.49) {
-            html += "AA";
-        } else if(associativity>0.39) {
-            html += "66";
-        } else if(associativity>0.29) {
-            html += "44";
-        }
-        html += "00'>";
-    }
-    html += QString::number(associativity*100.);
-    html += "%";
-    if(associativity>0.29) {
-        html += "</span>";
-    }
-    items += new QStandardItem(html);
+    // score painted as a meter by AssocScoreDelegate
+    item = new QStandardItem(QString::number(qRound(associativity*100.)));
+    item->setToolTip(tooltip);
+    item->setData(associativity, AssocScoreDelegate::ROLE_SCORE);
+    items += item;
 
     appendRow(items);
 }

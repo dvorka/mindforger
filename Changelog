@@ -1,13 +1,21 @@
 2026-..-..  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.5.0 - ...
+    * Feature: Debian 13 Trixie PPA - MindForger is newly provided for Debian 13
+      Trixie in addition to Debian 12 Bookworm (Debian 11 Bullseye, 10 Buster
+      and 9 Stretch PPAs are kept, but frozen) at https://www.mindforger.com/debian-ppa/
+    * Enhancement: new 3rd Note associations generation - Best Matching 25 (BM25)
+      based associations algorithm (extension of BoW): Notes are matched by whole
+      words (e.g. "art" no longer matches "start"), rare words weigh more than common
+      ones (TF-IDF), long Notes no longer win just because of their length,
+      Notes sharing tags w/ the current Note/Notebook are associated and
+      the associations are computed ~2x faster.
+    * Enhancement: association score is shown visually as a meter and the precise
+      score is newly shown in the tooltip only.
     * Enhancement: status bar indicators ("diodes") in the lower right corner of
       the main window - a capsule w/ autolinking (A), diagrams (D), live spell
       check (L), math (M), source code syntax highlighting (S), thinking (T) and
       Wingman availability (W) segments.
-    * Feature: Debian 13 Trixie PPA - MindForger is newly provided for Debian 13
-      Trixie in addition to Debian 12 Bookworm (Debian 11 Bullseye, 10 Buster
-      and 9 Stretch PPAs are kept, but frozen) at https://www.mindforger.com/debian-ppa/
     * Change: Debian PPA installation instructions use signed-by keyring
       instead of apt-key, which is no longer available on Debian Trixie.
     * Change: Debian PPA signing key self-signatures were refreshed from SHA-1
