@@ -33,7 +33,7 @@ extern char* getMindforgerGitHomePath();
  * Helpers
  */
 
-static m8r::Mind* learnAaBm25Repository(const string& configFileName)
+static m8r::Mind* learnAaBm25Repository(const string& configFileName, const vector<string>& tagsScope = vector<string>{})
 {
     string repositoryPath{"/lib/test/resources/aa-bm25-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
@@ -47,6 +47,7 @@ static m8r::Mind* learnAaBm25Repository(const string& configFileName)
         repositoryConfigRepresentation
     );
     config.setAaAlgorithm(m8r::Configuration::AssociationAssessmentAlgorithm::BM25);
+    config.setTagsScope(tagsScope);
 
     m8r::Mind* mind = new m8r::Mind(config);
     mind->learn();
@@ -234,4 +235,21 @@ TEST(AiAaBm25TestCase, OutlineAssociationsSkipSelfAndSiblings)
     ASSERT_TRUE(found);
     ASSERT_EQ(1u, associations.getAssociations()->size());
     ASSERT_EQ("Gardening in Japan", associations.getAssociations()->at(0).first->getName());
+}
+
+TEST(AiAaBm25TestCase, OutOfScopeOutlinesAreNotAssociated)
+{
+    // GIVEN: mind scoped to Os tagged "home" - only "Gardening" O is in scope
+    unique_ptr<m8r::Mind> scopedMind{learnAaBm25Repository("cfg-aabm-ooso.md", vector<string>{"home"})};
+    m8r::AssociatedNotes scopedAssociations{m8r::WORD, "gardening", nullptr};
+
+    // WHEN
+    bool scopedFound = scopedMind->getAssociatedNotes(scopedAssociations).get();
+
+    // THEN: "Gardening in Japan" (in "Travel" O w/o the tag) is out of scope
+    printAssociations("scoped: gardening", *scopedAssociations.getAssociations());
+    ASSERT_TRUE(scopedFound);
+    ASSERT_EQ(1u, scopedAssociations.getAssociations()->size());
+    ASSERT_EQ("Gardening", scopedAssociations.getAssociations()->at(0).first->getName());
+    ASSERT_EQ(-1, rankOf(*scopedAssociations.getAssociations(), "Gardening in Japan"));
 }

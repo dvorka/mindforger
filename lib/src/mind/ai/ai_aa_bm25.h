@@ -21,11 +21,9 @@
 
 #include <future>
 #include <vector>
-#include <map>
 
 #include "ai_aa.h"
 #include "../mind.h"
-#include "../../gear/hash_map.h"
 #include "./nlp/common_words_blacklist.h"
 #include "./nlp/markdown_tokenizer.h"
 
@@ -87,11 +85,6 @@ private:
     Memory& memory;
     CommonWordsBlacklist commonWords;
 
-    std::vector<Note*> notes;
-
-    // IMPROVE in addition to watermark also scope change should be tracked ~ mind.scopeWatermark
-    int lastMindDeleteWatermark;
-
 public:
     explicit AiAaBm25(Memory& memory, Mind& mind);
     AiAaBm25(const AiAaBm25&) = delete;
@@ -115,7 +108,6 @@ public:
     }
 
     virtual bool sleep() {
-        notes.clear();
         return true;
     }
 
@@ -135,8 +127,6 @@ public:
         std::vector<std::string>& terms);
 
 private:
-    void refreshNotes(bool checkWatermark);
-
     std::shared_future<bool> associate(
         const std::string& query,
         std::vector<std::pair<Note*,float>>& associations,

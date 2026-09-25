@@ -41,39 +41,17 @@ AiAaBm25::AiAaBm25(Memory& memory, Mind& mind)
       memory(memory),
       commonWords{}
 {
-    lastMindDeleteWatermark = mind.getDeleteWatermark();
 }
 
 AiAaBm25::~AiAaBm25()
 {
 }
 
-void AiAaBm25::refreshNotes(bool checkWatermark)
-{
-#ifdef DO_MF_DEBUG
-    MF_DEBUG("AA.BM25 Ns refresh - check watermark " << boolalpha << checkWatermark << endl);
-    auto begin = chrono::high_resolution_clock::now();
-#endif
-
-    if(checkWatermark && lastMindDeleteWatermark==mind.getDeleteWatermark()) {
-        return;
-    }
-    lastMindDeleteWatermark = mind.getDeleteWatermark();
-    notes.clear();
-    memory.getAllNotes(notes);
-
-#ifdef DO_MF_DEBUG
-    auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("AA.BM25 Ns refreshed in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms" << endl);
-#endif
-
-}
-
 shared_future<bool> AiAaBm25::dream()
 {
+    // nothing to learn - Os/Ns are scanned on every query to reflect O/N changes, deletes and scope
     MF_DEBUG("AA.BM25: LEARNING memory..." << endl);
 
-    refreshNotes(false);
     mind.persistMindState(Configuration::MindState::THINKING);
 
     std::promise<bool> p{};
@@ -220,7 +198,13 @@ void AiAaBm25::assessNotes(
         }
     };
 
+    // IMPORTANT: Mind::getOutlines() is NOT used as it rebuilds shared static vector (not thread safe)
     for(Outline* outline:memory.getOutlines()) {
+        // mind scope @ AI - out of scope Os/Ns must not affect terms/tags frequencies
+        if(mind.getScopeAspect().isOutOfScope(outline)) {
+            continue;
+        }
+
         // O
         int outlineCandidate = -1;
         bool matches = matchCandidate(
@@ -313,9 +297,6 @@ std::shared_future<bool> AiAaBm25::associate(
     MF_DEBUG("AA.BM25.words for  '" << query << "'" << endl);
     auto begin = chrono::high_resolution_clock::now();
 #endif
-
-    // Ns mut be refreshed from Mind to consider O/N deletes and scope changes
-    refreshNotes(true);
 
     // find matches
     vector<string> terms{};
