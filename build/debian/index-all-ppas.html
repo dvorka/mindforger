@@ -1,24 +1,73 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <title>MindForger Debian PPA repositories</title>
+    <style>
+      body { font-family: sans-serif; max-width: 60em; margin: 1em auto; padding: 0 1em; line-height: 1.4; }
+      table { border-collapse: collapse; }
+      th, td { border: 1px solid #ccc; padding: 0.3em 0.8em; text-align: left; }
+      pre { background: #f4f4f4; padding: 0.8em; overflow-x: auto; }
+    </style>
   </head>
   <body>
-    <h1>MindForger provides Debian PPA repositories</h1>
+    <h1>MindForger Debian PPA repositories</h1>
 
-    <p>MindForger provides Debian PPA repositories for the following 
-       Debian releases:
-    
-       <ul>
-         <li><a href="bookworm/index.html">Debian 12 Bookworm</a></li>
-         <li><a href="bullseye/index.html">Debian 11 Bullseye</a></li>
-         <li><a href="buster/index.html">Debian 10 Buster</a></li>
-         <li><a href="stretch/index.html">Debian 9 Stretch</a></li>    
-       </ul>
-
-       There is not one repository for all Debian releases,
-       but per-Debian release repository.
+    <p>MindForger provides Personal Package Archive (PPA) repositories
+       for the following Debian releases - there is not one repository
+       for all Debian releases, but a repository per Debian release:
     </p>
-    
+
+    <table>
+      <tr><th>Debian release</th><th>Codename</th><th>Status</th><th>Latest MindForger</th></tr>
+@RELEASES@
+    </table>
+
+    <p>Click the Debian release for installation steps.</p>
+
+    <h2>Installation</h2>
+
+    <p>Replace <code>CODENAME</code> with your Debian release codename
+       (<code>. /etc/os-release; echo $VERSION_CODENAME</code>) from the table above:</p>
+
+    <pre>
+# create directory for APT repository keys (if it does not exist)
+sudo install -d -m 0755 /etc/apt/keyrings
+# download MindForger GPG key and store it in the binary format used by APT
+wget -qO- @KEY_URL@ | gpg --dearmor | sudo tee /etc/apt/keyrings/mindforger.gpg > /dev/null
+echo "deb [signed-by=/etc/apt/keyrings/mindforger.gpg] https://www.mindforger.com/debian-ppa/CODENAME CODENAME main" | sudo tee /etc/apt/sources.list.d/mindforger.list
+sudo apt update
+sudo apt install mindforger</pre>
+
+    <h2 id="signing-key">Signing key</h2>
+
+    <p>All repositories are signed by MindForger key:</p>
+
+    <ul>
+      <li>fingerprint: <code>@KEY_FINGERPRINT@</code></li>
+      <li>public key: <a href="@KEY_URL@">@KEY_URL@</a></li>
+    </ul>
+
+    <p>Check the fingerprint of the downloaded key:</p>
+
+    <pre>
+wget -qO- @KEY_URL@ | gpg --show-keys --with-fingerprint</pre>
+
+    <p>Notes:</p>
+
+    <ul>
+      <li><b>2026 key refresh</b>: self-signatures of the key were refreshed
+          from SHA-1 to SHA-512, because Debian 13 Trixie apt rejects keys
+          w/ SHA-1 self-signatures. The key and its fingerprint did not change.
+          If <code>apt update</code> reports that the signing key
+          <i>is not bound</i> or <i>SHA1 is not considered secure</i>,
+          download the key again using the installation steps above.</li>
+      <li><code>apt-key</code> used by older installation instructions is
+          deprecated and it is not available on Debian 13 Trixie - use
+          <code>signed-by</code> keyring as shown above.</li>
+    </ul>
+
+    <p><small>Updated: @UPDATED@</small></p>
+
   </body>
 </html>
