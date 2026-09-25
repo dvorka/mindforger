@@ -327,7 +327,7 @@ Choose new library source:</source>
 <context>
     <name>m8r::AssocLeaderboardPresenter</name>
     <message>
-        <location filename="../../../src/qt/assoc_leaderboard_presenter.cpp" line="85"/>
+        <location filename="../../../src/qt/assoc_leaderboard_presenter.cpp" line="87"/>
         <source>Associations</source>
         <translation type="unfinished"></translation>
     </message>

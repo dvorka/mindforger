@@ -28,6 +28,7 @@
 #include "../memory.h"
 #include "./aa_model.h"
 #include "./ai_aa_weighted_fts.h"
+#include "./ai_aa_bm25.h"
 #include "./ai_aa_bow.h"
 
 namespace m8r {
@@ -70,7 +71,7 @@ private:
      * Associations
      */
 
-    // Associations assessment implementations: AA @ weighted FTS, AA @ BoW
+    // Associations assessment implementations: AA @ BM25, AA @ weighted FTS, AA @ BoW
     AiAssociationsAssessment* aa;
 
     /*

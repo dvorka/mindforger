@@ -22,6 +22,7 @@
 #include <QtWidgets>
 
 #include "model_meta_definitions.h"
+#include "assoc_score_delegate.h"
 #include "gear/qutils.h"
 
 namespace m8r {

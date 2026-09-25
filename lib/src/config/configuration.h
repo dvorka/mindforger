@@ -275,8 +275,9 @@ public:
     };
 
     enum AssociationAssessmentAlgorithm {
-        BOW,
-        WEIGHTED_FTS
+        BOW,          // 1st algorithm - Bag of Words, unused
+        WEIGHTED_FTS, // 2nd algorithm - weighted FTS, unused
+        BM25          // 3rd algorithm - Best Matching 25, default
     };
 
     enum JavaScriptLibSupport {
@@ -310,6 +311,7 @@ public:
 
     static constexpr const int DEFAULT_ASYNC_MIND_THRESHOLD_BOW = 200;
     static constexpr const int DEFAULT_ASYNC_MIND_THRESHOLD_WEIGHTED_FTS = 25000;
+    static constexpr const int DEFAULT_ASYNC_MIND_THRESHOLD_BM25 = 25000;
     static constexpr const int DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL = 500;
 
     static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;

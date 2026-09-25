@@ -140,10 +140,13 @@ void AsyncTaskNotificationsDistributor::run()
             mwp->getMind()->meditateAssociations();
 
             /*
-             * AA FTS algorithm
+             * AA BM25 and FTS algorithms (synchronous)
              */
 
-            if(Configuration::getInstance().getAaAlgorithm()==Configuration::AssociationAssessmentAlgorithm::WEIGHTED_FTS) {
+            if(Configuration::getInstance().getAaAlgorithm()==Configuration::AssociationAssessmentAlgorithm::BM25
+                 ||
+               Configuration::getInstance().getAaAlgorithm()==Configuration::AssociationAssessmentAlgorithm::WEIGHTED_FTS)
+            {
 
                 if(Configuration::getInstance().getMindState()==Configuration::MindState::THINKING) {
 
