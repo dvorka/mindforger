@@ -1,7 +1,10 @@
 2026-..-..  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.5.1 - ...
-    * .
+    * Enhancement: status bar indicators ("diodes") in the lower right corner of
+      the main window - autolinking (A), diagrams (D), live spell check (L),
+      math (M), source code syntax highlighting (S), thinking (T) and Wingman
+      availability (W) are shown in green when enabled and in gray when disabled.
 
 2026-09-23  Martin Dvorak  <martin.dvorak@mindforger.com>
 
