@@ -64,8 +64,20 @@ void AsyncTaskNotificationsDistributor::run()
     // avoid live preview flickering w/ longer refresh interval
     long long livePreviewMultiplier{0};
 
-    while(true) {
-        msleep(static_cast<unsigned long>(sleepInterval));
+    while(!isInterruptionRequested()) {
+        {
+            // sleep, but wake up immediately when stop() is called
+            std::unique_lock<std::mutex> sleepLock{sleepMutex};
+            sleepCondition.wait_for(
+                sleepLock,
+                std::chrono::milliseconds(sleepInterval),
+                [this] { return isInterruptionRequested(); });
+        }
+
+        // stop ASAP on shutdown - do NOT touch mwp/mind which may already be torn down
+        if(isInterruptionRequested()) {
+            break;
+        }
 
 
 
@@ -245,6 +257,16 @@ void AsyncTaskNotificationsDistributor::run()
             }
         }
     }
+}
+
+void AsyncTaskNotificationsDistributor::stop()
+{
+    {
+        // set the flag under the lock to avoid a lost wake-up in run()
+        std::lock_guard<std::mutex> sleepLock{sleepMutex};
+        requestInterruption();
+    }
+    sleepCondition.notify_all();
 }
 
 void AsyncTaskNotificationsDistributor::slotConfigurationUpdated()

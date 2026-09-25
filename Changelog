@@ -14,6 +14,10 @@
       to SHA-512 (the key fingerprint is unchanged) as Debian Trixie apt rejects
       keys w/ SHA-1 self-signatures - please DO re-import
       the key from https://www.mindforger.com/gpgpubkey.txt
+    * Fix: MindForger could randomly crash on exit as the async autolinking and
+      associations worker thread kept running while the application was being
+      torn down - the worker is newly stopped and joined on shutdown w/o any
+      delay regardless of the configured async refresh interval (#1563).
 
 2026-09-23  Martin Dvorak  <martin.dvorak@mindforger.com>
 
