@@ -258,7 +258,7 @@ MainWindowPresenter::~MainWindowPresenter()
     // stop & join the background distributor thread BEFORE deleting mind/widgets
     // it references - it runs an unbounded loop and must not touch freed memory
     if(distributor) {
-        distributor->requestInterruption();
+        distributor->stop();
         distributor->wait();
         delete distributor;
         distributor = nullptr;
