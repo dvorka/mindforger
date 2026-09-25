@@ -364,8 +364,8 @@ releng-version-set: ## propagate lib/src/app_info.h version to all release/packa
 releng-gh-downloads: ## show GitHub downloads count w/ optional VERSION=x.y.z release var
 	./make/gh-release-downloads.sh dvorka/mindforger $(if $(VERSION),$(VERSION),$(MINDFORGER_PREVIOUS_MINOR_VERSION))
 
-.PHONY: distro-pad-refresh
-distro-pad-refresh: ## refresh PAD.xml release fields (version, date, changelog, installer size)
+.PHONY: releng-pad-refresh
+releng-pad-refresh: ## refresh PAD.xml release fields (version, date, changelog, installer size)
 	./make/distro-pad-refresh.py
 
 
