@@ -2,9 +2,12 @@
 
     * Released v2.5.1 - ...
     * Enhancement: status bar indicators ("diodes") in the lower right corner of
-      the main window - autolinking (A), diagrams (D), live spell check (L),
-      math (M), source code syntax highlighting (S), thinking (T) and Wingman
-      availability (W) are shown in green when enabled and in gray when disabled.
+      the main window - a capsule w/ autolinking (A), diagrams (D), live spell
+      check (L), math (M), source code syntax highlighting (S), thinking (T) and
+      Wingman availability (W) segments. Enabled segments are filled w/ the theme
+      color of selected items, disabled segments are faded, and each segment has
+      a tooltip explaining its state. The autolinking text was removed from
+      the status bar message as it is replaced by the A indicator.
 
 2026-09-23  Martin Dvorak  <martin.dvorak@mindforger.com>
 

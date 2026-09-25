@@ -46,14 +46,16 @@ enum StatusBarIndicator {
 class StatusBarView
 {
 private:
+    static const char* INDICATORS_PANEL_OBJECT_NAME;
     static const char* INDICATOR_OBJECT_NAME;
 
     QStatusBar* statusBar;
 
+    // indicators are shown as segments of one capsule shaped panel
+    QFrame* indicatorsPanel;
     QLabel* indicators[INDICATOR_COUNT];
-    // indicator style sheets derived from the active theme
-    QString indicatorEnabledStyle;
-    QString indicatorDisabledStyle;
+    // indicator style sheets derived from the active theme: [indicator][enabled]
+    QString indicatorStyles[INDICATOR_COUNT][2];
 
     LookAndFeels& lookAndFeel;
     QFont font;
@@ -76,7 +78,11 @@ public:
 
 private:
     static QString createIndicatorStyle(
-        const QString& backgroundColor, const QString& textColor);
+        int indicator,
+        const QColor& textColor,
+        const QColor& backgroundColor,
+        const QColor& separatorColor);
+    static QString toCssColor(const QColor& color);
 };
 
 }
