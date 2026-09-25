@@ -332,7 +332,7 @@ Elija la nueva fuente de la biblioteca:</translation>
 <context>
     <name>m8r::AssocLeaderboardPresenter</name>
     <message>
-        <location filename="../../../src/qt/assoc_leaderboard_presenter.cpp" line="85"/>
+        <location filename="../../../src/qt/assoc_leaderboard_presenter.cpp" line="87"/>
         <source>Associations</source>
         <translation>Asociaciones</translation>
     </message>
