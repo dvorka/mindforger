@@ -86,6 +86,10 @@ for REL in "${RELEASES[@]}"; do
     echo -e "\n==================== ${REL} ===================="
     REL_OUT_DIR="${OUT_DIR}/${REL}"
     mkdir -p "${REL_OUT_DIR}"
+    # drop packages of previous builds so that a stale .deb can never be
+    # mistaken for the result of this build
+    echo "WRITE: removing previous build packages from ${REL_OUT_DIR}"
+    rm -vf "${REL_OUT_DIR}"/mindforger*.deb "${REL_OUT_DIR}"/mindforger*.buildinfo "${REL_OUT_DIR}"/mindforger*.changes
 
     docker build \
         --build-arg "DEBIAN_RELEASE=${REL}" \

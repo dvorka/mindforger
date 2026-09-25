@@ -2,38 +2,43 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>MindForger Debian "DISTRO" PPA repository</title>
+    <title>MindForger Debian "@DISTRO@" PPA repository</title>
+    <style>
+      body { font-family: sans-serif; max-width: 60em; margin: 1em auto; padding: 0 1em; line-height: 1.4; }
+      pre { background: #f4f4f4; padding: 0.8em; overflow-x: auto; }
+    </style>
   </head>
   <body>
-    <h1>MindForger Debian "DISTRO" PPA repository</h1>
+    <h1>MindForger Debian "@DISTRO@" PPA repository</h1>
 
     <p>This is Personal Package Archive (PPA)
        for <a href="https://www.mindforger.com/">MindForger</a>
-       and Debian "DISTRO" release.
+       and Debian "@DISTRO@" release
+       (<a href="../index.html">all MindForger Debian PPAs</a>).
     </p>
 
     <p>Download the key which is used to sign the repository:</p>
 
     <pre>
-      sudo install -d -m 0755 /etc/apt/keyrings
-      wget -qO- https://www.mindforger.com/gpgpubkey.txt | gpg --dearmor | sudo tee /etc/apt/keyrings/mindforger.gpg > /dev/null
-    </pre>
+# create directory for APT repository keys (if it does not exist)
+sudo install -d -m 0755 /etc/apt/keyrings
+# download MindForger GPG key and store it in the binary format used by APT
+wget -qO- @KEY_URL@ | gpg --dearmor | sudo tee /etc/apt/keyrings/mindforger.gpg > /dev/null</pre>
 
     <p>... add the repository:</p>
 
     <pre>
-      echo "deb [signed-by=/etc/apt/keyrings/mindforger.gpg] https://www.mindforger.com/debian-ppa/DISTRO DISTRO main" | sudo tee /etc/apt/sources.list.d/mindforger.list
-    </pre>
+echo "deb [signed-by=/etc/apt/keyrings/mindforger.gpg] https://www.mindforger.com/debian-ppa/@DISTRO@ @DISTRO@ main" | sudo tee /etc/apt/sources.list.d/mindforger.list</pre>
 
     <p>After that you can install MindForger as any other software package:</p>
 
     <pre>
-      sudo apt update
-      sudo apt install mindforger
-    </pre>
+sudo apt update
+sudo apt install mindforger</pre>
 
-    <p>Signing key fingerprint:
-       <code>E3E8 520D E382 0D8C 1A72 4BB7 B72E 4F7F 24AF 591D</code>
+    <p>Signing key fingerprint: <code>@KEY_FINGERPRINT@</code>
+       - see <a href="../index.html#signing-key">signing key notes</a>
+       if <code>apt update</code> reports a key problem.
     </p>
 
   </body>

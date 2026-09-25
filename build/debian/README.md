@@ -101,7 +101,7 @@ the one and only list used by all scripts and make targets:
 | `build/debian/debian-config.sh`     | **configuration**: paths + signing key (see [Configuration](#configuration)) |
 | `build/debian/debian-ppa.sh`        | PPA management script (aptly, gpg, Docker verification) |
 | `build/debian/index-ppa.html`       | template of `index.html` of a PPA (installation steps) |
-| `build/debian/index-all-ppas.html`  | template of `index.html` which lists all PPAs |
+| `build/debian/index-all-ppas.html`  | template of `/debian-ppa/index.html`: table of Debian releases (status, latest MF version), installation steps and signing key notes |
 | `build/docker/debian-deb/`          | Docker-based `.deb` builder (one image per Debian release) |
 | `build/debian/debian/`              | Debian packaging (control, rules, ...) |
 | `../mindforger-deb/<codename>/`     | `.deb` packages built by Docker (`MF_DEBIAN_DEB_DIR`) |
@@ -198,6 +198,7 @@ Parameters:
 | `distro-debian-ppa-remove` | remove `MF_VERSION` from `DEBIAN_RELEASE` PPA |
 | `distro-debian-ppa-sync` | rebuild and re-sign `DEBIAN_RELEASE` PPA from the archive (default: all) |
 | `distro-debian-ppa-list` | list archived and published MF versions (default: all releases) |
+| `distro-debian-ppa-index` | regenerate `index.html` pages only (e.g. after template change) - no re-signing |
 | `distro-debian-ppa-verify` | install MF from the local PPA in `debian:<codename>` container (default: all supported) |
 | `distro-debian-ppa-key-check` | check validity of the signing key |
 | `devenv-debian-ppa` | install aptly & co. |
@@ -425,7 +426,9 @@ MindForger installation from the PPA - replace `trixie` with your Debian
 release codename (`lsb_release -cs`):
 
 ```bash
+# create directory for APT repository keys (if it does not exist)
 sudo install -d -m 0755 /etc/apt/keyrings
+# download MindForger GPG key and store it in the binary format used by APT
 wget -qO- https://www.mindforger.com/gpgpubkey.txt \
     | gpg --dearmor | sudo tee /etc/apt/keyrings/mindforger.gpg > /dev/null
 echo "deb [signed-by=/etc/apt/keyrings/mindforger.gpg] https://www.mindforger.com/debian-ppa/trixie trixie main" \

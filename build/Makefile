@@ -465,6 +465,10 @@ distro-debian-ppa-sync: ## rebuild and re-sign Debian PPA(s) from .deb archive: 
 distro-debian-ppa-list: ## list archive/PPA paths and MF versions: DEBIAN_RELEASE=trixie (default: all)
 	./debian/debian-ppa.sh list $(DEBIAN_RELEASE)
 
+.PHONY: distro-debian-ppa-index
+distro-debian-ppa-index: ## regenerate index.html pages of Debian PPAs (releases table, installation, signing key)
+	./debian/debian-ppa.sh index
+
 .PHONY: distro-debian-ppa-verify
 distro-debian-ppa-verify: ## install MF from local Debian PPA in Docker: DEBIAN_RELEASE=trixie (default: all supported)
 	./debian/debian-ppa.sh verify $(or $(DEBIAN_RELEASE),supported)

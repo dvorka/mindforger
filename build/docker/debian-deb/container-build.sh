@@ -113,7 +113,20 @@ echo -e "\n# dpkg-buildpackage ############################################"
 dpkg-buildpackage -us -uc -b
 
 mkdir -p "${OUT}"
-cp -v ../*.deb ../*.buildinfo ../*.changes "${OUT}/" 2>/dev/null || true
+
+# the .deb is mandatory (fail loudly, never report success w/o it), build
+# metadata files are optional
+DEB_FILES=(../*.deb)
+if [ ! -e "${DEB_FILES[0]}" ]; then
+    echo "ERROR: no .deb package produced" >&2
+    exit 1
+fi
+cp -v "${DEB_FILES[@]}" "${OUT}/"
+for META in ../*.buildinfo ../*.changes; do
+    if [ -e "${META}" ]; then
+        cp -v "${META}" "${OUT}/"
+    fi
+done
 
 echo -e "\nDONE: package(s) written to /out"
 ls -la "${OUT}"

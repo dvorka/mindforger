@@ -173,31 +173,56 @@ fi
 # # Index #
 # ############################################################################
 
+# render HTML template - signing key placeholders are always substituted
+#
+# parameters:
+#   $1   - template file
+#   $2   - output file
+#   $3.. - additional sed expressions
+function render_template {
+    local template="${1}" output="${2}"
+    local fingerprint
+    shift 2
+    # E3E8520D... > E3E8 520D ...
+    fingerprint="$(echo "${MF_DEBIAN_GPG_KEY}" | sed -e 's/.\{4\}/& /g' -e 's/ $//')"
+    sed -e "s|@KEY_FINGERPRINT@|${fingerprint}|g" \
+        -e "s|@KEY_URL@|${MF_DEBIAN_GPG_KEY_URL}|g" \
+        "${@}" \
+        "${template}" > "${output}"
+}
+
 # generate index.html for the PPA of the Debian release
 function index_release {
     local codename="${1}"
-    sed -e "s/DISTRO/${codename}/g" "${SCRIPT_DIR}/index-ppa.html" \
-        > "${MF_DEBIAN_PPA_DIR}/${codename}/index.html"
+    render_template "${SCRIPT_DIR}/index-ppa.html" "${MF_DEBIAN_PPA_DIR}/${codename}/index.html" \
+        -e "s|@DISTRO@|${codename}|g"
 }
 
-# generate index.html for all PPAs w/ links to the published releases
+# generate index.html for all PPAs w/ the table of the published Debian
+# releases, their status and the latest MindForger version
 function cmd_index {
-    local codename items=""
+    local codename status latest rows=""
     info "WRITE: index.html pages in ${MF_DEBIAN_PPA_DIR}"
     mkdir -p "${MF_DEBIAN_PPA_DIR}"
     for codename in $(mf_debian_releases); do
         [ -d "${MF_DEBIAN_PPA_DIR}/${codename}/dists" ] || continue
         index_release "${codename}"
-        local item="<li><a href=\"${codename}/index.html\">Debian $(mf_debian_release_number "${codename}") ${codename^}</a>"
-        if [ "$(mf_debian_release_status "${codename}")" = "frozen" ]; then
-            item="${item} (frozen - no new MindForger versions)"
+        status="$(mf_debian_release_status "${codename}")"
+        if [ "${status}" = "supported" ]; then
+            status="supported - new MindForger versions are released"
+        else
+            status="frozen - no new MindForger versions"
         fi
-        items="${items}          ${item}</li>\n"
+        # 2.5.0-1 > 2.5.0
+        latest="$(ppa_versions "${codename}" | tail -1)"
+        latest="${latest%-*}"
+        rows="${rows}        <tr><td><a href=\"${codename}/index.html\">Debian $(mf_debian_release_number "${codename}") ${codename^}</a></td><td><code>${codename}</code></td><td>${status}</td><td>${latest}</td></tr>\n"
     done
-    items="${items%\\n}"
+    rows="${rows%\\n}"
     # GNU sed turns \n in the replacement to new line
-    sed -e "s|RELEASES|${items}|" "${SCRIPT_DIR}/index-all-ppas.html" \
-        > "${MF_DEBIAN_PPA_DIR}/index.html"
+    render_template "${SCRIPT_DIR}/index-all-ppas.html" "${MF_DEBIAN_PPA_DIR}/index.html" \
+        -e "s|@RELEASES@|${rows}|" \
+        -e "s|@UPDATED@|$(date -u +%Y-%m-%d)|"
     info "DONE: index.html pages generated in ${MF_DEBIAN_PPA_DIR}"
 }
 
