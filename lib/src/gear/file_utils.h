@@ -232,7 +232,8 @@ std::string getNewTempFilePath(const std::string& extension);
 bool stringToLines(const std::string* text, std::vector<std::string*>& lines);
 bool fileToLines(const std::string* filename, std::vector<std::string*>& lines, size_t& filesize);
 std::string* fileToString(const std::string& filename);
-void stringToFile(const std::string& filename, const std::string& content);
+// writes content to file - returns `false` if the file cannot be written
+bool stringToFile(const std::string& filename, const std::string& content);
 time_t fileModificationTime(const std::string* filename);
 bool copyFile(const std::string& from, const std::string& to);
 bool moveFile(const std::string& from, const std::string& to);
@@ -257,6 +258,16 @@ bool createDirectories(const std::string& path);
  * Method is not reentrant - it returns pointer to the static buffer.
  */
 char* getExecutablePath();
+
+/**
+ * @brief Is a GUI session available i.e. is either X11 or Wayland display set?
+ *
+ * Accept both X11 (DISPLAY) and Wayland (WAYLAND_DISPLAY) environment variable values.
+ *
+ * @param displayEnvValue          value of the DISPLAY environment variable (may be nullptr)
+ * @param waylandDisplayEnvValue   value of the WAYLAND_DISPLAY environment variable (may be nullptr)
+ */
+bool isGuiSessionAvailable(const char* displayEnvValue, const char* waylandDisplayEnvValue);
 
 } // m8r namespace
 

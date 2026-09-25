@@ -161,3 +161,267 @@ TEST(HtmlTestCase, TaskList)
     cout << "= BEGIN N HTML =" << endl << html << endl << "= END N HTML =" << endl;
     EXPECT_NE(std::string::npos, html.find("input"));
 }
+
+TEST(HtmlTestCase, MathSupportDisabled)
+{
+    // GIVEN: math support disabled (the default)
+    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-math-no.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
+    config.setUiEnableMathInMd(m8r::Configuration::MathJsLibSupport::MATH_NO);
+    m8r::Mind mind(config);
+    m8r::HtmlColorsMock dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(), dummyColors, nullptr};
+    mind.learn();
+    mind.think().get();
+    string markdown{"# Test\n\nInline math: $E=mc^2$\n"};
+
+    // WHEN
+    string html{};
+    htmlRepresentation.to(&markdown, &html);
+
+    // THEN: no math JS/CSS is injected at all
+    EXPECT_EQ(std::string::npos, html.find("katex"));
+    EXPECT_EQ(std::string::npos, html.find("mathjax"));
+}
+
+TEST(HtmlTestCase, MathSupportKaTeXIsOfflineOnly)
+{
+    // GIVEN: KaTeX selected as the math rendering engine
+    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-math-katex.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
+    config.setUiEnableMathInMd(m8r::Configuration::MathJsLibSupport::MATH_KATEX);
+    m8r::Mind mind(config);
+    m8r::HtmlColorsMock dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(), dummyColors, nullptr};
+    mind.learn();
+    mind.think().get();
+    string markdown{"# Test\n\nInline math: $E=mc^2$\n"};
+
+    // WHEN
+    string html{};
+    htmlRepresentation.to(&markdown, &html);
+
+    // THEN: KaTeX is loaded exclusively from bundled Qt resources - never the network
+    EXPECT_NE(std::string::npos, html.find("qrc:/js/katex.min.js"));
+    EXPECT_NE(std::string::npos, html.find("qrc:/js/katex-auto-render.min.js"));
+    EXPECT_NE(std::string::npos, html.find("qrc:/html-css/katex.min.css"));
+    EXPECT_EQ(std::string::npos, html.find("mathjax"));
+    EXPECT_EQ(std::string::npos, html.find("http://"));
+    EXPECT_EQ(std::string::npos, html.find("https://"));
+    EXPECT_EQ(std::string::npos, html.find("\\\\("));
+}
+
+TEST(HtmlTestCase, MathSupportMathJaxLegacyIsOfflineOnly)
+{
+    // GIVEN: MathJax (legacy) selected as the math rendering engine
+    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-math-mathjax.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
+    config.setUiEnableMathInMd(m8r::Configuration::MathJsLibSupport::MATH_MATHJAX);
+    m8r::Mind mind(config);
+    m8r::HtmlColorsMock dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(), dummyColors, nullptr};
+    mind.learn();
+    mind.think().get();
+    string markdown{"# Test\n\nInline math: $E=mc^2$\n"};
+
+    // WHEN
+    string html{};
+    htmlRepresentation.to(&markdown, &html);
+
+    // THEN: MathJax is loaded exclusively from bundled Qt resources - never the network
+    EXPECT_NE(std::string::npos, html.find("qrc:/js/mathjax-tex-svg.js"));
+    EXPECT_EQ(std::string::npos, html.find("katex"));
+    EXPECT_EQ(std::string::npos, html.find("http://"));
+    EXPECT_EQ(std::string::npos, html.find("https://"));
+    EXPECT_EQ(std::string::npos, html.find("\\\\("));
+}
+
+TEST(HtmlTestCase, DiagramSupportOfflineMermaidIsFixed)
+{
+    // GIVEN: offline Mermaid diagrams selected - previously broken since mermaid.js
+    // was never registered as a Qt resource (qrc:/js/mermaid.js 404-ed at runtime)
+    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-diagram-offline.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
+    config.setUiEnableDiagramsInMd(m8r::Configuration::JavaScriptLibSupport::OFFLINE);
+    m8r::Mind mind(config);
+    m8r::HtmlColorsMock dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(), dummyColors, nullptr};
+    mind.learn();
+    mind.think().get();
+    string markdown{"# Test\n\n```mermaid\ngraph TD; A-->B;\n```\n"};
+
+    // WHEN
+    string html{};
+    htmlRepresentation.to(&markdown, &html);
+
+    // THEN
+    EXPECT_NE(std::string::npos, html.find("qrc:/js/mermaid.js"));
+    EXPECT_EQ(std::string::npos, html.find("https://cdnjs.cloudflare.com"));
+}
+
+TEST(HtmlTestCase, SrcHighlightDisabledByDefault)
+{
+    // GIVEN: source code syntax highlighting disabled (the default)
+    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-hl-no.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
+    m8r::Mind mind(config);
+    m8r::HtmlColorsMock dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(), dummyColors, nullptr};
+    mind.learn();
+    mind.think().get();
+    string markdown{"# Test\n\n```cpp\nint i = 0;\n```\n"};
+
+    // WHEN
+    string html{};
+    htmlRepresentation.to(&markdown, &html);
+
+    // THEN: no highlight.js JS/CSS is injected at all
+    EXPECT_EQ(std::string::npos, html.find("highlight.js"));
+    EXPECT_EQ(std::string::npos, html.find("highlight.css"));
+    EXPECT_EQ(std::string::npos, html.find("hljs."));
+}
+
+TEST(HtmlTestCase, SrcHighlightEnabledUsesOfflineQrcBundle)
+{
+    // GIVEN: source code syntax highlighting enabled on the default (Qt
+    // WebEngine) rendering backend
+    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-hl-yes.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
+    config.setUiEnableSrcHighlightInMd(true);
+    config.setHtmlRenderingWebEngineBackend(true);
+    m8r::Mind mind(config);
+    m8r::HtmlColorsMock dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(), dummyColors, nullptr};
+    mind.learn();
+    mind.think().get();
+    string markdown{"# Test\n\n```cpp\nint i = 0;\n```\n"};
+
+    // WHEN
+    string html{};
+    htmlRepresentation.to(&markdown, &html);
+
+    // THEN: highlight.js is loaded exclusively from bundled Qt resources - never the network
+    EXPECT_NE(std::string::npos, html.find("qrc:/js/highlight.js"));
+    EXPECT_NE(std::string::npos, html.find("qrc:/html-css/highlight.css"));
+    EXPECT_NE(std::string::npos, html.find("hljs.highlightAll();"));
+    EXPECT_EQ(std::string::npos, html.find("http://"));
+    EXPECT_EQ(std::string::npos, html.find("https://"));
+}
+
+TEST(HtmlTestCase, SrcHighlightDisabledOnLegacyWebKitBackend)
+{
+    // GIVEN: source code syntax highlighting enabled in config, but rendering
+    // via the legacy Qt WebKit (mfwebkit) backend, whose JS engine cannot
+    // safely run the ES2015+ highlight.js bundle
+    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-hl-webkit.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
+    config.setUiEnableSrcHighlightInMd(true);
+    config.setHtmlRenderingWebEngineBackend(false);
+    m8r::Mind mind(config);
+    m8r::HtmlColorsMock dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(), dummyColors, nullptr};
+    mind.learn();
+    mind.think().get();
+    string markdown{"# Test\n\n```cpp\nint i = 0;\n```\n"};
+
+    // WHEN
+    string html{};
+    htmlRepresentation.to(&markdown, &html);
+
+    // THEN: highlight.js is NOT injected despite being enabled in config
+    EXPECT_EQ(std::string::npos, html.find("highlight.js"));
+    EXPECT_EQ(std::string::npos, html.find("highlight.css"));
+    EXPECT_EQ(std::string::npos, html.find("hljs."));
+
+    // cleanup
+    config.setHtmlRenderingWebEngineBackend(true);
+}
+
+TEST(HtmlTestCase, DiagramSupportOnlineIsNoLongerOffered)
+{
+    // GIVEN: ONLINE explicitly set (no longer reachable from the Preferences UI,
+    // which now offers only "disable"/"offline" - kept in the enum only for
+    // backward-compat config-file migration to OFFLINE)
+    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-diagram-online.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
+    config.setUiEnableDiagramsInMd(m8r::Configuration::JavaScriptLibSupport::ONLINE);
+    m8r::Mind mind(config);
+    m8r::HtmlColorsMock dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(), dummyColors, nullptr};
+    mind.learn();
+    mind.think().get();
+    string markdown{"# Test\n\n```mermaid\ngraph TD; A-->B;\n```\n"};
+
+    // WHEN
+    string html{};
+    htmlRepresentation.to(&markdown, &html);
+
+    // THEN: no diagram JS is injected at all for interactive (non-standalone) rendering
+    EXPECT_EQ(std::string::npos, html.find("mermaid.js"));
+    EXPECT_EQ(std::string::npos, html.find("http://"));
+    EXPECT_EQ(std::string::npos, html.find("https://"));
+}

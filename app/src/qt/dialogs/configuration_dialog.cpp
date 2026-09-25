@@ -105,6 +105,23 @@ void ConfigurationDialog::saveSlot()
  * App tab
  */
 
+/**
+ * @brief Build language combo item label prefixed with the UTF-8 flag emoji.
+ *
+ * Non-ASCII characters are passed as escaped u8 literals to keep sources
+ * portable across compilers (MSVC does not assume UTF-8 sources).
+ */
+static QString localeComboLabel(const char* flag, const QString& name)
+{
+#ifdef _WIN32
+    // Windows emoji font does not render flags - they would be shown as letters
+    Q_UNUSED(flag);
+    return name;
+#else
+    return QString::fromUtf8(flag) + QStringLiteral(" ") + name;
+#endif
+}
+
 ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
@@ -127,17 +144,43 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     themeCombo->addItem(QString{UI_THEME_NATIVE_WITH_FIXED_FONT});
 #endif
 
+    localeLabel = new QLabel(
+        tr("Language (<font color='#ff0000'>requires restart</font>)")+":", this);
+    localeCombo = new QComboBox{this};
+    localeCombo->addItem(
+        localeComboLabel(u8"\U0001F310", tr("System default")),
+        QString{UI_LOCALE_SYSTEM});
+    localeCombo->addItem(
+        localeComboLabel(u8"\U0001F1E8\U0001F1FF", QString::fromUtf8(u8"\u010Ce\u0161tina")),
+        QString{UI_LOCALE_CS_CZ});
+    localeCombo->addItem(
+        localeComboLabel(
+            u8"\U0001F1E8\U0001F1F3",
+            QString::fromUtf8(u8"\u4E2D\u6587\uFF08\u7B80\u4F53\uFF09")),
+        QString{UI_LOCALE_ZH_CN});
+    localeCombo->addItem(
+        localeComboLabel(u8"\U0001F1FA\U0001F1F8", QStringLiteral("English")),
+        QString{UI_LOCALE_EN_US});
+    localeCombo->addItem(
+        localeComboLabel(u8"\U0001F1EA\U0001F1F8", QString::fromUtf8(u8"Espa\u00F1ol")),
+        QString{UI_LOCALE_ES_ES});
+    localeCombo->addItem(
+        localeComboLabel(
+            u8"\U0001F1EE\U0001F1F3",
+            QString::fromUtf8(u8"\u0939\u093F\u0928\u094D\u0926\u0940")),
+        QString{UI_LOCALE_HI_IN});
+
     startupLabel = new QLabel(tr("Show the following view on application start")+":", this);
     startupCombo = new QComboBox{this};
-    startupCombo->addItem(QString{START_TO_OUTLINES});
-    startupCombo->addItem(QString{START_TO_OUTLINES_TREE});
-    startupCombo->addItem(QString{START_TO_TAGS});
-    startupCombo->addItem(QString{START_TO_RECENT});
+    startupCombo->addItem(tr("Notebooks"), QString{START_TO_OUTLINES});
+    startupCombo->addItem(tr("Notebook Shelves"), QString{START_TO_OUTLINES_TREE});
+    startupCombo->addItem(tr("Tags"), QString{START_TO_TAGS});
+    startupCombo->addItem(tr("Recent"), QString{START_TO_RECENT});
 #ifdef MF_BUG
     // must be fixed as it currently crashes
-    startupCombo->addItem(QString{START_TO_EISENHOWER_MATRIX});
+    startupCombo->addItem(tr("Eisenhower Matrix"), QString{START_TO_EISENHOWER_MATRIX});
 #endif
-    startupCombo->addItem(QString{START_TO_HOME_OUTLINE});
+    startupCombo->addItem(tr("Home Notebook"), QString{START_TO_HOME_OUTLINE});
 
     appFontSizeLabel = new QLabel(
         tr("Application font size - 0 is system (<font color='#ff0000'>requires restart</font>)")+":", this);
@@ -161,6 +204,8 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     QVBoxLayout* appearanceLayout = new QVBoxLayout{this};
     appearanceLayout->addWidget(themeLabel);
     appearanceLayout->addWidget(themeCombo);
+    appearanceLayout->addWidget(localeLabel);
+    appearanceLayout->addWidget(localeCombo);
     appearanceLayout->addWidget(appFontSizeLabel);
     appearanceLayout->addWidget(appFontSizeSpin);
     appearanceLayout->addWidget(menuLabel);
@@ -188,6 +233,8 @@ ConfigurationDialog::AppTab::~AppTab()
 {
     delete themeLabel;
     delete themeCombo;
+    delete localeLabel;
+    delete localeCombo;
     delete appFontSizeLabel;
     delete appFontSizeSpin;
     delete startupLabel;
@@ -197,13 +244,17 @@ ConfigurationDialog::AppTab::~AppTab()
 
 void ConfigurationDialog::AppTab::refresh()
 {
-    int i = startupCombo->findText(QString::fromStdString(config.getStartupView()));
+    int i = startupCombo->findData(QString::fromStdString(config.getStartupView()));
     if(i>=0) {
         startupCombo->setCurrentIndex(i);
     }
     i = themeCombo->findText(QString::fromStdString(config.getUiThemeName()));
     if(i>=0) {
         themeCombo->setCurrentIndex(i);
+    }
+    i = localeCombo->findData(QString::fromStdString(config.getUiLocale()));
+    if(i>=0) {
+        localeCombo->setCurrentIndex(i);
     }
     showToolbarCheck->setChecked(config.isUiShowToolbar());
     appFontSizeSpin->setValue(config.getUiAppFontSize());
@@ -213,8 +264,9 @@ void ConfigurationDialog::AppTab::refresh()
 
 void ConfigurationDialog::AppTab::save()
 {
-    config.setStartupView(startupCombo->itemText(startupCombo->currentIndex()).toStdString());
+    config.setStartupView(startupCombo->itemData(startupCombo->currentIndex()).toString().toStdString());
     config.setUiThemeName(themeCombo->itemText(themeCombo->currentIndex()).toStdString());
+    config.setUiLocale(localeCombo->currentData().toString().toStdString());
     config.setUiShowToolbar(showToolbarCheck->isChecked());
     config.setUiAppFontSize(appFontSizeSpin->value());
     config.setUiExpertMode(uiExpertModeCheck->isChecked());
@@ -235,17 +287,23 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget* parent)
 
     srcCodeHighlightSupportCheck = new QCheckBox{
         tr("source code syntax highlighting support"), this};
+#ifndef MF_QT_WEB_ENGINE
+    // legacy Qt WebKit's JS engine cannot safely run the ES2015+ highlight.js bundle
+    // -> keep the option hidden
+    srcCodeHighlightSupportCheck->setVisible(false);
+#endif
 
-    mathSupportCheck = new QCheckBox{tr("math support"), this};
+    mathSupportLabel = new QLabel(tr("Math support")+":", this);
+    mathSupportCombo = new QComboBox{this};
+    mathSupportCombo->addItem(QString{"disable"});
+    mathSupportCombo->addItem(QString{"KaTeX"});
+    mathSupportCombo->addItem(QString{"MathJax (legacy)"});
     fullOPreviewCheck = new QCheckBox{tr("whole notebook preview"), this};
     doubleClickViewerToEditCheck = new QCheckBox{
         tr("double click HTML preview to edit"), this};
 
-    diagramSupportLabel = new QLabel(tr("Diagram support")+":", this);
-    diagramSupportCombo = new QComboBox{this};
-    diagramSupportCombo->addItem(QString{"disable"});
-    // TODO: to be stabilized diagramSupportCombo->addItem(QString{"offline JavaScript lib"});
-    diagramSupportCombo->addItem(QString{"online JavaScript lib"});
+    diagramSupportCheck = new QCheckBox{
+        tr("diagram support"), this};
 
     htmlCssThemeLabel = new QLabel(tr("Viewer theme CSS")+":", this);
     htmlCssThemeCombo = new QComboBox{this};
@@ -271,9 +329,9 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget* parent)
     viewerLayout->addWidget(doubleClickViewerToEditCheck);
     viewerLayout->addWidget(fullOPreviewCheck);
     viewerLayout->addWidget(srcCodeHighlightSupportCheck);
-    viewerLayout->addWidget(mathSupportCheck);
-    viewerLayout->addWidget(diagramSupportLabel);
-    viewerLayout->addWidget(diagramSupportCombo);
+    viewerLayout->addWidget(diagramSupportCheck);
+    viewerLayout->addWidget(mathSupportLabel);
+    viewerLayout->addWidget(mathSupportCombo);
     viewerLayout->addWidget(zoomLabel);
     viewerLayout->addWidget(zoomSpin);
     viewerGroup->setLayout(viewerLayout);
@@ -300,10 +358,10 @@ ConfigurationDialog::ViewerTab::~ViewerTab()
     delete zoomLabel;
     delete zoomSpin;
     delete srcCodeHighlightSupportCheck;
-    delete mathSupportCheck;
+    delete mathSupportLabel;
+    delete mathSupportCombo;
     delete fullOPreviewCheck;
-    delete diagramSupportLabel;
-    delete diagramSupportCombo;
+    delete diagramSupportCheck;
     delete doubleClickViewerToEditCheck;
 }
 
@@ -319,14 +377,15 @@ void ConfigurationDialog::ViewerTab::refresh()
     }
 
     zoomSpin->setValue(config.getUiHtmlZoom());
-    // BUG: there is a bug @ Ubuntu 24.04 and newer that crashes MF if src highlight is on >
-    //   before it is fixed, this settting must be reset & disabled
-    srcCodeHighlightSupportCheck->setChecked(false);
-    srcCodeHighlightSupportCheck->setVisible(false);
-    //srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
-    mathSupportCheck->setChecked(config.isUiEnableMathInMd());
+    srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
+    mathSupportCombo->setCurrentIndex(config.getUiEnableMathInMd());
     fullOPreviewCheck->setChecked(config.isUiFullOPreview());
-    diagramSupportCombo->setCurrentIndex(config.getUiEnableDiagramsInMd());
+    // no "online" option (checked = offline Mermaid support) - any legacy ONLINE
+    // setting is migrated to OFFLINE on config load, but map it defensively here
+    // too in case it is ever set in-memory without a reload
+    diagramSupportCheck->setChecked(
+        config.getUiEnableDiagramsInMd() != Configuration::JavaScriptLibSupport::NO
+    );
     doubleClickViewerToEditCheck->setChecked(config.isUiDoubleClickNoteViewToEdit());
 }
 
@@ -346,10 +405,15 @@ void ConfigurationDialog::ViewerTab::save()
 
     config.setUiHtmlZoom(zoomSpin->value());
     config.setUiEnableSrcHighlightInMd(srcCodeHighlightSupportCheck->isChecked());
-    config.setUiEnableMathInMd(mathSupportCheck->isChecked());
+    config.setUiEnableMathInMd(
+        static_cast<Configuration::MathJsLibSupport>(mathSupportCombo->currentIndex())
+    );
     config.setUiFullOPreview(fullOPreviewCheck->isChecked());
+    // unchecked = disable, checked = offline (no "online" option)
     config.setUiEnableDiagramsInMd(
-        static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex())
+        diagramSupportCheck->isChecked()
+            ? Configuration::JavaScriptLibSupport::OFFLINE
+            : Configuration::JavaScriptLibSupport::NO
     );
     config.setUiDoubleClickNoteViewToEdit(doubleClickViewerToEditCheck->isChecked());
 }
@@ -408,7 +472,7 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
 
     editorSpellCheckHelp = new QLabel(
         tr("Spell check dictionaries <a href='"
-           "https://github.com/dvorka/mindforger/wiki/Installation#spell-check"
+           "https://www.mindforger.com/docs/installation.html#spell-check"
            "'>configuration documentation</a>"
         ),
         this

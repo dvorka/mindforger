@@ -1,9 +1,82 @@
-2026-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
+2026-..-..  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v2.2.0 - Snap distro and autolinking colors stabilization.
-    * Build: simplified version handling - lib/src/app_info.h as authoritative source.
+    * Released v2.5.1 - ...
+    * .
+
+2026-09-23  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v2.4.1 - Flatpak @ Wayland.
+    * Fix: Flatpak build would not start on a native Wayland session as
+      the startup text-console check only recognized the X11 DISPLAY environment
+      variable and exited before Qt could start, even though WAYLAND_DISPLAY was
+      correctly set by the sandbox.
+
+2026-09-22  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v2.4.0 - Flatpak.
+    * Feature: Flatpak distribution - single-file .flatpak bundle downloadable from
+      the GitHub release (not hosted on Flathub).
+    * Fix: winget Makefile target paths.
+    * Change: line endings are newly pinned repository wide by .gitattributes - text
+      files are stored and checked out w/ LF on every platform, while Windows only
+      scripts (.bat, .cmd, .ps1, .iss) and the vendored stemmer library keep CRLF.
+      A clone made w/ core.autocrlf=true no longer rewrites the shell scripts to CRLF,
+      which made them unrunnable and shipped a broken launcher inside the Snap and
+      Flatpak packages.
+
+2026-09-21  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v2.3.0 - Notebook shelves, localization to 4 languages, lines sorting,
+      winget packaging, Markdown export, non-ASCII links navigation.
+    * Feature: Notebook shelves - single notebook tree was rewritten to custom notebook
+      shelves - create as many named notebook shelves for notebooks you want to group
+      as needed and add Notebooks to them explicitly.
+    * Feature: Notebook/Export/Markdown - export a Notebook to a file in Markdown format.
+    * Feature: Preferences now let you pick the UI language - System default,
+      English, Czech, Spanish or other available translation instead of following
+      the OS locale.
+    * Feature: Czech (cs_CZ) localization.
+    * Feature: Mandarin Chinese (simplified, zh_CN) localization (LLM - not reviewed by native speaker).
+    * Feature: Hindi (hi_IN) localization (LLM - not reviewed by native speaker)..
+    * Feature: Spanish (es_ES) localization (LLM - not reviewed by native speaker)..
+    * Feature: Edit/Sort Lines - sorts the selected lines - or the lines of the block
+      under the cursor - alphabetically.
+    * Enhancement: improved Emoji insert dialog so that it can be used w/o mouse,
+      emojis can be filtered by name, selected using arrows - which move by the
+      visual rows across the dialog sections - and inserted w/ Enter
+      or Ctrl-[number] shortcuts.
+    * Enhancement: changed in-app diagram support configuration from dropdown to checkbox.
+    * Enhancement: CSV export no longer freezes UI on big repo and/or slow(er) HW as
+      export newly runs in the modal dialog w/ progress bar and it can be cancelled.
+    * Enhancement: improved performance of the find Note/Notebook by Name dialog on large
+      repositories - filtering as you type is debounced and no longer reallocates
+	    Qt strings per keystroke. The list is newly filtered via a proxy/cache model
+	    which fixed a serious lag when using backspace.
+    * Fix:CSV export reported success even when the CSV file could not be written
+      and it did not check whether the target CSV file already exists.
+    * Fix: navigation of links to Notebooks/Notes whose names contain non-ASCII
+      characters only (e.g. Korean, Chinese, Czech diacritics).
+    * Fix: source code syntax highlighting no longer crashes MindForger thanks to
+      the migration to Qt WebEngine + upgraded the offline highlight.js library
+      to new version.
+    * Distribution: added winget distribution tooling to generate and submit
+      MindForger.MindForger manifests to microsoft/winget-pkgs.
+    * Build: l10n of all languages can be updated, checked and compiled by a single
+      non-interactive 'make l10n' build target.
+    * Build: .qm - binary localization catalogs are newly generated from their .ts
+      sources and no longer stored in the Git repo to avoid unresolvable conflicts.
+    * Cleanup: hid not-yet-ready Workspace/Semantic Search menu item from production builds.
+
+2026-09-13  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v2.2.0 - Rewrap, Snap distro, WebEngine (Linux), KaTeX and autolinking.
     * Feature: Edit/Rewrap Paragraph - fills/rewraps the paragraph under the cursor
       to 80 columns.
+    * Enhancement: Qt WebEngine is newly the default HTML rendering backend on Linux as it
+      already was on Windows and macOS.
+    * Enhancement: Math support now offers KaTeX (really fast, offline @ QT resources
+      included MF binary) and MathJax (legacy, upgraded, offline) instead of online
+      CDN dependency.
     * Enhancement: add emojis by clicking associated button when adding new
       Notebook/Note or editing Notebook/Note name or description.
     * Fix: strict Snap shipped with no menu/toolbar icons.
@@ -13,9 +86,12 @@
       which corrupted the result - fixed by verbatim using CommonMark's <...>.
     * Fix: "arrow down" in the dialog to find Note/Outline by name finally gives
       always focus to the first entry in the list instead of scrolling down.
-    * Cleanup: stripped malformed iCCP profile from (un)used logos.
     * Fix: "arrow up" in the Notebook/Note tree no longer loses tree focus and
       switches to the Notebook description when pressed with no row selected.
+    * Fix: offline Mermaid diagram rendering works again - mermaid.js was not
+      registered as a Qt resource, so it always silently failed. Online option removed.
+    * Cleanup: stripped malformed iCCP profile from (un)used logos.
+    * Build: simplified version handling - lib/src/app_info.h as authoritative source.
 
 2026-09-02  Martin Dvorak  <martin.dvorak@mindforger.com>
 
@@ -40,7 +116,7 @@
       craft-parts qmake plugin, refreshed build/stage packages for Ubuntu 24.04
       and wired the Snap version to app_info.h like the other release artifacts.
     * Build: added a classic-confinement Snap variant (build/snap/apply-classic.sh,
-      dist-snap-classic make target) for a downloadable GitHub Release build with
+      distro-snap-classic make target) for a downloadable GitHub Release build with
       full host filesystem access, alongside the strict Snap Store build.
     * Fix: the Snap build could silently package a stale, previously locally-built
       binary (potentially an RC/debug build) instead of a fresh compile - fixed by

@@ -6,6 +6,7 @@
 *.o
 *.pro.user
 *.pro.user.*
+*.qm
 *.sln
 *.snap
 *.stash
@@ -28,5 +29,7 @@ compile_commands.json
 deps/cmark-gfm
 deps/cmark-gfm
 deps/mitie
+distro/flatpak/
+distro/winget/
 moc_*.cpp
 snapcraft.yaml

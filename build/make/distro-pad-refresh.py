@@ -170,7 +170,7 @@ def installer_size_bytes(version: str):
     """Return the size in bytes of a built distributable for ``version``, if any.
 
     Checked in priority order: the Windows installer built in-tree, then the
-    release tarball built by ``make dist-tarball`` into the sibling release
+    release tarball built by ``make distro-tarball`` into the sibling release
     directory (``../release/<version>-maker/``, alongside this repo checkout).
     Returns None when nothing has been built locally - PAD.xml's file size
     fields are then left unchanged.

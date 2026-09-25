@@ -19,23 +19,38 @@
 #ifndef M8RUI_EMOJIS_DIALOG_H
 #define M8RUI_EMOJIS_DIALOG_H
 
-#include <initializer_list>
+#include <vector>
 
 #include <QtWidgets>
+
+#include "../../lib/src/gear/grid_navigator.h"
+#include "../../lib/src/representations/emoji.h"
 
 namespace m8r {
 
 /**
- * @brief Dialog with clickable emoji and other special characters.
+ * @brief Dialog with clickable and searchable emoji and other special characters.
  *
- * Clicking a character emits emojiSelected() so that the caller can
- * insert it to whatever name/description field is currently edited.
- * The dialog stays open after a click so that several characters can
- * be inserted in a row - user closes it explicitly once done.
+ * The dialog is fully keyboard driven - user types to filter the characters
+ * by name/keyword and then inserts either by Ctrl+<digit>, or by moving
+ * to a character with arrows and pressing Enter.
  */
 class EmojisDialog : public QDialog
 {
     Q_OBJECT
+
+    static const int COLUMNS = 11;
+    static const int SHORTCUTS = 9;
+
+    /**
+     * @brief Section of the dialog - a title and a grid of emoji buttons.
+     */
+    struct Section {
+        QLabel* title;
+        QWidget* grid;
+        QGridLayout* gridLayout;
+        std::vector<QPushButton*> buttons;
+    };
 
 public:
     explicit EmojisDialog(QWidget* parent);
@@ -48,15 +63,33 @@ public:
 signals:
     void emojiSelected(const QString& c);
 
+protected:
+    void keyPressEvent(QKeyEvent* event) override;
+    void showEvent(QShowEvent* event) override;
+
 private slots:
     void slotCharacterButtonClicked();
+    void slotFilterChanged(const QString& filter);
+    void slotShortcutActivated();
 
 private:
-    void addCharactersSection(
-        QBoxLayout* mainLayout,
-        const QString& title,
-        std::initializer_list<QString> characters,
-        int columns);
+    QLineEdit* filterEdit;
+    QScrollArea* scrollArea;
+    QPushButton* closeButton;
+
+    std::vector<Section> sections;
+    QHash<QPushButton*, const Emoji*> buttonEmojis;
+    std::vector<QPushButton*> matchingButtons;
+    GridNavigator navigator;
+
+    void addSection(QBoxLayout* sectionsLayout, const EmojiSection& emojiSection);
+    QString getSectionName(const EmojiSection& emojiSection) const;
+    void decorateButton(QPushButton* button, const Emoji& emoji, int index);
+
+    void insertEmoji(QPushButton* button);
+    void insertMatchingEmoji(int index);
+    void focusButton(int index);
+    int getFocusedButtonIndex() const;
 };
 
 }

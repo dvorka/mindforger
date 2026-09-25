@@ -28,7 +28,8 @@ ExportCsvFileDialog::ExportCsvFileDialog(
      QString extension,
      QWidget* parent
 )
-    : QDialog(parent)
+    : QDialog(parent),
+      csvExport{nullptr}
 {
     homeDirectory = QStandardPaths::locate(
         QStandardPaths::HomeLocation,
@@ -64,6 +65,14 @@ ExportCsvFileDialog::ExportCsvFileDialog(
     oheTagsCardinalitySpin->setMinimum(DEFAULT_OHE_CARDINALITY);
     oheTagsCardinalitySpin->setMaximum(10000);
 
+    progressBar = new QProgressBar(this);
+    progressBar->setFormat("%p%  (%v / %m)");
+    progressBar->setVisible(false);
+
+    // timeout 0 ~ run slice whenever UI event loop is idle
+    exportTimer = new QTimer(this);
+    exportTimer->setInterval(0);
+
     // IMPROVE disable/enable find button if text/path is valid: freedom vs validation
     exportButton = new QPushButton{tr("Export")};
     exportButton->setDefault(true);
@@ -86,11 +95,11 @@ ExportCsvFileDialog::ExportCsvFileDialog(
         findDirectoryButton, SIGNAL(clicked()),
         this, SLOT(handleFindDirectory()));
     QObject::connect(
-        exportButton, SIGNAL(clicked()),
-        this, SLOT(close()));
-    QObject::connect(
         closeButton, SIGNAL(clicked()),
-        this, SLOT(close()));
+        this, SLOT(reject()));
+    QObject::connect(
+        exportTimer, SIGNAL(timeout()),
+        this, SLOT(handleExportSlice()));
 
     // assembly
     QVBoxLayout* mainLayout = new QVBoxLayout{};
@@ -107,6 +116,7 @@ ExportCsvFileDialog::ExportCsvFileDialog(
     mainLayout->addWidget(oheTagsCheck);
     mainLayout->addWidget(oheTagsCardinalityLabel);
     mainLayout->addWidget(oheTagsCardinalitySpin);
+    mainLayout->addWidget(progressBar);
 
     QHBoxLayout* buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
@@ -124,6 +134,8 @@ ExportCsvFileDialog::ExportCsvFileDialog(
 
 ExportCsvFileDialog::~ExportCsvFileDialog()
 {
+    // unique_ptr deletes (and thus cancels) running export
+    exportTimer->stop();
 }
 
 void ExportCsvFileDialog::show()
@@ -143,7 +155,101 @@ void ExportCsvFileDialog::show()
     oheTagsCardinalitySpin->setValue(DEFAULT_OHE_CARDINALITY);
     oheTagsCardinalitySpin->setEnabled(false);
 
+    setExportRunning(false);
+
     QDialog::show();
+}
+
+void ExportCsvFileDialog::runExport(CsvOutlinesExport* csvExport)
+{
+    if(isExportRunning()) {
+        delete csvExport;
+        return;
+    }
+
+    this->csvExport.reset(csvExport);
+    setExportRunning(true);
+    progressBar->setMaximum(static_cast<int>(csvExport->getTotalRows()));
+    progressBar->setValue(0);
+
+    if(csvExport->start()) {
+        exportTimer->start();
+    } else {
+        finishExport();
+    }
+}
+
+void ExportCsvFileDialog::handleExportSlice()
+{
+    if(!isExportRunning()) {
+        exportTimer->stop();
+        return;
+    }
+
+    QElapsedTimer sliceTimer{};
+    sliceTimer.start();
+    bool hasMore{true};
+    do {
+        hasMore = csvExport->step(EXPORT_ROWS_PER_STEP);
+    } while(hasMore && sliceTimer.elapsed() < EXPORT_SLICE_MILLIS);
+
+    progressBar->setValue(static_cast<int>(csvExport->getExportedRows()));
+
+    if(!hasMore) {
+        finishExport();
+    }
+}
+
+void ExportCsvFileDialog::finishExport()
+{
+    exportTimer->stop();
+
+    QString filePath = QString::fromStdString(csvExport->getFileName());
+    CsvOutlinesExport::Status status = csvExport->getStatus();
+    csvExport.reset();
+    setExportRunning(false);
+
+    switch(status) {
+    case CsvOutlinesExport::Status::FINISHED:
+        QDialog::accept();
+        emit signalExportFinished(
+            true, tr("Export to CSV file '%1' successfully finished").arg(filePath));
+        break;
+    case CsvOutlinesExport::Status::CANCELLED:
+        QDialog::reject();
+        emit signalExportFinished(
+            false, tr("Export to CSV file '%1' cancelled").arg(filePath));
+        break;
+    default:
+        // keep the dialog open so that the user can fix the target path
+        QMessageBox::critical(
+            this,
+            tr("Export Error"),
+            tr("Unable to write CSV file '%1'!").arg(filePath));
+        emit signalExportFinished(
+            false, tr("Export to CSV file '%1' failed").arg(filePath));
+    }
+}
+
+void ExportCsvFileDialog::reject()
+{
+    if(isExportRunning()) {
+        csvExport->cancel();
+        finishExport();
+    } else {
+        QDialog::reject();
+    }
+}
+
+void ExportCsvFileDialog::setExportRunning(bool running)
+{
+    fileNameEdit->setEnabled(!running);
+    dirEdit->setEnabled(!running);
+    findDirectoryButton->setEnabled(!running);
+    oheTagsCheck->setEnabled(!running);
+    oheTagsCardinalitySpin->setEnabled(!running && oheTagsCheck->isChecked());
+    exportButton->setEnabled(!running);
+    progressBar->setVisible(running);
 }
 
 void ExportCsvFileDialog::refreshPath()

@@ -109,6 +109,9 @@ private:
     QLabel* menuLabel;
     QComboBox* themeCombo;
 
+    QLabel* localeLabel;
+    QComboBox* localeCombo;
+
     QLabel* appFontSizeLabel;
     QSpinBox* appFontSizeSpin;
 
@@ -168,11 +171,11 @@ private:
 
     QLabel* zoomLabel;
     QSpinBox* zoomSpin;
-    QCheckBox* mathSupportCheck;
+    QLabel* mathSupportLabel;
+    QComboBox* mathSupportCombo;
     QCheckBox* fullOPreviewCheck;
     QCheckBox* doubleClickViewerToEditCheck;
-    QLabel* diagramSupportLabel;
-    QComboBox* diagramSupportCombo;
+    QCheckBox* diagramSupportCheck;
     QCheckBox* srcCodeHighlightSupportCheck;
 
 public:

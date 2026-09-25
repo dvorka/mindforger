@@ -113,16 +113,18 @@ using namespace m8r::filesystem;
  */
 int main(int argc, char* argv[])
 {
-    // check whether running in GUI (and not in text console tty)
+    // check whether running in GUI (and not in text console tty) - accept
+    // either X11 (DISPLAY) or Wayland (WAYLAND_DISPLAY) as a GUI session
 #if !defined(__APPLE__) && !defined(_WIN32)
-    char* term = getenv(m8r::ENV_VAR_DISPLAY);
-    if(!term || !strlen(term)) {
+    if(!m8r::isGuiSessionAvailable(
+        getenv(m8r::ENV_VAR_DISPLAY), getenv(m8r::ENV_VAR_WAYLAND_DISPLAY))
+    ) {
         cerr << endl
              << QCoreApplication::translate(
                     "main",
                     "MindForger CANNOT be run from text console "
-                    "- set DISPLAY environment variable or run "
-                    "MindForger from GUI."
+                    "- set DISPLAY or WAYLAND_DISPLAY environment "
+                    "variable or run MindForger from GUI."
                 ).toUtf8().constData()
              << endl;
         exit(1);
@@ -176,7 +178,7 @@ int main(int argc, char* argv[])
     //   - https://stackoverflow.com/questions/35432749/disable-web-security-in-chrome-48
     //     ^ changes in required parameters with disable-web-security
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0) && (defined(__APPLE__) || defined(_WIN32))
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0) && defined(MF_QT_WEB_ENGINE)
     char ARG_DISABLE_WEB_SECURITY[] = "--disable-web-security";
     int newArgc = argc + 1 + 1;
     char** newArgv = new char*[static_cast<size_t>(newArgc)];
@@ -236,7 +238,7 @@ int main(int argc, char* argv[])
         );
         parser.addOption(configPathOption);
 
-     #if defined(__APPLE__) || defined(_WIN32)
+     #if defined(MF_QT_WEB_ENGINE)
         // command line options which might be passed to WebEngine to control the security
         QCommandLineOption macosDisableSecurityOption(QStringList() << "S" << "disable-web-security",
             QCoreApplication::translate("main", "Disable WebEngine security to allow loading of images on macOS.")
@@ -267,7 +269,7 @@ int main(int argc, char* argv[])
         );
         parser.addOption(macosAcessFileFromFile);
       #endif // >= 5.15.0
-    #endif // APPLE or WIN
+    #endif // MF_QT_WEB_ENGINE
 
         QCommandLineOption versionOption=parser.addVersionOption();
         QCommandLineOption helpOption=parser.addHelpOption();
@@ -305,6 +307,11 @@ int main(int argc, char* argv[])
     // load configuration
     m8r::MarkdownConfigurationRepresentation mdConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
+#ifdef MF_QT_WEB_ENGINE
+    config.setHtmlRenderingWebEngineBackend(true);
+#else
+    config.setHtmlRenderingWebEngineBackend(false);
+#endif
     if(configurationFilePath.size()) {
         config.setConfigFilePath(configurationFilePath.toStdString());
     }

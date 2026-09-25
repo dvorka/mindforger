@@ -139,14 +139,18 @@ SOURCES += \
     ./gear/string_utils_test.cpp \
     ./gear/file_utils_test.cpp \
     ./gear/trie_test.cpp \
+    ./gear/grid_navigator_test.cpp \
     ./mind/fts_test.cpp \
     ./mind/memory_test.cpp \
     ./mind/mind_test.cpp \
     ./mind/note_test.cpp \
     ./mindforger_lib_unit_tests.cpp \
     ./mind/organizer_test.cpp \
+    ./mind/notebook_tree_test.cpp \
     ./mind/outline_test.cpp \
-    ./mind/filesystem_information_test.cpp
+    ./mind/filesystem_information_test.cpp \
+    ./csv/csv_test.cpp \
+    ./emoji/emoji_test.cpp
 
 HEADERS += \
     ./test_gear.h

@@ -20,6 +20,12 @@
 #include <iostream>
 #include <gtest/gtest.h>
 
+#ifdef _WIN32
+#include <crtdbg.h>
+#include <cstdlib>
+#include <windows.h>
+#endif
+
 using namespace std;
 
 /*
@@ -48,8 +54,35 @@ char* getMindforgerGitHomePath()
     return getenv("M8R_GIT_PATH");
 }
 
+#ifdef _WIN32
+/**
+ * @brief Report CRT and Windows failures to stderr instead of a modal dialog.
+ *
+ * a debug build shows a modal dialog on a failed CRT/iterator assertion, on abort()
+ * and on a crash. such a dialog blocks the headless CI agent until the whole build
+ * times out - w/o the test log, the exit code or any other diagnostics. reporting to
+ * stderr instead makes the test run fail fast and say what actually went wrong.
+ */
+static void reportWindowsFailuresToStderr()
+{
+    SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
+    // keep the abort() message, but never pop up the Windows Error Reporting dialog
+    _set_abort_behavior(_WRITE_ABORT_MSG, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
+
+    const int reportTypes[] = {_CRT_WARN, _CRT_ERROR, _CRT_ASSERT};
+    for(size_t i=0; i<sizeof(reportTypes)/sizeof(reportTypes[0]); i++) {
+        _CrtSetReportMode(reportTypes[i], _CRTDBG_MODE_FILE);
+        _CrtSetReportFile(reportTypes[i], _CRTDBG_FILE_STDERR);
+    }
+}
+#endif
+
 int main(int argc, char **argv)
 {
+#ifdef _WIN32
+    reportWindowsFailuresToStderr();
+#endif
+
     if(!getMindforgerGitHomePath()) {
         cout << "M8R_GIT_PATH environment variable must be set to run unit tests!" << endl;
         return 1;

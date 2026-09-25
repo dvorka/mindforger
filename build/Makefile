@@ -25,6 +25,7 @@
 # lib/src/app_info.h (MINDFORGER_VERSION_STRING) is the authoritative version source
 MINDFORGER_VERSION := $(shell sed -n 's/.*MINDFORGER_VERSION_STRING "\(.*\)"/\1/p' ../lib/src/app_info.h)
 MINDFORGER_VERSION_MAJOR_MINOR := $(word 1,$(subst ., ,$(MINDFORGER_VERSION))).$(word 2,$(subst ., ,$(MINDFORGER_VERSION)))
+MINDFORGER_PREVIOUS_MINOR_VERSION := $(shell echo $(MINDFORGER_VERSION) | awk -F. '{minor=$$2-1; if (minor<0) minor=0; print $$1"."minor".0"}')
 MINDFORGER_RELEASE_BASE_DIR := /home/dvorka/p/mindforger/release
 MINDFORGER_RELEASE_DIR := $(MINDFORGER_RELEASE_BASE_DIR)/$(MINDFORGER_VERSION)-maker
 
@@ -32,7 +33,7 @@ MF_MAKER_WORKING_DIR := $(MINDFORGER_RELEASE_BASE_DIR)/maker-at-work
 
 # class name like My_Class_Name used by C++ class generators
 CLASS_NAME := "New_Class"
-# l10n language: en, cs
+# l10n language: cs, en, es, hi, zh_cn
 MF_LANG := "en"
 # Ubuntu distro: trusty xenial bionic focal jammy kinetic
 DISTRO := "bionic"
@@ -87,7 +88,7 @@ help: ## make targets help
 	@echo "|_|  |_|_|_| |_|\\__,_|_|  \\___/|_|  \\__, |\\___|_|   $(MINDFORGER_VERSION)"
 	@echo "                                     |___/            "
 	@echo "MindForger Swiss knife:"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
+	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
 	| sort \
 	| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
@@ -146,7 +147,8 @@ gen-ui-class: ## generate UI C++ class skeleton: CLASS_NAME=My_Class
 ../app/mindforger: ../Makefile
 	@echo "Building PRODUCTION MindForger executable..."
 	cd .. && make -j $(CPU_CORES) ; cd build
-	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
+	@echo "If build succeeded, then MindForger executable can be found in:\n  ../app/mindforger"
+	@echo ""
 	ls -al ../app/mindforger
 
 
@@ -166,11 +168,11 @@ else
 	ls -al ../app/mindforger
 endif
 
-.PHONY: build-webengine
-build-webengine: clean-app ## build MindForger application binary w/ Qt WebEngine (macOS|Win) insted of default Qt WebKit (Linux)
-	@echo "Building MindForger executable with Qt WebEngine support..."
-	@echo "Prerequisite: Qt WebEngine must be installed: sudo apt-get install -y qtwebengine5-dev qtwebengine5-dev-tools"
-	cd .. && qmake -r mindforger.pro CONFIG+=mfwebengine DEFINES+=DO_MF_WEBENGINE && make -j $(CPU_CORES) ; cd ..
+.PHONY: build-webkit
+build-webkit: clean-app ## build MindForger application binary w/ legacy Qt WebKit instead of default Qt WebEngine (Linux only)
+	@echo "Building MindForger executable with legacy Qt WebKit support..."
+	@echo "Prerequisite: Qt WebKit must be installed: sudo apt-get install -y libqt5webkit5-dev"
+	cd .. && qmake -r mindforger.pro CONFIG+=mfwebkit && make -j $(CPU_CORES) ; cd ..
 	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 
@@ -220,7 +222,8 @@ else
 	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/bug-copy-image
 endif
 
-run-gdb: build-dev ## run MindForger using gdb
+
+run-gdb: clean build-dev ## run MindForger using gdb
 ifeq ($(UNAME), Darwin)
 	cd ../app/mindforger.app/Contents/MacOS && ./mindforger /Users/dvorka/mf-devel/mf-copy
 else
@@ -228,23 +231,74 @@ else
 endif
 
 
+run-production: build-rc ## run MindForger on the production knowledge base
+	cd ../app && pwd && ./mindforger /home/dvorka/mf
+
+
+#
+# Windows
+#
+# Targets below wrap the .bat scripts in build/windows/ (env.bat, build-*.bat,
+# run-*.bat). They only work when run on Windows (e.g. from Git Bash with GNU
+# Make installed via Chocolatey/winget) since they invoke MSVC/qmake/nmake.
+#
+
+.PHONY: win-build-cmake
+win-build-cmake: ## Windows: build the cmark-gfm dependency (Release+Debug)
+	cd windows && ./build-cmake.bat
+	@echo "If build succeeded, then cmark-gfm libs can be found in:\n  ../deps/cmark-gfm/build/src/{Release,Debug}\n  ../deps/cmark-gfm/build/extensions/{Release,Debug}"
+
+.PHONY: win-build-app
+win-build-app: ## Windows: build MindForger release application (qmake + nmake)
+	cd windows && ./build-app.bat
+	@echo "If build succeeded, then MindForger executable can be found in:\n  ../app/release/mindforger.exe"
+	@echo ""
+	ls -al ../app/release/mindforger.exe
+
+.PHONY: win-build-installer
+win-build-installer: win-build-app ## Windows: build MindForger installer (windeployqt + Inno Setup)
+	cd windows && ./build-installer.bat
+	@echo "If build succeeded, then MindForger installer can be found in:\n  ../app/release/installer/mindforger-setup.exe"
+	@echo ""
+	ls -al ../app/release/installer/mindforger-setup.exe
+
+.PHONY: win-build-unit-tests
+win-build-unit-tests: ## Windows: build MindForger lib unit tests
+	cd windows && ./build-unit-tests.bat
+	@echo "If build succeeded, then unit tests executable can be found in:\n  ../lib/test/src/debug/mindforger-lib-unit-tests.exe"
+	@echo ""
+	ls -al ../lib/test/src/debug/mindforger-lib-unit-tests.exe
+
+.PHONY: win-run-app
+win-run-app: ## Windows: run the already-built MindForger release application
+	@echo "Running:\n  ../app/release/mindforger.exe"
+	cd windows && ./run-app.bat
+
+.PHONY: win-run-unit-tests
+win-run-unit-tests: win-build-unit-tests ## Windows: build and run MindForger lib unit tests
+	cd windows && ./run-unit-tests.bat
+
+
 #
 # install
 #
 
 
+# Qt WebEngine is the default HTML rendering backend (see build-webkit target above
+# for the legacy Qt WebKit alternative, which needs libqt5webkit5-dev instead)
+
 .PHONY: devenv-ubuntu
 devenv-ubuntu:
-	sudo apt-get install build-essential zlib1g-dev libhunspell-dev libcurl4-gnutls-dev libqt5webkit5-dev qttools5-dev-tools qt5-default ccache cmake
+	sudo apt-get install build-essential zlib1g-dev libhunspell-dev libcurl4-gnutls-dev qtwebengine5-dev qttools5-dev-tools qt5-default ccache cmake
 
 
 devenv-ubuntu-2204:
-	sudo apt-get install build-essential zlib1g-dev libhunspell-dev libcurl4-gnutls-dev libqt5webkit5-dev qttools5-dev-tools qtbase5-dev qt5-qmake ccache cmake
+	sudo apt-get install build-essential zlib1g-dev libhunspell-dev libcurl4-gnutls-dev qtwebengine5-dev qttools5-dev-tools qtbase5-dev qt5-qmake ccache cmake
 
 
 .PHONY: devenv-debian
-devenv-debian:
-	sudo apt-get install build-essential zlib1g-dev libcurl4-gnutls-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools ccache cmake debhelper
+devenv-debian: ## dev env for build/debian/debian-make-deb.sh, which is pinned to CONFIG+=mfwebkit (see build/debian/debian/control)
+	sudo apt-get install build-essential zlib1g-dev libcurl4-gnutls-dev libhunspell-dev qtwebengine5-dev libqt5webkit5-dev qttools5-dev-tools ccache cmake debhelper
 
 
 install-dev-local: ../deps/cmark-gfm/build ../Makefile ../lib/tests/Makefile clean build-rc ## install MindForger RC build to ~/bin as 'mind' executable
@@ -258,18 +312,41 @@ install-dev-local: ../deps/cmark-gfm/build ../Makefile ../lib/tests/Makefile cle
 #
 
 
-.PHONY: localization
-localization: ## update and release localization strings: MF_LANG=en
+.PHONY: l10n-update
+l10n-update: ## update l10n strings of ALL languages from the source code (.ts)
+	cd make && ./l10n-update-strings.sh
+
+
+.PHONY: l10n-check
+l10n-check: ## check that l10n strings of ALL languages are in sync (.ts)
+	cd make && ./l10n-check-strings.py
+
+
+.PHONY: l10n-release
+l10n-release: ## compile l10n strings of ALL languages to binary catalogs (.qm)
+	cd make && ./l10n-release-strings.sh
+
+
+.PHONY: l10n
+l10n: l10n-update l10n-check l10n-release ## update, check and compile l10n of ALL languages
+
+
+.PHONY: l10n-edit
+l10n-edit: ## edit l10n strings of ONE language in Qt Linguist: MF_LANG=en
 	cd make && ./l10n-update-strings.sh && ./l10n-edit-and-release.sh $(MF_LANG)
 
 
-.PHONY: releng-rel-version
-releng-rel-version: ## pre-version update finder
-	cd .. && git grep -n "2\.1\."
+.PHONY: localization
+localization: l10n-edit ## DEPRECATED alias of l10n-edit - use l10n or l10n-edit instead
 
 
-.PHONY: releng-ver-set
-releng-ver-set: ## propagate lib/src/app_info.h version to all release/packaging files
+.PHONY: releng-version-find
+releng-version-find: ## find occurrences of the previous version (MINDFORGER_PREVIOUS_MINOR_VERSION)
+	cd .. && git grep -n -F "$(MINDFORGER_PREVIOUS_MINOR_VERSION)"
+
+
+.PHONY: releng-version-set
+releng-version-set: ## propagate lib/src/app_info.h version to all release/packaging files
 	@echo "Setting version $(MINDFORGER_VERSION) ($(MINDFORGER_VERSION_MAJOR_MINOR)) in release/packaging files..."
 	sed -i "s/^version: .*/version: $(MINDFORGER_VERSION_MAJOR_MINOR).{build}/" ../appveyor.yml
 	sed -i "s/^export NEW_VERSION_NAME=.*/export NEW_VERSION_NAME=\"$(MINDFORGER_VERSION)\"/" debian/debian-aptly-add-deb.sh
@@ -278,13 +355,17 @@ releng-ver-set: ## propagate lib/src/app_info.h version to all release/packaging
 	sed -i "s/export MFVERSION=\"[0-9.]*\"/export MFVERSION=\"$(MINDFORGER_VERSION)\"/" fedora/fedora-rpm-from-deb.sh
 	sed -i "s/^export MINDFORGER_VERSION=.*/export MINDFORGER_VERSION=\"$(MINDFORGER_VERSION)\"/" macos/env.sh
 	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" snap/snapcraft.yaml
+	sed -i -E "s|<release version=\"[^\"]+\" date=\"[^\"]+\"|<release version=\"$(MINDFORGER_VERSION)\" date=\"$$(date +%Y-%m-%d)\"|" flatpak/com.mindforger.MindForger.metainfo.xml
 	sed -i "s/^export ARG_VERSION=.*/export ARG_VERSION=\"$(MINDFORGER_VERSION)\"/" tarball/tarball-build.sh
 	sed -i -E "s/^mindforger \([0-9]+\.[0-9]+\.[0-9]+(-[^)]*)\)/mindforger ($(MINDFORGER_VERSION)\1)/" ubuntu/debian/changelog
 	@echo "Done. Review changes with: git diff"
 
+.PHONY: releng-gh-downloads
+releng-gh-downloads: ## show GitHub downloads count w/ optional VERSION=x.y.z release var
+	./make/gh-release-downloads.sh dvorka/mindforger $(if $(VERSION),$(VERSION),$(MINDFORGER_PREVIOUS_MINOR_VERSION))
 
-.PHONY: dist-pad-refresh
-dist-pad-refresh: ## refresh PAD.xml release fields (version, date, changelog, installer size)
+.PHONY: releng-pad-refresh
+releng-pad-refresh: ## refresh PAD.xml release fields (version, date, changelog, installer size)
 	./make/distro-pad-refresh.py
 
 
@@ -297,8 +378,8 @@ test-lib: clean ## compile and run lib/ unit tests
 	cd make && ./test-lib-units.sh
 
 
-.PHONY: dist-work-clean
-dist-work-clean:
+.PHONY: distro-work-clean
+distro-work-clean:
 	rm -rvf $(MF_MAKER_WORKING_DIR)
 
 
@@ -310,22 +391,22 @@ $(MINDFORGER_RELEASE_DIR):
 	mkdir -v $(MINDFORGER_RELEASE_DIR) || echo "$(MINDFORGER_RELEASE_DIR) already exists"
 
 
-dist-tarball: dist-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR) ## build tarball distribution
+distro-tarball: distro-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR) ## build tarball distribution
 	@echo "Building TARBALL distribution..."
 	mkdir -vp $(MF_MAKER_WORKING_DIR)
 	cp -vf ./tarball/tarball-build.sh $(MF_MAKER_WORKING_DIR) && cd $(MF_MAKER_WORKING_DIR) && ./tarball-build.sh
 	cp -vf $(MF_MAKER_WORKING_DIR)/`cd $(MF_MAKER_WORKING_DIR) && ls -d mindforger*`/mindforger_$(MINDFORGER_VERSION)_tarball.tgz $(MINDFORGER_RELEASE_DIR)
 
 
-dist-deb: dist-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR) ## build Debian distribution
+distro-deb: distro-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR) ## build Debian distribution
 	@echo "Building DEB distribution..."
 	mkdir -vp $(MF_MAKER_WORKING_DIR)
 	cp -vf ./debian/debian-make-deb.sh $(MF_MAKER_WORKING_DIR) && cd $(MF_MAKER_WORKING_DIR) && ./debian-make-deb.sh
 	cp -vf $(MF_MAKER_WORKING_DIR)/`cd $(MF_MAKER_WORKING_DIR) && ls -d mindforger*`/mindforger_$(MINDFORGER_VERSION)-1_amd64.deb $(MINDFORGER_RELEASE_DIR)
 
 
-.PHONY: dist-rpm
-dist-rpm: ## build .rpm package on Fedora
+.PHONY: distro-rpm
+distro-rpm: ## build .rpm package on Fedora
 	@echo "IMPORTANT: this target MUST be run on Fedora!"
 	cd fedora && ./fedora-distro-setup.sh
 	@echo "Building .rpm package..."
@@ -333,8 +414,8 @@ dist-rpm: ## build .rpm package on Fedora
 	@echo "Find .rpm in ~/alien directory"
 
 
-.PHONY: dist-dmg
-dist-dmg: ## build macOS Disk iMaGe .dmg package
+.PHONY: distro-dmg
+distro-dmg: ## build macOS Disk iMaGe .dmg package
 	@echo "Building .dmg package..."
 	cd macos && ./mindforger-build.sh && ./dmg-package-build.sh
 
@@ -387,8 +468,8 @@ dist-dmg: ## build macOS Disk iMaGe .dmg package
 # CURRENT repos : bookworm-main, bullseye-main, buster-main, stretch-main
 # obsolete repos: jessie-main
 
-.PHONY: dist-debian-ppa
-dist-debian-aptly-create-ppa:  ## create Debian PPA for all releases
+.PHONY: distro-debian-ppa
+distro-debian-aptly-create-ppa:  ## create Debian PPA for all releases
 	cd ./debian && ./debian-ppa-aptly-build.sh
 
 #
@@ -396,8 +477,8 @@ dist-debian-aptly-create-ppa:  ## create Debian PPA for all releases
 #
 
 
-.PHONY: dist-ubuntu-deb
-dist-ubuntu-deb: ## locally build .deb for any Ubuntu version: DISTRO=bionic
+.PHONY: distro-ubuntu-deb
+distro-ubuntu-deb: ## locally build .deb for any Ubuntu version: DISTRO=bionic
 	@echo "Building Ubuntu $(DISTRO) .deb ..."
 	@echo "Copying latest version of .sh script to launchpad/ ..."
 	@echo "Running .sh script ..."
@@ -414,13 +495,20 @@ dist-ubuntu-deb: ## locally build .deb for any Ubuntu version: DISTRO=bionic
 #   sudo lxd init --auto
 #   sudo usermod -aG lxd $USER
 #
-# build/snap/snapcraft.yaml is the STRICT manifest (Snap Store). dist-snap-classic
+# build/snap/snapcraft.yaml is the STRICT manifest (Snap Store). distro-snap-classic
 # derives the classic manifest (downloadable/sideloaded release) from it via
 # build/snap/apply-classic.sh - never hand-edit a classic variant directly.
 #
 
-.PHONY: dist-snap
-dist-snap: ## build strict Snap package for the Snap Store (LXD required)
+.PHONY: distro-snap-clean
+distro-snap-clean: ## remove locally built Snap relics (packed .snap + build-copy snapcraft.yaml) so a stale one is never picked up by mistake
+	@echo "Removing locally built Snap artifacts..."
+	rm -vf ../mindforger_*.snap
+	rm -vf ../snapcraft.yaml
+
+
+.PHONY: distro-snap
+distro-snap: distro-snap-clean ## build strict Snap package for the Snap Store (LXD required)
 	@echo "Building Snap $(MINDFORGER_VERSION) ..."
 	cd .. && make clean && cd build
 	cp -vf snap/snapcraft.yaml ../snapcraft.yaml
@@ -428,16 +516,16 @@ dist-snap: ## build strict Snap package for the Snap Store (LXD required)
 	cd .. && snapcraft clean && snapcraft pack
 
 
-.PHONY: dist-snap-wip
-dist-snap-wip: ## debug Snap build w/o clean up, but w/ incremental build
+.PHONY: distro-snap-wip
+distro-snap-wip: ## debug Snap build w/o clean up, but w/ incremental build
 	@echo "Building Snap $(MINDFORGER_VERSION) ..."
 	cp -vf snap/snapcraft.yaml ../snapcraft.yaml
 	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" ../snapcraft.yaml
 	cd .. && snapcraft pack --debug
 
 
-.PHONY: dist-snap-classic
-dist-snap-classic: ## build classic Snap package for downloadable GitHub Release (LXD required)
+.PHONY: distro-snap-classic
+distro-snap-classic: distro-snap-clean ## build classic Snap package for downloadable GitHub Release (LXD required)
 	@echo "Building classic Snap $(MINDFORGER_VERSION) ..."
 	cd .. && make clean && cd build
 	cp -vf snap/snapcraft.yaml ../snapcraft.yaml
@@ -446,19 +534,19 @@ dist-snap-classic: ## build classic Snap package for downloadable GitHub Release
 	cd .. && snapcraft clean && snapcraft pack
 
 
-.PHONY: dist-snap-remove
-dist-snap-remove: ## remove locally installed Snap (requires sudo)
+.PHONY: distro-snap-remove
+distro-snap-remove: ## remove locally installed Snap (requires sudo)
 	@echo "Removing Snap package..."
 	sudo snap remove mindforger || true
 	@echo "DONE Snap removed"
 
 
-.PHONY: dist-snap-install
-dist-snap-install: dist-snap-remove dist-snap ## build and install the STRICT Snap locally (for testing, requires sudo)
+.PHONY: distro-snap-install
+distro-snap-install: distro-snap-remove distro-snap ## build and install the STRICT Snap locally (for testing, requires sudo)
 	@echo "Installing strict Snap package locally..."
 	@SNAP_FILE=$$(ls ../mindforger_*.snap 2>/dev/null | head -1); \
 	if [ -z "$$SNAP_FILE" ]; then \
-		echo "Error: Snap package not found. Run 'make dist-snap' first."; \
+		echo "Error: Snap package not found. Run 'make distro-snap' first."; \
 		exit 1; \
 	fi; \
 	echo "Note: this command requires sudo privileges for snap install"; \
@@ -466,12 +554,12 @@ dist-snap-install: dist-snap-remove dist-snap ## build and install the STRICT Sn
 	echo "DONE Snap installed. Run with: mindforger"
 
 
-.PHONY: dist-snap-install-classic
-dist-snap-install-classic: dist-snap-remove dist-snap-classic ## build and install the CLASSIC Snap locally (for testing, requires sudo)
+.PHONY: distro-snap-install-classic
+distro-snap-install-classic: distro-snap-remove distro-snap-classic ## build and install the CLASSIC Snap locally (for testing, requires sudo)
 	@echo "Installing classic Snap package locally..."
 	@SNAP_FILE=$$(ls ../mindforger_*.snap 2>/dev/null | head -1); \
 	if [ -z "$$SNAP_FILE" ]; then \
-		echo "Error: Snap package not found. Run 'make dist-snap-classic' first."; \
+		echo "Error: Snap package not found. Run 'make distro-snap-classic' first."; \
 		exit 1; \
 	fi; \
 	echo "Note: this command requires sudo privileges for snap install"; \
@@ -479,29 +567,115 @@ dist-snap-install-classic: dist-snap-remove dist-snap-classic ## build and insta
 	echo "DONE Snap installed. Run with: mindforger"
 
 
-.PHONY: dist-snap-path
-dist-snap-path: ## show path to the last built Snap package
+.PHONY: distro-snap-path
+distro-snap-path: ## show path to the last built Snap package
 	@ls -1 ../mindforger_*.snap 2>/dev/null || echo "No Snap package built yet"
 
 
-.PHONY: dist-snap-upload
-dist-snap-upload: dist-snap ## upload strict Snap package to the Snap Store (amd64)
+.PHONY: distro-snap-upload
+distro-snap-upload: distro-snap ## upload strict Snap package to the Snap Store (amd64)
 	@echo "Uploading Snap package to the Snap Store..."
 	snapcraft upload --release=stable ../mindforger_$(MINDFORGER_VERSION)_amd64.snap
 
 
-.PHONY: dist-all-clean
-dist-all-clean:
+#
+# DISTRIBUTION: Flatpak package (local builds only)
+#
+# The bundle built here is the one uploaded to a GitHub Release - it is NOT the
+# Flathub-hosted build.
+#
+# Prerequisites:
+#   sudo apt install flatpak flatpak-builder   # or dnf/pacman/zypper equivalent
+#   flatpak remote-add --if-not-exists --user flathub \
+#       https://flathub.org/repo/flathub.flatpakrepo
+#   flatpak install --user flathub \
+#       org.kde.Platform//5.15-24.08 org.kde.Sdk//5.15-24.08 \
+#       io.qt.qtwebengine.BaseApp//5.15-24.08
+#
+# build/flatpak/com.mindforger.MindForger.yaml is the manifest - Qt 5.15 comes from
+# the KDE runtime, Qt WebEngine from Flathub's shared Qt WebEngine base app.
+#
+
+.PHONY: distro-flatpak-clean
+distro-flatpak-clean: ## remove locally built Flatpak relics (build dir, OSTree repo, bundle) so a stale one is never picked up by mistake
+	./flatpak/clean.sh
+
+
+.PHONY: distro-flatpak-build
+distro-flatpak-build: ## build Flatpak bundle for downloadable GitHub Release (flatpak-builder required)
+	@echo "Building Flatpak $(MINDFORGER_VERSION) ..."
+	./flatpak/build-flatpak.sh
+
+
+.PHONY: distro-flatpak-path
+distro-flatpak-path: ## show path to the last built Flatpak bundle
+	@ls -1 ../distro/flatpak/mindforger-*.flatpak 2>/dev/null || echo "No Flatpak bundle built yet"
+
+
+.PHONY: distro-flatpak-remove
+distro-flatpak-remove: ## remove locally installed Flatpak
+	@echo "Removing Flatpak package..."
+	flatpak uninstall --user -y com.mindforger.MindForger || true
+	@echo "DONE Flatpak removed"
+
+
+.PHONY: distro-flatpak-install
+distro-flatpak-install: distro-flatpak-build ## build and install the Flatpak locally (user scope, for testing)
+	@echo "Installing Flatpak bundle locally..."
+	@BUNDLE="../distro/flatpak/mindforger-$(MINDFORGER_VERSION).flatpak"; \
+	if [ ! -f "$$BUNDLE" ]; then \
+		echo "Error: Flatpak bundle $$BUNDLE not found. Run 'make distro-flatpak-build' first."; \
+		exit 1; \
+	fi; \
+	flatpak install --user --reinstall -y "$$BUNDLE"; \
+	echo "DONE Flatpak installed. Run with: flatpak run com.mindforger.MindForger"
+
+
+.PHONY: distro-flatpak-run
+distro-flatpak-run: ## run the locally installed Flatpak
+	flatpak run com.mindforger.MindForger
+
+
+#
+# winget (Windows Package Manager)
+#
+# Prerequisites and full walkthrough: see build/winget/README.md
+#
+# Per-release sequence - run AFTER the GitHub release (with the Windows installer
+# asset) is live:
+#   make distro-winget-from-release VERSION=x.y.z
+#   make distro-winget-validate     VERSION=x.y.z
+#   make distro-winget-submit-pr    VERSION=x.y.z WINGET_PKGS_DIR=C:\path\to\winget-pkgs
+#
+
+.PHONY: distro-winget-from-release
+distro-winget-from-release: ## look up the Windows installer on a GitHub release, hash it, and generate winget manifests (VERSION required)
+	powershell.exe -NoProfile -ExecutionPolicy Bypass -File winget/generate-from-release.ps1 -Version $(VERSION)
+
+.PHONY: distro-winget-validate
+distro-winget-validate: ## validate generated winget manifests locally (VERSION required)
+	winget validate --manifest ../distro/winget/manifests/m/MindForger/MindForger/$(VERSION)
+
+.PHONY: distro-winget-submit-pr
+distro-winget-submit-pr: ## copy manifests to winget-pkgs fork, commit signed, push, open PR (VERSION and WINGET_PKGS_DIR required)
+	powershell.exe -NoProfile -ExecutionPolicy Bypass -File winget/submit-pr.ps1 -Version $(VERSION) -WingetPkgsDir "$(WINGET_PKGS_DIR)"
+
+.PHONY: distro-winget-hash-url
+distro-winget-hash-url: ## print SHA256 of the published Windows installer without generating manifests (VERSION required)
+	powershell.exe -NoProfile -ExecutionPolicy Bypass -File winget/sha256-from-url.ps1 -Version $(VERSION)
+
+#
+# ^ winget
+#
+
+
+.PHONY: distro-all-clean
+distro-all-clean:
 	rm -rvf $(MINDFORGER_RELEASE_DIR)
 
 
-dist-all: dist-all-clean $(MINDFORGER_RELEASE_DIR) dist-tarball dist-deb ## build all distributions
+distro-all: distro-all-clean $(MINDFORGER_RELEASE_DIR) distro-tarball distro-deb ## build all distributions
 	@echo "Building all $(MINDFORGER_VERSION) distributions"
-
-
-.PHONY: statistic
-statistic: ## show source code statistic
-	cd make && ./statistic.sh
 
 
 .PHONY: doc-to-wiki
@@ -509,8 +683,20 @@ doc-to-wiki: ## mindforger-documentation to mindforger.wiki
 	cd doc && ./mf-doc-to-wiki.py
 
 
+www-live: ## start the local web server for the www.mindforger.com
+	@echo "Starting local web server for www.mindforger.com..."
+	# GitHub repository: dvorka/my-webs
+	cd ../../../../webs/www.mindforger.com/www && python3 -m http.server 8000
+
+
 .PHONY: doc-api-reference
 api-reference: ## generate Doxygen source code documentation
 	cd doxygen && doxygen ./mindforger.cfg
+
+
+.PHONY: statistic
+statistic: ## show source code statistic
+	cd make && ./statistic.sh
+
 
 # eof

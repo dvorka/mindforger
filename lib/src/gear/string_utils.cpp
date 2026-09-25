@@ -163,11 +163,16 @@ vector<string> stringSplit(const string s, const string regexDelimiter)
 string normalizeToNcName(string name, char quoteChar) {
     string result = name;
     if(!result.empty()) {
-        if(!isalnum(result[0], locale())) {
+        // a non-ASCII (UTF-8, >=0x80) leading byte is part of a Unicode letter/digit,
+        // which the XML NCName spec permits as NameStartChar - only an ASCII char
+        // that is not alpha numerical needs the safe '_' prefix
+        unsigned char first = static_cast<unsigned char>(result[0]);
+        if(first < 0x80 && !isalnum(result[0], locale())) {
             result.insert(0, 1, '_');
         }
         for(size_t i=0; i<result.size(); i++) {
-            if(!isalnum(result[i],locale())) {
+            unsigned char c = static_cast<unsigned char>(result[i]);
+            if(c < 0x80 && !isalnum(result[i],locale())) {
                 result[i] = quoteChar;
             }
         }
@@ -241,33 +246,119 @@ bool isMarkdownParagraphBoundaryLine(const string& line)
     return false;
 }
 
+static size_t utf8Length(const string& s)
+{
+    // count Unicode codepoints in a UTF-8 encoded string by skipping continuation
+    // bytes (10xxxxxx) - counts UTF-8 bytes, so accented Latin, Cyrillic or non-ASCII
+
+    size_t length{0};
+    for(unsigned char c: s) {
+        if((c&0xC0)!=0x80) {
+            length++;
+        }
+    }
+    return length;
+}
+
+static string asciiToLower(const string& s)
+{
+    // fold A-Z only - unlike std::tolower() this neither depends on the global
+    // locale, nor it touches the bytes of non-ASCII UTF-8 characters
+
+    string lower{s};
+    for(char& c: lower) {
+        if(c>='A' && c<='Z') {
+            c += 'a'-'A';
+        }
+    }
+    return lower;
+}
+
 vector<string> rewrapParagraphLines(const vector<string>& lines, unsigned width)
 {
-    vector<string> words{};
+    // hard break (two trailing spaces or backslash) aware word ensuring
+    // it will not be lost during rewrapping
+    struct Word {
+        string text;
+        bool hardBreak;
+        string hardBreakSuffix;
+    };
+
+    vector<Word> words{};
     for(const string& line: lines) {
+        size_t contentEnd{line.size()};
+        while(contentEnd>0 && line[contentEnd-1]==' ') {
+            contentEnd--;
+        }
+        bool hardBreak{false};
+        string hardBreakSuffix{};
+        if(line.size()-contentEnd>=2) {
+            hardBreak = true;
+            hardBreakSuffix = "  ";
+        } else if(contentEnd>0 && line[contentEnd-1]=='\\') {
+            hardBreak = true;
+        }
+
         istringstream iss{line};
         string word{};
+        size_t wordsBefore{words.size()};
         while(iss >> word) {
-            words.push_back(word);
+            words.push_back(Word{word, false, {}});
+        }
+        if(hardBreak && words.size()>wordsBefore) {
+            words.back().hardBreak = true;
+            words.back().hardBreakSuffix = hardBreakSuffix;
         }
     }
 
     vector<string> result{};
     string currentLine{};
-    for(const string& word: words) {
+    size_t currentLineLength{0};
+    for(const Word& word: words) {
+        size_t wordLength = utf8Length(word.text);
         if(currentLine.empty()) {
-            currentLine = word;
-        } else if(currentLine.size()+1+word.size()<=width) {
+            currentLine = word.text;
+            currentLineLength = wordLength;
+        } else if(currentLineLength+1+wordLength<=width) {
             currentLine += ' ';
-            currentLine += word;
+            currentLine += word.text;
+            currentLineLength += 1+wordLength;
         } else {
             result.push_back(currentLine);
-            currentLine = word;
+            currentLine = word.text;
+            currentLineLength = wordLength;
+        }
+        if(word.hardBreak) {
+            currentLine += word.hardBreakSuffix;
+            result.push_back(currentLine);
+            currentLine.clear();
+            currentLineLength = 0;
         }
     }
     if(!currentLine.empty()) {
         result.push_back(currentLine);
     }
+
+    return result;
+}
+
+vector<string> sortLinesAlphabetically(const vector<string>& lines)
+{
+    vector<string> result{lines};
+
+    sort(
+        result.begin(),
+        result.end(),
+        [](const string& l, const string& r) {
+            const string lowerL{asciiToLower(l)}, lowerR{asciiToLower(r)};
+            // case sensitive tie break makes the ordering of the lines which
+            // differ in the case only deterministic
+            if(lowerL == lowerR) {
+                return l < r;
+            }
+            return lowerL < lowerR;
+        }
+    );
 
     return result;
 }

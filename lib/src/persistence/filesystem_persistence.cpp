@@ -101,22 +101,30 @@ void FilesystemPersistence::save(Outline* outline)
     string* text = mdRepresentation.to(outline);
     if(text!=nullptr) {
         MF_DEBUG("Saving O: " << outline->getKey() << endl);
-        ofstream out(outline->getKey());
-        MF_DEBUG("  O opened: " << boolalpha << out.is_open() << endl);
-        out << *text;
-        MF_DEBUG("  O written: " << &out << endl);
-        out.close();
-        MF_DEBUG("O saved: " << &out << endl);
-        delete text;
 
-        outline->clearDirty();
+        // self-heal: an O's missing parent directory
+        string directory{}, file{};
+        pathToDirectoryAndFile(outline->getKey(), directory, file);
+        if(directory.size() && !isDirectoryOrFileExists(directory.c_str())) {
+            createDirectory(directory);
+        }
+
+        if(stringToFile(outline->getKey(), *text)) {
+            MF_DEBUG("O saved: " << outline->getKey() << endl);
+
+            outline->clearDirty();
+        } else {
+            // stringToFile() reports the reason
+            cerr << "Error: unable to save O '" << outline->getKey() << "'" << endl;
+        }
+        delete text;
     }
 }
 
-void FilesystemPersistence::saveAsHtml(Outline* outline, const string& fileName)
+bool FilesystemPersistence::saveAsHtml(Outline* outline, const string& fileName)
 {
     string* text = new string{};
-        htmlRepresentation.to(
+    htmlRepresentation.to(
         outline,
         text,
         true,
@@ -124,10 +132,26 @@ void FilesystemPersistence::saveAsHtml(Outline* outline, const string& fileName)
         true,
         false
     );
-    ofstream out(fileName);
-    out << *text;
-    out.close();
+    bool saved = stringToFile(fileName, *text);
     delete text;
+
+    return saved;
+}
+
+bool FilesystemPersistence::saveAsMarkdown(Outline* outline, const string& fileName)
+{
+    string* text = mdRepresentation.to(outline);
+    if(text == nullptr) {
+        cerr
+            << "Error: unable to serialize O '" << outline->getKey()
+            << "' to Markdown" << endl;
+        return false;
+    }
+
+    bool saved = stringToFile(fileName, *text);
+    delete text;
+
+    return saved;
 }
 
 } // m8r namespace

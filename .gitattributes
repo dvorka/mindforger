@@ -1,6 +1,45 @@
+# Line endings
+#
+# Everything below is about ONE thing: making the checked out working tree
+# byte-for-byte the same on Linux, macOS and Windows, no matter what the
+# contributor's local core.autocrlf happens to be set to. Attributes win over
+# core.autocrlf, so a clone with autocrlf=true no longer silently rewrites
+# shell scripts to CRLF - which makes them unrunnable ("/usr/bin/env: 'bash\r':
+# No such file or directory") and, worse, ships a CRLF launcher inside the Snap
+# and Flatpak packages.
+#
+# Order matters: the LAST matching pattern wins.
+
+# the default - every text file is stored w/ LF in the repository and checked
+# out w/ LF everywhere; binary files are detected and left alone
+* text=auto eol=lf
+
+# Windows-only tooling which is safer w/ native CRLF - .bat/.cmd are parsed
+# line by line by cmd.exe and Inno Setup .iss scripts are Windows-only as well
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+*.iss text eol=crlf
+
+# binary files - never normalized, never diffed as text (the text=auto
+# heuristic would catch these anyway, but state the intent explicitly)
+*.png binary
+*.ico binary
+*.icns binary
+*.dll binary
+*.pdf binary
+*.pyc binary
+
 # vendored stemmer library keeps its original Windows-style line endings;
 # pin them so tools don't silently convert only some lines and produce a
 # mixed-EOL file (see lib/src/mind/ai/nlp/stemmer/{utilities,stemming,indexing})
 lib/src/mind/ai/nlp/stemmer/utilities/* text eol=crlf
 lib/src/mind/ai/nlp/stemmer/stemming/* text eol=crlf
 lib/src/mind/ai/nlp/stemmer/indexing/* text eol=crlf
+
+# vendored/legal files which are kept byte-identical to their upstream drop -
+# '-text' means git never normalizes them in either direction
+deps/hunspell/hunspell.dsp -text
+licenses/oleander-software-stemmer.txt -text
+
+# eof

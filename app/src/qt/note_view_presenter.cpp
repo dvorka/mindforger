@@ -87,7 +87,7 @@ void NoteViewPresenter::refreshLivePreview()
 
     double yScrollPct{0};
     QScrollBar* scrollbar = orloj->getNoteEdit()->getView()->getNoteEditor()->verticalScrollBar();
-#if defined(_WIN32) || defined(__APPLE__)
+#if defined(MF_QT_WEB_ENGINE)
     // WebEngine: scroll to same pct view
     if(scrollbar) {
         if(scrollbar->maximum()) {
@@ -150,6 +150,15 @@ void NoteViewPresenter::slotLinkClicked(const QUrl& url)
 void NoteViewPresenter::slotEditNote()
 {
     orloj->showFacetNoteEdit(this->currentNote);
+}
+
+void NoteViewPresenter::slotConfigurationUpdated()
+{
+    // re-render the currently viewed N (if any) so that a changed setting
+    // (e.g. math rendering engine) is reflected without switching Ns
+    if(currentNote) {
+        refresh(currentNote);
+    }
 }
 
 void NoteViewPresenter::slotEditNoteDoubleClick()

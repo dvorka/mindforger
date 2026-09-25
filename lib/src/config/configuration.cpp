@@ -37,6 +37,7 @@ const string KnowledgeTool::TOOL_PHRASE = string{"<<PHRASE>>"};
 const string Configuration::DEFAULT_ACTIVE_REPOSITORY_PATH = string{FILE_PATH_M8R_REPOSITORY};
 const string Configuration::DEFAULT_STARTUP_VIEW_NAME = string{DEFAULT_STARTUP_VIEW};
 const string Configuration::DEFAULT_UI_THEME_NAME = string{UI_DEFAULT_THEME};
+const string Configuration::DEFAULT_UI_LOCALE_NAME = string{UI_LOCALE_SYSTEM};
 const string Configuration::DEFAULT_UI_HTML_CSS_THEME = string{UI_DEFAULT_HTML_CSS_THEME};
 const string Configuration::DEFAULT_EDITOR_FONT= string{UI_DEFAULT_EDITOR_FONT};
 const string Configuration::DEFAULT_TIME_SCOPE = string{"0y0m0d0h0m"};
@@ -55,6 +56,7 @@ Configuration::Configuration()
       autolinkingCaseInsensitive{},
       semanticSearch{DEFAULT_SEMANTIC_SEARCH},
       md2HtmlOptions{},
+      htmlRenderingWebEngineBackend{true},
       distributorSleepInterval{DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL},
       markdownQuoteSections{},
       recentIncludeOs{DEFAULT_RECENT_INCLUDE_OS},
@@ -161,9 +163,9 @@ void Configuration::clear()
     md2HtmlOptions = 0
         // DISABLED highlighting and extensions support is consequence of HTML preview flickering when =-v is enabled
         //| MdToHtmlOption::CodeHighlighting // source code highlighting via offline highlight.js - disabled by default
-        //| MdToHtmlOption::MathSupport // math expressions support via mathjax.js - disabled by default
         //| MdToHtmlOption::DiagramSupport; // diagram support via mermaid.js - disabled by default
         ;
+    uiEnableMathInMd = DEFAULT_MD_MATH; // math support via KaTeX/MathJax - disabled by default
 
     aaAlgorithm = AssociationAssessmentAlgorithm::WEIGHTED_FTS;
     switch(aaAlgorithm) {
@@ -196,6 +198,7 @@ void Configuration::clear()
 #endif
     startupView.assign(DEFAULT_STARTUP_VIEW);
     uiThemeName.assign(UI_DEFAULT_THEME);
+    uiLocale.assign(UI_LOCALE_SYSTEM);
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);
     uiHtmlZoom = DEFAULT_UI_HTML_ZOOM;
     externalEditorCmd = "";

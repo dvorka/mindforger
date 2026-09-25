@@ -112,24 +112,52 @@
 #       - build distro: `ubuntu-launchpad-...-from-beast.sh trusty` @ beast machine
 #
 
-# EDIT for every release:
+# ########################################################################
+# # Hints
+# ########################################################################
+
+# Qt WebEngine is MF's default MD 2 HTML rendering backend on all supported Ubuntu versions
+# Legacy Qt WebKit remains available on Linux via CONFIG+=mfwebkit (see mindforger.pro)
+
+# ########################################################################
+# MANUAL preparation
+# ########################################################################
+# For every release edit:
 # - UBUNTU_VERSIONS
 # - PATCH_VERSION
+# (major and minor versions are read from lib/src/app_info.h in MFSRC)
 
+# manually specify patch version (incremented for every Ubuntu build @ Launchpad)
+export PATCH_VERSION=0
+# set to the Ubuntu versions to release
 if [[ ${#} == 1 ]]
 then
     export UBUNTU_VERSIONS=(${1})
 else
-    # export UBUNTU_VERSIONS=(jammy noble resolute)
+    export UBUNTU_VERSIONS=(jammy noble resolute)
+    # export UBUNTU_VERSIONS=(noble resolute)
     # export UBUNTU_VERSIONS=(jammy)
     # export UBUNTU_VERSIONS=(noble)
-    export UBUNTU_VERSIONS=(resolute)
+    # export UBUNTU_VERSIONS=(resolute)
 fi
 
 # environment variables
-export MAJOR_VERSION=2
-export MINOR_VERSION=1
-export PATCH_VERSION=3 # patch version is incremented for every Ubuntu build @ Launchpad
+export SCRIPTHOME=`pwd`
+export MFSRC=/home/dvorka/p/mindforger/git/mindforger
+# authoritative major and minor versions are read from the source repository
+export MF_APP_INFO_H="${MFSRC}/lib/src/app_info.h"
+if [[ ! -f "${MF_APP_INFO_H}" ]]
+then
+    echo "ERROR: unable to find ${MF_APP_INFO_H} to read MindForger version"
+    exit 1
+fi
+export MAJOR_VERSION=$(sed -n 's/^#define MINDFORGER_VERSION_MAJOR "\([0-9]*\)"/\1/p' "${MF_APP_INFO_H}")
+export MINOR_VERSION=$(sed -n 's/^#define MINDFORGER_VERSION_MINOR "\([0-9]*\)"/\1/p' "${MF_APP_INFO_H}")
+if [[ -z "${MAJOR_VERSION}" || -z "${MINOR_VERSION}" ]]
+then
+    echo "ERROR: unable to read major/minor version from ${MF_APP_INFO_H}"
+    exit 1
+fi
 export MF_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" # semantic version
 export RM_CMD="rm -vrf "
 export CP_CMD="cp -vrf "
@@ -152,33 +180,6 @@ else
     export OPT_DO_PUSH="true" # "true" to upload src to bazaar
     export OPT_DO_RELEASE="true" # "true" to dpush binary .deb to Launchpad and TRIGGER release
 fi
-
-# Ubuntu removed legacy WebKit (libqt5webkit5-dev) starting w/ 26.04 LTS (resolute):
-# - older Ubuntu versions (jammy, noble) to use WebKit which MF used for years
-# - newer Ubuntu versions (resolute, ...) to use WebEngine which is used by Win and macOS versions of MF
-export WEBENGINE_DISTROS=(resolute)
-
-function usesWebengine {
-    local distro=${1}
-    local d
-    for d in "${WEBENGINE_DISTROS[@]}"
-    do
-	if [[ "${d}" == "${distro}" ]]
-	then
-	    return 0
-	fi
-    done
-    return 1
-}
-
-function patchDebianForWebengine {
-    echo "Patching debian/control + debian/rules: ${UBUNTUVERSION} needs Qt WebEngine (libqt5webkit5-dev unavailable there)"
-    sed -i 's/libqt5webkit5-dev/qtwebengine5-dev/' ./debian/control
-    printf '\noverride_dh_auto_configure:\n\tdh_auto_configure -- CONFIG+=mfwebengine\n' >> ./debian/rules
-}
-
-# shell variables
-# ...
 
 # ########################################################################
 # # Helpers
@@ -228,8 +229,11 @@ function checkoutMindforger {
     rm -rf${OPT_VERBOSE} ./lib/.qmake.stash ./lib/lib.pro.user ./lib/src/mindforger-lib-unit-tests
     rm -rf${OPT_VERBOSE} ./deps/cmark-gfm/.github
     rm -rf${OPT_VERBOSE} ./deps/mitie
+    # remove stray packaging artifacts (e.g. locally built .snap) that may be
+    # sitting in MFSRC working directory - cp above does NOT respect .gitignore
+    rm -rf${OPT_VERBOSE} ./*.snap
     # IMPROVE: static libraries lib*.a are NOT deleted to keep cmark-gfm dependency libs
-    find . -type f \( -name "*moc_*.cpp" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
+    find . -type f \( -name "*moc_*.cpp" -or -name "*.o" -or -name "*.*~" -or -name "*.snap" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
 
     cd ..
 }
@@ -301,14 +305,12 @@ function patchQmakePathInMakefile {
 # - step by step it releases MindForger for one particular Ubuntu version
 
 function releaseForParticularUbuntuVersion {
-    export SCRIPTHOME=`pwd`
     export UBUNTUVERSION=${1}
     export MFVERSION=${2}
     export MFBZRMSG=${3}
     export MFFULLVERSION=${MFVERSION}-0ubuntu1
     export MF=mindforger_${MFVERSION}
     export MFRELEASE=mindforger_${MFFULLVERSION}
-    export MFSRC=/home/dvorka/p/mindforger/git/mindforger
     export NOW=`date +%Y-%m-%d--%H-%M-%S`
     export MFBUILD=mindforger-${NOW}
 
@@ -327,13 +329,6 @@ function releaseForParticularUbuntuVersion {
     echoStep "Create Debian control files"
     cd mindforger && cp -rvf ${MFSRC}/build/ubuntu/debian .
     createChangelog ./debian/changelog
-    if usesWebengine "${UBUNTUVERSION}"
-    then
-        echo -e "\n# HTML rendering: modern WebEngine ############################"
-	    patchDebianForWebengine
-    else:
-        echo -e "\n# HTML rendering: legacy WebKit ############################"
-    fi
     echo "Changelog:"
     cat ./debian/changelog
     echo "Control:"
@@ -360,12 +355,7 @@ function releaseForParticularUbuntuVersion {
     # like this qt5-default.
     # Instead debian/rules file exports env var w/ Qt choice
     # .pro file is also extended to have 'make install' target
-    if usesWebengine "${UBUNTUVERSION}"
-    then
-	qmake -r mindforger.pro CONFIG+=mfwebengine
-    else
-	qmake -r mindforger.pro
-    fi
+    qmake -r mindforger.pro
 
     # 6) optionally PATCH source files e.g. different Ubuntu distro specific paths
     echoStep "Patch Makefiles - fix Qt paths for Ubuntu versions"
@@ -460,7 +450,7 @@ function releaseForParticularUbuntuVersion {
     echo "    - mindfoger_<major>.<minor>.<patch>-0ubuntu1.dsc ... control descriptor according to which is build made"
     echo "    - mindfoger_<major>.<minor>.<patch>.orig.tar.gz  ... TARBALL w/ Debian control files used to build .deb"
     # pbuild-dist help: https://wiki.ubuntu.com/PbuilderHowto
-    pbuilder-dist ${UBUNTUVERSION} build --debbuildopts="-j${BUILD_JOBS}" ${MFRELEASE}.dsc
+    pbuilder-dist ${UBUNTUVERSION} build --debbuildopts "-j${BUILD_JOBS}" ${MFRELEASE}.dsc
     # VERIFY pbuilder-dist build result
     build_status=$?
     echo -e "DONE: BINARY .deb package build on FAKEROOT system, result stored to ${PBUILDFOLDER}/${UBUNTUVERSION}_result:"
@@ -506,7 +496,7 @@ do
     echo "# Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     echo "###################################################"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" "${BAZAAR_MSG}"
-    MINOR_VERSION=`expr $MINOR_VERSION + 1`
+    PATCH_VERSION=`expr $PATCH_VERSION + 1`
 done
 
 # eof

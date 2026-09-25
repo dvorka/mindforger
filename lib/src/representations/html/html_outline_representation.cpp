@@ -177,23 +177,16 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
 #endif
 
         // DIAGRAMS: mermaid.js
-        // - CDN: https://cdnjs.com/libraries/mermaid
         // - download from: https://unpkg.com/mermaid@7.1.0/dist/
         // - live demo: https://mermaidjs.github.io/mermaid-live-editor
+        // NOTE: interactive rendering is offline-only (no CDN option) - standalone HTML
+        // export still uses the CDN since qrc:/ resources are not available outside the app
         if(standalone) {
             html += "<script type=\"text/javascript\" src=\"";
             html += JS_LIB_MERMAILD_URL;
             html += "\"></script>";
         } else {
             switch(config.getUiEnableDiagramsInMd()) {
-            case Configuration::JavaScriptLibSupport::ONLINE:
-                html += "<script type=\"text/javascript\" src=\"";
-                html += JS_LIB_MERMAILD_URL;
-                html += "\"></script>";
-#ifdef DO_MF_DEBUG
-                html += "\n";
-#endif
-                break;
             case Configuration::JavaScriptLibSupport::OFFLINE:
                 html += "<script type=\"text/javascript\" src=\"qrc:/js/mermaid.js\"></script>";
 #ifdef DO_MF_DEBUG
@@ -205,27 +198,81 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
             }
         }
 
-        // MATH: MathJax.js
-        // - doc: http://docs.mathjax.org/en/latest/start.html
-        // - CDN: https://cdnjs.com/libraries/mathjax
-        // - check newMathJax variable in the script above e.g. https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-        if(standalone || config.isUiEnableMathInMd()) {
-            html += "<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>";
+        // MATH: KaTeX (fast, offline) or MathJax (legacy, offline)
+        // - KaTeX doc: https://katex.org/docs/browser.html
+        // - MathJax doc: https://docs.mathjax.org/en/latest/start.html
+        // NOTE:
+        // - only $...$/$$...$$ delimiters are supported
+        //   (other delimiters would NOT survive CommonMark rendering)
+        static const char* MATH_DELIMITERS_KATEX =
+            "document.addEventListener('DOMContentLoaded',function(){"
+            "renderMathInElement(document.body,{delimiters:["
+            "{left:'$$',right:'$$',display:true},"
+            "{left:'$',right:'$',display:false}"
+            "]});});";
+        if(standalone) {
+            // standalone HTML export: qrc:/ resources are not available outside the app
+            html += "<link rel=\"stylesheet\" href=\"";
+            html += JS_LIB_KATEX_CSS_URL;
+            html += "\">";
+            html += "<script src=\"";
+            html += JS_LIB_KATEX_JS_URL;
+            html += "\"></script>";
+            html += "<script src=\"";
+            html += JS_LIB_KATEX_AUTORENDER_URL;
+            html += "\"></script>";
+            html += "<script>";
+            html += MATH_DELIMITERS_KATEX;
+            html += "</script>";
+        } else {
+            switch(config.getUiEnableMathInMd()) {
+            case Configuration::MathJsLibSupport::MATH_KATEX:
+                html += "<link rel=\"stylesheet\" href=\"qrc:/html-css/katex.min.css\">";
 #ifdef DO_MF_DEBUG
-            html += "\n";
+                html += "\n";
 #endif
-            html += "<script type=\"text/javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML\"></script>";
+                html += "<script type=\"text/javascript\" src=\"qrc:/js/katex.min.js\"></script>";
 #ifdef DO_MF_DEBUG
-            html += "\n";
+                html += "\n";
 #endif
+                html += "<script type=\"text/javascript\" src=\"qrc:/js/katex-auto-render.min.js\"></script>";
+#ifdef DO_MF_DEBUG
+                html += "\n";
+#endif
+                html += "<script type=\"text/javascript\">";
+                html += MATH_DELIMITERS_KATEX;
+                html += "</script>";
+#ifdef DO_MF_DEBUG
+                html += "\n";
+#endif
+                break;
+            case Configuration::MathJsLibSupport::MATH_MATHJAX:
+                // same $...$/$$...$$-only rationale as MATH_DELIMITERS_KATEX above
+                html += "<script type=\"text/javascript\">window.MathJax = {tex: {inlineMath: [['$','$']]}};</script>";
+#ifdef DO_MF_DEBUG
+                html += "\n";
+#endif
+                html += "<script type=\"text/javascript\" src=\"qrc:/js/mathjax-tex-svg.js\"></script>";
+#ifdef DO_MF_DEBUG
+                html += "\n";
+#endif
+                break;
+            default:
+                break;
+            }
         }
 
-        // SYNTAX HIGHLIGHTING: offline Highlight.js (CME)
+        // SYNTAX HIGHLIGHTING: highlight.js 11.x - offline qrc:/ bundle in-app,
+        // standalone HTML export uses a CDN (qrc:/ resources are not available outside the app)
         if(standalone) {
-            html += "<link rel=\"stylesheet\" href=\"http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/default.min.css\">";
-            html += "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js\"></script>";
-            html += "<script>hljs.initHighlightingOnLoad();</script>";
-        } else if(config.isUiEnableSrcHighlightInMd()) {
+            html += "<link rel=\"stylesheet\" href=\"";
+            html += JS_LIB_HLJS_CSS_URL;
+            html += "\">";
+            html += "<script src=\"";
+            html += JS_LIB_HLJS_JS_URL;
+            html += "\"></script>";
+            html += "<script>hljs.highlightAll();</script>";
+        } else if(config.isUiEnableSrcHighlightInMd() && config.isHtmlRenderingWebEngineBackend()) {
             html += "<link rel=\"stylesheet\" href=\"qrc:/html-css/highlight.css\"/>";
 #ifdef DO_MF_DEBUG
             html += "\n";
@@ -234,7 +281,7 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
 #ifdef DO_MF_DEBUG
             html += "\n";
 #endif
-            html += "<script type=\"text/javascript\">hljs.initHighlightingOnLoad();</script>";
+            html += "<script type=\"text/javascript\">hljs.highlightAll();</script>";
 #ifdef DO_MF_DEBUG
             html += "\n";
 #endif
