@@ -1,6 +1,10 @@
 2026-..-..  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.5.0 - ...
+    * Enhancement: status bar indicators ("diodes") in the lower right corner of
+      the main window - a capsule w/ autolinking (A), diagrams (D), live spell
+      check (L), math (M), source code syntax highlighting (S), thinking (T) and
+      Wingman availability (W) segments.
     * Feature: Debian 13 Trixie PPA - MindForger is newly provided for Debian 13
       Trixie in addition to Debian 12 Bookworm (Debian 11 Bullseye, 10 Buster
       and 9 Stretch PPAs are kept, but frozen) at https://www.mindforger.com/debian-ppa/

@@ -353,6 +353,7 @@ void MainWindowPresenter::showInitialView()
 
     // config > menu
     mainMenu->showFacetMindAutolink(config.isAutolinking());
+    statusBar->showIndicators();
     mainMenu->showFacetLiveNotePreview(config.isUiLiveNotePreview());
     orloj->setAspect(
         config.isUiLiveNotePreview()
@@ -689,6 +690,7 @@ void MainWindowPresenter::doActionMindToggleAutolink()
         config.setAutolinking(true);
     }
     mainMenu->showFacetMindAutolink(config.isAutolinking());
+    statusBar->showIndicators();
     mdConfigRepresentation->save(config);
 
     // refresh view
@@ -3500,6 +3502,7 @@ void MainWindowPresenter::handleMindPreferences()
 
     // re-initialize Wingman
     mind->initWingman();
+    statusBar->showIndicators();
 
     view.getToolBar()->setVisible(config.isUiShowToolbar());
     view.getOrloj()->getNoteView()->setZoomFactor(config.getUiHtmlZoomFactor());

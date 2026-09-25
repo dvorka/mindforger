@@ -47,6 +47,7 @@ public:
     StatusBarPresenter &operator=(const StatusBarPresenter&&) = delete;
 
     void showMindStatistics();
+    void showIndicators();
 
     void showInfo(const char* message) { showInfo(QString::fromUtf8(message)); }
     void showInfo(const std::string& message) { showInfo(QString::fromStdString(message)); }
