@@ -22,37 +22,58 @@
 # bullseye/bookworm) machine is needed to produce a package that can be
 # attached to a GitHub release.
 #
+# Debian releases (and their HTML backend) are read from
+# build/debian/debian-releases.conf
+#
 # usage:
 #   ./build-deb.sh [release ...] [output-dir]
 #
-#   release     one or more of: bullseye bookworm trixie all (default: all)
-#   output-dir  default: ../../../../mindforger-deb (one subdir per release)
+#   release     one or more codenames from debian-releases.conf, or
+#               supported (default) ... all releases w/ supported status
+#   output-dir  default: MF_DEBIAN_DEB_DIR (build/debian/debian-config.sh),
+#               one subdir per release
 #
 # examples:
 #   ./build-deb.sh trixie
-#   ./build-deb.sh bullseye bookworm trixie ~/mindforger-debs
+#   ./build-deb.sh bookworm trixie ~/mindforger-debs
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
-ALL_RELEASES=(bullseye bookworm trixie)
+
+# shellcheck source=../../debian/debian-config.sh
+source "${REPO_ROOT}/build/debian/debian-config.sh"
+# shellcheck source=../../debian/debian-releases.sh
+source "${REPO_ROOT}/build/debian/debian-releases.sh"
+
+read -r -a SUPPORTED_RELEASES <<< "$(mf_debian_releases supported | tr '\n' ' ')"
 
 ARGS=("$@")
-OUT_DIR="${REPO_ROOT}/../mindforger-deb"
+OUT_DIR="${MF_DEBIAN_DEB_DIR}"
 RELEASES=()
 
 for A in "${ARGS[@]+"${ARGS[@]}"}"; do
-    case "${A}" in
-        bullseye|bookworm|trixie) RELEASES+=("${A}") ;;
-        all) RELEASES=("${ALL_RELEASES[@]}") ;;
-        *) OUT_DIR="${A}" ;;
-    esac
+    if [ "${A}" = "supported" ] || [ "${A}" = "all" ]; then
+        RELEASES+=("${SUPPORTED_RELEASES[@]}")
+    elif mf_debian_is_release "${A}"; then
+        RELEASES+=("${A}")
+    else
+        OUT_DIR="${A}"
+    fi
 done
 
 if [ "${#RELEASES[@]}" -eq 0 ]; then
-    RELEASES=("${ALL_RELEASES[@]}")
+    RELEASES=("${SUPPORTED_RELEASES[@]}")
 fi
+
+for REL in "${RELEASES[@]}"; do
+    HTML_BACKEND="$(mf_debian_release_html_backend "${REL}")"
+    if [ "${HTML_BACKEND}" != "webkit" ] && [ "${HTML_BACKEND}" != "webengine" ]; then
+        echo "ERROR: Debian ${REL} cannot be built (html-backend '${HTML_BACKEND}' in ${MF_DEBIAN_RELEASES_CONF})"
+        exit 1
+    fi
+done
 
 mkdir -p "${OUT_DIR}"
 OUT_DIR="$(cd "${OUT_DIR}" && pwd)"
@@ -66,7 +87,11 @@ for REL in "${RELEASES[@]}"; do
     REL_OUT_DIR="${OUT_DIR}/${REL}"
     mkdir -p "${REL_OUT_DIR}"
 
-    docker build --build-arg "DEBIAN_RELEASE=${REL}" -t "mindforger-deb-builder:${REL}" "${SCRIPT_DIR}"
+    docker build \
+        --build-arg "DEBIAN_RELEASE=${REL}" \
+        --build-arg "MF_HTML_BACKEND=$(mf_debian_release_html_backend "${REL}")" \
+        -t "mindforger-deb-builder:${REL}" \
+        "${SCRIPT_DIR}"
     docker run --rm \
         -v "${REPO_ROOT}:/src:ro" \
         -v "${REL_OUT_DIR}:/out" \

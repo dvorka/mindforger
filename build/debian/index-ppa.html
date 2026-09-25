@@ -1,34 +1,40 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <title>MindForger Debian "DISTRO" PPA repository</title>
   </head>
   <body>
     <h1>MindForger Debian "DISTRO" PPA repository</h1>
 
     <p>This is Personal Package Archive (PPA)
-       for <a href="https://www.mindforger.com/">MindForger</a>.
-    </p>    
-    <p>To install programs from this PPA add new repository
-       to <code>/etc/apt/sources.list</code> as follows:</p>
-    </p>    
+       for <a href="https://www.mindforger.com/">MindForger</a>
+       and Debian "DISTRO" release.
+    </p>
+
+    <p>Download the key which is used to sign the repository:</p>
 
     <pre>
-      echo "deb http://www.mindforger.com/debian-ppa/DISTRO DISTRO main" | sudo tee /etc/apt/sources.list.d/mindforger.list      
+      sudo install -d -m 0755 /etc/apt/keyrings
+      wget -qO- https://www.mindforger.com/gpgpubkey.txt | gpg --dearmor | sudo tee /etc/apt/keyrings/mindforger.gpg > /dev/null
     </pre>
 
-    <p>... and import key that is used to sign the release:</p>
+    <p>... add the repository:</p>
 
     <pre>
-      $ wget -qO - http://www.mindforger.com/gpgpubkey.txt | sudo apt-key add -
+      echo "deb [signed-by=/etc/apt/keyrings/mindforger.gpg] https://www.mindforger.com/debian-ppa/DISTRO DISTRO main" | sudo tee /etc/apt/sources.list.d/mindforger.list
     </pre>
 
     <p>After that you can install MindForger as any other software package:</p>
 
     <pre>
-      $ sudo apt update
-      $ sudo apt install mindforger
+      sudo apt update
+      sudo apt install mindforger
     </pre>
-    
+
+    <p>Signing key fingerprint:
+       <code>E3E8 520D E382 0D8C 1A72 4BB7 B72E 4F7F 24AF 591D</code>
+    </p>
+
   </body>
 </html>

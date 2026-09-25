@@ -18,19 +18,22 @@
 # builds a MindForger .deb for a chosen Debian release, in an isolated
 # per-release container - see build-deb.sh for usage.
 #
-# - bullseye (11) and bookworm (12) build exactly like build/debian/debian/
+# - MF_HTML_BACKEND is the html-backend column of build/debian/debian-releases.conf
+# - webkit releases (e.g. bookworm) build exactly like build/debian/debian/
 #   already declares (Qt WebKit): nothing about that packaging is touched.
-# - trixie (13) dropped libqt5webkit5-dev from the archive entirely, so its
-#   build patches its OWN COPY of debian/control + debian/rules (done in
+# - webengine releases (trixie+ dropped libqt5webkit5-dev from the archive
+#   entirely) patch their OWN COPY of debian/control + debian/rules (done in
 #   container-build.sh, never the checked-in files) to use Qt WebEngine
-#   instead - see mindforger.pro's documented CONFIG+=mfwebengine option.
+#   instead (Qt WebEngine is MF default, Qt WebKit is CONFIG+=mfwebkit).
 
 ARG DEBIAN_RELEASE=trixie
 FROM debian:${DEBIAN_RELEASE}
 
 ARG DEBIAN_RELEASE
+ARG MF_HTML_BACKEND=webengine
 ENV DEBIAN_FRONTEND=noninteractive
 ENV MF_DEBIAN_RELEASE=${DEBIAN_RELEASE}
+ENV MF_HTML_BACKEND=${MF_HTML_BACKEND}
 
 # bullseye (11) is past standard support: deb.debian.org's Release file for
 # it has expired, and worse, its package pool has already partly moved off
@@ -44,7 +47,7 @@ RUN if [ "${DEBIAN_RELEASE}" = "bullseye" ]; then \
             /etc/apt/sources.list; \
     fi
 
-RUN if [ "${DEBIAN_RELEASE}" = "trixie" ]; then MF_WEB_PKG=qtwebengine5-dev; else MF_WEB_PKG=libqt5webkit5-dev; fi \
+RUN if [ "${MF_HTML_BACKEND}" = "webengine" ]; then MF_WEB_PKG=qtwebengine5-dev; else MF_WEB_PKG=libqt5webkit5-dev; fi \
     && apt-get -o Acquire::Check-Valid-Until=false update && apt-get install -y --no-install-recommends \
         build-essential \
         debhelper \
@@ -59,6 +62,7 @@ RUN if [ "${DEBIAN_RELEASE}" = "trixie" ]; then MF_WEB_PKG=qtwebengine5-dev; els
         libhunspell-dev \
         qt5-qmake \
         qtbase5-dev \
+        qttools5-dev-tools \
         "${MF_WEB_PKG}" \
     && rm -rf /var/lib/apt/lists/*
 

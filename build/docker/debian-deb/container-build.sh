@@ -19,7 +19,8 @@
 
 # runs INSIDE the mindforger-deb-builder:<release> container - see
 # build-deb.sh. expects the repository read-only mounted @ /src, an output
-# dir @ /out, and MF_DEBIAN_RELEASE set (baked into the image, see Dockerfile).
+# dir @ /out, and MF_DEBIAN_RELEASE + MF_HTML_BACKEND set (baked into the image,
+# see Dockerfile).
 
 set -euo pipefail
 
@@ -66,31 +67,36 @@ cmake -S deps/cmark-gfm -B deps/cmark-gfm/build \
 cmake --build deps/cmark-gfm/build
 
 # Debian packaging metadata + a changelog entry for this exact version. The
-# checked-in build/debian/debian/{control,rules} target bullseye/bookworm
-# (Qt WebKit) and are copied as-is for them. trixie dropped WebKit from the
-# archive, so ONLY this throwaway copy is patched to Qt WebEngine instead -
-# build/debian/debian itself is never touched by this script.
+# checked-in build/debian/debian/control targets Qt WebKit and is copied
+# as-is for webkit releases. trixie+ dropped WebKit from the archive, so for
+# webengine releases ONLY this throwaway copy is patched to Qt WebEngine
+# instead - build/debian/debian itself is never touched by this script.
 echo -e "\n# Debian packaging metadata ###################################"
 cp -rf build/debian/debian .
 
-if [ "${MF_DEBIAN_RELEASE}" = "trixie" ]; then
-    echo "Patching packaging copy for trixie: Qt WebKit -> Qt WebEngine"
+# Qt WebEngine is MF default HTML backend, Qt WebKit needs CONFIG+=mfwebkit
+# (see mindforger.pro build options)
+if [ "${MF_HTML_BACKEND}" = "webengine" ]; then
+    echo "Patching packaging copy for ${MF_DEBIAN_RELEASE}: Qt WebKit -> Qt WebEngine"
     sed -i 's/libqt5webkit5-dev/qtwebengine5-dev/' debian/control
-    cat >> debian/rules <<'EOF'
+    MF_QMAKE_CONFIG=""
+else
+    MF_QMAKE_CONFIG="CONFIG+=mfwebkit"
+fi
 
-# libqt5webkit5-dev is gone from Debian starting with trixie -> build with
-# Qt WebEngine instead (see mindforger.pro's CONFIG+=mfwebengine option)
+cat >> debian/rules <<EOF
+
+# HTML backend: ${MF_HTML_BACKEND}
 override_dh_auto_configure:
-	dh_auto_configure -- CONFIG+=mfwebengine
+	dh_auto_configure -- ${MF_QMAKE_CONFIG}
 
 # on a fresh source tree there is no generated Makefile to clean yet; letting
 # dh_auto_clean run one anyway would make qmake regenerate it without the
 # CONFIG above (the subdirs Makefiles re-invoke qmake with a fixed argument
-# list, not the CONFIG+= passed to `make`), which re-selects the now
-# unavailable WebKit modules and fails
+# list, not the CONFIG+= passed to make), which may select unavailable
+# HTML backend Qt modules and fail
 override_dh_auto_clean:
 EOF
-fi
 
 TS=$(date "+%a, %d %b %Y %H:%M:%S")
 {
