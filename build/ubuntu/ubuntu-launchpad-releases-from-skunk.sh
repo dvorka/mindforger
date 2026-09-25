@@ -139,8 +139,8 @@ fi
 
 # environment variables
 export MAJOR_VERSION=2
-export MINOR_VERSION=4
-export PATCH_VERSION=10 # patch version is incremented for every Ubuntu build @ Launchpad
+export MINOR_VERSION=5
+export PATCH_VERSION=0 # patch version is incremented for every Ubuntu build @ Launchpad
 export MF_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" # semantic version
 export RM_CMD="rm -vrf "
 export CP_CMD="cp -vrf "

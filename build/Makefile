@@ -340,9 +340,9 @@ l10n-edit: ## edit l10n strings of ONE language in Qt Linguist: MF_LANG=en
 localization: l10n-edit ## DEPRECATED alias of l10n-edit - use l10n or l10n-edit instead
 
 
-.PHONY: releng-rel-version
-releng-rel-version: ## pre-version update finder
-	cd .. && git grep -n "2\.1\."
+.PHONY: releng-version-find
+releng-version-find: ## find occurrences of the previous version (MINDFORGER_PREVIOUS_MINOR_VERSION)
+	cd .. && git grep -n -F "$(MINDFORGER_PREVIOUS_MINOR_VERSION)"
 
 
 .PHONY: releng-version-set
