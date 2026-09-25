@@ -1,13 +1,19 @@
 2026-..-..  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v2.5.1 - ...
+    * Released v2.5.0 - ...
     * Enhancement: status bar indicators ("diodes") in the lower right corner of
       the main window - a capsule w/ autolinking (A), diagrams (D), live spell
       check (L), math (M), source code syntax highlighting (S), thinking (T) and
-      Wingman availability (W) segments. Enabled segments are filled w/ the theme
-      color of selected items, disabled segments are faded, and each segment has
-      a tooltip explaining its state. The autolinking text was removed from
-      the status bar message as it is replaced by the A indicator.
+      Wingman availability (W) segments.
+    * Feature: Debian 13 Trixie PPA - MindForger is newly provided for Debian 13
+      Trixie in addition to Debian 12 Bookworm (Debian 11 Bullseye, 10 Buster
+      and 9 Stretch PPAs are kept, but frozen) at https://www.mindforger.com/debian-ppa/
+    * Change: Debian PPA installation instructions use signed-by keyring
+      instead of apt-key, which is no longer available on Debian Trixie.
+    * Change: Debian PPA signing key self-signatures were refreshed from SHA-1
+      to SHA-512 (the key fingerprint is unchanged) as Debian Trixie apt rejects
+      keys w/ SHA-1 self-signatures - please DO re-import
+      the key from https://www.mindforger.com/gpgpubkey.txt
 
 2026-09-23  Martin Dvorak  <martin.dvorak@mindforger.com>
 

@@ -37,6 +37,10 @@ CLASS_NAME := "New_Class"
 MF_LANG := "en"
 # Ubuntu distro: trusty xenial bionic focal jammy kinetic
 DISTRO := "bionic"
+# Debian release codename: bookworm trixie (see debian/debian-releases.conf)
+DEBIAN_RELEASE :=
+# MindForger version to be added/updated/removed in Debian PPA
+MF_VERSION := $(MINDFORGER_VERSION)
 # CPU cores thant can be used to build the project
 ifeq ($(shell hostname), skunkworks)
   CPU_CORES := 10
@@ -349,7 +353,6 @@ releng-version-find: ## find occurrences of the previous version (MINDFORGER_PRE
 releng-version-set: ## propagate lib/src/app_info.h version to all release/packaging files
 	@echo "Setting version $(MINDFORGER_VERSION) ($(MINDFORGER_VERSION_MAJOR_MINOR)) in release/packaging files..."
 	sed -i "s/^version: .*/version: $(MINDFORGER_VERSION_MAJOR_MINOR).{build}/" ../appveyor.yml
-	sed -i "s/^export NEW_VERSION_NAME=.*/export NEW_VERSION_NAME=\"$(MINDFORGER_VERSION)\"/" debian/debian-aptly-add-deb.sh
 	sed -i "s/^export ARG_VERSION=.*/export ARG_VERSION=\"$(MINDFORGER_VERSION)\"/" debian/debian-make-deb.sh
 	sed -i -E "s/^mindforger \([0-9]+\.[0-9]+\.[0-9]+(-[^)]*)\)/mindforger ($(MINDFORGER_VERSION)\1)/" debian/debian/changelog
 	sed -i "s/export MFVERSION=\"[0-9.]*\"/export MFVERSION=\"$(MINDFORGER_VERSION)\"/" fedora/fedora-rpm-from-deb.sh
@@ -423,54 +426,65 @@ distro-dmg: ## build macOS Disk iMaGe .dmg package
 #
 # Debian
 #
-# OBSOLETE: MindForger PPA: https://www.mindforger.com/debian is managed by aptly
+# MindForger Debian PPAs @ https://www.mindforger.com/debian-ppa/<codename>/
+# - one PPA per Debian release, managed by aptly, signed by MindForger GPG key
+# - Debian releases: debian/debian-releases.conf
+# - .deb packages are built in Docker: docker/debian-deb/
+# - see debian/README.md for the whole release process
 #
-# - OBSOLETE: information about MindForger's Debian PPAs can be found in
-#   https://www.mindforger.com/debian/index.html
-#
-# - aptly CANNOT be used to build one PPA for all Debian releases
-#   therefore every release has its own PPA
-#
-# - the structure looks like this (from deprecated debian/ to new debian-ppa/):
-#
-#   https://www.mindforger.com/debian-ppa/
-#     stretch/
-#       dists/      ... export from ~/.aptly/public
-#       pool/
-#       index.html  ... created by me w/ how to set it up
-#     ...
-#     trixie/
-#       dists/      ... export from ~/.aptly/public
-#       pool/
-#       index.html  ... created by me w/ how to set it up
-#
-# - Debian distributions are built in VirtualBox VMs on "mind" machine
-#
-# - source Debian packages for every version (which are used by aptly)
-#   are stored in
-#
-#   ~/p/mindforger/debian/aptly/
-#     hstr/
-#       9-stretch/
-#       ...
-#       13-trixie/
-#     mindforger/
-#       9-stretch/
-#         mindforger-*.*.*.deb
-#       ...
-#       13-trixie/
-#         mindforger-*.*.*.deb
-#
-# - Makefile targets below are used to manage Debian PPAs and generate them
+# Parameters:
+#   DEBIAN_RELEASE ... Debian release codename e.g. trixie
+#   MF_VERSION     ... MindForger version e.g. 2.5.0 (default: current version)
 #
 
-# future repos  : trixie-main
-# CURRENT repos : bookworm-main, bullseye-main, buster-main, stretch-main
-# obsolete repos: jessie-main
+.PHONY: devenv-debian-ppa
+devenv-debian-ppa: ## dev env for Debian PPA management (aptly, Docker is expected to be installed)
+	sudo apt-get install aptly gnupg curl dpkg-dev
 
-.PHONY: distro-debian-ppa
-distro-debian-aptly-create-ppa:  ## create Debian PPA for all releases
-	cd ./debian && ./debian-ppa-aptly-build.sh
+.PHONY: distro-debian-deb
+distro-debian-deb: ## build .deb in Docker for DEBIAN_RELEASE=trixie (default: all supported releases)
+	./docker/debian-deb/build-deb.sh $(or $(DEBIAN_RELEASE),supported)
+
+.PHONY: distro-debian-ppa-add
+distro-debian-ppa-add: ## add MF .deb to Debian PPA: DEBIAN_RELEASE=trixie MF_VERSION=2.5.0
+	./debian/debian-ppa.sh add $(DEBIAN_RELEASE) $(MF_VERSION)
+
+.PHONY: distro-debian-ppa-update
+distro-debian-ppa-update: ## replace MF .deb in Debian PPA: DEBIAN_RELEASE=trixie MF_VERSION=2.5.0
+	./debian/debian-ppa.sh update $(DEBIAN_RELEASE) $(MF_VERSION)
+
+.PHONY: distro-debian-ppa-remove
+distro-debian-ppa-remove: ## remove MF .deb from Debian PPA: DEBIAN_RELEASE=trixie MF_VERSION=2.5.0
+	./debian/debian-ppa.sh remove $(DEBIAN_RELEASE) $(MF_VERSION)
+
+.PHONY: distro-debian-ppa-sync
+distro-debian-ppa-sync: ## rebuild and re-sign Debian PPA(s) from .deb archive: DEBIAN_RELEASE=trixie (default: all)
+	./debian/debian-ppa.sh sync $(or $(DEBIAN_RELEASE),all)
+
+.PHONY: distro-debian-ppa-list
+distro-debian-ppa-list: ## list archive/PPA paths and MF versions: DEBIAN_RELEASE=trixie (default: all)
+	./debian/debian-ppa.sh list $(DEBIAN_RELEASE)
+
+.PHONY: distro-debian-ppa-index
+distro-debian-ppa-index: ## regenerate index.html pages of Debian PPAs (releases table, installation, signing key)
+	./debian/debian-ppa.sh index
+
+.PHONY: distro-debian-ppa-verify
+distro-debian-ppa-verify: ## install MF from local Debian PPA in Docker: DEBIAN_RELEASE=trixie (default: all supported)
+	./debian/debian-ppa.sh verify $(or $(DEBIAN_RELEASE),supported)
+
+.PHONY: distro-debian-ppa-key-check
+distro-debian-ppa-key-check: ## check validity of the GPG key which signs Debian PPAs
+	./debian/debian-ppa.sh key-check
+
+.PHONY: distro-debian-add-new-version
+distro-debian-add-new-version: ## build current MF version .debs and add them to ALL supported Debian PPAs
+	./debian/debian-ppa.sh key-check
+	./docker/debian-deb/build-deb.sh supported
+	./debian/debian-ppa.sh release $(MINDFORGER_VERSION)
+	./debian/debian-ppa.sh verify supported
+	@echo "DONE: MindForger $(MINDFORGER_VERSION) added to supported Debian PPAs"
+	@echo "NEXT: upload MF_DEBIAN_PPA_DIR (see the configuration printed above) to https://www.mindforger.com/debian-ppa/ (see debian/README.md)"
 
 #
 # ^ Debian
