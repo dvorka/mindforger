@@ -64,8 +64,13 @@ void AsyncTaskNotificationsDistributor::run()
     // avoid live preview flickering w/ longer refresh interval
     long long livePreviewMultiplier{0};
 
-    while(true) {
+    while(!isInterruptionRequested()) {
         msleep(static_cast<unsigned long>(sleepInterval));
+
+        // stop ASAP on shutdown - do NOT touch mwp/mind which may already be torn down
+        if(isInterruptionRequested()) {
+            break;
+        }
 
 
 
