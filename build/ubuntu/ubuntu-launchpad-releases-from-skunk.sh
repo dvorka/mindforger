@@ -125,7 +125,11 @@
 # For every release edit:
 # - UBUNTU_VERSIONS
 # - PATCH_VERSION
+# (major and minor versions are read from lib/src/app_info.h in MFSRC)
 
+# manually specify patch version (incremented for every Ubuntu build @ Launchpad)
+export PATCH_VERSION=0
+# set to the Ubuntu versions to release
 if [[ ${#} == 1 ]]
 then
     export UBUNTU_VERSIONS=(${1})
@@ -138,9 +142,22 @@ else
 fi
 
 # environment variables
-export MAJOR_VERSION=2
-export MINOR_VERSION=4
-export PATCH_VERSION=10 # patch version is incremented for every Ubuntu build @ Launchpad
+export SCRIPTHOME=`pwd`
+export MFSRC=/home/dvorka/p/mindforger/git/mindforger
+# authoritative major and minor versions are read from the source repository
+export MF_APP_INFO_H="${MFSRC}/lib/src/app_info.h"
+if [[ ! -f "${MF_APP_INFO_H}" ]]
+then
+    echo "ERROR: unable to find ${MF_APP_INFO_H} to read MindForger version"
+    exit 1
+fi
+export MAJOR_VERSION=$(sed -n 's/^#define MINDFORGER_VERSION_MAJOR "\([0-9]*\)"/\1/p' "${MF_APP_INFO_H}")
+export MINOR_VERSION=$(sed -n 's/^#define MINDFORGER_VERSION_MINOR "\([0-9]*\)"/\1/p' "${MF_APP_INFO_H}")
+if [[ -z "${MAJOR_VERSION}" || -z "${MINOR_VERSION}" ]]
+then
+    echo "ERROR: unable to read major/minor version from ${MF_APP_INFO_H}"
+    exit 1
+fi
 export MF_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" # semantic version
 export RM_CMD="rm -vrf "
 export CP_CMD="cp -vrf "
@@ -288,14 +305,12 @@ function patchQmakePathInMakefile {
 # - step by step it releases MindForger for one particular Ubuntu version
 
 function releaseForParticularUbuntuVersion {
-    export SCRIPTHOME=`pwd`
     export UBUNTUVERSION=${1}
     export MFVERSION=${2}
     export MFBZRMSG=${3}
     export MFFULLVERSION=${MFVERSION}-0ubuntu1
     export MF=mindforger_${MFVERSION}
     export MFRELEASE=mindforger_${MFFULLVERSION}
-    export MFSRC=/home/dvorka/p/mindforger/git/mindforger
     export NOW=`date +%Y-%m-%d--%H-%M-%S`
     export MFBUILD=mindforger-${NOW}
 

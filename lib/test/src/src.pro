@@ -133,6 +133,7 @@ SOURCES += \
     ../benchmark/trie_benchmark.cpp \
     ../benchmark/ai_benchmark.cpp \
     ./ai/nlp_test.cpp \
+    ./ai/ai_aa_bm25_test.cpp \
     ./ai/autolinking_test.cpp \
     ./ai/autolinking_cmark_test.cpp \
     ./gear/datetime_test.cpp \

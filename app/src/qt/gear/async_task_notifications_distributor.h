@@ -21,6 +21,8 @@
 
 #include <vector>
 #include <future>
+#include <mutex>
+#include <condition_variable>
 
 #include "../../lib/src/debug.h"
 #include "../../lib/src/model/note.h"
@@ -94,6 +96,10 @@ private:
     std::vector<Task*> tasks;
     std::mutex tasksMutex;
 
+    // interruptible sleep between iterations - woken by stop() on shutdown
+    std::mutex sleepMutex;
+    std::condition_variable sleepCondition;
+
 public:
     explicit AsyncTaskNotificationsDistributor(MainWindowPresenter* mwp);
     ~AsyncTaskNotificationsDistributor();
@@ -102,6 +108,14 @@ public:
      * @brief Worker thread code.
      */
     void run();
+
+    /**
+     * @brief Request the worker thread to stop and wake it up immediately.
+     *
+     * Unlike QThread::requestInterruption() alone, this method also interrupts
+     * the sleep between iterations so that the caller's wait() returns promptly.
+     */
+    void stop();
 
     /*
      * Futures to be notified

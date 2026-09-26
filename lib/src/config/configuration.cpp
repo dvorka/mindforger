@@ -167,8 +167,11 @@ void Configuration::clear()
         ;
     uiEnableMathInMd = DEFAULT_MD_MATH; // math support via KaTeX/MathJax - disabled by default
 
-    aaAlgorithm = AssociationAssessmentAlgorithm::WEIGHTED_FTS;
+    aaAlgorithm = AssociationAssessmentAlgorithm::BM25;
     switch(aaAlgorithm) {
+    case AssociationAssessmentAlgorithm::BM25:
+        asyncMindThreshold = DEFAULT_ASYNC_MIND_THRESHOLD_BM25;
+        break;
     case AssociationAssessmentAlgorithm::WEIGHTED_FTS:
         asyncMindThreshold = DEFAULT_ASYNC_MIND_THRESHOLD_WEIGHTED_FTS;
         break;

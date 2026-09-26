@@ -237,9 +237,9 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     );
 
     // async task 2 GUI events distributor
+    // lifetime is managed explicitly in ~MainWindowPresenter() (stopped & deleted
+    // there) - it must NOT outlive mind/widgets it references
     distributor = new AsyncTaskNotificationsDistributor(this);
-    // setup callback for cleanup when it finishes
-    QObject::connect(distributor, SIGNAL(finished()), distributor, SLOT(deleteLater()));
     distributor->start();
 
     // send signal to components to be updated on a config change (callback)
@@ -255,6 +255,15 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
 MainWindowPresenter::~MainWindowPresenter()
 {
+    // stop & join the background distributor thread BEFORE deleting mind/widgets
+    // it references - it runs an unbounded loop and must not touch freed memory
+    if(distributor) {
+        distributor->stop();
+        distributor->wait();
+        delete distributor;
+        distributor = nullptr;
+    }
+
     if(mind) delete mind;
     if(mainMenu) delete mainMenu;
     if(statusBar) delete statusBar;
@@ -353,6 +362,7 @@ void MainWindowPresenter::showInitialView()
 
     // config > menu
     mainMenu->showFacetMindAutolink(config.isAutolinking());
+    statusBar->showIndicators();
     mainMenu->showFacetLiveNotePreview(config.isUiLiveNotePreview());
     orloj->setAspect(
         config.isUiLiveNotePreview()
@@ -689,6 +699,7 @@ void MainWindowPresenter::doActionMindToggleAutolink()
         config.setAutolinking(true);
     }
     mainMenu->showFacetMindAutolink(config.isAutolinking());
+    statusBar->showIndicators();
     mdConfigRepresentation->save(config);
 
     // refresh view
@@ -3500,6 +3511,7 @@ void MainWindowPresenter::handleMindPreferences()
 
     // re-initialize Wingman
     mind->initWingman();
+    statusBar->showIndicators();
 
     view.getToolBar()->setVisible(config.isUiShowToolbar());
     view.getOrloj()->getNoteView()->setZoomFactor(config.getUiHtmlZoomFactor());
