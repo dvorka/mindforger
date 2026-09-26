@@ -25,17 +25,15 @@ https://www.mindforger.com
 
 
 ## Thinking Notebook
-![MindForger](http://www.mindforger.com/github/github-thinking-notebook.png)
+![MindForger](media/screenshots/github-thinking-notebook.png)
 
 MindForger is human mind inspired personal knowledge management tool.
 
 
-
 ## Markdown Editor
-![MindForger](http://www.mindforger.com/github/github-markdown-ide.png?)
+![MindForger](media/screenshots/github-markdown-ide.png)
 
 MindForger is open, free, well performing Markdown editor / IDE which respects your privacy.
-
 
 
 ## Perfect Software
@@ -46,8 +44,9 @@ The **MindForger** project **is perfect to me**. Even if project's main developm
 If you have any ideas, suggestions, news to share, or constructive criticism to share, **do not hesitate to contact me**! Please do not be offended if your GitHub issue or bug report is not implemeted - IAGNI.
 
 
+## Installation
 <!--
-## Packages
+Packages:
 
 <table><tr><td>
   <a href="https://repology.org/project/mindforger/versions">
@@ -56,33 +55,31 @@ If you have any ideas, suggestions, news to share, or constructive criticism to 
 </td></tr></table>
 -->
 
-
-## Installation
 Install:
 
-* [macOS](https://www.mindforger.com/docs/installation.html#macos)
-* [Windows](https://www.mindforger.com/docs/installation.html#windows)
-* [Winget](https://github.com/microsoft/winget-pkgs/tree/master/manifests/m/MindForger/MindForger)
-* [Ubuntu](https://www.mindforger.com/docs/installation.html#ubuntu)
-* [Snap](https://snapcraft.io/mindforger)
-* [Flatpak](https://www.mindforger.com/docs/installation.html#flatpak)
+* [Arch Linux](https://www.mindforger.com/docs/installation.html#arch-linux)
 * [Debian](https://www.mindforger.com/docs/installation.html#debian)
 * [Fedora](https://www.mindforger.com/docs/installation.html#fedora)
+* [Flatpak](https://www.mindforger.com/docs/installation.html#flatpak)
 * [FreeBSD](https://www.mindforger.com/docs/installation.html#freebsd)
-* [Arch Linux](https://www.mindforger.com/docs/installation.html#arch-linux)
+* [macOS](https://www.mindforger.com/docs/installation.html#macos)
 * [NixOS](https://www.mindforger.com/docs/installation.html#nixos)
 * [openSUSE](https://www.mindforger.com/docs/installation.html#opensuse)
+* [Snap](https://snapcraft.io/mindforger)
+* [Ubuntu](https://www.mindforger.com/docs/installation.html#ubuntu)
+* [Windows](https://www.mindforger.com/docs/installation.html#windows)
+* [winget](https://github.com/microsoft/winget-pkgs/tree/master/manifests/m/MindForger/MindForger)
 * [WSL](https://www.mindforger.com/docs/installation.html#wsl)
 
 Build:
 
-* [build on macOS](https://www.mindforger.com/docs/installation.html#build-on-macos)
-* [build on Windows](https://www.mindforger.com/docs/installation.html#build-on-windows)
-* [build on Ubuntu](https://www.mindforger.com/docs/installation.html#build-on-ubuntu)
 * [build on Debian](https://www.mindforger.com/docs/installation.html#build-on-debian)
 * [build on Fedora](https://www.mindforger.com/docs/installation.html#build-on-fedora)
 * [build on Gentoo](https://www.mindforger.com/docs/installation.html#build-on-gentoo)
+* [build on macOS](https://www.mindforger.com/docs/installation.html#build-on-macos)
 * [build on NixOS](https://www.mindforger.com/docs/installation.html#build-on-nixos)
+* [build on Ubuntu](https://www.mindforger.com/docs/installation.html#build-on-ubuntu)
+* [build on Windows](https://www.mindforger.com/docs/installation.html#build-on-windows)
 * [build on WSL](https://www.mindforger.com/docs/installation.html#build-on-wsl)
 * [build Flatpak](https://www.mindforger.com/docs/installation.html#build-flatpak)
 * [build Snap](https://www.mindforger.com/docs/installation.html#build-snap)
@@ -106,6 +103,8 @@ Check also [packages](https://pkgs.org/search/?q=mindforger) for Linux and Unix.
 
 
 ## Documentation
+[![Basics](media/basics/mindforger-basics.png)](https://mindforger.com/#basics)
+
 Read:
 
 * [Getting started](https://www.mindforger.com/docs/getting-started.html)
