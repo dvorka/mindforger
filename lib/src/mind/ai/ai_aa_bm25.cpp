@@ -253,7 +253,7 @@ void AiAaBm25::assessNotes(
     }
     vector<float> tagIdfs(tagFrequencies.size());
     for(size_t i=0; i<tagFrequencies.size(); ++i) {
-        tagIdfs[i] = std::log(1.f + n / std::max(tagFrequencies[i], 1u));
+        tagIdfs[i] = std::log(1.f + n / (std::max)(tagFrequencies[i], 1u));
     }
     const float avgDescriptionLength = static_cast<float>(descriptionsLength) / n;
 
@@ -313,7 +313,7 @@ std::shared_future<bool> AiAaBm25::associate(
 
     // build leaderboard - self is NOT among matches
     MF_DEBUG("AA.BM25.words '" << query << "' w/ " << matches.size() << " matches" << endl);
-    const size_t leaderboardSize = std::min(matches.size(), static_cast<size_t>(AA_LEADERBOARD_SIZE));
+    const size_t leaderboardSize = (std::min)(matches.size(), static_cast<size_t>(AA_LEADERBOARD_SIZE));
     std::partial_sort(
         matches.begin(), matches.begin()+leaderboardSize, matches.end(), bm25MatchesComparator);
     associations.insert(associations.end(), matches.begin(), matches.begin()+leaderboardSize);

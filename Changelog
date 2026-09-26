@@ -1,12 +1,12 @@
-2026-..-..  Martin Dvorak  <martin.dvorak@mindforger.com>
+2026-09-26  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.5.0 - new Notebook/Note associations (BM25), status bar w/
-      ADLMSTW diods, new Debian PPA
+      ADLMSTW diodes, new Debian PPA.
     * Feature: Debian 13 Trixie PPA - MindForger is newly provided for Debian 13
       Trixie in addition to Debian 12 Bookworm (Debian 11 Bullseye, 10 Buster
       and 9 Stretch PPAs are kept, but frozen) at https://www.mindforger.com/debian-ppa/
     * Enhancement: new 3rd Note associations generation - Best Matching 25
-      (BM25; TF-IDF w/ normalization which ensures that long(er) docs win)
+      (BM25; TF-IDF + normalization which prevents long(er) docs from winning)
       based associations algorithm (extension of BoW): Notes are matched by whole
       words (e.g. "art" no longer matches "start"), rare words weigh more than common
       ones (TF-IDF), long Notes no longer win just because of their length,

@@ -24,7 +24,6 @@
 #   archive and then the PPA of the Debian release is REBUILT from scratch
 #   using aptly in a throwaway aptly root (no persistent ~/.aptly state)
 # - Debian releases are listed in debian-releases.conf
-# - see README.md in this directory for the whole release process
 #
 # usage:
 #   ./debian-ppa.sh add       <codename> <version>
@@ -95,7 +94,7 @@ function new_tmp_dir {
 
 function require_cmd {
     for C in "${@}"; do
-        command -v "${C}" > /dev/null || die "'${C}' command not found - see README.md prerequisites"
+        command -v "${C}" > /dev/null || die "'${C}' command not found"
     done
 }
 
@@ -160,7 +159,7 @@ function export_keyring {
 # the master archive MUST exist - it is never created, because PPAs rebuilt
 # from an empty/wrong archive would DROP all previously released versions
 function require_archive_root {
-    [ -d "${MF_DEBIAN_ARCHIVE_DIR}" ] || die "master .deb archive ${MF_DEBIAN_ARCHIVE_DIR} not found - set MF_DEBIAN_ARCHIVE_DIR to its location (see README.md)"
+    [ -d "${MF_DEBIAN_ARCHIVE_DIR}" ] || die "master .deb archive ${MF_DEBIAN_ARCHIVE_DIR} not found - set MF_DEBIAN_ARCHIVE_DIR to its location"
 }
 
 # make pinentry work when run from a terminal
@@ -192,9 +191,14 @@ function render_template {
 }
 
 # generate index.html for the PPA of the Debian release
+#
+# parameters:
+#   $1 - codename
+#   $2 - PPA directory (optional, default: MF_DEBIAN_PPA_DIR/<codename>)
 function index_release {
     local codename="${1}"
-    render_template "${SCRIPT_DIR}/index-ppa.html" "${MF_DEBIAN_PPA_DIR}/${codename}/index.html" \
+    local ppa_dir="${2:-${MF_DEBIAN_PPA_DIR}/${codename}}"
+    render_template "${SCRIPT_DIR}/index-ppa.html" "${ppa_dir}/index.html" \
         -e "s|@DISTRO@|${codename}|g"
 }
 
@@ -233,7 +237,7 @@ function cmd_index {
 # rebuild the PPA of the Debian release from the archive using aptly
 function sync_release {
     local codename="${1}"
-    local dir aptly_root aptly_conf repo
+    local dir aptly_root aptly_conf repo staging
     dir="$(archive_dir "${codename}")"
     repo="mindforger-${codename}"
 
@@ -271,11 +275,18 @@ EOF
         -gpg-key="${MF_DEBIAN_GPG_KEY}" \
         "${repo}" "${codename}"
 
+    # stage the new PPA next to the old one and swap them only once it is
+    # complete so that a failure never leaves the PPA absent or partial
+    staging="${MF_DEBIAN_PPA_DIR}/.${codename}.new"
+    info "WRITE: staging PPA ${staging}"
+    rm -rf "${staging:?}"
+    mkdir -p "${MF_DEBIAN_PPA_DIR}"
+    cp -r "${aptly_root}/public/${codename}" "${staging}"
+    index_release "${codename}" "${staging}"
+
     info "WRITE: replacing PPA ${MF_DEBIAN_PPA_DIR}/${codename}"
     rm -rf "${MF_DEBIAN_PPA_DIR:?}/${codename}"
-    mkdir -p "${MF_DEBIAN_PPA_DIR}"
-    cp -r "${aptly_root}/public/${codename}" "${MF_DEBIAN_PPA_DIR}/${codename}"
-    index_release "${codename}"
+    mv "${staging}" "${MF_DEBIAN_PPA_DIR}/${codename}"
 
     info "DONE: ${codename} PPA rebuilt w/ $(ppa_versions "${codename}" | tr '\n' ' ')"
 }
@@ -535,7 +546,7 @@ function cmd_key_check {
     # self-signature digests (SHA-1 bindings are rejected by trixie+ apt)
     export_keyring "${tmp_dir}/local.gpg"
     if [ "$(sha1_self_sigs "${tmp_dir}/local.gpg")" -gt 0 ]; then
-        echo "ERROR: local key has SHA-1 self-signatures - Debian trixie+ apt rejects it (see README.md: refresh self-signatures)"
+        echo "ERROR: local key has SHA-1 self-signatures - Debian trixie+ apt rejects it (refresh self-signatures)"
         errors=$((errors + 1))
     else
         info "DONE: local key self-signatures are not SHA-1"
@@ -552,7 +563,7 @@ function cmd_key_check {
         fi
         web_sha1="$(sha1_self_sigs "${tmp_dir}/web.asc")"
         if [ "${web_sha1}" -gt 0 ]; then
-            warn "${MF_DEBIAN_GPG_KEY_URL} still has SHA-1 self-signatures - upload the re-exported public key (see README.md)"
+            warn "${MF_DEBIAN_GPG_KEY_URL} still has SHA-1 self-signatures - upload the re-exported public key"
         else
             info "DONE: ${MF_DEBIAN_GPG_KEY_URL} self-signatures are not SHA-1"
         fi
