@@ -1837,14 +1837,12 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation>Abrir la permanencia en memoria...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="322"/>
         <source>&amp;CLI</source>
-        <translation>&amp;CLI</translation>
+        <translation type="vanished">&amp;CLI</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="324"/>
         <source>Activate command line interface...</source>
-        <translation>Activar la interfaz de línea de comandos...</translation>
+        <translation type="vanished">Activar la interfaz de línea de comandos...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="327"/>
@@ -2010,6 +2008,16 @@ Elija la nueva fuente de la biblioteca:</translation>
         <location filename="../../../src/qt/main_menu_view.cpp" line="196"/>
         <source>&amp;Export</source>
         <translation>&amp;Exportar</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="322"/>
+        <source>&amp;Command Palette</source>
+        <translation>Paleta de &amp;comandos</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="324"/>
+        <source>Activate command palette...</source>
+        <translation>Activar la paleta de comandos...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="446"/>

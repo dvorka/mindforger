@@ -20,6 +20,7 @@
       Wingman availability (W) segments.
     * Change: autolinking, thinking and math are newly enabled by default after
       fresh MindForger installation.
+    * Change: View/CLI menu item renamed to View/Command Palette.
     * Change: Debian PPA installation instructions use signed-by keyring
       instead of apt-key, which is no longer available on Debian Trixie.
     * Change: Debian PPA signing key self-signatures were refreshed from SHA-1

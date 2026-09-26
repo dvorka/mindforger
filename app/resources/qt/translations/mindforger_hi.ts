@@ -1837,14 +1837,12 @@ Choose new library source:</source>
         <translation>स्मृति ठहराव खोलें...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="322"/>
         <source>&amp;CLI</source>
-        <translation>CLI(&amp;C)</translation>
+        <translation type="vanished">CLI(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="324"/>
         <source>Activate command line interface...</source>
-        <translation>कमांड लाइन इंटरफ़ेस सक्रिय करें...</translation>
+        <translation type="vanished">कमांड लाइन इंटरफ़ेस सक्रिय करें...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="327"/>
@@ -2010,6 +2008,16 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_menu_view.cpp" line="196"/>
         <source>&amp;Export</source>
         <translation>निर्यात करें(&amp;E)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="322"/>
+        <source>&amp;Command Palette</source>
+        <translation>कमांड पैलेट(&amp;C)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="324"/>
+        <source>Activate command palette...</source>
+        <translation>कमांड पैलेट सक्रिय करें...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="446"/>

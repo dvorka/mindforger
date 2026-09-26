@@ -2057,9 +2057,8 @@ Choose new library source:</source>
         <translation>显示笔记本树列表...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="322"/>
         <source>&amp;CLI</source>
-        <translation>命令行(&amp;C)</translation>
+        <translation type="vanished">命令行(&amp;C)</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="355"/>
@@ -2838,9 +2837,8 @@ Choose new library source:</source>
         <translation>主页笔记本(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="324"/>
         <source>Activate command line interface...</source>
-        <translation>激活命令行界面...</translation>
+        <translation type="vanished">激活命令行界面...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="671"/>
@@ -2978,6 +2976,16 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_menu_view.cpp" line="122"/>
         <source>Open Wingman dialog...</source>
         <translation>打开 AI 助手对话框...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="322"/>
+        <source>&amp;Command Palette</source>
+        <translation>命令面板(&amp;C)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="324"/>
+        <source>Activate command palette...</source>
+        <translation>激活命令面板...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="500"/>

@@ -319,9 +319,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewDwell->setStatusTip(tr("Open memory dwell..."));
     actionViewDwell->setEnabled(false);
 
-    actionViewCli = new QAction(QIcon(":/menu-icons/cli.svg"), tr("&CLI"), mainWindow);
+    actionViewCli = new QAction(QIcon(":/menu-icons/cli.svg"), tr("&Command Palette"), mainWindow);
     actionViewCli->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
-    actionViewCli->setStatusTip(tr("Activate command line interface..."));
+    actionViewCli->setStatusTip(tr("Activate command palette..."));
 
     actionViewTerminal = new QAction(
         QIcon(":/menu-icons/terminal.svg"), tr("Ter&minal"), mainWindow

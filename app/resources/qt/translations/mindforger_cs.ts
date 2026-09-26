@@ -1998,9 +1998,8 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Zobrazit seznam stromů zápisníků...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="322"/>
         <source>&amp;CLI</source>
-        <translation>&amp;CLI</translation>
+        <translation type="vanished">&amp;CLI</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="355"/>
@@ -2759,9 +2758,8 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>&amp;Domovský zápisník</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="324"/>
         <source>Activate command line interface...</source>
-        <translation>Aktivovat příkazový řádek...</translation>
+        <translation type="vanished">Aktivovat příkazový řádek...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="671"/>
@@ -2899,6 +2897,16 @@ Vyberte nový zdroj knihovny:</translation>
         <location filename="../../../src/qt/main_menu_view.cpp" line="122"/>
         <source>Open Wingman dialog...</source>
         <translation>Otevřít dialog AI parťáka...</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="322"/>
+        <source>&amp;Command Palette</source>
+        <translation>Paleta příkazů (&amp;C)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="324"/>
+        <source>Activate command palette...</source>
+        <translation>Aktivovat paletu příkazů...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="500"/>

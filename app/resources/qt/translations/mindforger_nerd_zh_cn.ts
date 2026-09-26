@@ -1837,14 +1837,12 @@ Choose new library source:</source>
         <translation>打开记忆驻留...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="322"/>
         <source>&amp;CLI</source>
-        <translation>命令行(&amp;C)</translation>
+        <translation type="vanished">命令行(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="324"/>
         <source>Activate command line interface...</source>
-        <translation>激活命令行界面...</translation>
+        <translation type="vanished">激活命令行界面...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="327"/>
@@ -2010,6 +2008,16 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_menu_view.cpp" line="196"/>
         <source>&amp;Export</source>
         <translation>导出(&amp;E)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="322"/>
+        <source>&amp;Command Palette</source>
+        <translation>命令面板(&amp;C)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="324"/>
+        <source>Activate command palette...</source>
+        <translation>激活命令面板...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="446"/>
