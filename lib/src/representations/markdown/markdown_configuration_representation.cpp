@@ -613,7 +613,10 @@ string* MarkdownConfigurationRepresentation::to(Configuration& c)
 string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
 {
     stringstream s{};
-    string timeScopeAsString{}, tagsScopeAsString{}, mindStateAsString{"sleep"};
+    string timeScopeAsString{}, tagsScopeAsString{};
+    string mindStateAsString{
+        Configuration::DEFAULT_MIND_STATE==Configuration::MindState::THINKING?"think":"sleep"
+    };
     if(c) {
         // time
         c->getTimeScope().toString(timeScopeAsString);
@@ -626,7 +629,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
             tagsScopeAsString.resize(tagsScopeAsString.size()-1);
         }
         // mind state
-        if(c->getDesiredMindState()==Configuration::MindState::THINKING) mindStateAsString= "think";
+        mindStateAsString = c->getDesiredMindState()==Configuration::MindState::THINKING?"think":"sleep";
     } else {
         timeScopeAsString.assign(Configuration::DEFAULT_TIME_SCOPE);
     }
@@ -747,7 +750,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_MD_HIGHLIGHT_LABEL << (c?(c->isUiEnableSrcHighlightInMd()?"yes":"no"):(Configuration::DEFAULT_MD_HIGHLIGHT?"yes":"no")) << endl <<
          "    * Enable offline Highlight JavaScript library to show source code with syntax highlighting in HTML generated from Markdown." << endl <<
          "    * Examples: yes, no" << endl <<
-         CONFIG_SETTING_MD_MATH_LABEL << (c?c->getMathLibSupportAsString(c->getUiEnableMathInMd()):UI_MATH_LIB_NO) << endl <<
+         CONFIG_SETTING_MD_MATH_LABEL << Configuration::getMathLibSupportAsString(c?c->getUiEnableMathInMd():Configuration::DEFAULT_MD_MATH) << endl <<
          "    * Enable offline KaTeX or MathJax (legacy) JavaScript library to show math expressions in HTML generated from Markdown." << endl <<
          "    * Examples: katex, mathjax, no" << endl <<
          CONFIG_SETTING_MD_DIAGRAM_LABEL << (c?c->getJsLibSupportAsString(c->getUiEnableDiagramsInMd()):UI_JS_LIB_NO) << endl <<

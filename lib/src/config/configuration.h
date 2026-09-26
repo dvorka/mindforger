@@ -321,7 +321,8 @@ public:
     static const std::string DEFAULT_WINGMAN_LLM_MODEL_OLLAMA;
     static constexpr const WingmanLlmProviders DEFAULT_WINGMAN_LLM_PROVIDER = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
 
-    static constexpr const bool DEFAULT_AUTOLINKING = false;
+    static constexpr const MindState DEFAULT_MIND_STATE = MindState::THINKING;
+    static constexpr const bool DEFAULT_AUTOLINKING = true;
     static constexpr const bool DEFAULT_AUTOLINKING_COLON_SPLIT = true;
     static constexpr const bool DEFAULT_AUTOLINKING_CASE_INSENSITIVE = true;
     static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
@@ -353,7 +354,7 @@ public:
     static constexpr const bool DEFAULT_RECENT_INCLUDE_OS= false;
     static constexpr const bool DEFAULT_SPELLCHECK_LIVE = true;
     static constexpr const bool DEFAULT_MD_HIGHLIGHT = true;
-    static constexpr const MathJsLibSupport DEFAULT_MD_MATH = MathJsLibSupport::MATH_NO;
+    static constexpr const MathJsLibSupport DEFAULT_MD_MATH = MathJsLibSupport::MATH_KATEX;
     static constexpr const bool DEFAULT_ALLOW_ONLINE_JS_LIBS = false;
     static constexpr const bool DEFAULT_NAVIGATOR_SHOW_LEGEND = false;
     static constexpr const int DEFAULT_OS_TABLE_SORT_COLUMN = 7;
@@ -721,7 +722,7 @@ public:
             if(s==JavaScriptLibSupport::OFFLINE) return UI_JS_LIB_OFFLINE; else return UI_JS_LIB_NO;
     }
 
-    const char* getMathLibSupportAsString(MathJsLibSupport s) const {
+    static const char* getMathLibSupportAsString(MathJsLibSupport s) {
         if(s==MathJsLibSupport::MATH_KATEX) return UI_MATH_LIB_KATEX; else
             if(s==MathJsLibSupport::MATH_MATHJAX) return UI_MATH_LIB_MATHJAX; else return UI_MATH_LIB_NO;
     }

@@ -45,7 +45,9 @@ const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OPENAI = string{LLM_MODEL_
 const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OLLAMA = string{LLM_MODEL_PHI};
 
 Configuration::Configuration()
-    : asyncMindThreshold{},
+    : desiredMindState{DEFAULT_MIND_STATE},
+      mindState{MindState::SLEEPING},
+      asyncMindThreshold{},
       activeRepository{},
       repositories{},
       repositoryConfiguration{getDummyRepositoryConfiguration()},
@@ -145,6 +147,7 @@ void Configuration::clear()
     clearRepositoryConfiguration();
 
     // lib
+    desiredMindState = DEFAULT_MIND_STATE;
     mindState = MindState::SLEEPING;
     writeMetadata = true;
     saveReadsMetadata = DEFAULT_SAVE_READS_METADATA;
@@ -165,7 +168,7 @@ void Configuration::clear()
         //| MdToHtmlOption::CodeHighlighting // source code highlighting via offline highlight.js - disabled by default
         //| MdToHtmlOption::DiagramSupport; // diagram support via mermaid.js - disabled by default
         ;
-    uiEnableMathInMd = DEFAULT_MD_MATH; // math support via KaTeX/MathJax - disabled by default
+    uiEnableMathInMd = DEFAULT_MD_MATH; // math support via KaTeX/MathJax - KaTeX enabled by default
 
     aaAlgorithm = AssociationAssessmentAlgorithm::BM25;
     switch(aaAlgorithm) {

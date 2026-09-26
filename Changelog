@@ -18,6 +18,8 @@
       the main window - a capsule w/ autolinking (A), diagrams (D), live spell
       check (L), math (M), source code syntax highlighting (S), thinking (T) and
       Wingman availability (W) segments.
+    * Change: autolinking, thinking and math are newly enabled by default after
+      fresh MindForger installation.
     * Change: Debian PPA installation instructions use signed-by keyring
       instead of apt-key, which is no longer available on Debian Trixie.
     * Change: Debian PPA signing key self-signatures were refreshed from SHA-1
