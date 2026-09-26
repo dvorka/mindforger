@@ -106,17 +106,31 @@ void StatusBarPresenter::showMindStatistics()
         status += "   ";
     }
 
-    if(Configuration::getInstance().isAutolinking()) {
-        status += "autolinking   ";
-    }
-
-
 #ifdef DO_MF_DEBUG
     status += "watermark:";
     status += stringFormatIntAsUs(mind->getDeleteWatermark());
 #endif
 
     view->showInfo(status);
+    showIndicators();
+}
+
+void StatusBarPresenter::showIndicators()
+{
+    Configuration& config = Configuration::getInstance();
+    view->showIndicator(INDICATOR_AUTOLINKING, config.isAutolinking());
+    view->showIndicator(
+        INDICATOR_DIAGRAMS,
+        config.getUiEnableDiagramsInMd() != Configuration::JavaScriptLibSupport::NO);
+    view->showIndicator(INDICATOR_LIVE_SPELL_CHECK, config.isUiEditorLiveSpellCheck());
+    view->showIndicator(
+        INDICATOR_MATH,
+        config.getUiEnableMathInMd() != Configuration::MathJsLibSupport::MATH_NO);
+    view->showIndicator(INDICATOR_SRC_HIGHLIGHT, config.isUiEnableSrcHighlightInMd());
+    view->showIndicator(
+        INDICATOR_THINKING,
+        config.getMindState() == Configuration::MindState::THINKING);
+    view->showIndicator(INDICATOR_WINGMAN, config.isWingman());
 }
 
 /*

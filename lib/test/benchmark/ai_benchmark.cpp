@@ -17,6 +17,7 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <chrono>
 #include <string>
 #include <iostream>
 
@@ -83,4 +84,75 @@ TEST(AiBenchmark, DISABLED_AaMatrix)
     std::vector<std::pair<m8r::Note*,float>> lb{};
     // TODO to be rewritten mind.getAssociationsLeaderboard(n, lb);
     // TODO to be rewritten m8r::Ai::print(n,lb);
+}
+
+/*
+ * Associations assessment benchmark: benchmark-repository ~ 5.000 Ns, 100 N + 2 O + 10 word queries, MF_DEBUG enabled
+ *
+ * 2026/09/25 ... BM25         ~ 3.5ms/query ... single scan, whole word matching, BM25 ranking w/ tags
+ * 2026/09/25 ... weighted FTS ~ 7.7ms/query ... phrase substring scan + fallback scan (first 3 words)
+ */
+static void benchmarkAssociations(m8r::Configuration::AssociationAssessmentAlgorithm algorithm, const string& name)
+{
+    // GIVEN
+    string repositoryPath{"/lib/test/resources/benchmark-repository"};
+    repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-aib-aa.md");
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)), repositoryConfigRepresentation);
+    config.setAaAlgorithm(algorithm);
+    m8r::Mind mind(config);
+    mind.learn();
+    mind.think().get();
+
+    vector<m8r::Note*> notes{};
+    mind.remind().getAllNotes(notes);
+    ASSERT_LE(100, notes.size());
+    const size_t step = notes.size()/100;
+    const vector<string> words{"pointer", "exception", "const", "template", "lifetime", "Resource Acquisition", "RAII", "owner", "thread", "interface"};
+
+    // WHEN
+    size_t queries = 0;
+    size_t failures = 0;
+    auto begin = chrono::high_resolution_clock::now();
+    for(size_t i=0; i<notes.size(); i+=step) {
+        m8r::AssociatedNotes associations{m8r::NOTE, notes[i]};
+        mind.getAssociatedNotes(associations);
+        queries++;
+        if(associations.getAssociations()->size() > 10) failures++;
+        for(auto& a:*associations.getAssociations()) {
+            if(a.first == notes[i]) failures++;
+        }
+    }
+    for(m8r::Outline* o:mind.remind().getOutlines()) {
+        m8r::AssociatedNotes associations{m8r::OUTLINE, o};
+        mind.getAssociatedNotes(associations);
+        queries++;
+        if(associations.getAssociations()->size() > 10) failures++;
+    }
+    for(const string& w:words) {
+        m8r::AssociatedNotes associations{m8r::WORD, w, notes[0]};
+        mind.getAssociatedNotes(associations);
+        queries++;
+        if(associations.getAssociations()->size() > 10) failures++;
+    }
+    auto end = chrono::high_resolution_clock::now();
+
+    // THEN
+    double ms = chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0;
+    cout << "AA " << name << " benchmark: " << notes.size() << " Ns, "
+         << queries << " queries in " << ms << "ms ~ " << ms/queries << "ms/query" << endl;
+    EXPECT_EQ(0, failures);
+}
+
+TEST(AiBenchmark, AaBm25)
+{
+    benchmarkAssociations(m8r::Configuration::AssociationAssessmentAlgorithm::BM25, "BM25");
+}
+
+TEST(AiBenchmark, AaWeightedFts)
+{
+    benchmarkAssociations(m8r::Configuration::AssociationAssessmentAlgorithm::WEIGHTED_FTS, "weighted FTS");
 }

@@ -260,6 +260,11 @@ static size_t utf8Length(const string& s)
     return length;
 }
 
+static inline char asciiToLower(const char c)
+{
+    return c>='A' && c<='Z' ? static_cast<char>(c + ('a'-'A')) : c;
+}
+
 static string asciiToLower(const string& s)
 {
     // fold A-Z only - unlike std::tolower() this neither depends on the global
@@ -267,9 +272,7 @@ static string asciiToLower(const string& s)
 
     string lower{s};
     for(char& c: lower) {
-        if(c>='A' && c<='Z') {
-            c += 'a'-'A';
-        }
+        c = asciiToLower(c);
     }
     return lower;
 }
@@ -361,6 +364,83 @@ vector<string> sortLinesAlphabetically(const vector<string>& lines)
     );
 
     return result;
+}
+
+void stringToLowerWords(const string& s, vector<string>& words)
+{
+    const size_t n = s.size();
+    size_t b = 0;
+    while(b<n) {
+        if(!isWordByte(s[b])) {
+            ++b;
+            continue;
+        }
+        size_t e = b+1;
+        while(e<n && isWordByte(s[e])) {
+            ++e;
+        }
+
+        string word{};
+        word.reserve(e-b);
+        for(size_t i=b; i<e; ++i) {
+            word += asciiToLower(s[i]);
+        }
+        words.push_back(word);
+
+        b = e;
+    }
+}
+
+size_t countWordsIgnoreCase(
+    const string& text,
+    const vector<string>& lowerTerms,
+    vector<unsigned>& counts,
+    size_t maxSuffix,
+    size_t minStemLength)
+{
+    if(counts.size() < lowerTerms.size()) {
+        counts.resize(lowerTerms.size(), 0);
+    }
+
+    size_t matches = 0;
+    const size_t n = text.size();
+    size_t b = 0;
+    while(b<n) {
+        // skip to the beginning of the next word
+        if(!isWordByte(text[b])) {
+            ++b;
+            continue;
+        }
+        size_t e = b+1;
+        while(e<n && isWordByte(text[e])) {
+            ++e;
+        }
+
+        // match the word [b,e) against all the terms
+        const size_t wordLength = e-b;
+        for(size_t t=0; t<lowerTerms.size(); ++t) {
+            const string& term = lowerTerms[t];
+            if(term.empty() || wordLength<term.size()) {
+                continue;
+            }
+            const size_t suffix = wordLength-term.size();
+            if(suffix > (term.size()<minStemLength ? 0 : maxSuffix)) {
+                continue;
+            }
+            size_t i = 0;
+            while(i<term.size() && asciiToLower(text[b+i])==term[i]) {
+                ++i;
+            }
+            if(i == term.size()) {
+                ++counts[t];
+                ++matches;
+            }
+        }
+
+        b = e;
+    }
+
+    return matches;
 }
 
 } /* namespace */

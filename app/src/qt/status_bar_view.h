@@ -25,10 +25,37 @@
 
 namespace m8r {
 
+/**
+ * @brief Status indicators ("diodes") shown in the lower right corner.
+ *
+ * Indicators are shown in the order of this enum, which is alphabetical
+ * by indicator letter.
+ */
+enum StatusBarIndicator {
+    INDICATOR_AUTOLINKING,      // A
+    INDICATOR_DIAGRAMS,         // D
+    INDICATOR_LIVE_SPELL_CHECK, // L
+    INDICATOR_MATH,             // M
+    INDICATOR_SRC_HIGHLIGHT,    // S
+    INDICATOR_THINKING,         // T
+    INDICATOR_WINGMAN,          // W
+
+    INDICATOR_COUNT
+};
+
 class StatusBarView
 {
 private:
+    static const char* INDICATORS_PANEL_OBJECT_NAME;
+    static const char* INDICATOR_OBJECT_NAME;
+
     QStatusBar* statusBar;
+
+    // indicators are shown as segments of one capsule shaped panel
+    QFrame* indicatorsPanel;
+    QLabel* indicators[INDICATOR_COUNT];
+    // indicator style sheets derived from the active theme: [indicator][enabled]
+    QString indicatorStyles[INDICATOR_COUNT][2];
 
     LookAndFeels& lookAndFeel;
     QFont font;
@@ -46,6 +73,16 @@ public:
     void showInfo(const QString& message) const;
     void showWarning(const QString& message) const;
     void showError(const QString& message) const;
+
+    void showIndicator(StatusBarIndicator indicator, bool enabled) const;
+
+private:
+    static QString createIndicatorStyle(
+        int indicator,
+        const QColor& textColor,
+        const QColor& backgroundColor,
+        const QColor& separatorColor);
+    static QString toCssColor(const QColor& color);
 };
 
 }

@@ -29,6 +29,7 @@ compile_commands.json
 deps/cmark-gfm
 deps/cmark-gfm
 deps/mitie
+distro/debian/
 distro/flatpak/
 distro/winget/
 moc_*.cpp

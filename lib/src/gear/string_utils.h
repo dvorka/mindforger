@@ -223,6 +223,52 @@ std::vector<std::string> rewrapParagraphLines(const std::vector<std::string>& li
  */
 std::vector<std::string> sortLinesAlphabetically(const std::vector<std::string>& lines);
 
+/**
+ * @brief Check whether the byte is a part of a word.
+ *
+ * ASCII letters and digits are word bytes. Bytes of non-ASCII UTF-8 characters
+ * are word bytes as well, so that words w/ national characters are not split.
+ */
+static inline bool isWordByte(const char c)
+{
+    const unsigned char u = static_cast<unsigned char>(c);
+    return u>=0x80 || (u>='a' && u<='z') || (u>='A' && u<='Z') || (u>='0' && u<='9');
+}
+
+/**
+ * @brief Split string to lower case words.
+ *
+ * Words are the longest sequences of word bytes (see isWordByte()). The case
+ * is folded for A-Z only (the same way as asciiToLower() folds it).
+ *
+ * @param s     string to be split
+ * @param words lower case words are APPENDED to this vector
+ */
+void stringToLowerWords(const std::string& s, std::vector<std::string>& words);
+
+/**
+ * @brief Count whole word occurrences of the terms in the text ignoring case.
+ *
+ * The text is scanned just once for all the terms and no memory is allocated.
+ * A term matches a word of the text if the word starts w/ the term (A-Z case
+ * is ignored) and the rest of the word is at most maxSuffix bytes long - "note"
+ * therefore matches "Notes", but "art" does NOT match "start". Terms shorter
+ * than minStemLength must match whole words (e.g. "go" does NOT match "goal").
+ *
+ * @param text          text to be searched
+ * @param lowerTerms    lower case terms
+ * @param counts        term occurrences are ADDED to counts (resized if smaller than terms)
+ * @param maxSuffix     the max number of bytes which may follow the term in the matching word
+ * @param minStemLength terms shorter than this length must match the whole word
+ * @return the number of all the matches found in the text
+ */
+size_t countWordsIgnoreCase(
+    const std::string& text,
+    const std::vector<std::string>& lowerTerms,
+    std::vector<unsigned>& counts,
+    size_t maxSuffix = 3,
+    size_t minStemLength = 4);
+
 } /* namespace*/
 
 #endif /* M8R_STRING_UTILS_H_ */

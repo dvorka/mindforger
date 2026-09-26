@@ -245,6 +245,7 @@ HEADERS += \
     ./src/qt/note_edit_presenter.h \
     ./src/qt/look_n_feel.h \
     ./src/qt/html_delegate.h \
+    ./src/qt/assoc_score_delegate.h \
     ./src/qt/note_edit_highlighter.h \
     ./src/qt/gear/qutils.h \
     ./src/qt/i18nl10n.h \
@@ -375,6 +376,7 @@ SOURCES += \
     ./src/qt/note_edit_presenter.cpp \
     ./src/qt/look_n_feel.cpp \
     ./src/qt/html_delegate.cpp \
+    ./src/qt/assoc_score_delegate.cpp \
     ./src/qt/note_edit_highlighter.cpp \
     ./src/qt/gear/qutils.cpp \
     ./src/qt/i18nl10n.cpp \

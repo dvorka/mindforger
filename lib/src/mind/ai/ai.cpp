@@ -31,6 +31,9 @@ Ai::Ai(Memory& memory, Mind& mind)
     case Configuration::AssociationAssessmentAlgorithm::WEIGHTED_FTS:
         aa = new AiAaWeightedFts{memory,mind};
         break;
+    case Configuration::AssociationAssessmentAlgorithm::BM25:
+        aa = new AiAaBm25{memory,mind};
+        break;
     default:
         aa = nullptr;
     }

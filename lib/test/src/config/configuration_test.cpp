@@ -115,7 +115,38 @@ TEST(ConfigurationTestCase, SaveDefaultConfig)
     EXPECT_NE(std::string::npos, asString->find("Save reads metadata: yes"));
     EXPECT_NE(std::string::npos, asString->find("Active repository: ~/mindforger-repository"));
     EXPECT_NE(std::string::npos, asString->find("Repository: ~/mindforger-repository"));
+    EXPECT_NE(std::string::npos, asString->find("Mind state: think"));
+    EXPECT_NE(std::string::npos, asString->find("Autolinking: yes"));
+    EXPECT_NE(std::string::npos, asString->find("Enable math support in Markdown: katex"));
     delete asString;
+}
+
+TEST(ConfigurationTestCase, FreshConfigThinksAutolinksAndMath)
+{
+    // GIVEN: snapshot of the current configuration to be restored after the test
+    string snapshotConfigPath{"/tmp/cfg-ctc-fresh-snapshot.md"};
+    m8r::MarkdownConfigurationRepresentation configRepresentation{};
+    m8r::Configuration& c = m8r::Configuration::getInstance();
+    string backupConfigPath = c.getConfigFilePath();
+    c.setConfigFilePath(snapshotConfigPath);
+    configRepresentation.save(c);
+    c.setDesiredMindState(m8r::Configuration::MindState::SLEEPING);
+    c.setAutolinking(false);
+    c.setUiEnableMathInMd(m8r::Configuration::MathJsLibSupport::MATH_NO);
+
+    // WHEN: configuration is reset to defaults (fresh installation)
+    c.clear();
+
+    // THEN
+    EXPECT_EQ(m8r::Configuration::MindState::THINKING, c.getDesiredMindState());
+    EXPECT_EQ(m8r::Configuration::MindState::SLEEPING, c.getMindState());
+    EXPECT_TRUE(c.isAutolinking());
+    EXPECT_EQ(m8r::Configuration::MathJsLibSupport::MATH_KATEX, c.getUiEnableMathInMd());
+
+    // cleanup
+    c.setConfigFilePath(snapshotConfigPath);
+    ASSERT_TRUE(configRepresentation.load(c));
+    c.setConfigFilePath(backupConfigPath);
 }
 
 TEST(ConfigurationTestCase, SaveAndLoad)

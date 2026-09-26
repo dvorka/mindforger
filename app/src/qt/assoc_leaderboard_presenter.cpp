@@ -31,6 +31,8 @@ AssocLeaderboardPresenter::AssocLeaderboardPresenter(AssocLeaderboardView* view,
     // ensure HTML cells rendering
     HtmlDelegate* delegate = new HtmlDelegate();
     this->view->setItemDelegate(delegate);
+    // score column is painted as a meter
+    this->view->setItemDelegateForColumn(1, new AssocScoreDelegate(this->view));
 
     QObject::connect(
         view->selectionModel(),

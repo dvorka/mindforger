@@ -460,3 +460,83 @@ TEST(StringGearTestCase, SortLinesAlphabeticallyEmpty)
     cout << "sorted[" << sorted.size() << "]" << endl;
     ASSERT_TRUE(sorted.empty());
 }
+
+TEST(StringGearTestCase, StringToLowerWords)
+{
+    // GIVEN
+    string s{"C++ Core-Guidelines: RAII, Ownership & Čas_2"};
+    vector<string> words{};
+
+    // WHEN
+    stringToLowerWords(s, words);
+
+    // THEN
+    for(const string& w: words) {
+        cout << "word '" << w << "'" << endl;
+    }
+    ASSERT_EQ(7u, words.size());
+    ASSERT_EQ("c", words[0]);
+    ASSERT_EQ("core", words[1]);
+    ASSERT_EQ("guidelines", words[2]);
+    ASSERT_EQ("raii", words[3]);
+    ASSERT_EQ("ownership", words[4]);
+    // non-ASCII letters are kept intact (and NOT folded)
+    ASSERT_EQ("Čas", words[5]);
+    ASSERT_EQ("2", words[6]);
+}
+
+TEST(StringGearTestCase, CountWordsIgnoreCaseWholeWords)
+{
+    // GIVEN
+    string text{"Art: the start of the party was ART. Arts and artist."};
+    vector<string> terms{"art"};
+    vector<unsigned> counts{};
+
+    // WHEN
+    size_t matches = countWordsIgnoreCase(text, terms, counts);
+
+    // THEN
+    cout << "matches " << matches << " counts[0] " << counts[0] << endl;
+    // "art" is shorter than the min stem length, so neither "Arts" nor "artist" match
+    ASSERT_EQ(2u, matches);
+    ASSERT_EQ(2u, counts[0]);
+}
+
+TEST(StringGearTestCase, CountWordsIgnoreCaseSuffix)
+{
+    // GIVEN
+    string text{"Note, notes, NOTED, notebook, annotate."};
+    vector<string> terms{"note", "pointer"};
+    vector<unsigned> counts{};
+
+    // WHEN
+    size_t matches = countWordsIgnoreCase(text, terms, counts);
+
+    // THEN
+    cout << "matches " << matches << " note " << counts[0] << " pointer " << counts[1] << endl;
+    // "notebook" has too long suffix, "annotate" does not start w/ the term
+    ASSERT_EQ(3u, matches);
+    ASSERT_EQ(2u, counts.size());
+    ASSERT_EQ(3u, counts[0]);
+    ASSERT_EQ(0u, counts[1]);
+}
+
+TEST(StringGearTestCase, CountWordsIgnoreCaseMultipleTermsAndUtf8)
+{
+    // GIVEN
+    string text{"Čaj a kafe. čaje, KAFE!"};
+    vector<string> terms{"čaj", "kafe", ""};
+    vector<unsigned> counts{0, 1, 0};
+
+    // WHEN
+    size_t matches = countWordsIgnoreCase(text, terms, counts);
+
+    // THEN
+    cout << "matches " << matches << " čaj " << counts[0] << " kafe " << counts[1] << " empty " << counts[2] << endl;
+    // "Čaj" is not folded (non-ASCII), "čaje" is a prefix match; counts are ADDED
+    ASSERT_EQ(3u, matches);
+    ASSERT_EQ(1u, counts[0]);
+    ASSERT_EQ(3u, counts[1]);
+    // empty term never matches
+    ASSERT_EQ(0u, counts[2]);
+}

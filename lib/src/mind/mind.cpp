@@ -52,13 +52,14 @@ Mind::Mind(Configuration &configuration)
       tagsScopeAspect{ontology},
       scopeAspect{timeScopeAspect, tagsScopeAspect}
 {
-    ai = new Ai{memory, *this};
-
-    initWingman();
-
+    // IMPORTANT: initialize state BEFORE AI is constructed as AI reads it (e.g. delete watermark)
     deleteWatermark = 0;
     activeProcesses = 0;
     associationsSemaphore = 0;
+
+    ai = new Ai{memory, *this};
+
+    initWingman();
 
     knowledgeGraph = new KnowledgeGraph{this};
 

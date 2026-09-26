@@ -22,9 +22,6 @@
 import os
 
 SEMANTIC_VERSION_FILES = [
-    "../../build/debian/debian-aptly-add-deb.sh",
-    # ^ export NEW_DEB="mindforger_1.54.0-1_amd64.deb"
-    # ^ export NEW_VERSION="1.54.0"
     "../../build/debian/debian-make-deb.sh",
     # ^ export ARG_VERSION="1.54.0"
     "../../build/debian/debian/changelog",
