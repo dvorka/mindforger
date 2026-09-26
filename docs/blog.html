@@ -112,6 +112,7 @@
                               <a class="dropdown-item" href="assets/comics/index.html">Comics</a>
 <a class="dropdown-item" href="installation.html">Installation</a>
 <a class="dropdown-item" href="getting-started.html">Getting Started</a>
+<a class="dropdown-item" href="video-tutorials.html">Video Tutorials</a>
 <a class="dropdown-item" href="user-documentation.html">User Documentation</a>
 <a class="dropdown-item" href="note-taking-best-practices.html">Note Taking Best Practices</a>
 <div class="dropdown-divider"></div>
@@ -195,6 +196,74 @@
               <div class="col-12 col-xl-9">
                 <div class="card mb-3"><div class="card-body">
 <p>News and articles about MindForger - one post per <a href="releases.html">release</a>, newest first.</p>
+<h3 id="mindforger-2-5-0--3rd-generation-of-associations-lookup-and-visualization--status-bar-w--adlmstw-diodes-and-new-debian-ppa">MindForger 2.5.0: 3rd generation of associations lookup and visualization, status bar w/ ADLMSTW diodes and new Debian PPA</h3>
+<p><em>2026-09-26</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/2.5.0">release on GitHub</a></p>
+<p><img alt="MindForger 2.5.0" src="BLOG.mindforger-2-5-0.png" / class="img-fluid rounded border my-2"></p>
+<p>This <strong>minor</strong> <a href="https://www.mindforger.com/">MindForger</a> release brings rewrite of associations lookup and visualization, new status bar w/ <code>ADLMSTW</code> diodes and new Debian PPA:</p>
+<ul>
+<li><strong>Mind inspired features</strong><ul>
+<li>3rd generation of the Notebook/Notes associations - <a href="https://en.wikipedia.org/wiki/Okapi_BM25">Best Matching 25</a> based associations algorithm (BM25; evolution of BoW; TF-IDF + normalization which prevents long(er) docs from winning): Notes are matched by whole words (e.g. "art" no longer matches "start"), rare words weigh more than common ones (TF-IDF), long Notes no longer win just because of their length, Notes sharing tags w/ the current Note/Notebook are associated and the associations are computed ~2x faster.</li>
+<li>Association score is shown visually as a meter and the precise score is newly shown in the tooltip only.</li>
+</ul>
+</li>
+<li><strong>Status bar</strong><ul>
+<li>Status bar indicators ("diodes") in the lower right corner of the main window - a capsule w/ autolinking (A), diagrams (D), live spell check (L), math (M), source code syntax highlighting (S), thinking (T) and Wingman availability (W) segments.</li>
+</ul>
+</li>
+<li><strong>Distributions</strong><ul>
+<li>MindForger is newly provided for Debian 13 Trixie in addition to Debian 12 Bookworm (Debian 11 Bullseye, 10 Buster and 9 Stretch PPAs are kept, but frozen) at <a href="https://www.mindforger.com/debian-ppa/">https://www.mindforger.com/debian-ppa/</a> - see <a href="installation.html#debian">Debian installation</a>.</li>
+<li>Debian PPA signing key self-signatures were refreshed from SHA-1 to SHA-512 (the key fingerprint is unchanged) as Debian Trixie apt rejects keys w/ SHA-1 self-signatures - please DO re-import the key from <a href="https://www.mindforger.com/gpgpubkey.txt">https://www.mindforger.com/gpgpubkey.txt</a>.</li>
+</ul>
+</li>
+<li><strong>Fixes</strong><ul>
+<li>Autolinking, thinking and math are stable enough so that they are newly enabled by default after fresh MindForger installation.</li>
+</ul>
+</li>
+</ul>
+<h3 id="mindforger-2-4-0--flatpak">MindForger 2.4.0: Flatpak</h3>
+<p><em>2026-09-22</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/2.4.0">release on GitHub</a></p>
+<p><img alt="MindForger 2.4.0" src="BLOG.mindforger-2-4-0.png" / class="img-fluid rounded border my-2"></p>
+<p>This <strong>minor</strong> <a href="https://www.mindforger.com/">MindForger</a> release brings <strong>Flatpak</strong> distribution:</p>
+<ul>
+<li><strong>Flatpak</strong><ul>
+<li>Install MindForger on any major Linux distribution as a sandboxed single-file <code>.flatpak</code> bundle - see <a href="installation.html#flatpak">Flatpak installation</a>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="mindforger-2-3-0--notebook-shelves--localization-to-4-languages--lines-sorting--winget-packaging--markdown-export--non-ascii-links-navigation">MindForger 2.3.0: Notebook shelves, localization to 4 languages, lines sorting, winget packaging, Markdown export, non-ASCII links navigation</h3>
+<p><em>2026-09-22</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/2.3.0">release on GitHub</a></p>
+<p><img alt="MindForger 2.3.0" src="BLOG.mindforger-2-3-0.png" / class="img-fluid rounded border my-2"></p>
+<p>This <strong>minor</strong> <a href="https://www.mindforger.com/">MindForger</a> release brings Notebook shelves, localization to 4 languages, lines sorting, winget packaging, Markdown export, non-ASCII links navigation, various fixes and small enhancements:</p>
+<ul>
+<li><strong>Notebook shelves</strong><ul>
+<li>Single notebook tree was rewritten to custom notebook shelves - create as many named notebook shelves for notebooks you want to group as needed and add Notebooks to them explicitly.</li>
+</ul>
+</li>
+<li><strong>Localization</strong><ul>
+<li>Czech (<code>cs_CZ</code>) localization.</li>
+<li>Mandarin Chinese (simplified, <code>zh_CN</code>) localization (LLM - not reviewed by native speaker).</li>
+<li>Hindi (<code>hi_IN</code>) localization (LLM - not reviewed by native speaker).</li>
+<li>Spanish (<code>es_ES</code>) localization (LLM - not reviewed by native speaker).</li>
+<li>Preferences now let you pick the UI language - System default, English, Czech, Spanish or other available translation instead of following the OS locale.</li>
+</ul>
+</li>
+<li><strong>Export</strong><ul>
+<li><code>Notebook/Export/Markdown</code> - export a Notebook to a file in Markdown format.</li>
+<li>CSV export no longer freezes UI on big repo and/or slow(er) HW as export newly runs in the modal dialog w/ progress bar and it can be cancelled.</li>
+<li>CSV export reported success even when the CSV file could not be written and it did not check whether the target CSV file already exists.</li>
+</ul>
+</li>
+<li><strong>Edit</strong><ul>
+<li><code>Edit/Sort Lines</code> - sorts the selected lines - or the lines of the block under the cursor - alphabetically.</li>
+<li>Improved Emoji insert dialog so that it can be used w/o mouse, emojis can be filtered by name, selected using arrows - which move by the visual rows across the dialog sections - and inserted w/ <code>Enter</code> or <code>Ctrl-[number]</code> shortcuts.</li>
+<li>Changed in-app diagram support configuration from drop-down to checkbox.</li>
+</ul>
+</li>
+<li><strong>Search</strong><ul>
+<li>Improved performance of the find Note/Notebook by Name dialog on large repositories - filtering as you type is debounced and no longer reallocates Qt strings per keystroke. The list is newly filtered via a proxy/cache model which fixed a serious lag when using backspace.</li>
+</ul>
+</li>
+</ul>
 <h3 id="you--amp--mindforger--a-comic">You &amp; MindForger: a comic</h3>
 <p><em>2026-09-20</em></p>
 <p><img alt="You &amp; MindForger comic" src="BLOG.comics-you-and-mindforger.png" / class="img-fluid rounded border my-2"></p>
@@ -441,7 +510,10 @@ In addition it lays the foundation for <a href="https://github.com/dvorka/mindfo
                 <div class="mf-toc sticky-top">
               <div class="mf-toc-title">On this page</div>
               <div class="nav nav-vertical" id="toc">
-                <a href="#you--amp--mindforger--a-comic" class="nav-link ms-3 small">You &amp; MindForger: a comic</a>
+                <a href="#mindforger-2-5-0--3rd-generation-of-associations-lookup-and-visualization--status-bar-w--adlmstw-diodes-and-new-debian-ppa" class="nav-link ms-3 small">MindForger 2.5.0: 3rd generation of associations lookup and visualization, status bar w/ ADLMSTW diodes and new Debian PPA</a>
+<a href="#mindforger-2-4-0--flatpak" class="nav-link ms-3 small">MindForger 2.4.0: Flatpak</a>
+<a href="#mindforger-2-3-0--notebook-shelves--localization-to-4-languages--lines-sorting--winget-packaging--markdown-export--non-ascii-links-navigation" class="nav-link ms-3 small">MindForger 2.3.0: Notebook shelves, localization to 4 languages, lines sorting, winget packaging, Markdown export, non-ASCII links navigation</a>
+<a href="#you--amp--mindforger--a-comic" class="nav-link ms-3 small">You &amp; MindForger: a comic</a>
 <a href="#nerdview-for-the-mindforger-documentation" class="nav-link ms-3 small">Nerdview for the MindForger documentation</a>
 <a href="#mindforger-2-2-0--rewrap--snap--webengine--katex-and-mermaid" class="nav-link ms-3 small">MindForger 2.2.0: Rewrap, Snap, WebEngine, KaTeX and Mermaid</a>
 <a href="#mindforger-2-1-0--snap--autolinking-colorization-and-wingman" class="nav-link ms-3 small">MindForger 2.1.0: Snap, Autolinking colorization and Wingman</a>

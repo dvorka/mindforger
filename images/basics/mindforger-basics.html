@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MindForger basics</title>
+<!--
+  Source of mindforger-basics.png and mindforger-basics@2x.png (same look as the Basics animation in index.html).
+  Serve www/ over HTTP and take screenshots with Firefox:
+    firefox --headless --window-size=1600,600 --screenshot mindforger-basics.png http://localhost:8000/images/basics/mindforger-basics.html
+    firefox --headless --window-size=3200,1200 --screenshot mindforger-basics@2x.png "http://localhost:8000/images/basics/mindforger-basics.html?2x"
+-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&display=swap">
+<style>
+    /*
+       MindForger basics animation: Note > Outline > Notebook > Notebook shelves
+
+       scoped under .mfb / mfb-* so it never collides with w3.css or .mfd
+
+       The scene is drawn in fixed virtual pixels (layouts in the script)
+       and scaled to the width of the stage - like an SVG.
+    */
+    .mfb {
+        /* NerdView palette */
+        --mfb-bg: #000000;
+        --mfb-bg-deep: #0a0a0a;
+        --mfb-card: #191919;
+        --mfb-card-hi: #2a2a2a;
+        --mfb-line: #5a5a5a;
+        --mfb-line-hi: #a0a0a0;
+        --mfb-text: #ffffff;
+        --mfb-muted: #aaaaaa;
+        --mfb-dim: #777777;
+        --mfb-red: #ff8181;
+        --mfb-green: #7fc074;
+        --mfb-blue: #99b1ff;
+        --mfb-yellow: #ffcd8d;
+        --mfb-orange: #ed7014;
+        --mfb-purple: #c79ec9;
+        --mfb-gray: #888888;
+        --mfb-turquoise: #40e0d0;
+        --mfb-md-bold: #ffff00;
+        --mfb-md-italic: #00aa00;
+        --mfb-md-list: #009900;
+
+        --mfb-ease: cubic-bezier(0.65, 0, 0.35, 1);
+        --mfb-move: 0.9s;
+        --mfb-step-ms: 5000ms;
+
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        padding: 2.5em 16px;
+        font: 14px/1.5 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+        color: var(--mfb-text);
+        text-align: left;
+        background: var(--mfb-bg);
+    }
+
+    .mfb *,
+    .mfb *::before,
+    .mfb *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    .mfb ul {
+        list-style: none;
+    }
+
+    .mfb button {
+        font: inherit;
+        color: inherit;
+        background: none;
+        border: 0;
+        cursor: pointer;
+    }
+
+    .mfb-wrap {
+        max-width: 948px;
+        margin: 0 auto;
+    }
+
+    /* ------------------------------------------------ stage & scene */
+
+    .mfb-stage {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        overflow: hidden;
+    }
+
+    .mfb-scene {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 960px;
+        height: 500px;
+        transform-origin: 0 0;
+        transition: opacity 0.6s ease;
+    }
+
+    .mfb-scene.mfb-fade {
+        opacity: 0;
+    }
+
+    .mfb-instant,
+    .mfb-instant * {
+        transition: none !important;
+    }
+
+    .mfb-head {
+        position: absolute;
+        top: 8px;
+        left: 0;
+        right: 0;
+        z-index: 5;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 0 16px;
+        text-align: center;
+    }
+
+    .mfb-label {
+        padding: 1px 16px;
+        border: 1px solid var(--mfb-line);
+        border-radius: 5px;
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--mfb-yellow);
+        background: var(--mfb-bg);
+        box-shadow: 0 0 22px color-mix(in srgb, var(--mfb-yellow) 16%, transparent);
+    }
+
+    .mfb-caption {
+        font-size: 15px;
+        color: var(--mfb-muted);
+    }
+
+    .mfb-caption b {
+        color: var(--mfb-text);
+    }
+
+    .mfb-swap {
+        animation: mfb-swap 0.5s ease both;
+    }
+
+    @keyframes mfb-swap {
+        from { opacity: 0; transform: translateY(-6px); }
+    }
+
+    /* ------------------------------------------------ actors */
+
+    .mfb-actor {
+        position: absolute;
+        opacity: 0;
+        transition:
+            left var(--mfb-move) var(--mfb-ease),
+            top var(--mfb-move) var(--mfb-ease),
+            width var(--mfb-move) var(--mfb-ease),
+            height var(--mfb-move) var(--mfb-ease),
+            opacity 0.5s ease,
+            transform 0.5s ease;
+    }
+
+    .mfb-card {
+        overflow: hidden;
+        background: var(--mfb-card);
+        border: 1px solid var(--mfb-line);
+        border-radius: 8px;
+    }
+
+    /* ------------------------------------------------ note */
+
+    .mfb-note {
+        z-index: 3;
+        padding: 16px 20px;
+        border-top-right-radius: 0;
+        transform-origin: left center;
+        transition:
+            left var(--mfb-move) var(--mfb-ease),
+            top var(--mfb-move) var(--mfb-ease),
+            width var(--mfb-move) var(--mfb-ease),
+            height var(--mfb-move) var(--mfb-ease),
+            padding var(--mfb-move) var(--mfb-ease),
+            opacity 0.5s ease,
+            transform 0.5s ease-in,
+            background 0.5s ease,
+            border-color 0.5s ease,
+            border-radius 0.5s ease,
+            box-shadow 0.5s ease;
+    }
+
+    /* page with a folded corner = Note */
+    .mfb-note::after {
+        content: '';
+        position: absolute;
+        top: -1px;
+        right: -1px;
+        border-style: solid;
+        border-width: 0 16px 16px 0;
+        border-color: transparent var(--mfb-bg) var(--mfb-line-hi) transparent;
+        transition: opacity 0.3s ease;
+    }
+
+    .mfb-note-name {
+        display: block;
+        min-height: 1.3em;
+        padding-bottom: 8px;
+        margin-bottom: 12px;
+        border-bottom: 1px solid color-mix(in srgb, var(--mfb-orange) 55%, transparent);
+        font-size: 22px;
+        font-weight: 800;
+        line-height: 1.3;
+        color: var(--mfb-orange);
+        transition:
+            font-size var(--mfb-move) var(--mfb-ease),
+            line-height var(--mfb-move) var(--mfb-ease),
+            padding var(--mfb-move) var(--mfb-ease),
+            margin var(--mfb-move) var(--mfb-ease),
+            border-color 0.5s ease,
+            color 0.5s ease;
+    }
+
+    .mfb-note-desc {
+        font-size: 15px;
+        line-height: 1.6;
+        color: #dddddd;
+        transition: opacity 0.4s ease;
+    }
+
+    .mfb-md-i {
+        font-style: italic;
+        color: var(--mfb-md-italic);
+    }
+
+    .mfb-md-b {
+        font-weight: 800;
+        color: var(--mfb-md-bold);
+    }
+
+    .mfb-md-i,
+    .mfb-md-b {
+        animation: mfb-md 0.6s ease both;
+    }
+
+    @keyframes mfb-md {
+        from { color: #dddddd; }
+    }
+
+    .mfb-typing::after {
+        content: '';
+        display: inline-block;
+        width: 0.55em;
+        height: 1.1em;
+        margin-left: 1px;
+        vertical-align: -0.18em;
+        background: var(--mfb-md-italic);
+        animation: mfb-blink 0.9s steps(1) infinite;
+    }
+
+    @keyframes mfb-blink {
+        50% { opacity: 0; }
+    }
+
+    /* note shrunk to a row of the outline */
+    .mfb-note.mfb-row {
+        padding: 2px 8px;
+        border-color: var(--mfb-orange);
+        border-radius: 3px;
+        background: var(--mfb-orange);
+        box-shadow: 0 0 22px color-mix(in srgb, var(--mfb-orange) 55%, transparent);
+    }
+
+    .mfb-note.mfb-row::after {
+        opacity: 0;
+    }
+
+    .mfb-row .mfb-note-name {
+        padding-bottom: 0;
+        margin-bottom: 0;
+        border-bottom-color: transparent;
+        font-size: 14px;
+        line-height: 20px;
+        white-space: nowrap;
+        color: #000000;
+    }
+
+    .mfb-row .mfb-note-desc {
+        opacity: 0;
+    }
+
+    /* the right page turns over the left one */
+    .mfb-note.mfb-flip {
+        transform: perspective(1600px) rotateY(-90deg);
+    }
+
+    /* ------------------------------------------------ outline */
+
+    .mfb-outline {
+        z-index: 2;
+        padding: 14px;
+    }
+
+    .mfb-tree {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 14px;
+    }
+
+    .mfb-tree li {
+        margin-left: calc(var(--dep) * 18px);
+        padding: 2px 8px;
+        line-height: 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: var(--mfb-text);
+        background: var(--mfb-bg-deep);
+        border: 1px solid var(--mfb-line);
+        border-left: 2px solid var(--mfb-md-list);
+        border-radius: 3px;
+    }
+
+    /* slot for the new Note - collapsed, opened, filled */
+    .mfb-tree li.mfb-new {
+        max-height: 0;
+        margin-top: -4px;
+        padding-top: 0;
+        padding-bottom: 0;
+        border-width: 0;
+        opacity: 0;
+        color: transparent;
+        background: transparent;
+        transition:
+            max-height 0.5s var(--mfb-ease),
+            margin 0.5s var(--mfb-ease),
+            padding 0.5s var(--mfb-ease),
+            opacity 0.3s ease,
+            background 0.4s ease,
+            color 0.4s ease;
+    }
+
+    .mfb-open .mfb-tree li.mfb-new {
+        max-height: 26px;
+        margin-top: 0;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        border-width: 1px 1px 1px 2px;
+        border-style: dashed;
+        border-color: var(--mfb-orange);
+        opacity: 1;
+    }
+
+    .mfb-filled .mfb-tree li.mfb-new {
+        font-weight: 700;
+        color: #000000;
+        background: var(--mfb-orange);
+        border-style: solid;
+    }
+
+    /* ------------------------------------------------ notebook window */
+
+    .mfb-frame {
+        z-index: 1;
+        background: var(--mfb-bg-deep);
+        border-color: var(--mfb-line-hi);
+    }
+
+    .mfb-frame-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: 34px;
+        padding: 0 12px;
+        border-bottom: 1px solid var(--mfb-line);
+        font-size: 14px;
+        white-space: nowrap;
+        background: var(--mfb-card);
+    }
+
+    .mfb-frame-bar i {
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        margin-right: 3px;
+        border-radius: 50%;
+        background: var(--mfb-line);
+    }
+
+    .mfb-frame-bar b {
+        color: var(--mfb-orange);
+    }
+
+    .mfb-frame-bar em {
+        font-style: normal;
+        color: var(--mfb-dim);
+    }
+
+    /* ------------------------------------------------ closed notebook */
+
+    .mfb-cover {
+        z-index: 4;
+        overflow: hidden;
+        border: 1px solid var(--mfb-line-hi);
+        border-radius: 3px 8px 8px 3px;
+        transform-origin: right center;
+        transition:
+            left var(--mfb-move) var(--mfb-ease),
+            top var(--mfb-move) var(--mfb-ease),
+            width var(--mfb-move) var(--mfb-ease),
+            height var(--mfb-move) var(--mfb-ease),
+            opacity 0.5s ease,
+            transform 0.5s ease-out,
+            border-color 0.5s ease,
+            border-radius 0.5s ease,
+            box-shadow 0.5s ease;
+    }
+
+    .mfb-cover.mfb-flip {
+        transform: perspective(1600px) rotateY(90deg);
+    }
+
+    .mfb-cover-face {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 20px 16px 20px 36px;
+        text-align: center;
+        white-space: nowrap;
+        background:
+            linear-gradient(90deg, var(--mfb-orange) 0 16px, rgba(0, 0, 0, 0.45) 16px 20px, transparent 20px),
+            linear-gradient(160deg, #2c2c2c, #121212);
+        transition: opacity 0.3s ease;
+    }
+
+    .mfb-cover-face::before {
+        content: '';
+        position: absolute;
+        inset: 14px 14px 14px 34px;
+        border: 1px solid color-mix(in srgb, var(--mfb-orange) 45%, transparent);
+        border-radius: 4px;
+    }
+
+    .mfb-cover-kicker {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--mfb-yellow);
+    }
+
+    .mfb-cover-title {
+        font-size: 26px;
+        font-weight: 800;
+        line-height: 1.2;
+        color: var(--mfb-text);
+    }
+
+    .mfb-cover-file {
+        font-size: 12px;
+        color: var(--mfb-dim);
+    }
+
+    .mfb-cover-spine {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.25), transparent 30%, transparent 70%, rgba(0, 0, 0, 0.25)), var(--mfb-orange);
+        transition: opacity 0.4s ease 0.3s;
+    }
+
+    .mfb-cover-spine span,
+    .mfb-book span {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        font-size: 12px;
+        font-weight: 800;
+        white-space: nowrap;
+        color: #000000;
+    }
+
+    .mfb-cover.mfb-spine {
+        border-color: transparent;
+        border-radius: 2px 2px 0 0;
+        box-shadow: 0 0 18px color-mix(in srgb, var(--mfb-orange) 60%, transparent);
+    }
+
+    .mfb-spine .mfb-cover-face {
+        opacity: 0;
+    }
+
+    .mfb-spine .mfb-cover-spine {
+        opacity: 1;
+    }
+
+    .mfb-cover.mfb-bounce {
+        animation: mfb-bounce 0.55s ease;
+    }
+
+    @keyframes mfb-bounce {
+        35% { transform: translateY(-12px); }
+        65% { transform: translateY(0); }
+        82% { transform: translateY(-4px); }
+    }
+
+    /* ------------------------------------------------ notebook shelves */
+
+    .mfb-case {
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: opacity 0.8s ease;
+    }
+
+    .mfb-shelf {
+        display: flex;
+        align-items: flex-end;
+        gap: 4px;
+        height: 100px;
+        padding: 0 14px;
+        border-bottom: 4px solid var(--mfb-line-hi);
+    }
+
+    .mfb-book {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        width: 30px;
+        height: var(--h);
+        padding-bottom: 6px;
+        border-radius: 2px 2px 0 0;
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.25), transparent 30%, transparent 70%, rgba(0, 0, 0, 0.25)), var(--c);
+    }
+
+    .mfb-book.mfb-slot {
+        visibility: hidden;
+        height: 92px;
+    }
+
+    .mfb-shelf-name {
+        display: block;
+        margin: 4px 0 0 14px;
+        font-size: 13px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--mfb-muted);
+    }
+
+    /* ------------------------------------------------ controls */
+
+    .mfb-bar {
+        display: flex;
+        align-items: stretch;
+        margin-top: 1.5em;
+        border: 1px solid var(--mfb-line);
+        border-radius: 0.4em;
+        overflow: hidden;
+    }
+
+    .mfb-tabs {
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .mfb .mfb-tab,
+    .mfb .mfb-ctl {
+        position: relative;
+        padding: 0.75em 0.2em 0.85em;
+        font-size: 0.72em;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--mfb-muted);
+        transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    .mfb .mfb-tab + .mfb-tab,
+    .mfb .mfb-ctl {
+        border-left: 1px solid var(--mfb-line);
+    }
+
+    .mfb .mfb-ctl {
+        width: 3.4em;
+    }
+
+    .mfb .mfb-tab b {
+        margin-right: 0.4em;
+        color: var(--mfb-orange);
+    }
+
+    .mfb .mfb-tab:hover,
+    .mfb .mfb-ctl:hover {
+        color: var(--mfb-text);
+        background: color-mix(in srgb, var(--mfb-orange) 10%, transparent);
+    }
+
+    .mfb .mfb-tab[aria-selected="true"] {
+        color: #ffffff;
+        background: linear-gradient(180deg, color-mix(in srgb, var(--mfb-orange) 28%, transparent), color-mix(in srgb, var(--mfb-orange) 6%, transparent));
+    }
+
+    .mfb .mfb-tab:focus-visible,
+    .mfb .mfb-ctl:focus-visible {
+        outline: 2px solid var(--mfb-orange);
+        outline-offset: -2px;
+    }
+
+    .mfb-tab-bar {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 2px;
+        background: var(--mfb-orange);
+        box-shadow: 0 0 8px var(--mfb-orange);
+    }
+
+    .mfb-tab[aria-selected="true"] .mfb-tab-bar {
+        animation: mfb-progress var(--mfb-step-ms) linear forwards;
+    }
+
+    .mfb-paused .mfb-tab-bar {
+        animation-play-state: paused !important;
+    }
+
+    @keyframes mfb-progress {
+        to { width: 100%; }
+    }
+
+    @media screen and (max-width: 600px) {
+        .mfb .mfb-tab b {
+            display: block;
+            margin: 0;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .mfb *,
+        .mfb *::before,
+        .mfb *::after {
+            animation-duration: 1ms !important;
+            animation-iteration-count: 1 !important;
+            transition: none !important;
+        }
+        .mfb-tab[aria-selected="true"] .mfb-tab-bar {
+            width: 100%;
+        }
+    }
+    html, body { margin: 0; background: #000; }
+    .mfb.mfbx { box-sizing: border-box; width: 1600px; height: 600px; padding: 22px 30px 0; }
+    .mfb *, .mfb .mfb-md-i, .mfb .mfb-md-b { animation: none !important; }
+    .mfbx-title { display: flex; align-items: center; justify-content: center; gap: 12px; height: 52px; font-size: 26px; letter-spacing: 0.04em; color: var(--mfb-muted); }
+    .mfbx-title img { width: 46px; height: 46px; }
+    .mfbx-title b { color: var(--mfb-text); }
+    .mfbx-row { display: flex; align-items: stretch; justify-content: space-between; height: 500px; padding-top: 14px; }
+    .mfbx-panel { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .mfbx .mfb-label { font-size: 16px; letter-spacing: 0.14em; white-space: nowrap; }
+    .mfbx .mfb-caption { font-size: 12px; white-space: nowrap; }
+    .mfbx-vis { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; }
+    .mfbx-chevron { align-self: center; margin-top: 60px; font-size: 54px; font-weight: 800; line-height: 1; color: var(--mfb-orange); text-shadow: 0 0 14px color-mix(in srgb, var(--mfb-orange) 50%, transparent); }
+    .mfbx .mfb-note, .mfbx .mfb-cover { position: relative; }
+    .mfbx .mfb-note { padding: 14px 16px; }
+    .mfbx .mfb-note-name { font-size: 18px; }
+    .mfbx .mfb-note-desc { font-size: 12.5px; }
+    .mfbx .mfb-outline { padding: 10px; }
+    .mfbx .mfb-tree { font-size: 12px; gap: 5px; }
+    .mfbx .mfb-tree li { line-height: 18px; margin-left: calc(var(--dep) * 14px); }
+    .mfbx-window { width: 410px; }
+    .mfbx-panes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px; }
+    .mfbx-panes .mfb-outline { padding: 7px; }
+    .mfbx-panes .mfb-tree { font-size: 10px; gap: 3px; }
+    .mfbx-panes .mfb-tree li { padding: 1px 5px; line-height: 14px; margin-left: calc(var(--dep) * 10px); }
+    .mfbx-panes .mfb-note { padding: 10px 11px; }
+    .mfbx-panes .mfb-note-name { font-size: 14px; padding-bottom: 5px; margin-bottom: 8px; }
+    .mfbx-panes .mfb-note-desc { font-size: 10.5px; }
+    .mfbx-cover { width: 160px; height: 250px; }
+    .mfbx-cover .mfb-cover-face { padding: 12px 10px 12px 28px; gap: 8px; }
+    .mfbx-cover .mfb-cover-face::before { inset: 10px 10px 10px 28px; }
+    .mfbx-cover .mfb-cover-title { font-size: 19px; white-space: normal; }
+    .mfbx-cover .mfb-cover-kicker, .mfbx-cover .mfb-cover-file { font-size: 10px; }
+    .mfbx-case { width: 280px; height: 400px; }
+    .mfbx .mfb-shelf { height: 102px; padding: 0 10px; gap: 5px; }
+    .mfbx-new { box-shadow: 0 0 16px color-mix(in srgb, var(--mfb-orange) 70%, transparent); }
+    .mfbx .mfb-shelf-name { margin-left: 10px; font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="mfb mfbx">
+  <header class="mfbx-title"><img src="../mind-forger.png" alt=""/><span><b>MindForger</b> basics</span></header>
+  <div class="mfbx-row">
+
+    <div class="mfbx-panel" style="width:260px">
+      <span class="mfb-label">Note</span>
+      <span class="mfb-caption">name + Markdown description</span>
+      <div class="mfbx-vis">
+        <div class="mfb-card mfb-note" style="width:260px">
+          <span class="mfb-note-name">ACME interview</span>
+          <p class="mfb-note-desc" data-md></p>
+        </div>
+      </div>
+    </div>
+
+    <span class="mfbx-chevron">&rsaquo;</span>
+
+    <div class="mfbx-panel" style="width:240px">
+      <span class="mfb-label">Outline</span>
+      <span class="mfb-caption">tree of Notes</span>
+      <div class="mfbx-vis">
+        <div class="mfb-card mfb-outline mfb-open mfb-filled" style="width:240px"><ul class="mfb-tree" data-tree></ul></div>
+      </div>
+    </div>
+
+    <span class="mfbx-chevron">&rsaquo;</span>
+
+    <div class="mfbx-panel" style="width:410px">
+      <span class="mfb-label">Notebook</span>
+      <span class="mfb-caption">Outline of Notes in one Markdown file</span>
+      <div class="mfbx-vis">
+        <div class="mfb-card mfb-frame mfbx-window">
+          <div class="mfb-frame-bar"><span><i></i><i></i><i></i></span><b>My New Job</b><em>my-new-job.md</em></div>
+          <div class="mfbx-panes">
+            <div class="mfb-card mfb-outline mfb-open mfb-filled"><ul class="mfb-tree" data-tree></ul></div>
+            <div class="mfb-card mfb-note">
+              <span class="mfb-note-name">ACME interview</span>
+              <p class="mfb-note-desc" data-md></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <span class="mfbx-chevron">&rsaquo;</span>
+
+    <div class="mfbx-panel" style="width:160px">
+      <span class="mfb-label">Notebook</span>
+      <span class="mfb-caption">closed</span>
+      <div class="mfbx-vis">
+        <div class="mfb-cover mfbx-cover">
+          <div class="mfb-cover-face">
+            <span class="mfb-cover-kicker">notebook</span>
+            <span class="mfb-cover-title">My New Job</span>
+            <span class="mfb-cover-file">my-new-job.md</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <span class="mfbx-chevron">&rsaquo;</span>
+
+    <div class="mfbx-panel" style="width:300px">
+      <span class="mfb-label">Notebook shelves</span>
+      <span class="mfb-caption">Notebooks on shelves</span>
+      <div class="mfbx-vis">
+        <div class="mfb-case mfbx-case" data-case></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<script>
+(function () {
+    var NAME = 'ACME interview';
+    var DESC = 'My _dream_ job - I want to make great **new** products with Coyote and Road Runner. Dangerous and exciting!';
+    var OUTLINE = [[0, 'My dream job'], [0, 'Opportunities'], [1, 'ACME'], [2, NAME, true], [1, 'Cyberdine'], [2, 'Intro to RL'], [1, 'Initech'], [2, 'Printercalipse'], [0, 'Preparation'], [1, 'Absurd thingies']];
+    var SHELVES = [
+        ['work', [['Project X', 'var(--mfb-blue)', 84], ['Hail Mary', 'var(--mfb-yellow)', 96], ['Saturn 5', 'var(--mfb-gray)', 90], ['Taxes', 'var(--mfb-red)', 70], ['My New Job', 'var(--mfb-orange)', 92, true]]],
+        ['my hobbies', [['Cycling', 'var(--mfb-green)', 90], ['Chess', 'var(--mfb-purple)', 72], ['Rubik', 'var(--mfb-red)', 68], ['Cooking', 'var(--mfb-yellow)', 84], ['Travel', 'var(--mfb-blue)', 78]]],
+        ['my research', [['Cognition', 'var(--mfb-yellow)', 92], ['Memory', 'var(--mfb-blue)', 80], ['Psychology', 'var(--mfb-purple)', 96], ['Learning', 'var(--mfb-red)', 88], ['Sleep', 'var(--mfb-green)', 70]]]
+    ];
+    var html = DESC.replace(/\*\*(.+?)\*\*/g, '<b class="mfb-md-b">**$1**</b>').replace(/_(.+?)_/g, '<i class="mfb-md-i">_$1_</i>');
+    document.querySelectorAll('[data-md]').forEach(function (p) { p.innerHTML = html; });
+    document.querySelectorAll('[data-tree]').forEach(function (ul) {
+        ul.innerHTML = OUTLINE.map(function (n) {
+            return '<li style="--dep:' + n[0] + '"' + (n[2] ? ' class="mfb-new"' : '') + '>' + n[1] + '</li>';
+        }).join('');
+    });
+    document.querySelector('[data-case]').innerHTML = SHELVES.map(function (shelf) {
+        return '<div><div class="mfb-shelf">' + shelf[1].map(function (b) {
+            return '<span class="mfb-book' + (b[3] ? ' mfbx-new' : '') + '" style="--c:' + b[1] + ';--h:' + b[2] + 'px"><span>' + b[0] + '</span></span>';
+        }).join('') + '</div><span class="mfb-shelf-name">' + shelf[0] + '</span></div>';
+    }).join('');
+}());
+</script>
+
+<script>if (location.search.indexOf('2x') >= 0) { document.documentElement.style.zoom = 2; }</script>
+</body>
+</html>

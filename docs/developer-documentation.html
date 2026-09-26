@@ -112,6 +112,7 @@
                               <a class="dropdown-item" href="assets/comics/index.html">Comics</a>
 <a class="dropdown-item" href="installation.html">Installation</a>
 <a class="dropdown-item" href="getting-started.html">Getting Started</a>
+<a class="dropdown-item" href="video-tutorials.html">Video Tutorials</a>
 <a class="dropdown-item" href="user-documentation.html">User Documentation</a>
 <a class="dropdown-item" href="note-taking-best-practices.html">Note Taking Best Practices</a>
 <div class="dropdown-divider"></div>
@@ -445,11 +446,11 @@ from its name. For more details see Google test framework documentation and benc
 <p>For more details see source code.</p>
 <h3 id="install-prerequisites">Install prerequisites</h3>
 <ul>
-<li><a href="https://visualstudio.microsoft.com/downloads/">Microsoft Visual Studio</a> (Community Edition suffices), during installation add with C++ support (todo: detailed info or screenshot)<ul>
+<li><strong>Compiler</strong>: <a href="https://visualstudio.microsoft.com/downloads/">Microsoft Visual Studio</a> (Community Edition suffices), during installation add with C++ support (todo: detailed info or screenshot)<ul>
 <li>or [Windows 10 SDK] (untested)(https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk)</li>
 </ul>
 </li>
-<li>Qt<ul>
+<li><strong>IDE</strong>: Qt<ul>
 <li>Download <a href="https://www.qt.io/download">Qt for Windows</a> - Open Source</li>
 <li>During installation select:<ul>
 <li>Qt-&gt;Qt 5.12.x-&gt;MSVC 2017 64-bit</li>
@@ -458,7 +459,7 @@ from its name. For more details see Google test framework documentation and benc
 </li>
 </ul>
 </li>
-<li><a href="https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4-win64-x64.msi">cmake</a></li>
+<li><strong>Builder</strong>: <a href="https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4-win64-x64.msi">cmake</a></li>
 </ul>
 <p>Prepare MindForger sources:</p>
 <ul>
@@ -498,6 +499,7 @@ from its name. For more details see Google test framework documentation and benc
 </li>
 </ul>
 <h3 id="build-mindforger">Build MindForger</h3>
+<p>Build MindForger from <strong>CLI</strong>:</p>
 <ul>
 <li>Goto GitHub repository directory:<ul>
 <li><code>cd $GIT\mindforger</code></li>
@@ -518,58 +520,12 @@ from its name. For more details see Google test framework documentation and benc
 </li>
 <li><code>.exe</code> binary will be stored in the <code>app\release</code> folder</li>
 </ul>
-<h4 id="plan-for-windows-build-and-distribution">Plan for Windows build and distribution</h4>
-<p>GitHub:</p>
+<p>Build MindForger in <strong>IDE</strong>:</p>
 <ul>
-<li>milestone: https://github.com/dvorka/mindforger/milestone/10</li>
-<li>branch: https://github.com/dvorka/mindforger/tree/dev/1.49.0-win</li>
+<li>Use <code>Build</code> in QtCreator.</li>
 </ul>
-<p>2019/1 plan to port MindForger on Windows:</p>
-<ul>
-<li>[x] <strong>development environment</strong>:<ul>
-<li>document IDE, compiler and OS setup - QtCreator, LLVM (would be nice), Win10 (VM)</li>
-</ul>
-</li>
-<li>[x] <strong>backend lib build</strong>:<ul>
-<li>rewrite using Qt to portable version (Qt is NOT intentionally used in backend now)</li>
-<li>decide whether...<ul>
-<li>go with Qt functions on all platforms</li>
-<li>conditional compilation which introduces Qt dependency for Win only</li>
-</ul>
-</li>
-<li>https://github.com/dvorka/mindforger/issues/77</li>
-</ul>
-</li>
-<li>[x] (preview) <strong>frontend build</strong> to identify non-portable code:<ul>
-<li>skip MD 2 HTML rendering (avoid its compilation) w/
-  <code>html_outline_representation.cpp</code> and <code>MF_NO_MD_2_HTML</code> define</li>
-<li>skip HTML rendering (avoid its compilation)</li>
-<li>https://github.com/dvorka/mindforger/issues/648</li>
-</ul>
-</li>
-<li>[x] <strong>MD 2 HTML rendering</strong>:<ul>
-<li>refactor existing impl to iface &amp; implementation allowing to switch renderer</li>
-<li>migrate to <code>cmark-GFM</code> library ~ GitHub's MD 2 HTML renderer</li>
-</ul>
-</li>
-<li>[x] HTML <strong>viewer</strong>:<ul>
-<li>Qt uses the same engine as on macOS (WebEngine vs. WebKit)</li>
-</ul>
-</li>
-<li>[x] <strong>full build</strong> w/ lib, <code>cmark-GFM</code> and HTML viewer</li>
-<li>[x] Win <strong>installer</strong> (possibly Qt based)</li>
-<li>[ ] make MF real Win app:<ul>
-<li>keyboard shortcuts which follow Windows conventions</li>
-<li>desktop integration which start associated app for opened attachments
-  (PDF, GIF, ...)</li>
-</ul>
-</li>
-</ul>
-<p>Get <strong>pre-release</strong> user feedback:</p>
-<ul>
-<li>https://github.com/dvorka/mindforger/issues/632</li>
-</ul>
-<h3 id="running-mindforger">Running MindForger</h3>
+<h4 id="running-mindforger">Running MindForger</h4>
+<p>Run MindForger from <strong>CLI</strong>:</p>
 <ul>
 <li>Manual run outside of QtCreator requires adding Qt libraries and Zlib libraries to <em>PATH</em>. Zlib binaries are located in `$GIT\mindforger\deps\zlib-win\</li>
 <li>Qt files. Change path according to your setup<ul>
@@ -584,6 +540,10 @@ from its name. For more details see Google test framework documentation and benc
 <li><code>app\release\mindforger.exe</code></li>
 </ul>
 </li>
+</ul>
+<p>Run MindForger from <strong>IDE</strong>:</p>
+<ul>
+<li>Use <code>Run</code> in QtCreator.</li>
 </ul>
 <h3 id="creating-installer">Creating installer</h3>
 <ul>
@@ -993,7 +953,6 @@ faster and less time consuming.</p>
 <a href="#install-prerequisites" class="nav-link ms-3 small">Install prerequisites</a>
 <a href="#build-dependencies" class="nav-link ms-3 small">Build dependencies</a>
 <a href="#build-mindforger" class="nav-link ms-3 small">Build MindForger</a>
-<a href="#running-mindforger" class="nav-link ms-3 small">Running MindForger</a>
 <a href="#creating-installer" class="nav-link ms-3 small">Creating installer</a>
 <a href="#building-unit-tests" class="nav-link ms-3 small">Building unit tests</a>
 <a href="#using-scripts" class="nav-link ms-3 small">Using scripts</a>

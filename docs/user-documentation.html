@@ -112,6 +112,7 @@
                               <a class="dropdown-item" href="assets/comics/index.html">Comics</a>
 <a class="dropdown-item" href="installation.html">Installation</a>
 <a class="dropdown-item" href="getting-started.html">Getting Started</a>
+<a class="dropdown-item" href="video-tutorials.html">Video Tutorials</a>
 <a class="dropdown-item active" href="user-documentation.html">User Documentation</a>
 <a class="dropdown-item" href="note-taking-best-practices.html">Note Taking Best Practices</a>
 <div class="dropdown-divider"></div>
@@ -732,14 +733,14 @@ glum,</p>
 <table class="table table-bordered table-vcenter">
 <thead>
 <tr>
-<th align="left">Frontend</th>
-<th align="left">Backend</th>
+<th style="text-align: left;">Frontend</th>
+<th style="text-align: left;">Backend</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left">Qt</td>
-<td align="left">C++</td>
+<td style="text-align: left;">Qt</td>
+<td style="text-align: left;">C++</td>
 </tr>
 </tbody>
 </table>
@@ -748,21 +749,21 @@ glum,</p>
 <table class="table table-bordered table-vcenter">
 <thead>
 <tr>
-<th align="left">Left</th>
-<th align="center">Center</th>
-<th align="right">Right</th>
+<th style="text-align: left;">Left</th>
+<th style="text-align: center;">Center</th>
+<th style="text-align: right;">Right</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left">This is frontend</td>
-<td align="center">This is middle-ware</td>
-<td align="right">This is backend</td>
+<td style="text-align: left;">This is frontend</td>
+<td style="text-align: center;">This is middle-ware</td>
+<td style="text-align: right;">This is backend</td>
 </tr>
 <tr>
-<td align="left">Js</td>
-<td align="center">ESB</td>
-<td align="right">C++</td>
+<td style="text-align: left;">Js</td>
+<td style="text-align: center;">ESB</td>
+<td style="text-align: right;">C++</td>
 </tr>
 </tbody>
 </table>
@@ -784,8 +785,8 @@ glum,</p>
     ```
 </code></pre></div>
 
-<div class="codehilite"><pre><span></span><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">string</span><span class="o">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">string</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
 
@@ -797,8 +798,8 @@ glum,</p>
 
 <hr />
 <p>3) Fenced block w/ language spec:</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">string</span><span class="o">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">string</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
 
@@ -1582,24 +1583,24 @@ can specify:</p>
 <div class="card mb-3"><div class="card-body">
 <h2 id="command-line-and-man">Command line and man</h2>
 <p>For information on MindForger command line options read the manual page:</p>
-<div class="codehilite"><pre><span></span><code>man mindforger
+<div class="codehilite"><pre><span></span><code>man<span class="w"> </span>mindforger
 </code></pre></div>
 
 <p>For command options see the help file:</p>
-<div class="codehilite"><pre><span></span><code>$ mindforger --help
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>mindforger<span class="w"> </span>--help
 
-Usage: mindforger <span class="o">[</span>options<span class="o">]</span> <span class="o">[</span>&lt;directory&gt;<span class="p">|</span>&lt;file&gt;<span class="o">]</span>
-Thinking notebook.
+Usage:<span class="w"> </span>mindforger<span class="w"> </span><span class="o">[</span>options<span class="o">]</span><span class="w"> </span><span class="o">[</span>&lt;directory&gt;<span class="p">|</span>&lt;file&gt;<span class="o">]</span>
+Thinking<span class="w"> </span>notebook.
 
 Options:
-  -t, --theme &lt;theme&gt;            Use <span class="s1">&#39;dark&#39;</span>, <span class="s1">&#39;light&#39;</span> or other GUI &lt;theme&gt;.
-  -c, --config-file-path &lt;file&gt;  Load configuration from given &lt;file&gt;.
-  -v, --version                  Displays version information.
-  -h, --help                     Displays this help.
+<span class="w">  </span>-t,<span class="w"> </span>--theme<span class="w"> </span>&lt;theme&gt;<span class="w">            </span>Use<span class="w"> </span><span class="s1">&#39;dark&#39;</span>,<span class="w"> </span><span class="s1">&#39;light&#39;</span><span class="w"> </span>or<span class="w"> </span>other<span class="w"> </span>GUI<span class="w"> </span>&lt;theme&gt;.
+<span class="w">  </span>-c,<span class="w"> </span>--config-file-path<span class="w"> </span>&lt;file&gt;<span class="w">  </span>Load<span class="w"> </span>configuration<span class="w"> </span>from<span class="w"> </span>given<span class="w"> </span>&lt;file&gt;.
+<span class="w">  </span>-v,<span class="w"> </span>--version<span class="w">                  </span>Displays<span class="w"> </span>version<span class="w"> </span>information.
+<span class="w">  </span>-h,<span class="w"> </span>--help<span class="w">                     </span>Displays<span class="w"> </span>this<span class="w"> </span>help.
 
 Arguments:
-  <span class="o">[</span>&lt;directory&gt;<span class="p">|</span>&lt;file&gt;<span class="o">]</span>           MindForger repository or directory/file with
-                                 Markdown file<span class="o">(</span>s<span class="o">)</span> to open
+<span class="w">  </span><span class="o">[</span>&lt;directory&gt;<span class="p">|</span>&lt;file&gt;<span class="o">]</span><span class="w">           </span>MindForger<span class="w"> </span>repository<span class="w"> </span>or<span class="w"> </span>directory/file<span class="w"> </span>with
+<span class="w">                                 </span>Markdown<span class="w"> </span>file<span class="o">(</span>s<span class="o">)</span><span class="w"> </span>to<span class="w"> </span>open
 </code></pre></div>
 
 

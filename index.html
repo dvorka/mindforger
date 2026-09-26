@@ -1637,6 +1637,661 @@
     </style>
     <!-- END mfd: functional architecture diagram - head -->
 
+    <!-- BEGIN mfb: basics animation - head -->
+    <style>
+    /*
+       MindForger basics animation: Note > Outline > Notebook > Notebook shelves
+
+       scoped under .mfb / mfb-* so it never collides with w3.css or .mfd
+
+       The scene is drawn in fixed virtual pixels (layouts in the script)
+       and scaled to the width of the stage - like an SVG.
+    */
+    .mfb {
+        /* NerdView palette */
+        --mfb-bg: #000000;
+        --mfb-bg-deep: #0a0a0a;
+        --mfb-card: #191919;
+        --mfb-card-hi: #2a2a2a;
+        --mfb-line: #5a5a5a;
+        --mfb-line-hi: #a0a0a0;
+        --mfb-text: #ffffff;
+        --mfb-muted: #aaaaaa;
+        --mfb-dim: #777777;
+        --mfb-red: #ff8181;
+        --mfb-green: #7fc074;
+        --mfb-blue: #99b1ff;
+        --mfb-yellow: #ffcd8d;
+        --mfb-orange: #ed7014;
+        --mfb-purple: #c79ec9;
+        --mfb-gray: #888888;
+        --mfb-turquoise: #40e0d0;
+        --mfb-md-bold: #ffff00;
+        --mfb-md-italic: #00aa00;
+        --mfb-md-list: #009900;
+
+        --mfb-ease: cubic-bezier(0.65, 0, 0.35, 1);
+        --mfb-move: 0.9s;
+        --mfb-step-ms: 5000ms;
+
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        padding: 2.5em 16px;
+        font: 14px/1.5 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+        color: var(--mfb-text);
+        text-align: left;
+        background: var(--mfb-bg);
+    }
+
+    .mfb *,
+    .mfb *::before,
+    .mfb *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    .mfb ul {
+        list-style: none;
+    }
+
+    .mfb button {
+        font: inherit;
+        color: inherit;
+        background: none;
+        border: 0;
+        cursor: pointer;
+    }
+
+    .mfb-wrap {
+        max-width: 948px;
+        margin: 0 auto;
+    }
+
+    /* ------------------------------------------------ stage & scene */
+
+    .mfb-stage {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        overflow: hidden;
+    }
+
+    .mfb-scene {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 960px;
+        height: 500px;
+        transform-origin: 0 0;
+        transition: opacity 0.6s ease;
+    }
+
+    .mfb-scene.mfb-fade {
+        opacity: 0;
+    }
+
+    .mfb-instant,
+    .mfb-instant * {
+        transition: none !important;
+    }
+
+    .mfb-head {
+        position: absolute;
+        top: 8px;
+        left: 0;
+        right: 0;
+        z-index: 5;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 0 16px;
+        text-align: center;
+    }
+
+    .mfb-label {
+        padding: 1px 16px;
+        border: 1px solid var(--mfb-line);
+        border-radius: 5px;
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--mfb-yellow);
+        background: var(--mfb-bg);
+        box-shadow: 0 0 22px color-mix(in srgb, var(--mfb-yellow) 16%, transparent);
+    }
+
+    .mfb-caption {
+        font-size: 15px;
+        color: var(--mfb-muted);
+    }
+
+    .mfb-caption b {
+        color: var(--mfb-text);
+    }
+
+    .mfb-swap {
+        animation: mfb-swap 0.5s ease both;
+    }
+
+    @keyframes mfb-swap {
+        from { opacity: 0; transform: translateY(-6px); }
+    }
+
+    /* ------------------------------------------------ actors */
+
+    .mfb-actor {
+        position: absolute;
+        opacity: 0;
+        transition:
+            left var(--mfb-move) var(--mfb-ease),
+            top var(--mfb-move) var(--mfb-ease),
+            width var(--mfb-move) var(--mfb-ease),
+            height var(--mfb-move) var(--mfb-ease),
+            opacity 0.5s ease,
+            transform 0.5s ease;
+    }
+
+    .mfb-card {
+        overflow: hidden;
+        background: var(--mfb-card);
+        border: 1px solid var(--mfb-line);
+        border-radius: 8px;
+    }
+
+    /* ------------------------------------------------ note */
+
+    .mfb-note {
+        z-index: 3;
+        padding: 16px 20px;
+        border-top-right-radius: 0;
+        transform-origin: left center;
+        transition:
+            left var(--mfb-move) var(--mfb-ease),
+            top var(--mfb-move) var(--mfb-ease),
+            width var(--mfb-move) var(--mfb-ease),
+            height var(--mfb-move) var(--mfb-ease),
+            padding var(--mfb-move) var(--mfb-ease),
+            opacity 0.5s ease,
+            transform 0.5s ease-in,
+            background 0.5s ease,
+            border-color 0.5s ease,
+            border-radius 0.5s ease,
+            box-shadow 0.5s ease;
+    }
+
+    /* page with a folded corner = Note */
+    .mfb-note::after {
+        content: '';
+        position: absolute;
+        top: -1px;
+        right: -1px;
+        border-style: solid;
+        border-width: 0 16px 16px 0;
+        border-color: transparent var(--mfb-bg) var(--mfb-line-hi) transparent;
+        transition: opacity 0.3s ease;
+    }
+
+    .mfb-note-name {
+        display: block;
+        min-height: 1.3em;
+        padding-bottom: 8px;
+        margin-bottom: 12px;
+        border-bottom: 1px solid color-mix(in srgb, var(--mfb-orange) 55%, transparent);
+        font-size: 22px;
+        font-weight: 800;
+        line-height: 1.3;
+        color: var(--mfb-orange);
+        transition:
+            font-size var(--mfb-move) var(--mfb-ease),
+            line-height var(--mfb-move) var(--mfb-ease),
+            padding var(--mfb-move) var(--mfb-ease),
+            margin var(--mfb-move) var(--mfb-ease),
+            border-color 0.5s ease,
+            color 0.5s ease;
+    }
+
+    .mfb-note-desc {
+        font-size: 15px;
+        line-height: 1.6;
+        color: #dddddd;
+        transition: opacity 0.4s ease;
+    }
+
+    .mfb-md-i {
+        font-style: italic;
+        color: var(--mfb-md-italic);
+    }
+
+    .mfb-md-b {
+        font-weight: 800;
+        color: var(--mfb-md-bold);
+    }
+
+    .mfb-md-i,
+    .mfb-md-b {
+        animation: mfb-md 0.6s ease both;
+    }
+
+    @keyframes mfb-md {
+        from { color: #dddddd; }
+    }
+
+    .mfb-typing::after {
+        content: '';
+        display: inline-block;
+        width: 0.55em;
+        height: 1.1em;
+        margin-left: 1px;
+        vertical-align: -0.18em;
+        background: var(--mfb-md-italic);
+        animation: mfb-blink 0.9s steps(1) infinite;
+    }
+
+    @keyframes mfb-blink {
+        50% { opacity: 0; }
+    }
+
+    /* note shrunk to a row of the outline */
+    .mfb-note.mfb-row {
+        padding: 2px 8px;
+        border-color: var(--mfb-orange);
+        border-radius: 3px;
+        background: var(--mfb-orange);
+        box-shadow: 0 0 22px color-mix(in srgb, var(--mfb-orange) 55%, transparent);
+    }
+
+    .mfb-note.mfb-row::after {
+        opacity: 0;
+    }
+
+    .mfb-row .mfb-note-name {
+        padding-bottom: 0;
+        margin-bottom: 0;
+        border-bottom-color: transparent;
+        font-size: 14px;
+        line-height: 20px;
+        white-space: nowrap;
+        color: #000000;
+    }
+
+    .mfb-row .mfb-note-desc {
+        opacity: 0;
+    }
+
+    /* the right page turns over the left one */
+    .mfb-note.mfb-flip {
+        transform: perspective(1600px) rotateY(-90deg);
+    }
+
+    /* ------------------------------------------------ outline */
+
+    .mfb-outline {
+        z-index: 2;
+        padding: 14px;
+    }
+
+    .mfb-tree {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 14px;
+    }
+
+    .mfb-tree li {
+        margin-left: calc(var(--dep) * 18px);
+        padding: 2px 8px;
+        line-height: 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: var(--mfb-text);
+        background: var(--mfb-bg-deep);
+        border: 1px solid var(--mfb-line);
+        border-left: 2px solid var(--mfb-md-list);
+        border-radius: 3px;
+    }
+
+    /* slot for the new Note - collapsed, opened, filled */
+    .mfb-tree li.mfb-new {
+        max-height: 0;
+        margin-top: -4px;
+        padding-top: 0;
+        padding-bottom: 0;
+        border-width: 0;
+        opacity: 0;
+        color: transparent;
+        background: transparent;
+        transition:
+            max-height 0.5s var(--mfb-ease),
+            margin 0.5s var(--mfb-ease),
+            padding 0.5s var(--mfb-ease),
+            opacity 0.3s ease,
+            background 0.4s ease,
+            color 0.4s ease;
+    }
+
+    .mfb-open .mfb-tree li.mfb-new {
+        max-height: 26px;
+        margin-top: 0;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        border-width: 1px 1px 1px 2px;
+        border-style: dashed;
+        border-color: var(--mfb-orange);
+        opacity: 1;
+    }
+
+    .mfb-filled .mfb-tree li.mfb-new {
+        font-weight: 700;
+        color: #000000;
+        background: var(--mfb-orange);
+        border-style: solid;
+    }
+
+    /* ------------------------------------------------ notebook window */
+
+    .mfb-frame {
+        z-index: 1;
+        background: var(--mfb-bg-deep);
+        border-color: var(--mfb-line-hi);
+    }
+
+    .mfb-frame-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: 34px;
+        padding: 0 12px;
+        border-bottom: 1px solid var(--mfb-line);
+        font-size: 14px;
+        white-space: nowrap;
+        background: var(--mfb-card);
+    }
+
+    .mfb-frame-bar i {
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        margin-right: 3px;
+        border-radius: 50%;
+        background: var(--mfb-line);
+    }
+
+    .mfb-frame-bar b {
+        color: var(--mfb-orange);
+    }
+
+    .mfb-frame-bar em {
+        font-style: normal;
+        color: var(--mfb-dim);
+    }
+
+    /* ------------------------------------------------ closed notebook */
+
+    .mfb-cover {
+        z-index: 4;
+        overflow: hidden;
+        border: 1px solid var(--mfb-line-hi);
+        border-radius: 3px 8px 8px 3px;
+        transform-origin: right center;
+        transition:
+            left var(--mfb-move) var(--mfb-ease),
+            top var(--mfb-move) var(--mfb-ease),
+            width var(--mfb-move) var(--mfb-ease),
+            height var(--mfb-move) var(--mfb-ease),
+            opacity 0.5s ease,
+            transform 0.5s ease-out,
+            border-color 0.5s ease,
+            border-radius 0.5s ease,
+            box-shadow 0.5s ease;
+    }
+
+    .mfb-cover.mfb-flip {
+        transform: perspective(1600px) rotateY(90deg);
+    }
+
+    .mfb-cover-face {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 20px 16px 20px 36px;
+        text-align: center;
+        white-space: nowrap;
+        background:
+            linear-gradient(90deg, var(--mfb-orange) 0 16px, rgba(0, 0, 0, 0.45) 16px 20px, transparent 20px),
+            linear-gradient(160deg, #2c2c2c, #121212);
+        transition: opacity 0.3s ease;
+    }
+
+    .mfb-cover-face::before {
+        content: '';
+        position: absolute;
+        inset: 14px 14px 14px 34px;
+        border: 1px solid color-mix(in srgb, var(--mfb-orange) 45%, transparent);
+        border-radius: 4px;
+    }
+
+    .mfb-cover-kicker {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--mfb-yellow);
+    }
+
+    .mfb-cover-title {
+        font-size: 26px;
+        font-weight: 800;
+        line-height: 1.2;
+        color: var(--mfb-text);
+    }
+
+    .mfb-cover-file {
+        font-size: 12px;
+        color: var(--mfb-dim);
+    }
+
+    .mfb-cover-spine {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.25), transparent 30%, transparent 70%, rgba(0, 0, 0, 0.25)), var(--mfb-orange);
+        transition: opacity 0.4s ease 0.3s;
+    }
+
+    .mfb-cover-spine span,
+    .mfb-book span {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        font-size: 12px;
+        font-weight: 800;
+        white-space: nowrap;
+        color: #000000;
+    }
+
+    .mfb-cover.mfb-spine {
+        border-color: transparent;
+        border-radius: 2px 2px 0 0;
+        box-shadow: 0 0 18px color-mix(in srgb, var(--mfb-orange) 60%, transparent);
+    }
+
+    .mfb-spine .mfb-cover-face {
+        opacity: 0;
+    }
+
+    .mfb-spine .mfb-cover-spine {
+        opacity: 1;
+    }
+
+    .mfb-cover.mfb-bounce {
+        animation: mfb-bounce 0.55s ease;
+    }
+
+    @keyframes mfb-bounce {
+        35% { transform: translateY(-12px); }
+        65% { transform: translateY(0); }
+        82% { transform: translateY(-4px); }
+    }
+
+    /* ------------------------------------------------ notebook shelves */
+
+    .mfb-case {
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: opacity 0.8s ease;
+    }
+
+    .mfb-shelf {
+        display: flex;
+        align-items: flex-end;
+        gap: 4px;
+        height: 100px;
+        padding: 0 14px;
+        border-bottom: 4px solid var(--mfb-line-hi);
+    }
+
+    .mfb-book {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        width: 30px;
+        height: var(--h);
+        padding-bottom: 6px;
+        border-radius: 2px 2px 0 0;
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.25), transparent 30%, transparent 70%, rgba(0, 0, 0, 0.25)), var(--c);
+    }
+
+    .mfb-book.mfb-slot {
+        visibility: hidden;
+        height: 92px;
+    }
+
+    .mfb-shelf-name {
+        display: block;
+        margin: 4px 0 0 14px;
+        font-size: 13px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--mfb-muted);
+    }
+
+    /* ------------------------------------------------ controls */
+
+    .mfb-bar {
+        display: flex;
+        align-items: stretch;
+        margin-top: 1.5em;
+        border: 1px solid var(--mfb-line);
+        border-radius: 0.4em;
+        overflow: hidden;
+    }
+
+    .mfb-tabs {
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .mfb .mfb-tab,
+    .mfb .mfb-ctl {
+        position: relative;
+        padding: 0.75em 0.2em 0.85em;
+        font-size: 0.72em;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--mfb-muted);
+        transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    .mfb .mfb-tab + .mfb-tab,
+    .mfb .mfb-ctl {
+        border-left: 1px solid var(--mfb-line);
+    }
+
+    .mfb .mfb-ctl {
+        width: 3.4em;
+    }
+
+    .mfb .mfb-tab b {
+        margin-right: 0.4em;
+        color: var(--mfb-orange);
+    }
+
+    .mfb .mfb-tab:hover,
+    .mfb .mfb-ctl:hover {
+        color: var(--mfb-text);
+        background: color-mix(in srgb, var(--mfb-orange) 10%, transparent);
+    }
+
+    .mfb .mfb-tab[aria-selected="true"] {
+        color: #ffffff;
+        background: linear-gradient(180deg, color-mix(in srgb, var(--mfb-orange) 28%, transparent), color-mix(in srgb, var(--mfb-orange) 6%, transparent));
+    }
+
+    .mfb .mfb-tab:focus-visible,
+    .mfb .mfb-ctl:focus-visible {
+        outline: 2px solid var(--mfb-orange);
+        outline-offset: -2px;
+    }
+
+    .mfb-tab-bar {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 2px;
+        background: var(--mfb-orange);
+        box-shadow: 0 0 8px var(--mfb-orange);
+    }
+
+    .mfb-tab[aria-selected="true"] .mfb-tab-bar {
+        animation: mfb-progress var(--mfb-step-ms) linear forwards;
+    }
+
+    .mfb-paused .mfb-tab-bar {
+        animation-play-state: paused !important;
+    }
+
+    @keyframes mfb-progress {
+        to { width: 100%; }
+    }
+
+    @media screen and (max-width: 600px) {
+        .mfb .mfb-tab b {
+            display: block;
+            margin: 0;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .mfb *,
+        .mfb *::before,
+        .mfb *::after {
+            animation-duration: 1ms !important;
+            animation-iteration-count: 1 !important;
+            transition: none !important;
+        }
+        .mfb-tab[aria-selected="true"] .mfb-tab-bar {
+            width: 100%;
+        }
+    }
+    </style>
+    <!-- END mfb: basics animation - head -->
+
 <body>
 
 <!-- Top Navbar -->
@@ -1661,9 +2316,10 @@
     <!-- https://www.w3schools.com/icons/fontawesome_icons_webapp.asp -->
     <a href="#download" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-download"></i> Download</a>
     <a href="#home" class="w3-bar-item w3-button">MindForger</a>
-    <a href="#documentation" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-user"></i> Docs</a>
+    <a href="./docs/index.html" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-user"></i> Docs</a>
     <a href="#overview" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-sitemap"></i> Nerdview</a>
     <a href="#features" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-th"></i> Features</a>
+    <a href="#basics" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-book"></i> Basics</a>
     <!-- a href="#you-mf" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-comments"></i> You&amp;MF</a -->
     <a href="#vision" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-eye"></i> Vision</a>
   </div>
@@ -1671,6 +2327,7 @@
   <!-- Navbar on small screens -->
   <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium">
     <a href="#vision" class="w3-bar-item w3-button" onclick="toggleFunction()">Vision</a>
+    <a href="#basics" class="w3-bar-item w3-button" onclick="toggleFunction()">Basics</a>
     <!-- a href="#you-mf" class="w3-bar-item w3-button" onclick="toggleFunction()">You&amp;MF</a -->
     <a href="#features" class="w3-bar-item w3-button" onclick="toggleFunction()">Features</a>
     <a href="#overview" class="w3-bar-item w3-button" onclick="toggleFunction()">Nerdview</a>
@@ -1867,6 +2524,563 @@
 </div>
 
 
+
+
+<div class="w3-row w3-center w3-black w3-padding-16" style="border-top: 3px solid white;">
+  <div class="w3-section">
+    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Basics</span><br>
+  </div>
+</div>
+
+<!-- BEGIN mfb: basics animation - markup -->
+<section class="mfb" id="basics" aria-label="MindForger basics: Note, Outline, Notebook and Notebook shelves">
+ <div class="mfb-wrap">
+  <div class="mfb-stage" id="mfb-stage">
+    <div class="mfb-scene" id="mfb-scene">
+      <div class="mfb-head" id="mfb-head" aria-live="polite">
+        <span class="mfb-label" id="mfb-label">Note</span>
+        <span class="mfb-caption" id="mfb-caption">Write a <b>Note</b> - a name and a Markdown description.</span>
+      </div>
+
+      <div class="mfb-actor mfb-card mfb-frame" id="mfb-frame" aria-hidden="true">
+        <div class="mfb-frame-bar"><span><i></i><i></i><i></i></span><b>My New Job</b><em>my-new-job.md</em></div>
+      </div>
+
+      <div class="mfb-actor mfb-card mfb-outline" id="mfb-outline" aria-hidden="true">
+        <ul class="mfb-tree" id="mfb-tree"></ul>
+      </div>
+
+      <div class="mfb-actor mfb-card mfb-note" id="mfb-note" aria-hidden="true">
+        <span class="mfb-note-name" id="mfb-note-name"></span>
+        <p class="mfb-note-desc" id="mfb-note-desc"></p>
+      </div>
+
+      <div class="mfb-actor mfb-case" id="mfb-case" aria-hidden="true"></div>
+
+      <div class="mfb-actor mfb-cover" id="mfb-cover" aria-hidden="true">
+        <div class="mfb-cover-face">
+          <span class="mfb-cover-kicker">notebook</span>
+          <span class="mfb-cover-title">My New Job</span>
+          <span class="mfb-cover-file">my-new-job.md</span>
+        </div>
+        <div class="mfb-cover-spine"><span>My New Job</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mfb-bar">
+    <div class="mfb-tabs" id="mfb-tabs" role="tablist" aria-label="MindForger basics steps"></div>
+    <button class="mfb-ctl" id="mfb-pause" type="button" aria-label="Pause"><i class="fa fa-pause"></i></button>
+    <button class="mfb-ctl" id="mfb-replay" type="button" aria-label="Replay"><i class="fa fa-repeat"></i></button>
+  </div>
+ </div>
+</section>
+<!-- END mfb: basics animation - markup -->
+
+<!-- BEGIN mfb: basics animation - script -->
+<script>
+(function () {
+    'use strict';
+
+    var root = document.getElementById('basics');
+    if (!root) {
+        return;
+    }
+
+    function $(id) {
+        return document.getElementById('mfb-' + id);
+    }
+
+    var el = {
+        stage: $('stage'),
+        scene: $('scene'),
+        head: $('head'),
+        label: $('label'),
+        caption: $('caption'),
+        frame: $('frame'),
+        outline: $('outline'),
+        tree: $('tree'),
+        note: $('note'),
+        name: $('note-name'),
+        desc: $('note-desc'),
+        kase: $('case'),
+        cover: $('cover'),
+        tabs: $('tabs'),
+        pause: $('pause'),
+        replay: $('replay')
+    };
+
+    // ------------------------------------------------ content
+
+    var NAME = 'ACME interview';
+    var DESC = 'My _dream_ job - I want to make great **new** products with Coyote and Road Runner. Dangerous and exciting!';
+    var DESC_HTML = DESC
+        .replace(/\*\*(.+?)\*\*/g, '<b class="mfb-md-b">**$1**</b>')
+        .replace(/_(.+?)_/g, '<i class="mfb-md-i">_$1_</i>');
+    var TYPE_MS = { name: 75, desc: 28 };
+
+    // [depth, name, is the new Note]
+    var OUTLINE = [
+        [0, 'My dream job'],
+        [0, 'Opportunities'],
+        [1, 'ACME'],
+        [2, NAME, true],
+        [1, 'Cyberdine'],
+        [2, 'Intro to RL'],
+        [1, 'Initech'],
+        [2, 'Printercalipse'],
+        [0, 'Preparation'],
+        [1, 'Absurd thingies']
+    ];
+
+    // [shelf, [[Notebook, color, spine height]], has a slot for the new Notebook]
+    var SHELVES = [
+        ['work', [['Project X', 'var(--mfb-blue)', 84], ['Hail Mary', 'var(--mfb-yellow)', 96], ['Saturn 5', 'var(--mfb-gray)', 90], ['Taxes', 'var(--mfb-red)', 70]], true],
+        ['my hobbies', [['Cycling', 'var(--mfb-green)', 90], ['Chess', 'var(--mfb-purple)', 72], ['Rubik', 'var(--mfb-red)', 68], ['Cooking', 'var(--mfb-yellow)', 84], ['Travel', 'var(--mfb-blue)', 78]]],
+        ['my research', [['Cognition', 'var(--mfb-yellow)', 92], ['Memory', 'var(--mfb-blue)', 80], ['Psychology', 'var(--mfb-purple)', 96], ['Learning', 'var(--mfb-red)', 88], ['Sleep', 'var(--mfb-green)', 70]]]
+    ];
+
+    // boxes [x, y, width, height] in virtual pixels of the scene; 'slot' and 'slot5' are measured
+    var LAYOUTS = {
+        wide: {
+            w: 960, h: 500,
+            note1: [250, 160, 460, 180],
+            note2: [40, 180, 400, 190],
+            outline2: [520, 100, 400, 340],
+            frame3: [80, 96, 800, 396],
+            outline3: [90, 140, 385, 342],
+            note3: [485, 140, 385, 342],
+            book4: [355, 110, 250, 360],
+            case5: [250, 96, 460, 396],
+            wait5: [790, 200, 30, 92]
+        },
+        narrow: {
+            w: 480, h: 690,
+            note1: [30, 220, 420, 200],
+            note2: [30, 110, 420, 200],
+            outline2: [60, 340, 360, 340],
+            frame3: [10, 110, 460, 440],
+            outline3: [18, 152, 218, 390],
+            note3: [244, 152, 218, 390],
+            book4: [115, 150, 250, 360],
+            case5: [40, 200, 400, 400],
+            wait5: [225, 110, 30, 92]
+        }
+    };
+
+    // ------------------------------------------------ timeline
+
+    var S0 = {
+        noteBox: 'note1', noteO: 0, noteRow: false, noteFlip: false, nameN: 0, descN: 0, md: false,
+        outlineBox: 'outline2', outlineO: 0, slotOpen: false, slotFilled: false,
+        frameO: 0, caseO: 0,
+        coverBox: 'book4', coverO: 0, coverFlip: false, coverSpine: false, bounce: false
+    };
+
+    // beat: pre ... state applied instantly, type ... field to type, s ... state to animate to, d ... ms to wait
+    var STEPS = [
+        {
+            tab: 'note',
+            label: 'Note',
+            caption: 'Write a <b>Note</b> - a name and a Markdown description.',
+            beats: [
+                { s: { noteO: 1 }, d: 700 },
+                { type: 'name', d: 300 },
+                { type: 'desc', d: 300 },
+                { s: { md: true }, d: 1900 }
+            ]
+        },
+        {
+            tab: 'outline',
+            label: 'Outline',
+            caption: 'Notes form an <b>Outline</b> - a tree of Notes.',
+            beats: [
+                { s: { noteBox: 'note2', outlineO: 1 }, d: 1100 },
+                { s: { slotOpen: true }, d: 800 },
+                { s: { noteRow: true, noteBox: 'slot' }, d: 1000 },
+                { s: { slotFilled: true, noteO: 0 }, d: 1900 }
+            ]
+        },
+        {
+            tab: 'notebook',
+            label: 'Notebook',
+            caption: 'Outline with Notes is a <b>Notebook</b> - a single Markdown file.',
+            beats: [
+                { s: { frameO: 1, outlineBox: 'outline3' }, d: 1000 },
+                { pre: { noteBox: 'slot' }, s: { noteO: 1, noteRow: false, noteBox: 'note3' }, d: 2800 }
+            ]
+        },
+        {
+            tab: 'close',
+            label: 'Notebook',
+            caption: 'Close the <b>Notebook</b> - it is named My New Job.',
+            beats: [
+                { s: { noteFlip: true }, d: 500 },
+                { pre: { noteO: 0, coverO: 1, coverFlip: true, coverBox: 'outline3' }, s: { coverFlip: false }, d: 700 },
+                { s: { frameO: 0, outlineO: 0, coverBox: 'book4' }, d: 2300 }
+            ]
+        },
+        {
+            tab: 'shelves',
+            label: 'Notebook shelves',
+            caption: 'Put the Notebook on a <b>shelf</b> - organize Notebooks to shelves.',
+            beats: [
+                { s: { caseO: 1, coverSpine: true, coverBox: 'wait5' }, d: 1300 },
+                { s: { coverBox: 'slot5' }, d: 900 },
+                { s: { bounce: true }, d: 3400 }
+            ]
+        }
+    ];
+
+    function assign(to, from) {
+        for (var k in from) {
+            to[k] = from[k];
+        }
+        return to;
+    }
+
+    // state at the start of each step and at the end of the timeline
+    var STARTS = [];
+    var END = (function () {
+        var acc = assign({}, S0);
+        STEPS.forEach(function (step, i) {
+            STARTS[i] = assign({}, acc);
+            step.ms = 0;
+            step.beats.forEach(function (b) {
+                assign(acc, b.pre || {});
+                if (b.type) {
+                    var text = b.type === 'name' ? NAME : DESC;
+                    acc[b.type + 'N'] = text.length;
+                    step.ms += text.length * TYPE_MS[b.type];
+                }
+                assign(acc, b.s || {});
+                step.ms += b.d;
+            });
+        });
+        return acc;
+    }());
+
+    function finalOf(i) {
+        return i + 1 < STEPS.length ? STARTS[i + 1] : END;
+    }
+
+    // ------------------------------------------------ rendering
+
+    el.tree.innerHTML = OUTLINE.map(function (n) {
+        return '<li style="--dep:' + n[0] + '"' + (n[2] ? ' class="mfb-new"' : '') + '>' + n[1] + '</li>';
+    }).join('');
+    el.slot = el.tree.querySelector('.mfb-new');
+
+    el.kase.innerHTML = SHELVES.map(function (shelf) {
+        return '<div><div class="mfb-shelf">' + shelf[1].map(function (b) {
+            return '<span class="mfb-book" style="--c:' + b[1] + ';--h:' + b[2] + 'px"><span>' + b[0] + '</span></span>';
+        }).join('') + (shelf[2] ? '<span class="mfb-book mfb-slot"></span>' : '') +
+            '</div><span class="mfb-shelf-name">' + shelf[0] + '</span></div>';
+    }).join('');
+    el.slot5 = el.kase.querySelector('.mfb-slot');
+
+    el.tabs.innerHTML = STEPS.map(function (step, i) {
+        return '<button class="mfb-tab" type="button" role="tab" aria-selected="false"><b>' + (i + 1) + '</b>' +
+            step.tab + '<span class="mfb-tab-bar"></span></button>';
+    }).join('');
+    var tabs = [].slice.call(el.tabs.children);
+
+    var L = LAYOUTS.wide;
+    var cur = assign({}, S0);
+    var shown = -1;
+
+    function toggle(e, cls, on) {
+        e.classList.toggle(cls, !!on);
+    }
+
+    function place(e, box) {
+        e.style.left = box[0] + 'px';
+        e.style.top = box[1] + 'px';
+        e.style.width = box[2] + 'px';
+        e.style.height = box[3] + 'px';
+    }
+
+    // box of an element in scene coordinates - offsets ignore the scale transform of the scene
+    function boxOf(e) {
+        var x = 0;
+        var y = 0;
+        for (var n = e; n && n !== el.scene; n = n.offsetParent) {
+            x += n.offsetLeft;
+            y += n.offsetTop;
+        }
+        return [x, y, e.offsetWidth, e.offsetHeight];
+    }
+
+    function resolve(key) {
+        if (key === 'slot') {
+            return boxOf(el.slot);
+        }
+        if (key === 'slot5') {
+            return boxOf(el.slot5);
+        }
+        return L[key];
+    }
+
+    function renderText(st) {
+        el.name.textContent = NAME.slice(0, st.nameN);
+        if (st.md) {
+            if (el.desc.innerHTML !== DESC_HTML) {
+                el.desc.innerHTML = DESC_HTML;
+            }
+        } else {
+            el.desc.textContent = DESC.slice(0, st.descN);
+        }
+    }
+
+    function apply(st, instant) {
+        if (instant) {
+            el.scene.classList.add('mfb-instant');
+        }
+
+        toggle(el.outline, 'mfb-open', st.slotOpen);
+        toggle(el.outline, 'mfb-filled', st.slotFilled);
+        place(el.outline, L[st.outlineBox]);
+        el.outline.style.opacity = st.outlineO;
+        place(el.frame, L.frame3);
+        el.frame.style.opacity = st.frameO;
+        place(el.kase, L.case5);
+        el.kase.style.opacity = st.caseO;
+
+        toggle(el.note, 'mfb-row', st.noteRow);
+        toggle(el.note, 'mfb-flip', st.noteFlip);
+        el.note.style.opacity = st.noteO;
+        renderText(st);
+
+        toggle(el.cover, 'mfb-flip', st.coverFlip);
+        toggle(el.cover, 'mfb-spine', st.coverSpine);
+        toggle(el.cover, 'mfb-bounce', st.bounce);
+        el.cover.style.opacity = st.coverO;
+
+        // measured boxes need the layout above to be settled
+        void el.scene.offsetWidth;
+        place(el.note, resolve(st.noteBox));
+        place(el.cover, resolve(st.coverBox));
+
+        if (instant) {
+            void el.scene.offsetWidth;
+            el.scene.classList.remove('mfb-instant');
+            void el.scene.offsetWidth;
+        }
+    }
+
+    function restart(e, cls) {
+        e.classList.remove(cls);
+        void e.offsetWidth;
+        e.classList.add(cls);
+    }
+
+    function setStep(i) {
+        var step = STEPS[i];
+        if (i !== shown) {
+            el.label.textContent = step.label;
+            el.caption.innerHTML = step.caption;
+            restart(el.head, 'mfb-swap');
+        }
+        shown = i;
+        root.style.setProperty('--mfb-step-ms', step.ms + 'ms');
+        tabs.forEach(function (t) {
+            t.setAttribute('aria-selected', 'false');
+        });
+        void el.tabs.offsetWidth;
+        tabs[i].setAttribute('aria-selected', 'true');
+    }
+
+    // ------------------------------------------------ player
+
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var STOP = {};
+    var gen = 0;
+    var started = false;
+    var visible = false;
+    var hover = false;
+    var userPaused = false;
+
+    function paused() {
+        return userPaused || hover || !visible;
+    }
+
+    function syncPaused() {
+        toggle(root, 'mfb-paused', paused());
+        el.pause.innerHTML = '<i class="fa fa-' + (userPaused ? 'play' : 'pause') + '"></i>';
+        el.pause.setAttribute('aria-label', userPaused ? 'Play' : 'Pause');
+    }
+
+    // sleep which does not count time while paused; rejects when a newer run started
+    function sleep(ms, g) {
+        return new Promise(function (resolve, reject) {
+            var left = ms;
+            var last = performance.now();
+            function tick(now) {
+                if (g !== gen) {
+                    reject(STOP);
+                    return;
+                }
+                if (!paused()) {
+                    left -= now - last;
+                }
+                last = now;
+                if (left <= 0) {
+                    resolve();
+                } else {
+                    requestAnimationFrame(tick);
+                }
+            }
+            requestAnimationFrame(tick);
+        });
+    }
+
+    async function type(field, g) {
+        var text = field === 'name' ? NAME : DESC;
+        var span = field === 'name' ? el.name : el.desc;
+        span.classList.add('mfb-typing');
+        try {
+            for (var n = cur[field + 'N'] + 1; n <= text.length; n++) {
+                cur[field + 'N'] = n;
+                renderText(cur);
+                await sleep(TYPE_MS[field], g);
+            }
+        } finally {
+            span.classList.remove('mfb-typing');
+        }
+    }
+
+    async function play(i, g) {
+        setStep(i);
+        var beats = STEPS[i].beats;
+        for (var j = 0; j < beats.length; j++) {
+            var b = beats[j];
+            if (b.pre) {
+                apply(assign(cur, b.pre), true);
+            }
+            if (b.type) {
+                await type(b.type, g);
+            }
+            if (b.s) {
+                apply(assign(cur, b.s), false);
+            }
+            await sleep(b.d, g);
+        }
+    }
+
+    async function run(k) {
+        var g = ++gen;
+        started = true;
+        try {
+            for (;;) {
+                cur = assign({}, STARTS[k]);
+                apply(cur, true);
+                el.scene.classList.remove('mfb-fade');
+                for (var i = k; i < STEPS.length; i++) {
+                    await play(i, g);
+                }
+                el.scene.classList.add('mfb-fade');
+                await sleep(700, g);
+                k = 0;
+            }
+        } catch (e) {
+            if (e !== STOP) {
+                throw e;
+            }
+        }
+    }
+
+    // final frame of the step - without motion
+    function show(i) {
+        gen++;
+        el.scene.classList.remove('mfb-fade');
+        cur = assign({}, finalOf(i));
+        apply(cur, true);
+        setStep(i);
+    }
+
+    function go(i) {
+        if (reduceMotion) {
+            show(i);
+        } else {
+            run(i);
+        }
+    }
+
+    tabs.forEach(function (t, i) {
+        t.addEventListener('click', function () {
+            go(i);
+        });
+    });
+
+    el.pause.addEventListener('click', function () {
+        userPaused = !userPaused;
+        syncPaused();
+    });
+
+    el.replay.addEventListener('click', function () {
+        userPaused = false;
+        syncPaused();
+        go(0);
+    });
+
+    el.stage.addEventListener('mouseenter', function () {
+        hover = true;
+        syncPaused();
+    });
+
+    el.stage.addEventListener('mouseleave', function () {
+        hover = false;
+        syncPaused();
+    });
+
+    // ------------------------------------------------ scale the scene to the stage
+
+    var mode = null;
+
+    function fit() {
+        var w = el.stage.clientWidth;
+        var m = w < 600 ? 'narrow' : 'wide';
+        L = LAYOUTS[m];
+        var scale = w / L.w;
+        el.scene.style.width = L.w + 'px';
+        el.scene.style.height = L.h + 'px';
+        el.scene.style.transform = 'scale(' + scale + ')';
+        el.stage.style.height = Math.ceil(L.h * scale) + 'px';
+        if (m !== mode) {
+            mode = m;
+            apply(cur, true);
+        }
+    }
+
+    fit();
+    if (window.ResizeObserver) {
+        new ResizeObserver(fit).observe(el.stage);
+    } else {
+        window.addEventListener('resize', fit);
+    }
+
+    // until it gets visible show the written Note
+    show(0);
+    syncPaused();
+
+    if (reduceMotion || !window.IntersectionObserver) {
+        visible = true;
+        syncPaused();
+        if (!reduceMotion) {
+            run(0);
+        }
+    } else {
+        new IntersectionObserver(function (entries) {
+            visible = entries[0].isIntersecting;
+            syncPaused();
+            if (visible && !started) {
+                run(0);
+            }
+        }, { threshold: 0.35 }).observe(el.stage);
+    }
+}());
+</script>
+<!-- END mfb: basics animation - script -->
 
 
 <div class="w3-row w3-center w3-black w3-padding-16" style="border-top: 3px solid white;">
@@ -3453,6 +4667,9 @@
 
      MindForger releases:<br/>
      <br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/2.5.0" target="_blank">BM25 associations, status bar diodes, Debian 13 Trixie PPA (2.5.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/2.4.0" target="_blank">Flatpak (2.4.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/2.3.0" target="_blank">Notebook shelves, localization to 4 languages, lines sorting, winget packaging, Markdown export, non-ASCII links navigation (2.3.0)</a><br/>
      <a href="https://github.com/dvorka/mindforger/releases/tag/2.2.0" target="_blank">Rewrap, Snap, WebEngine (Linux), KaTeX and Mermaid (2.2.0)</a><br/>
      <a href="https://github.com/dvorka/mindforger/releases/tag/2.1.0" target="_blank">Ollama/OpenRouter/OpenAI LLM providers, library mgmt (2.1.0)</a><br/>
      <a href="https://github.com/dvorka/mindforger/releases/tag/2.0.0" target="_blank">LLM integration, Notebook tree, Libraries (2.0.0)</a><br/>

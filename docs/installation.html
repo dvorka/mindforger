@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Installation - MindForger Documentation</title>
-    <meta name="description" content="If your operating system or distribution is not listed below, then check packages repository for Linux and Unix. macOS Install MindForger on macOS..." />
+    <meta name="description" content="See Flatpak setup for other distributions. Log out and log in again after the first installation of Flatpak so that your desktop picks up the..." />
     <meta name="author" content="Martin.Dvorak@mindforger.com" />
     <link rel="canonical" href="https://www.mindforger.com/docs/installation.html" />
     <link rel="alternate" type="application/rss+xml" title="MindForger Blog" href="rss.xml" />
@@ -16,12 +16,12 @@
     <meta property="og:site_name" content="MindForger Documentation" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Installation - MindForger Documentation" />
-    <meta property="og:description" content="If your operating system or distribution is not listed below, then check packages repository for Linux and Unix. macOS Install MindForger on macOS..." />
+    <meta property="og:description" content="See Flatpak setup for other distributions. Log out and log in again after the first installation of Flatpak so that your desktop picks up the..." />
     <meta property="og:url" content="https://www.mindforger.com/docs/installation.html" />
     <meta property="og:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Installation - MindForger Documentation" />
-    <meta name="twitter:description" content="If your operating system or distribution is not listed below, then check packages repository for Linux and Unix. macOS Install MindForger on macOS..." />
+    <meta name="twitter:description" content="See Flatpak setup for other distributions. Log out and log in again after the first installation of Flatpak so that your desktop picks up the..." />
     <meta name="twitter:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
     <!-- END OPEN GRAPH -->
 
@@ -112,6 +112,7 @@
                               <a class="dropdown-item" href="assets/comics/index.html">Comics</a>
 <a class="dropdown-item active" href="installation.html">Installation</a>
 <a class="dropdown-item" href="getting-started.html">Getting Started</a>
+<a class="dropdown-item" href="video-tutorials.html">Video Tutorials</a>
 <a class="dropdown-item" href="user-documentation.html">User Documentation</a>
 <a class="dropdown-item" href="note-taking-best-practices.html">Note Taking Best Practices</a>
 <div class="dropdown-divider"></div>
@@ -196,28 +197,31 @@
                 <div class="card mb-3"><div class="card-body">
 <p>Install:</p>
 <ul>
-<li><a href="#macos">macOS</a></li>
-<li><a href="#windows">Windows</a></li>
-<li><a href="#snap">Snap</a></li>
-<li><a href="#ubuntu">Ubuntu</a></li>
+<li><a href="#arch-linux">Arch Linux</a></li>
 <li><a href="#debian">Debian</a></li>
 <li><a href="#fedora">Fedora</a></li>
+<li><a href="#flatpak">Flatpak</a></li>
 <li><a href="#freebsd">FreeBSD</a></li>
-<li><a href="#arch-linux">Arch Linux</a></li>
+<li><a href="#macos">macOS</a></li>
 <li><a href="#nixos-">NixOS</a></li>
 <li><a href="#opensuse">openSUSE</a></li>
+<li><a href="#snap">Snap</a></li>
+<li><a href="#ubuntu">Ubuntu</a></li>
+<li><a href="#windows">Windows</a></li>
 <li><a href="#wsl">WSL</a></li>
 </ul>
 <p>Build:</p>
 <ul>
-<li><a href="#build-on-macos">build on macOS</a></li>
-<li><a href="#build-on-windows">build on Windows</a></li>
-<li><a href="#build-on-ubuntu">build on Ubuntu</a></li>
 <li><a href="#build-on-debian">build on Debian</a></li>
 <li><a href="#build-on-fedora">build on Fedora</a></li>
 <li><a href="#build-on-gentoo">build on Gentoo</a></li>
+<li><a href="#build-on-macos">build on macOS</a></li>
 <li><a href="#build-on-nixos">build on NixOS</a></li>
+<li><a href="#build-on-ubuntu">build on Ubuntu</a></li>
+<li><a href="#build-on-windows">build on Windows</a></li>
 <li><a href="#build-on-wsl">build on WSL</a></li>
+<li><a href="#build-flatpak">build Flatpak</a></li>
+<li><a href="#build-snap">build Snap</a></li>
 <li><a href="#build-and-run-in-container">build and run container</a></li>
 </ul>
 <p>Configure:</p>
@@ -242,14 +246,172 @@
 <h2 id="install-a-package">Install a package</h2>
 <p>Install MindForger using a package.</p>
 <p>If your operating system or distribution is not listed below, then check <a href="https://pkgs.org/search/?q=mindforger]">packages repository</a> for Linux and Unix.</p>
+<h3 id="arch-linux">Arch Linux</h3>
+<p>Install MindForger from Arch User Repository (AUR):</p>
+<ul>
+<li>https://aur.archlinux.org/packages/mindforger/</li>
+</ul>
+<h3 id="debian">Debian</h3>
+<p>Install MindForger on <a href="https://www.debian.org/">Debian</a>:</p>
+<ul>
+<li>either by downloading <code>.deb</code> </li>
+<li>or from <strong>PPA</strong></li>
+</ul>
+<p>Download <code>.deb</code> package for your Debian version from:</p>
+<ul>
+<li><a href="https://github.com/dvorka/mindforger/releases">GitHub Releases</a> <strong>Assets</strong> section</li>
+</ul>
+<p>To install MindForger from the <strong>PPA</strong> add <a href="https://www.mindforger.com/debian-ppa/">my PPA</a> for <strong>your Debian release</strong> version, trust <a href="https://www.mindforger.com/gpgpubkey.txt">GPG key</a> and
+install MindForger - follow the instructions described in:</p>
+<ul>
+<li><a href="https://www.mindforger.com/debian-ppa/">https://www.mindforger.com/debian-ppa/</a></li>
+</ul>
+<p>PPAs for Debian 13 <strong>"trixie"</strong> and Debian 12 <strong>"bookworm"</strong> get new MindForger versions (older Debian releases PPAs are kept, but frozen).
+For example Debian <strong>"bookworm"</strong> (for Debian <strong>"trixie"</strong> replace <code>bookworm</code> with <code>trixie</code>):</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># create directory for APT repository keys (if it does not exist)</span>
+sudo<span class="w"> </span>install<span class="w"> </span>-d<span class="w"> </span>-m<span class="w"> </span><span class="m">0755</span><span class="w"> </span>/etc/apt/keyrings
+<span class="c1"># download MindForger GPG key and store it in the binary format used by APT</span>
+wget<span class="w"> </span>-qO-<span class="w"> </span>https://www.mindforger.com/gpgpubkey.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>gpg<span class="w"> </span>--dearmor<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/keyrings/mindforger.gpg<span class="w"> </span>&gt;<span class="w"> </span>/dev/null
+
+<span class="c1"># add PPA to APT sources</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb [signed-by=/etc/apt/keyrings/mindforger.gpg] https://www.mindforger.com/debian-ppa/bookworm bookworm main&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/mindforger.list
+
+<span class="c1"># update sources</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>update
+
+<span class="c1"># install MindForger</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>mindforger
+</code></pre></div>
+
+<p>Hints:</p>
+<ul>
+<li><code>apt-key</code> used by older versions of these instructions is deprecated and it is not available on Debian <strong>"trixie"</strong>.</li>
+<li>If <code>apt update</code> reports that the signing key <em>is not bound</em> or <em>SHA1 is not considered secure</em>, download the GPG key again (see above) - its self-signatures were refreshed to SHA-512 in 2026 (the key fingerprint <code>E3E8 520D E382 0D8C 1A72 4BB7 B72E 4F7F 24AF 591D</code> did not change).</li>
+</ul>
+<h3 id="fedora">Fedora</h3>
+<p>Install MindForger on <a href="https://getfedora.org/">Fedora</a>:</p>
+<ul>
+<li><a href="https://github.com/dvorka/mindforger/releases">download RPM</a> from GitHub releases</li>
+</ul>
+<p>Install RPM:</p>
+<div class="codehilite"><pre><span></span><code>sudo dnf install mindforger-MAJOR.MINOR.REVISION.rpm
+</code></pre></div>
+
+<h3 id="flatpak">Flatpak</h3>
+<p><a href="https://flatpak.org">Flatpak</a> is a sandboxed package which runs on all major Linux
+distributions. MindForger is distributed as a single-file <code>.flatpak</code> <strong>bundle</strong>
+downloadable from the <a href="https://github.com/dvorka/mindforger/releases">GitHub Releases</a>
+page (it is not a Flathub hosted application).</p>
+<p><strong>Prerequisites</strong></p>
+<p>Install <code>flatpak</code> (if it is not installed already):</p>
+<p>Ubuntu/Debian:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>flatpak
+</code></pre></div>
+
+<p>Fedora:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>flatpak
+</code></pre></div>
+
+<p>Arch Linux:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>flatpak
+</code></pre></div>
+
+<p>openSUSE:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>zypper<span class="w"> </span>install<span class="w"> </span>flatpak
+</code></pre></div>
+
+<p>See <a href="https://flatpak.org/setup/">Flatpak setup</a> for other distributions. Log out and
+log in again after the <strong>first</strong> installation of Flatpak so that your desktop picks up
+the applications installed by it.</p>
+<p><strong>Download</strong></p>
+<p>Download <code>mindforger-&lt;version&gt;.flatpak</code> from the <strong>Assets</strong> section of the latest:</p>
+<ul>
+<li><a href="https://github.com/dvorka/mindforger/releases">GitHub release</a></li>
+</ul>
+<p><strong>Install</strong></p>
+<p>Install the downloaded bundle for your user (no <code>root</code> privileges are needed):</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># example: mindforger-2.4.0.flatpak</span>
+flatpak<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>./mindforger-2.4.0.flatpak
+</code></pre></div>
+
+<p>The bundle is self-contained - if the <code>org.kde.Platform</code> 5.15 runtime it needs is
+missing, then Flatpak offers to download it from <a href="https://flathub.org">Flathub</a>
+automatically, you do <strong>not</strong> have to configure Flathub first. Should you prefer to add
+the Flathub remote yourself:</p>
+<div class="codehilite"><pre><span></span><code>flatpak<span class="w"> </span>remote-add<span class="w"> </span>--if-not-exists<span class="w"> </span>--user<span class="w"> </span>flathub<span class="w"> </span>https://flathub.org/repo/flathub.flatpakrepo
+</code></pre></div>
+
+<p>Check the installation:</p>
+<div class="codehilite"><pre><span></span><code>flatpak<span class="w"> </span>info<span class="w"> </span>com.mindforger.MindForger
+</code></pre></div>
+
+<p><strong>Run</strong></p>
+<p>Run MindForger either from the application menu (<code>MindForger</code>) or from the command line:</p>
+<div class="codehilite"><pre><span></span><code>flatpak<span class="w"> </span>run<span class="w"> </span>com.mindforger.MindForger
+</code></pre></div>
+
+<p>On the <strong>first</strong> start MindForger creates a copy of the documentation and stencils in
+your home directory (<code>~/mindforger-repository</code>) and opens it as the default repository.</p>
+<p><strong>Data storage</strong></p>
+<p>The sandbox is granted access to your home directory, therefore MindForger stores the
+data in the same location as any other MindForger installation - your notebooks are not
+locked inside the Flatpak:</p>
+<div class="codehilite"><pre><span></span><code>~/mindforger-repository   ... default repository with your Markdown files
+~/.mindforger.md          ... configuration
+</code></pre></div>
+
+<p>Markdown repositories on external/mounted media (<code>/media</code>, <code>/run/media</code>) can be opened
+as well. The sandbox is also granted network access which is used by
+<a href="user-documentation.html#wingman">Wingman</a> LLM providers.</p>
+<p><strong>Upgrade</strong></p>
+<p>A bundle installed from a file has no remote to be upgraded from (<code>flatpak update</code>
+refreshes the runtime only). Download the newer <code>.flatpak</code> and install it the same way -
+your repository and configuration are kept:</p>
+<div class="codehilite"><pre><span></span><code>flatpak<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--reinstall<span class="w"> </span>./mindforger-&lt;version&gt;.flatpak
+</code></pre></div>
+
+<p><strong>Uninstall</strong></p>
+<div class="codehilite"><pre><span></span><code>flatpak<span class="w"> </span>uninstall<span class="w"> </span>--user<span class="w"> </span>com.mindforger.MindForger
+</code></pre></div>
+
+<p><code>~/mindforger-repository</code> and <code>~/.mindforger.md</code> are <strong>not</strong> removed by the uninstall -
+delete them manually if you want to get rid of them.</p>
+<h3 id="freebsd">FreeBSD</h3>
+<p>Install MindForger on <a href="https://www.freshports.org/deskutils/mindforger">FreeBSD</a>:</p>
+<div class="codehilite"><pre><span></span><code>pkg install deskutils/mindforger
+pkg install mindforger
+</code></pre></div>
+
+<p>(<a href="https://cgit.freebsd.org/ports/commit/?id=0c3409cfc37cfce255d0578b13805bf059a3be16">port commit</a>)</p>
 <h3 id="macos">macOS</h3>
 <p>Install MindForger on macOS either using <code>brew</code> or by downloading <code>.dmg</code>.</p>
+<p>MindForger is <strong>not signed nor notarized</strong> by Apple. Therefore macOS Gatekeeper
+blocks its first launch and MindForger is no longer available in the official
+Homebrew cask repository. Follow the steps below to install MindForger and
+allow it to run.</p>
 <p><strong>Homebrew</strong></p>
-<p>Install MindForger using <a href="https://brew.sh">HomeBrew</a>:</p>
-<div class="codehilite"><pre><span></span><code>brew install mindforger
+<p>Install MindForger using <a href="https://brew.sh">Homebrew</a> from the
+<a href="https://github.com/dvorka/homebrew-mindforger">dvorka/mindforger</a> tap:</p>
+<div class="codehilite"><pre><span></span><code>brew install --cask dvorka/mindforger/mindforger
+</code></pre></div>
+
+<p>Homebrew removes the quarantine attribute after the installation, so MindForger
+should start without any further steps. Upgrade MindForger by:</p>
+<div class="codehilite"><pre><span></span><code>brew upgrade --cask mindforger
+</code></pre></div>
+
+<p>If you have MindForger installed from the official Homebrew cask repository
+(<code>brew install mindforger</code>), then uninstall it first:</p>
+<div class="codehilite"><pre><span></span><code>brew uninstall --cask mindforger
+brew install --cask dvorka/mindforger/mindforger
 </code></pre></div>
 
 <p><strong>Disk iMaGe</strong></p>
+<p>MindForger <code>.dmg</code> is built for Intel - Apple Silicon Macs run it using
+<a href="https://support.apple.com/en-us/102527">Rosetta 2</a> which is installed by macOS
+automatically on the first launch (or install it by
+<code>softwareupdate --install-rosetta --agree-to-license</code>).</p>
 <p>Install MindForger using <code>.dmg</code>:</p>
 <ul>
 <li><a href="https://github.com/dvorka/mindforger/releases">download .dmg</a> from <a href="https://github.com/dvorka/mindforger/releases">GitHub releases</a></li>
@@ -258,9 +420,126 @@
 <ul>
 <li>Open/mount <code>.dmg</code></li>
 <li>Drag and drop/copy <code>mindforger</code> from <code>.dmg</code> to <code>Applications</code></li>
+<li>Allow MindForger to run - see below</li>
 <li>Run <code>MindForger</code></li>
 </ul>
+<p><strong>Allow MindForger to run</strong></p>
+<p>When macOS says that <em>"mindforger" cannot be opened because Apple cannot check
+it for malicious software</em> or that <em>"mindforger" is damaged</em>, then allow
+MindForger to run using one of the options below.</p>
+<p>Option 1 - Terminal (works on all macOS versions):</p>
+<div class="codehilite"><pre><span></span><code>xattr -dr com.apple.quarantine /Applications/mindforger.app
+</code></pre></div>
+
+<p>Option 2 - System Settings (macOS 15 Sequoia and newer):</p>
+<ul>
+<li>Try to run MindForger and close the warning dialog</li>
+<li>Open <strong>System Settings &gt; Privacy &amp; Security</strong></li>
+<li>Scroll down to the <strong>Security</strong> section and click <strong>Open Anyway</strong> next to
+  the message about <code>mindforger</code></li>
+<li>Confirm by clicking <strong>Open Anyway</strong> and authenticate with your password
+  or Touch ID</li>
+</ul>
+<p>Option 3 - Finder (macOS 14 Sonoma and older):</p>
+<ul>
+<li>Open <code>Applications</code> in Finder</li>
+<li><kbd>Control</kbd>-click (or right-click) <code>mindforger</code> and choose <strong>Open</strong></li>
+<li>Click <strong>Open</strong> in the warning dialog</li>
+</ul>
+<p>Allow MindForger once after every installation (or update) from <code>.dmg</code>.</p>
 <p>MindForger creates copy of the documentation in your home directory (<code>~/mindforger-repository</code>) and opens it as default repository.</p>
+<h3 id="nixos">NixOS</h3>
+<p>Install <a href="https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/editors/mindforger">MindForger package</a> on <a href="https://nixos.org/">NixOS</a>:</p>
+<div class="codehilite"><pre><span></span><code>nix-env -i mindforger
+</code></pre></div>
+
+<h3 id="opensuse">openSUSE</h3>
+<p>Install MindForger on <a href="https://www.opensuse.org/">openSUSE</a>:</p>
+<div class="codehilite"><pre><span></span><code>sudo zypper in opi
+opi mindforger
+</code></pre></div>
+
+<h3 id="snap">Snap</h3>
+<p><a href="https://snapcraft.io/docs">Snap</a> is a self-contained package which runs on all major Linux distros. There are the following MindForger Snap distributions:</p>
+<ul>
+<li><a href="https://snapcraft.io/mindforger">SnapCraft.io</a> package which uses strict confinement.</li>
+<li><strong>Classic</strong> confinement package downloadable from <a href="https://github.com/dvorka/mindforger/releases">GitHub Releases</a> page.</li>
+</ul>
+<p>Both packages require <code>snapd</code> - install it (if it is not installed already) by following
+the official guide for your distribution:</p>
+<ul>
+<li><a href="https://snapcraft.io/docs/installing-snapd">Installing snapd</a></li>
+</ul>
+<p><strong>Downloadable <code>.snap</code> package</strong></p>
+<p>The <code>.snap</code> package attached to every <a href="https://github.com/dvorka/mindforger/releases">GitHub release</a>
+uses <strong>classic</strong> confinement. Unlike the strictly confined
+<a href="https://snapcraft.io/mindforger">SnapCraft.io</a> package it has full access to the host,
+therefore it reads and writes your Markdown files and its configuration exactly like
+the <code>.deb</code> or tarball installation does. Classic confinement packages cannot be
+published to the Snap Store - the downloaded <code>.snap</code> file is installed directly
+(sideloaded).</p>
+<p><strong>Download</strong></p>
+<p>Download <code>mindforger_&lt;version&gt;_amd64.snap</code> from the <strong>Assets</strong> section of the latest:</p>
+<ul>
+<li><a href="https://github.com/dvorka/mindforger/releases">GitHub release</a></li>
+</ul>
+<p><strong>Install</strong></p>
+<p>Install the downloaded package with the <code>--dangerous</code> (sideloaded package which is not
+signed by the Snap Store) and <code>--classic</code> (classic confinement) flags:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># example: mindforger_2.3.0_amd64.snap</span>
+sudo<span class="w"> </span>snap<span class="w"> </span>install<span class="w"> </span>--dangerous<span class="w"> </span>--classic<span class="w"> </span>./mindforger_2.3.0_amd64.snap
+</code></pre></div>
+
+<p>Check the installation:</p>
+<div class="codehilite"><pre><span></span><code>snap<span class="w"> </span>list<span class="w"> </span>mindforger
+</code></pre></div>
+
+<p><strong>Run</strong></p>
+<p>Run MindForger either from the application menu (<code>MindForger</code>) or from the command line:</p>
+<div class="codehilite"><pre><span></span><code>mindforger
+</code></pre></div>
+
+<p>... or:</p>
+<div class="codehilite"><pre><span></span><code>snap<span class="w"> </span>run<span class="w"> </span>mindforger
+</code></pre></div>
+
+<p>On the <strong>first</strong> start MindForger creates a copy of the documentation and stencils in
+your home directory (<code>~/mindforger-repository</code>) and opens it as the default repository.</p>
+<p><strong>Data storage</strong></p>
+<p>Classic confinement stores the data in the same location as any other MindForger
+installation - your notebooks are not locked inside the snap:</p>
+<div class="codehilite"><pre><span></span><code>~/mindforger-repository   ... default repository with your Markdown files
+~/.mindforger.md          ... configuration
+</code></pre></div>
+
+<p>The strictly confined <a href="https://snapcraft.io/mindforger">SnapCraft.io</a> package keeps both
+under <code>~/snap/mindforger/common/</code> instead.</p>
+<p><strong>Upgrade</strong></p>
+<p>A sideloaded snap is not refreshed automatically (<code>snap refresh</code> has no Snap Store
+revision to upgrade to). Download the newer <code>.snap</code> and install it the same way - your
+repository and configuration are kept:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>snap<span class="w"> </span>install<span class="w"> </span>--dangerous<span class="w"> </span>--classic<span class="w"> </span>./mindforger_&lt;version&gt;_amd64.snap
+</code></pre></div>
+
+<p><strong>Uninstall</strong></p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>snap<span class="w"> </span>remove<span class="w"> </span>mindforger
+</code></pre></div>
+
+<p><code>snap remove</code> deletes the snap and its <code>~/snap/mindforger</code> directory -
+<code>~/mindforger-repository</code> and <code>~/.mindforger.md</code> are <strong>not</strong> touched.</p>
+<h3 id="ubuntu">Ubuntu</h3>
+<p>Install MindForger from <strong>PPA</strong>.
+Add <a href="https://launchpad.net/~ultradvorka/+archive/ubuntu/productivity">my Lauchpad hosted PPA</a> and install MindForger:</p>
+<div class="codehilite"><pre><span></span><code># add PPA to trusted repositories
+sudo add-apt-repository ppa:ultradvorka/productivity
+
+# update sources
+sudo apt update
+
+# install MindForger
+sudo apt install mindforger
+</code></pre></div>
+
 <h3 id="windows">Windows</h3>
 <p>Install MindForger using installer.</p>
 <ul>
@@ -281,92 +560,16 @@
 <p>Install MindForger from PPA. Add <a href="http://www.mindforger.com/debian">my PPA</a> to Apt, trust <a href="http://www.mindforger.com/gpgpubkey.txt">GPG key</a>,
 install MindForger and run it:</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># add PPA to trusted repositories</span>
-sudo add-apt-repository ppa:ultradvorka/productivity
+sudo<span class="w"> </span>add-apt-repository<span class="w"> </span>ppa:ultradvorka/productivity
 
 <span class="c1"># update sources</span>
-sudo apt update
+sudo<span class="w"> </span>apt<span class="w"> </span>update
 
 <span class="c1"># install MindForger</span>
-sudo apt install mindforger
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>mindforger
 
 <span class="c1"># run MindForger</span>
-<span class="nv">DISPLAY</span><span class="o">=</span>:0.0 mindforger
-</code></pre></div>
-
-<h3 id="snap">Snap</h3>
-<p>There are the following Snap distributions:</p>
-<ul>
-<li><a href="https://snapcraft.io/mindforger">SnapCraft.io</a> package which uses strict confinement.</li>
-<li><strong>Classic</strong> confinement package downloadable from <a href="https://github.com/dvorka/mindforger/releases">GitHub Releases</a> page.</li>
-</ul>
-<h3 id="ubuntu">Ubuntu</h3>
-<p>Install MindForger from <strong>PPA</strong>.
-Add <a href="https://launchpad.net/~ultradvorka/+archive/ubuntu/productivity">my Lauchpad hosted PPA</a> and install MindForger:</p>
-<div class="codehilite"><pre><span></span><code># add PPA to trusted repositories
-sudo add-apt-repository ppa:ultradvorka/productivity
-
-# update sources
-sudo apt update
-
-# install MindForger
-sudo apt install mindforger
-</code></pre></div>
-
-<h3 id="debian">Debian</h3>
-<p>Install MindForger on <a href="https://www.debian.org/">Debian</a> either by downloading <code>.deb</code> or from <strong>PPA</strong>.</p>
-<p>Download <code>.deb</code> package for your Debian version from:</p>
-<ul>
-<li><a href="https://github.com/dvorka/mindforger/releases">GitHub Releases</a> <strong>Assets</strong> section</li>
-</ul>
-<p>To install MindForger from the <strong>PPA</strong> add <a href="http://www.mindforger.com/debian">my PPA</a> for <strong>your Debian release</strong> version, trust <a href="http://www.mindforger.com/gpgpubkey.txt">GPG key</a> and
-install MindForger - follow the instructions described in:</p>
-<ul>
-<li>http://www.mindforger.com/debian-ppa</li>
-</ul>
-<p>For example Debian <strong>"bookworm"</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># add PPA to APT sources:</span>
-<span class="nb">echo</span> <span class="s2">&quot;deb http://www.mindforger.com/debian-ppa/bookworm bookworm main&quot;</span> <span class="p">|</span> sudo tee /etc/apt/sources.list.d/mindforger.list
-
-<span class="c1"># import PPA&#39;s GPG key</span>
-wget -qO - http://www.mindforger.com/gpgpubkey.txt <span class="p">|</span> sudo apt-key add -
-
-<span class="c1"># update sources</span>
-sudo apt update
-
-<span class="c1"># install MindForger</span>
-sudo apt install mindforger
-</code></pre></div>
-
-<h3 id="fedora">Fedora</h3>
-<p>Install MindForger on <a href="https://getfedora.org/">Fedora</a>:</p>
-<ul>
-<li><a href="https://github.com/dvorka/mindforger/releases">download RPM</a> from GitHub releases</li>
-</ul>
-<p>Install RPM:</p>
-<div class="codehilite"><pre><span></span><code>sudo dnf install mindforger-MAJOR.MINOR.REVISION.rpm
-</code></pre></div>
-
-<h3 id="freebsd">FreeBSD</h3>
-<p>Install MindForger on <a href="https://www.freshports.org/deskutils/mindforger">FreeBSD</a>:</p>
-<div class="codehilite"><pre><span></span><code>pkg install deskutils/mindforger
-pkg install mindforger
-</code></pre></div>
-
-<p>(<a href="https://cgit.freebsd.org/ports/commit/?id=0c3409cfc37cfce255d0578b13805bf059a3be16">port commit</a>)</p>
-<h3 id="arch-linux">Arch Linux</h3>
-<p>Install MindForger from Arch User Repository (AUR):</p>
-<ul>
-<li>https://aur.archlinux.org/packages/mindforger/</li>
-</ul>
-<h3 id="nixos">NixOS</h3>
-<p>Install <a href="https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/editors/mindforger">MindForger package</a> on <a href="https://nixos.org/">NixOS</a>:</p>
-<div class="codehilite"><pre><span></span><code>nix-env -i mindforger
-</code></pre></div>
-
-<h3 id="opensuse">openSUSE</h3>
-<p>Install MindForger on <a href="https://www.opensuse.org/">openSUSE</a>:</p>
-<div class="codehilite"><pre><span></span><code>sudo zypper in opi
-opi mindforger
+<span class="nv">DISPLAY</span><span class="o">=</span>:0.0<span class="w"> </span>mindforger
 </code></pre></div>
 
 
@@ -374,19 +577,135 @@ opi mindforger
 <div class="card mb-3"><div class="card-body">
 <h2 id="build-from-source-code">Build from source code</h2>
 <p>Build MindForger from the source code.</p>
+<h3 id="build-on-debian">Build on Debian</h3>
+<p>Build MindForger on Debian 9 (<code>stretch</code>) or later.</p>
+<p>Install package dependencies:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>build-essential<span class="w"> </span>zlib1g-dev<span class="w"> </span>libhunspell-dev<span class="w"> </span>libqt5webkit5-dev<span class="w"> </span>qttools5-dev-tools<span class="w"> </span>ccache<span class="w"> </span>cmake<span class="w"> </span>debhelper
+</code></pre></div>
+
+<p>Get <a href="https://github.com/dvorka/mindforger">source code</a>:</p>
+<div class="codehilite"><pre><span></span><code># clone MindForger repository
+git clone https://github.com/dvorka/mindforger.git
+# update repository sub-modules
+git submodule init
+git submodule update
+</code></pre></div>
+
+<p>Build dependencies:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
+<span class="nb">cd</span><span class="w"> </span>mindforger/deps/cmark-gfm
+mkdir<span class="w"> </span>build
+<span class="c1"># OPTIONAL step on certain Debian vesions: cmake -S . -B ./build</span>
+<span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>-DCMARK_TESTS<span class="o">=</span>OFF<span class="w"> </span>-DCMARK_SHARED<span class="o">=</span>OFF<span class="w"> </span>..
+cmake<span class="w"> </span>--build<span class="w"> </span>.
+</code></pre></div>
+
+<p>Compile and install from Git repository root directory:</p>
+<div class="codehilite"><pre><span></span><code>qmake<span class="w"> </span>-r<span class="w"> </span>mindforger.pro
+<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
+make
+sudo<span class="w"> </span>make<span class="w"> </span>install
+</code></pre></div>
+
+<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
+<div class="codehilite"><pre><span></span><code># clone MindForger documentation repository to home directory (location and directory name matters)
+cd ~
+git clone https://github.com/dvorka/mindforger-repository.git
+</code></pre></div>
+
+<p>Run MindForger:</p>
+<div class="codehilite"><pre><span></span><code>./mindforger
+</code></pre></div>
+
+<h3 id="build-on-fedora">Build on Fedora</h3>
+<p>Build MindForger on Fedora.</p>
+<p>Install package dependencies:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>zlib-devel<span class="w"> </span>hunspell-devel<span class="w"> </span>qt-devel<span class="w"> </span>qt5-devel<span class="w"> </span>ccache
+</code></pre></div>
+
+<p>Get source code:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger repository</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/dvorka/mindforger.git
+<span class="c1"># update repository sub-modules                                            </span>
+git<span class="w"> </span>submodule<span class="w"> </span>init
+git<span class="w"> </span>submodule<span class="w"> </span>update
+</code></pre></div>
+
+<p>Build dependencies:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
+<span class="nb">cd</span><span class="w"> </span>mindforger/deps/cmark-gfm
+mkdir<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>-DCMARK_TESTS<span class="o">=</span>OFF<span class="w"> </span>-DCMARK_SHARED<span class="o">=</span>OFF<span class="w"> </span>..
+cmake<span class="w"> </span>--build<span class="w"> </span>.
+</code></pre></div>
+
+<p>Compile and install from Git repository root directory:</p>
+<div class="codehilite"><pre><span></span><code>qmake-qt5<span class="w"> </span>-r<span class="w"> </span>mindforger.pro
+<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
+make
+sudo<span class="w"> </span>make<span class="w"> </span>install
+</code></pre></div>
+
+<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
+<div class="codehilite"><pre><span></span><code># clone MindForger documentation repository to home directory (location and directory name matters)
+cd ~
+git clone https://github.com/dvorka/mindforger-repository.git
+</code></pre></div>
+
+<p>Run MindForger:</p>
+<div class="codehilite"><pre><span></span><code>./mindforger
+</code></pre></div>
+
+<h3 id="build-on-gentoo">Build on Gentoo</h3>
+<p>Build MindForger on <a href="https://www.gentoo.org/">Gentoo</a>:</p>
+<p>Install package dependencies.</p>
+<p>Get source code:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger repository</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/dvorka/mindforger.git
+<span class="c1"># update repository sub-modules                                            </span>
+git<span class="w"> </span>submodule<span class="w"> </span>init
+git<span class="w"> </span>submodule<span class="w"> </span>update
+</code></pre></div>
+
+<p>Build dependencies:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
+<span class="nb">cd</span><span class="w"> </span>mindforger/deps/cmark-gfm
+mkdir<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>-DCMARK_TESTS<span class="o">=</span>OFF<span class="w"> </span>-DCMARK_SHARED<span class="o">=</span>OFF<span class="w"> </span>..
+cmake<span class="w"> </span>--build<span class="w"> </span>.
+</code></pre></div>
+
+<p>Compile and install from Git repository root directory:</p>
+<div class="codehilite"><pre><span></span><code>qmake<span class="w"> </span><span class="nv">CONFIG</span><span class="o">+=</span>mfwebengine<span class="w"> </span>-r<span class="w"> </span>mindforger.pro
+<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
+make
+sudo<span class="w"> </span>make<span class="w"> </span>install
+</code></pre></div>
+
+<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
+<div class="codehilite"><pre><span></span><code># clone MindForger documentation repository to home directory (location and directory name matters)
+cd ~
+git clone https://github.com/dvorka/mindforger-repository.git
+</code></pre></div>
+
+<p>Run MindForger:</p>
+<div class="codehilite"><pre><span></span><code>./mindforger
+</code></pre></div>
+
 <h3 id="build-on-macos">Build on macOS</h3>
 <p>Build MindForger on macOS Sierra 10.12+.</p>
 <p>Open <code>Terminal</code> and install/update <a href="https://developer.apple.com/">Xcode</a> command line tools:</p>
-<div class="codehilite"><pre><span></span><code>xcode-select --install
+<div class="codehilite"><pre><span></span><code>xcode-select<span class="w"> </span>--install
 </code></pre></div>
 
 <p>Install/update <a href="https://brew.sh">HomeBrew</a> package manager:</p>
-<div class="codehilite"><pre><span></span><code>ruby -e <span class="s2">&quot;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install<span class="k">)</span><span class="s2">&quot;</span>
-brew doctor
+<div class="codehilite"><pre><span></span><code>ruby<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/Homebrew/install/master/install<span class="k">)</span><span class="s2">&quot;</span>
+brew<span class="w"> </span>doctor
 </code></pre></div>
 
 <p>Install build tools and dependencies:</p>
-<div class="codehilite"><pre><span></span><code>brew install ccache
+<div class="codehilite"><pre><span></span><code>brew<span class="w"> </span>install<span class="w"> </span>ccache
 </code></pre></div>
 
 <p>Download Qt from https://www.qt.io/download and in its online installer choose:</p>
@@ -406,9 +725,9 @@ brew doctor
 </ul>
 <p>Once Qt is installed you can use <code>~/Qt/MaintennanceTool.app</code> to add/remove Qt components.</p>
 <p>Get <a href="https://github.com/dvorka/mindforger">source code</a>:</p>
-<div class="codehilite"><pre><span></span><code>git clone https://github.com/dvorka/mindforger.git
-git submodule init
-git submodule update
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/dvorka/mindforger.git
+git<span class="w"> </span>submodule<span class="w"> </span>init
+git<span class="w"> </span>submodule<span class="w"> </span>update
 </code></pre></div>
 
 <p>There are two ways how to <strong>build</strong> MindForger Disk iMaGe package:</p>
@@ -428,41 +747,41 @@ git submodule update
 <li>don't forget to apply changes e.g. using <code>. .bashr_profile</code></li>
 </ul>
 <div class="codehilite"><pre><span></span><code><span class="c1"># clang</span>
-<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/Users/username/Qt/5.x.x/clang_64/bin:</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/Users/username/Qt/5.x.x/clang_64/bin:</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="c1"># cmake</span>
-<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">:/Users/username/Qt/Tools/CMake/CMake.app/Contents/bin&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">:/Users/username/Qt/Tools/CMake/CMake.app/Contents/bin&quot;</span>
 <span class="c1"># installer</span>
-<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">:/Users/username/Qt/Tools/QtInstallerFramework/3.2/bin&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">:/Users/username/Qt/Tools/QtInstallerFramework/3.2/bin&quot;</span>
 </code></pre></div>
 
 <p>Get <a href="https://github.com/dvorka/mindforger">source code</a>:</p>
-<div class="codehilite"><pre><span></span><code>git clone https://github.com/dvorka/mindforger.git
-git submodule init
-git submodule update
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/dvorka/mindforger.git
+git<span class="w"> </span>submodule<span class="w"> </span>init
+git<span class="w"> </span>submodule<span class="w"> </span>update
 </code></pre></div>
 
 <p>Build <strong>dependencies</strong>:</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># build dependency: cmark-gfm</span>
-<span class="nb">cd</span> mindforger/deps/cmark-gfm
-mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
-cmake -DCMARK_TESTS<span class="o">=</span>OFF -DCMARK_SHARED<span class="o">=</span>OFF ..
-cmake --build .
+<span class="nb">cd</span><span class="w"> </span>mindforger/deps/cmark-gfm
+mkdir<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>-DCMARK_TESTS<span class="o">=</span>OFF<span class="w"> </span>-DCMARK_SHARED<span class="o">=</span>OFF<span class="w"> </span>..
+cmake<span class="w"> </span>--build<span class="w"> </span>.
 </code></pre></div>
 
 <p>Compile <strong>sources</strong> from repository <strong>root</strong> directory:</p>
-<div class="codehilite"><pre><span></span><code>qmake -r mindforger.pro
+<div class="codehilite"><pre><span></span><code>qmake<span class="w"> </span>-r<span class="w"> </span>mindforger.pro
 <span class="c1"># consider adding -j parameter with the number of CPU cores to use e.g. make -j 8</span>
 make
 </code></pre></div>
 
 <p>Optionally <strong>install</strong> MindForger:</p>
-<div class="codehilite"><pre><span></span><code><span class="nb">cd</span> app <span class="o">&amp;&amp;</span> cp -rvf mindforger.app /Applications
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>app<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>cp<span class="w"> </span>-rvf<span class="w"> </span>mindforger.app<span class="w"> </span>/Applications
 </code></pre></div>
 
 <p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger documentation repository to home directory - location and directory name matters</span>
-<span class="nb">cd</span> ~
-git clone https://github.com/dvorka/mindforger-repository.git
+<span class="nb">cd</span><span class="w"> </span>~
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/dvorka/mindforger-repository.git
 </code></pre></div>
 
 <p>Run MindForger either as application or using command line:</p>
@@ -486,6 +805,83 @@ git clone https://github.com/dvorka/mindforger-repository.git
 <li>run <code>build/macos/dmg-package-build.sh</code></li>
 <li>check <code>.dmg</code> distro created in <code>mindforger/app/mindforger.dmg</code></li>
 </ul>
+<h3 id="build-on-nixos">Build on NixOS</h3>
+<p>Build MindForger on <a href="https://www.gentoo.org/">Gentoo</a>:</p>
+<p>Install package <a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/mindforger/default.nix">dependencies</a>.</p>
+<p>Get source code:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger repository</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/dvorka/mindforger.git
+<span class="c1"># update repository sub-modules                                            </span>
+git<span class="w"> </span>submodule<span class="w"> </span>init
+git<span class="w"> </span>submodule<span class="w"> </span>update
+</code></pre></div>
+
+<p>Build dependencies:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
+<span class="nb">cd</span><span class="w"> </span>mindforger/deps/cmark-gfm
+mkdir<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>-DCMARK_TESTS<span class="o">=</span>OFF<span class="w"> </span>-DCMARK_SHARED<span class="o">=</span>OFF<span class="w"> </span>..
+cmake<span class="w"> </span>--build<span class="w"> </span>.
+</code></pre></div>
+
+<p>Compile and install from Git repository root directory:</p>
+<div class="codehilite"><pre><span></span><code>qmake<span class="w"> </span><span class="nv">CONFIG</span><span class="o">+=</span>mfwebengine<span class="w"> </span>-r<span class="w"> </span>mindforger.pro
+<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
+make
+sudo<span class="w"> </span>make<span class="w"> </span>install
+</code></pre></div>
+
+<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
+<div class="codehilite"><pre><span></span><code># clone MindForger documentation repository to home directory (location and directory name matters)
+cd ~
+git clone https://github.com/dvorka/mindforger-repository.git
+</code></pre></div>
+
+<p>Run MindForger:</p>
+<div class="codehilite"><pre><span></span><code>./mindforger
+</code></pre></div>
+
+<h3 id="build-on-ubuntu">Build on Ubuntu</h3>
+<p>Build MindForger on Ubuntu 16.04 or later.</p>
+<p>Install package dependencies:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>build-essential<span class="w"> </span>zlib1g-dev<span class="w"> </span>libhunspell-dev<span class="w"> </span>libqt5webkit5-dev<span class="w"> </span>qttools5-dev-tools<span class="w"> </span>qt5-default<span class="w"> </span>ccache<span class="w"> </span>cmake
+</code></pre></div>
+
+<p>Get <a href="https://github.com/dvorka/mindforger">source code</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger repository</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/dvorka/mindforger.git
+<span class="c1"># update repository sub-modules</span>
+<span class="nb">cd</span><span class="w"> </span>mindforger
+git<span class="w"> </span>submodule<span class="w"> </span>init
+git<span class="w"> </span>submodule<span class="w"> </span>update
+</code></pre></div>
+
+<p>Build <strong>dependencies</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
+<span class="nb">cd</span><span class="w"> </span>mindforger/deps/cmark-gfm
+mkdir<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>-DCMARK_TESTS<span class="o">=</span>OFF<span class="w"> </span>-DCMARK_SHARED<span class="o">=</span>OFF<span class="w"> </span>..
+cmake<span class="w"> </span>--build<span class="w"> </span>.
+</code></pre></div>
+
+<p><strong>Compile</strong> sources and <strong>install</strong> MindForger from Git repository root directory:</p>
+<div class="codehilite"><pre><span></span><code>qmake<span class="w"> </span>-r<span class="w"> </span>mindforger.pro
+<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
+make
+sudo<span class="w"> </span>make<span class="w"> </span>install
+</code></pre></div>
+
+<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger documentation repository to home directory (location and directory name matters)</span>
+<span class="nb">cd</span><span class="w"> </span>~
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/dvorka/mindforger-repository.git
+</code></pre></div>
+
+<p>Run MindForger:</p>
+<div class="codehilite"><pre><span></span><code>./mindforger
+</code></pre></div>
+
+<p>See also <code>mindforger/build/ubuntu/build-all-clean-system.sh</code></p>
 <h3 id="build-on-windows">Build on Windows</h3>
 <p>Build MindForger on <a href="https://www.microsoft.com/en-us/windows">Microsoft Windows</a>.</p>
 <p>Install build <strong>tools</strong>:</p>
@@ -594,247 +990,152 @@ use <code>mindforger-setup-debug.iss</code> installer configuration.</p>
 <h3 id="build-on-wsl">Build on WSL</h3>
 <p>Build MindForger on <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">Windows Subsystem for Linux</a> (WSL).</p>
 <p>Install build tools:</p>
-<div class="codehilite"><pre><span></span><code>sudo apt-get install build-essential zlib1g-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools qt5-default ccache
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>build-essential<span class="w"> </span>zlib1g-dev<span class="w"> </span>libhunspell-dev<span class="w"> </span>libqt5webkit5-dev<span class="w"> </span>qttools5-dev-tools<span class="w"> </span>qt5-default<span class="w"> </span>ccache
 </code></pre></div>
 
 <p>Update <code>gcc</code> and <code>g++</code> to version 5 (at least):</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># adds the the test toolchain which includes gcc-5 and g++5 </span>
-sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-sudo apt-get update
-sudo apt-get install gcc-5 g++-5
+sudo<span class="w"> </span>add-apt-repository<span class="w"> </span>ppa:ubuntu-toolchain-r/test
+sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>gcc-5<span class="w"> </span>g++-5
 <span class="c1"># substitute gcc-5 for gcc and g++-5 for g++ (current version)</span>
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 <span class="m">60</span> --slave /usr/bin/g++ g++ /usr/bin/g++-5
+sudo<span class="w"> </span>update-alternatives<span class="w"> </span>--install<span class="w"> </span>/usr/bin/gcc<span class="w"> </span>gcc<span class="w"> </span>/usr/bin/gcc-5<span class="w"> </span><span class="m">60</span><span class="w"> </span>--slave<span class="w"> </span>/usr/bin/g++<span class="w"> </span>g++<span class="w"> </span>/usr/bin/g++-5
 </code></pre></div>
 
 <p>Get <a href="https://github.com/dvorka/mindforger">source code</a>:</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger repository</span>
-git clone https://github.com/dvorka/mindforger.git
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/dvorka/mindforger.git
 <span class="c1"># update repository sub-modules</span>
-<span class="nb">cd</span> mindforger
-git submodule init
-git submodule update
+<span class="nb">cd</span><span class="w"> </span>mindforger
+git<span class="w"> </span>submodule<span class="w"> </span>init
+git<span class="w"> </span>submodule<span class="w"> </span>update
 </code></pre></div>
 
 <p>Build <strong>dependencies</strong>:</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
-<span class="nb">cd</span> mindforger/deps/cmark-gfm
-mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
-cmake -DCMARK_TESTS<span class="o">=</span>OFF -DCMARK_SHARED<span class="o">=</span>OFF ..
-cmake --build .
+<span class="nb">cd</span><span class="w"> </span>mindforger/deps/cmark-gfm
+mkdir<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>-DCMARK_TESTS<span class="o">=</span>OFF<span class="w"> </span>-DCMARK_SHARED<span class="o">=</span>OFF<span class="w"> </span>..
+cmake<span class="w"> </span>--build<span class="w"> </span>.
 </code></pre></div>
 
 <p>Compile and install from Git repository root directory:</p>
-<div class="codehilite"><pre><span></span><code>qmake -r mindforger.pro
+<div class="codehilite"><pre><span></span><code>qmake<span class="w"> </span>-r<span class="w"> </span>mindforger.pro
 <span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
 make
-sudo make install
+sudo<span class="w"> </span>make<span class="w"> </span>install
 </code></pre></div>
 
 <p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger documentation repository to home directory (location and directory name matters)</span>
-<span class="nb">cd</span> ~
-git clone https://github.com/dvorka/mindforger-repository.git
+<span class="nb">cd</span><span class="w"> </span>~
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/dvorka/mindforger-repository.git
 
 <span class="c1"># verify MindForger repository installation</span>
-ls mindforger-repository
-  limbo  memory  mind  stencils
+ls<span class="w"> </span>mindforger-repository
+<span class="w">  </span>limbo<span class="w">  </span>memory<span class="w">  </span>mind<span class="w">  </span>stencils
 </code></pre></div>
 
 <p>Run MindForger and start your XServer for Windows (e.g. <a href="https://sourceforge.net/projects/xming/">Xming</a>)</p>
-<div class="codehilite"><pre><span></span><code><span class="nv">DISPLAY</span><span class="o">=</span>:0.0 ./mindforger
+<div class="codehilite"><pre><span></span><code><span class="nv">DISPLAY</span><span class="o">=</span>:0.0<span class="w"> </span>./mindforger
 </code></pre></div>
 
-<h3 id="build-on-ubuntu">Build on Ubuntu</h3>
-<p>Build MindForger on Ubuntu 16.04 or later.</p>
-<p>Install package dependencies:</p>
-<div class="codehilite"><pre><span></span><code>sudo apt-get install build-essential zlib1g-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools qt5-default ccache cmake
+<h3 id="build-flatpak">Build Flatpak</h3>
+<p>Build the downloadable <code>.flatpak</code> bundle (see <a href="#flatpak">Flatpak</a> for installing the
+already built bundle) from <code>build/flatpak/com.mindforger.MindForger.yaml</code> - the manifest
+uses <code>org.kde.Platform</code> 5.15 for Qt 5.15 and Flathub's shared Qt WebEngine base app.</p>
+<p><strong>Prerequisites</strong></p>
+<p>Install <code>flatpak-builder</code> itself, plus <code>eu-strip</code>/<code>eu-elfcompress</code> (package <code>elfutils</code>)
+and <code>appstream-compose</code> - <code>flatpak-builder</code> shells out to all three to strip debug info
+and compose AppStream metadata, and none of them come with a plain <code>flatpak</code> install:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>flatpak<span class="w"> </span>flatpak-builder<span class="w"> </span>elfutils<span class="w"> </span>appstream-compose
 </code></pre></div>
 
-<p>Get <a href="https://github.com/dvorka/mindforger">source code</a>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger repository</span>
-git clone https://github.com/dvorka/mindforger.git
-<span class="c1"># update repository sub-modules</span>
-<span class="nb">cd</span> mindforger
-git submodule init
-git submodule update
+<p>On some distros (e.g. Ubuntu 22.04) the <code>appstream-compose</code> package installs its
+binary as <code>/usr/libexec/appstreamcli-compose</code> instead of <code>appstream-compose</code> on
+<code>PATH</code>, which <code>flatpak-builder</code> 1.2.x hardcodes the name of - symlink it if so:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>appstream-compose<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>sudo<span class="w"> </span>ln<span class="w"> </span>-s<span class="w"> </span>/usr/libexec/appstreamcli-compose<span class="w"> </span>/usr/local/bin/appstream-compose
 </code></pre></div>
 
-<p>Build <strong>dependencies</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
-<span class="nb">cd</span> mindforger/deps/cmark-gfm
-mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
-cmake -DCMARK_TESTS<span class="o">=</span>OFF -DCMARK_SHARED<span class="o">=</span>OFF ..
-cmake --build .
-</code></pre></div>
-
-<p><strong>Compile</strong> sources and <strong>install</strong> MindForger from Git repository root directory:</p>
-<div class="codehilite"><pre><span></span><code>qmake -r mindforger.pro
-<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
-make
-sudo make install
-</code></pre></div>
-
-<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger documentation repository to home directory (location and directory name matters)</span>
-<span class="nb">cd</span> ~
-git clone https://github.com/dvorka/mindforger-repository.git
-</code></pre></div>
-
-<p>Run MindForger:</p>
-<div class="codehilite"><pre><span></span><code>./mindforger
-</code></pre></div>
-
-<p>See also <code>mindforger/build/ubuntu/build-all-clean-system.sh</code></p>
-<h3 id="build-on-debian">Build on Debian</h3>
-<p>Build MindForger on Debian 9 (<code>stretch</code>) or later.</p>
-<p>Install package dependencies:</p>
-<div class="codehilite"><pre><span></span><code>sudo apt-get install build-essential zlib1g-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools ccache cmake debhelper
+<p>Install the Flatpak SDK/runtime/base-app pinned by the manifest:</p>
+<div class="codehilite"><pre><span></span><code>flatpak<span class="w"> </span>remote-add<span class="w"> </span>--if-not-exists<span class="w"> </span>--user<span class="w"> </span>flathub<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>https://flathub.org/repo/flathub.flatpakrepo
+flatpak<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>flathub<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>org.kde.Platform//5.15-24.08<span class="w"> </span>org.kde.Sdk//5.15-24.08<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>io.qt.qtwebengine.BaseApp//5.15-24.08
 </code></pre></div>
 
 <p>Get <a href="https://github.com/dvorka/mindforger">source code</a>:</p>
-<div class="codehilite"><pre><span></span><code># clone MindForger repository
-git clone https://github.com/dvorka/mindforger.git
-# update repository sub-modules
-git submodule init
-git submodule update
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/dvorka/mindforger.git
+git<span class="w"> </span>submodule<span class="w"> </span>init
+git<span class="w"> </span>submodule<span class="w"> </span>update
 </code></pre></div>
 
-<p>Build dependencies:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
-<span class="nb">cd</span> mindforger/deps/cmark-gfm
-mkdir build
-<span class="c1"># OPTIONAL step on certain Debian vesions: cmake -S . -B ./build</span>
-<span class="nb">cd</span> build
-cmake -DCMARK_TESTS<span class="o">=</span>OFF -DCMARK_SHARED<span class="o">=</span>OFF ..
-cmake --build .
+<p><strong>Build</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>mindforger/build
+make<span class="w"> </span>distro-flatpak-clean<span class="w"> </span>distro-flatpak-build
 </code></pre></div>
 
-<p>Compile and install from Git repository root directory:</p>
-<div class="codehilite"><pre><span></span><code>qmake -r mindforger.pro
-<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
-make
-sudo make install
+<p>The bundle is written to <code>distro/flatpak/mindforger-&lt;version&gt;.flatpak</code> - show its path
+with:</p>
+<div class="codehilite"><pre><span></span><code>make<span class="w"> </span>distro-flatpak-path
 </code></pre></div>
 
-<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
-<div class="codehilite"><pre><span></span><code># clone MindForger documentation repository to home directory (location and directory name matters)
-cd ~
-git clone https://github.com/dvorka/mindforger-repository.git
+<p><strong>Install and run locally (optional)</strong></p>
+<div class="codehilite"><pre><span></span><code>make<span class="w"> </span>distro-flatpak-install
+make<span class="w"> </span>distro-flatpak-run
 </code></pre></div>
 
-<p>Run MindForger:</p>
-<div class="codehilite"><pre><span></span><code>./mindforger
+<p>Remove the locally installed build:</p>
+<div class="codehilite"><pre><span></span><code>make<span class="w"> </span>distro-flatpak-remove
 </code></pre></div>
 
-<h3 id="build-on-fedora">Build on Fedora</h3>
-<p>Build MindForger on Fedora.</p>
-<p>Install package dependencies:</p>
-<div class="codehilite"><pre><span></span><code>sudo dnf install zlib-devel hunspell-devel qt-devel qt5-devel ccache
+<h3 id="build-snap">Build Snap</h3>
+<p>Build the <code>.snap</code> package (see <a href="#snap">Snap</a> for installing an already built package)
+from <code>build/snap/snapcraft.yaml</code> - the <strong>strict</strong> manifest, used both for the Snap
+Store package and, via <code>build/snap/apply-classic.sh</code>, to derive the <strong>classic</strong>
+manifest for the downloadable GitHub Release package. Never hand-edit a classic
+variant directly.</p>
+<p><strong>Prerequisites</strong></p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>snap<span class="w"> </span>install<span class="w"> </span>snapcraft<span class="w"> </span>--classic
+sudo<span class="w"> </span>snap<span class="w"> </span>install<span class="w"> </span>lxd
+sudo<span class="w"> </span>lxd<span class="w"> </span>init<span class="w"> </span>--auto
+sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> </span>lxd<span class="w"> </span><span class="nv">$USER</span>
 </code></pre></div>
 
-<p>Get source code:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger repository</span>
-git clone https://github.com/dvorka/mindforger.git
-<span class="c1"># update repository sub-modules                                            </span>
-git submodule init
-git submodule update
+<p><code>snapcraft</code> builds inside an LXD container, so log out and log in again (or <code>newgrp
+lxd</code>) after adding yourself to the <code>lxd</code> group for the first time.</p>
+<p>Get <a href="https://github.com/dvorka/mindforger">source code</a>:</p>
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/dvorka/mindforger.git
+git<span class="w"> </span>submodule<span class="w"> </span>init
+git<span class="w"> </span>submodule<span class="w"> </span>update
 </code></pre></div>
 
-<p>Build dependencies:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
-<span class="nb">cd</span> mindforger/deps/cmark-gfm
-mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
-cmake -DCMARK_TESTS<span class="o">=</span>OFF -DCMARK_SHARED<span class="o">=</span>OFF ..
-cmake --build .
+<p><strong>Build</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>mindforger/build
+<span class="c1"># strict package (Snap Store)</span>
+make<span class="w"> </span>distro-snap
+<span class="c1"># ... or the classic package (downloadable/sideloaded GitHub Release)</span>
+make<span class="w"> </span>distro-snap-classic
 </code></pre></div>
 
-<p>Compile and install from Git repository root directory:</p>
-<div class="codehilite"><pre><span></span><code>qmake-qt5 -r mindforger.pro
-<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
-make
-sudo make install
+<p>The packed <code>mindforger_&lt;version&gt;_amd64.snap</code> is written to the repository root - show
+its path with:</p>
+<div class="codehilite"><pre><span></span><code>make<span class="w"> </span>distro-snap-path
 </code></pre></div>
 
-<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
-<div class="codehilite"><pre><span></span><code># clone MindForger documentation repository to home directory (location and directory name matters)
-cd ~
-git clone https://github.com/dvorka/mindforger-repository.git
+<p><strong>Install and run locally (optional)</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># strict package</span>
+make<span class="w"> </span>distro-snap-install
+<span class="c1"># ... or the classic package</span>
+make<span class="w"> </span>distro-snap-install-classic
+
+mindforger
 </code></pre></div>
 
-<p>Run MindForger:</p>
-<div class="codehilite"><pre><span></span><code>./mindforger
-</code></pre></div>
-
-<h3 id="build-on-gentoo">Build on Gentoo</h3>
-<p>Build MindForger on <a href="https://www.gentoo.org/">Gentoo</a>:</p>
-<p>Install package dependencies.</p>
-<p>Get source code:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger repository</span>
-git clone https://github.com/dvorka/mindforger.git
-<span class="c1"># update repository sub-modules                                            </span>
-git submodule init
-git submodule update
-</code></pre></div>
-
-<p>Build dependencies:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
-<span class="nb">cd</span> mindforger/deps/cmark-gfm
-mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
-cmake -DCMARK_TESTS<span class="o">=</span>OFF -DCMARK_SHARED<span class="o">=</span>OFF ..
-cmake --build .
-</code></pre></div>
-
-<p>Compile and install from Git repository root directory:</p>
-<div class="codehilite"><pre><span></span><code>qmake <span class="nv">CONFIG</span><span class="o">+=</span>mfwebengine -r mindforger.pro
-<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
-make
-sudo make install
-</code></pre></div>
-
-<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
-<div class="codehilite"><pre><span></span><code># clone MindForger documentation repository to home directory (location and directory name matters)
-cd ~
-git clone https://github.com/dvorka/mindforger-repository.git
-</code></pre></div>
-
-<p>Run MindForger:</p>
-<div class="codehilite"><pre><span></span><code>./mindforger
-</code></pre></div>
-
-<h3 id="build-on-nixos">Build on NixOS</h3>
-<p>Build MindForger on <a href="https://www.gentoo.org/">Gentoo</a>:</p>
-<p>Install package <a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/mindforger/default.nix">dependencies</a>.</p>
-<p>Get source code:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger repository</span>
-git clone https://github.com/dvorka/mindforger.git
-<span class="c1"># update repository sub-modules                                            </span>
-git submodule init
-git submodule update
-</code></pre></div>
-
-<p>Build dependencies:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
-<span class="nb">cd</span> mindforger/deps/cmark-gfm
-mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
-cmake -DCMARK_TESTS<span class="o">=</span>OFF -DCMARK_SHARED<span class="o">=</span>OFF ..
-cmake --build .
-</code></pre></div>
-
-<p>Compile and install from Git repository root directory:</p>
-<div class="codehilite"><pre><span></span><code>qmake <span class="nv">CONFIG</span><span class="o">+=</span>mfwebengine -r mindforger.pro
-<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
-make
-sudo make install
-</code></pre></div>
-
-<p>Install <a href="https://github.com/dvorka/mindforger-repository">documentation and stencils</a>:</p>
-<div class="codehilite"><pre><span></span><code># clone MindForger documentation repository to home directory (location and directory name matters)
-cd ~
-git clone https://github.com/dvorka/mindforger-repository.git
-</code></pre></div>
-
-<p>Run MindForger:</p>
-<div class="codehilite"><pre><span></span><code>./mindforger
+<p>Remove the locally installed package:</p>
+<div class="codehilite"><pre><span></span><code>make<span class="w"> </span>distro-snap-remove
 </code></pre></div>
 
 
@@ -985,26 +1286,29 @@ repository or not - consider performance/CPU consumption vs features trade-off.<
               <div class="mf-toc-title">On this page</div>
               <div class="nav nav-vertical" id="toc">
                 <a href="#install-a-package" class="nav-link">Install a package</a>
-<a href="#macos" class="nav-link ms-3 small">macOS</a>
-<a href="#windows" class="nav-link ms-3 small">Windows</a>
-<a href="#wsl" class="nav-link ms-3 small">WSL</a>
-<a href="#snap" class="nav-link ms-3 small">Snap</a>
-<a href="#ubuntu" class="nav-link ms-3 small">Ubuntu</a>
+<a href="#arch-linux" class="nav-link ms-3 small">Arch Linux</a>
 <a href="#debian" class="nav-link ms-3 small">Debian</a>
 <a href="#fedora" class="nav-link ms-3 small">Fedora</a>
+<a href="#flatpak" class="nav-link ms-3 small">Flatpak</a>
 <a href="#freebsd" class="nav-link ms-3 small">FreeBSD</a>
-<a href="#arch-linux" class="nav-link ms-3 small">Arch Linux</a>
+<a href="#macos" class="nav-link ms-3 small">macOS</a>
 <a href="#nixos" class="nav-link ms-3 small">NixOS</a>
 <a href="#opensuse" class="nav-link ms-3 small">openSUSE</a>
+<a href="#snap" class="nav-link ms-3 small">Snap</a>
+<a href="#ubuntu" class="nav-link ms-3 small">Ubuntu</a>
+<a href="#windows" class="nav-link ms-3 small">Windows</a>
+<a href="#wsl" class="nav-link ms-3 small">WSL</a>
 <a href="#build-from-source-code" class="nav-link">Build from source code</a>
-<a href="#build-on-macos" class="nav-link ms-3 small">Build on macOS</a>
-<a href="#build-on-windows" class="nav-link ms-3 small">Build on Windows</a>
-<a href="#build-on-wsl" class="nav-link ms-3 small">Build on WSL</a>
-<a href="#build-on-ubuntu" class="nav-link ms-3 small">Build on Ubuntu</a>
 <a href="#build-on-debian" class="nav-link ms-3 small">Build on Debian</a>
 <a href="#build-on-fedora" class="nav-link ms-3 small">Build on Fedora</a>
 <a href="#build-on-gentoo" class="nav-link ms-3 small">Build on Gentoo</a>
+<a href="#build-on-macos" class="nav-link ms-3 small">Build on macOS</a>
 <a href="#build-on-nixos" class="nav-link ms-3 small">Build on NixOS</a>
+<a href="#build-on-ubuntu" class="nav-link ms-3 small">Build on Ubuntu</a>
+<a href="#build-on-windows" class="nav-link ms-3 small">Build on Windows</a>
+<a href="#build-on-wsl" class="nav-link ms-3 small">Build on WSL</a>
+<a href="#build-flatpak" class="nav-link ms-3 small">Build Flatpak</a>
+<a href="#build-snap" class="nav-link ms-3 small">Build Snap</a>
 <a href="#docker" class="nav-link">Docker</a>
 <a href="#build-and-run-in-container" class="nav-link ms-3 small">Build and run in container</a>
 <a href="#nightly-builds" class="nav-link">Nightly builds</a>
