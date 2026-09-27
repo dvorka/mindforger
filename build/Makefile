@@ -121,7 +121,7 @@ git-subs-update: ## update Git submodules
 	@echo "Building cmark-gfm and other dependencies..."
 	cd ../deps/cmark-gfm \
 	&& mkdir -p build && cd build \
-	&& cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. \
+	&& cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. \
 	&& cmake --build . \
 	; cd ../../../build
 
@@ -361,6 +361,8 @@ releng-version-set: ## propagate lib/src/app_info.h version to all release/packa
 	sed -i -E "s|<release version=\"[^\"]+\" date=\"[^\"]+\"|<release version=\"$(MINDFORGER_VERSION)\" date=\"$$(date +%Y-%m-%d)\"|" flatpak/com.mindforger.MindForger.metainfo.xml
 	sed -i "s/^export ARG_VERSION=.*/export ARG_VERSION=\"$(MINDFORGER_VERSION)\"/" tarball/tarball-build.sh
 	sed -i -E "s/^mindforger \([0-9]+\.[0-9]+\.[0-9]+(-[^)]*)\)/mindforger ($(MINDFORGER_VERSION)\1)/" ubuntu/debian/changelog
+	sed -i -E "s/^pkgver=.*/pkgver=$(MINDFORGER_VERSION)/; s/^pkgrel=.*/pkgrel=1/" arch/PKGBUILD
+	sed -i -E "s/^(\tpkgver = ).*/\1$(MINDFORGER_VERSION)/; s/^(\tpkgrel = ).*/\11/; s/#tag=[0-9.]+$$/#tag=$(MINDFORGER_VERSION)/" arch/.SRCINFO
 	@echo "Done. Review changes with: git diff"
 
 .PHONY: releng-gh-downloads
@@ -488,6 +490,22 @@ distro-debian-add-new-version: ## build current MF version .debs and add them to
 
 #
 # ^ Debian
+#
+
+#
+# Arch Linux: reference PKGBUILD for AUR (see arch/README.md)
+#
+
+.PHONY: distro-arch-pkg
+distro-arch-pkg: ## build, namcap and install Arch package from arch/PKGBUILD in Docker (1st run builds Qt WebKit chain from AUR - hours)
+	./docker/arch/build-pkg.sh pkg
+
+.PHONY: distro-arch-srcinfo
+distro-arch-srcinfo: ## regenerate arch/.SRCINFO from arch/PKGBUILD in Docker
+	./docker/arch/build-pkg.sh srcinfo
+
+#
+# ^ Arch Linux
 #
 
 
