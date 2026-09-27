@@ -15,9 +15,9 @@ sudo dnf install mindforger
 Host prerequisites: **Linux** w/ GNU tools (`tar`, `date`) and **Docker** -
 `rpmbuild` and `copr-cli` run in the `build/docker/fedora-rpm/` toolbox
 container (like the Debian tooling, macOS is not supported as a release host).
-Git submodules must be initialized (`git submodule update --init --recursive`). Paths, COPR project and
-architectures are configured in `fedora-config.sh` (env overrides).
-Design: `FEDORA_COPR_PLAN.md`.
+Git submodules must be initialized (`git submodule update --init --recursive`).
+Paths, COPR project and architectures are configured in `fedora-config.sh`
+(env overrides).
 
 ## 1. First time setup (once)
 
@@ -75,7 +75,7 @@ Re-spin packaging of the same MindForger version (spec fix):
   1. check Qt 5 WebEngine is still available:
      `docker run --rm fedora:45 dnf -q repoquery qt5-qtwebengine-devel`
   2. add `45 supported` to `fedora-releases.conf`
-  3. enable its chroots in COPR:
+  3. enable its chroots in COPR (CWD is `./build`):
      `./fedora/fedora-copr.sh copr-cli modify mindforger --chroot fedora-45-x86_64 --chroot fedora-45-aarch64 ...`
      (`--chroot` list **replaces** the project chroots - list all of them) or use the COPR web UI
   4. `make distro-fedora-add-new-version`
