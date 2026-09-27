@@ -12,8 +12,10 @@ sudo dnf copr enable dvorka/mindforger
 sudo dnf install mindforger
 ```
 
-Host prerequisites: **Docker** only - `rpmbuild` and `copr-cli` run in the
-`build/docker/fedora-rpm/` toolbox container. Paths, COPR project and
+Host prerequisites: **Linux** w/ GNU tools (`tar`, `date`) and **Docker** -
+`rpmbuild` and `copr-cli` run in the `build/docker/fedora-rpm/` toolbox
+container (like the Debian tooling, macOS is not supported as a release host).
+Git submodules must be initialized (`git submodule update --init --recursive`). Paths, COPR project and
 architectures are configured in `fedora-config.sh` (env overrides).
 Design: `FEDORA_COPR_PLAN.md`.
 
@@ -30,6 +32,7 @@ Design: `FEDORA_COPR_PLAN.md`.
 5. Create the COPR project w/ chroots of **supported** releases from
    `fedora-releases.conf` (x86_64 + aarch64):
    ```sh
+   # CWD is ./build
    ./fedora/fedora-copr.sh copr-cli create mindforger \
        --chroot fedora-44-x86_64 --chroot fedora-44-aarch64 \
        --chroot fedora-43-x86_64 --chroot fedora-43-aarch64 \
@@ -51,7 +54,7 @@ It runs: token check, local `.rpm` pre-flight build for all supported
 releases (Docker), COPR build of all chroots (waits for it), download of the
 COPR `.rpm`s and installation check from COPR in clean `fedora:NN` containers.
 
-Then attach `MF_FEDORA_RPM_DIR/copr/*.rpm` (default `../mindforger-rpm/copr/`)
+Then attach `MF_FEDORA_RPM_DIR/copr/*.rpm` (default `distro/fedora/copr/`)
 to the GitHub release.
 
 Individual steps (when something fails):

@@ -24,8 +24,8 @@
 #   repository to manage (unlike Debian PPA)
 # - Fedora releases are listed in fedora-releases.conf, configuration is in
 #   fedora-config.sh
-# - only Docker is needed on the host: rpmbuild and copr-cli run in the
-#   build/docker/fedora-rpm/ toolbox container
+# - Linux host w/ GNU tools (tar, date) and Docker is needed: rpmbuild and
+#   copr-cli run in the build/docker/fedora-rpm/ toolbox container
 #
 # usage:
 #   ./fedora-copr.sh srpm
@@ -148,6 +148,11 @@ function cmd_srpm {
     mf_fedora_print_config
     version="$(mf_version)"
     tarball="${MF_FEDORA_RPM_DIR}/mindforger-${version}.tar.gz"
+
+    # uninitialized submodules are listed by `git ls-files` as empty dirs -
+    # the tarball would be silently incomplete (no cmark-gfm, no doc)
+    ! git -C "${REPO_ROOT}" submodule status --recursive | grep -q '^-' \
+        || die "Git submodules are not initialized - run: git submodule update --init --recursive"
 
     mkdir -p "${MF_FEDORA_RPM_DIR}"
     # drop artifacts of previous builds so that a stale one can never be

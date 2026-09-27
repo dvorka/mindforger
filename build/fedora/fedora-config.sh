@@ -24,7 +24,7 @@
 #
 # Every value can be overridden by the environment variable of the same name:
 #
-#   export MF_FEDORA_RPM_DIR=/new/location/mindforger-rpm  # ~/.bashrc
+#   export MF_FEDORA_RPM_DIR=/new/location/fedora  # ~/.bashrc
 #
 # The configuration in effect (incl. its source: default or env) is printed
 # by every command - see mf_fedora_print_config.
@@ -48,7 +48,8 @@ MF_FEDORA_COPR_PROJECT="${MF_FEDORA_COPR_PROJECT:-dvorka/mindforger}"
 # architectures built in COPR (chroot fedora-<number>-<arch>)
 MF_FEDORA_ARCHES="${MF_FEDORA_ARCHES:-x86_64 aarch64}"
 # source tarball, SRPM and .rpm packages (local builds and COPR downloads)
-MF_FEDORA_RPM_DIR="${MF_FEDORA_RPM_DIR:-${MF_REPO_ROOT}/../mindforger-rpm}"
+# - generated, Git ignored (like MF_DEBIAN_PPA_DIR)
+MF_FEDORA_RPM_DIR="${MF_FEDORA_RPM_DIR:-${MF_REPO_ROOT}/distro/fedora}"
 # COPR API token file - https://copr.fedorainfracloud.org/api/
 MF_FEDORA_COPR_CONFIG="${MF_FEDORA_COPR_CONFIG:-${HOME}/.config/copr}"
 # the list of Fedora releases

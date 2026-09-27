@@ -30,6 +30,7 @@ deps/cmark-gfm
 deps/cmark-gfm
 deps/mitie
 distro/debian/
+distro/fedora/
 distro/flatpak/
 distro/winget/
 moc_*.cpp
