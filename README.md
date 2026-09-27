@@ -57,7 +57,7 @@ Packages:
 
 Install:
 
-* [Arch Linux](https://www.mindforger.com/docs/installation.html#arch-linux)
+* [Arch](https://www.mindforger.com/docs/installation.html#arch-linux)
 * [Debian](https://www.mindforger.com/docs/installation.html#debian)
 * [Fedora](https://www.mindforger.com/docs/installation.html#fedora)
 * [Flatpak](https://www.mindforger.com/docs/installation.html#flatpak)
