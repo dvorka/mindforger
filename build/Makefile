@@ -123,7 +123,7 @@ git-subs-update: ## update Git submodules
 	@echo "Building cmark-gfm and other dependencies..."
 	cd ../deps/cmark-gfm \
 	&& mkdir -p build && cd build \
-	&& cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. \
+	&& cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. \
 	&& cmake --build . \
 	; cd ../../../build
 
@@ -242,7 +242,7 @@ run-production: build-rc ## run MindForger on the production knowledge base
 
 
 #
-# Windows
+# DISTRIBUTION: Windows
 #
 # Targets below wrap the .bat scripts in build/windows/ (env.bat, build-*.bat,
 # run-*.bat). They only work when run on Windows (e.g. from Git Bash with GNU
@@ -362,6 +362,8 @@ releng-version-set: ## propagate lib/src/app_info.h version to all release/packa
 	sed -i -E "s|<release version=\"[^\"]+\" date=\"[^\"]+\"|<release version=\"$(MINDFORGER_VERSION)\" date=\"$$(date +%Y-%m-%d)\"|" flatpak/com.mindforger.MindForger.metainfo.xml
 	sed -i "s/^export ARG_VERSION=.*/export ARG_VERSION=\"$(MINDFORGER_VERSION)\"/" tarball/tarball-build.sh
 	sed -i -E "s/^mindforger \([0-9]+\.[0-9]+\.[0-9]+(-[^)]*)\)/mindforger ($(MINDFORGER_VERSION)\1)/" ubuntu/debian/changelog
+	sed -i -E "s/^pkgver=.*/pkgver=$(MINDFORGER_VERSION)/; s/^pkgrel=.*/pkgrel=1/" arch/PKGBUILD
+	sed -i -E "s/^(\tpkgver = ).*/\1$(MINDFORGER_VERSION)/; s/^(\tpkgrel = ).*/\11/; s/#tag=[0-9.]+$$/#tag=$(MINDFORGER_VERSION)/" arch/.SRCINFO
 	@echo "Done. Review changes with: git diff"
 
 .PHONY: releng-gh-downloads
@@ -409,6 +411,10 @@ distro-deb: distro-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR) 
 	cp -vf $(MF_MAKER_WORKING_DIR)/`cd $(MF_MAKER_WORKING_DIR) && ls -d mindforger*`/mindforger_$(MINDFORGER_VERSION)-1_amd64.deb $(MINDFORGER_RELEASE_DIR)
 
 
+#
+# DISTRIBUTION: macOS
+#
+
 .PHONY: distro-dmg
 distro-dmg: ## build macOS Disk iMaGe .dmg package
 	@echo "Building .dmg package..."
@@ -416,7 +422,7 @@ distro-dmg: ## build macOS Disk iMaGe .dmg package
 
 
 #
-# Debian
+# DISTRIBUTION: Debian
 #
 # MindForger Debian PPAs @ https://www.mindforger.com/debian-ppa/<codename>/
 # - one PPA per Debian release, managed by aptly, signed by MindForger GPG key
@@ -478,12 +484,24 @@ distro-debian-add-new-version: ## build current MF version .debs and add them to
 	@echo "DONE: MindForger $(MINDFORGER_VERSION) added to supported Debian PPAs"
 	@echo "NEXT: upload MF_DEBIAN_PPA_DIR (see the configuration printed above) to https://www.mindforger.com/debian-ppa/ (see debian/README.md)"
 
-#
-# ^ Debian
-#
 
 #
-# Fedora
+# DISTRIBUTION: Arch Linux:
+#
+# Reference PKGBUILD for AUR - see arch/README.md.
+#
+
+.PHONY: distro-arch-pkg
+distro-arch-pkg: ## build, namcap and install Arch package from arch/PKGBUILD in Docker (1st run builds Qt WebKit chain from AUR - ~40 min)
+	./docker/arch/build-pkg.sh pkg
+
+.PHONY: distro-arch-srcinfo
+distro-arch-srcinfo: ## regenerate arch/.SRCINFO from arch/PKGBUILD in Docker
+	./docker/arch/build-pkg.sh srcinfo
+
+
+#
+# DISTRIBUTION: Fedora
 #
 # MindForger Fedora COPR @ https://copr.fedorainfracloud.org/coprs/dvorka/mindforger/
 # - COPR builds, hosts and signs the dnf repository for all supported Fedora releases
@@ -524,10 +542,10 @@ distro-fedora-add-new-version: ## build current MF version .rpms locally, then i
 	@echo "DONE: MindForger $(MINDFORGER_VERSION) released to Fedora COPR"
 	@echo "NEXT: attach MF_FEDORA_RPM_DIR/copr/*.rpm (see the configuration printed above) to the GitHub release"
 
-#
-# ^ Fedora
-#
 
+#
+# DISTRIBUTION: Ubuntu
+#
 
 .PHONY: distro-ubuntu-deb
 distro-ubuntu-deb: ## locally build .deb for any Ubuntu version: DISTRO=bionic
@@ -689,7 +707,7 @@ distro-flatpak-run: ## run the locally installed Flatpak
 
 
 #
-# winget (Windows Package Manager)
+# DISTRIBUTION: winget (Windows Package Manager)
 #
 # Prerequisites and full walkthrough: see build/winget/README.md
 #
@@ -716,10 +734,10 @@ distro-winget-submit-pr: ## copy manifests to winget-pkgs fork, commit signed, p
 distro-winget-hash-url: ## print SHA256 of the published Windows installer without generating manifests (VERSION required)
 	powershell.exe -NoProfile -ExecutionPolicy Bypass -File winget/sha256-from-url.ps1 -Version $(VERSION)
 
-#
-# ^ winget
-#
 
+#
+# tools
+#
 
 .PHONY: distro-all-clean
 distro-all-clean:

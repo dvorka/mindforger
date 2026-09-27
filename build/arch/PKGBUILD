@@ -1,0 +1,46 @@
+# Maintainer: Fabio 'Lolix' Loli <fabio.loli@disroot.org> -> https://github.com/FabioLolix
+# Maintainer: Maxim Mikityanskiy <maxtram95@gmail.com>
+# Contributor: Martin Dvorak <martin.dvorak@mindforger.com>
+#
+# MindForger upstream reference PKGBUILD for AUR - see build/arch/README.md
+
+pkgname=mindforger
+pkgver=2.5.0
+pkgrel=1
+pkgdesc="Thinking notebook and Markdown IDE. Search, browse, view and edit your Markdown files. Get as much as possible from knowledge in your remarks"
+arch=(x86_64 aarch64)
+url="https://github.com/dvorka/mindforger"
+license=(GPL-2.0-or-later)
+depends=(qt5-base qt5-webkit zlib hunspell curl hicolor-icon-theme glibc libgcc libstdc++)
+makedepends=(git cmake qt5-tools)
+source=("git+https://github.com/dvorka/mindforger.git#tag=${pkgver}"
+        "git+https://github.com/dvorka/mindforger-repository.git"
+        "mindforger-cmark::git+https://github.com/dvorka/cmark.git")
+sha256sums=('SKIP'
+            'SKIP'
+            'SKIP')
+
+prepare() {
+  cd "$pkgname"
+  git submodule init
+  git config 'submodule.doc.url' "${srcdir}/mindforger-repository"
+  git config 'submodule.deps/cmark-gfm.url' "${srcdir}/mindforger-cmark"
+  git -c protocol.file.allow=always submodule update
+}
+
+build() {
+  cd "$srcdir/$pkgname"
+  # the policy flag is needed only for MF releases whose cmark-gfm submodule predates the CMake 4 fix
+  cmake -S deps/cmark-gfm -B deps/cmark-gfm/build \
+    -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF -Wno-dev \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+  cmake --build deps/cmark-gfm/build
+
+  qmake -r CONFIG+=mfnoccache CONFIG+=mfwebkit mindforger.pro
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname"
+  make INSTALL_ROOT="$pkgdir/usr" install
+}

@@ -31,6 +31,9 @@
       Wingman availability (W) segments.
     * Change: autolinking, thinking and math are newly enabled by default after
       fresh MindForger installation.
+    * Enhancement: Arch Linux upstream reference AUR package - PKGBUILD for
+      the AUR mindforger package (Qt WebKit) is newly maintained in build/arch/
+      and verified in an Arch Linux Docker container (make distro-arch-pkg).
     * Change: View/CLI menu item renamed to View/Command Palette.
     * Change: Debian PPA installation instructions use signed-by keyring
       instead of apt-key, which is no longer available on Debian Trixie.
@@ -45,6 +48,11 @@
       associations worker thread kept running while the application was being
       torn down - the worker is newly stopped and joined on shutdown w/o any
       delay regardless of the configured async refresh interval (#1563).
+    * Fix: MindForger could not be built w/ CMake 4 (e.g. on Arch Linux) as the
+      bundled cmark-gfm required CMake < 3.5 which is no longer supported by
+      CMake 4 - cmark-gfm build newly requires CMake 3.5 (cmark-gfm sources are
+      unchanged) and all maintained build scripts pass CMake 4 compatibility
+      policy (#1553).
 
 2026-09-23  Martin Dvorak  <martin.dvorak@mindforger.com>
 
