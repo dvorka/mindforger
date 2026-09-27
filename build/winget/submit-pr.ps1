@@ -65,17 +65,17 @@ if (-not (Test-Path (Join-Path $WingetPkgsDir ".git"))) {
 
 $ScriptDir   = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ProjectRoot = Resolve-Path (Join-Path $ScriptDir "..\..")
-$PackageId   = "MindForger.MindForger"
-$ManifestSrc = Join-Path $ProjectRoot "distro\winget\manifests\m\MindForger\MindForger\$Version"
-$ManifestDst = Join-Path $WingetPkgsDir "manifests\m\MindForger\MindForger\$Version"
+$PackageId   = "MartinDvorak.MindForger"
+$ManifestSrc = Join-Path $ProjectRoot "distro\winget\manifests\m\MartinDvorak\MindForger\$Version"
+$ManifestDst = Join-Path $WingetPkgsDir "manifests\m\MartinDvorak\MindForger\$Version"
 $BranchName  = "$PackageId-$Version"
-$IsNew       = -not (Test-Path (Join-Path $WingetPkgsDir "manifests\m\MindForger"))
+$IsNew       = -not (Test-Path (Join-Path $WingetPkgsDir "manifests\m\MartinDvorak\MindForger"))
 
 if (-not (Test-Path $ManifestSrc)) {
     Write-Error "Manifests not found at $ManifestSrc`nRun 'make distro-winget-from-release VERSION=$Version' first."
 }
 
-$Verb      = if ($IsNew) { "New package" } else { "Update" }
+$Verb      = if ($IsNew) { "New package" } else { "New version" }
 $CommitMsg = "${Verb}: $PackageId version $Version"
 $PrTitle   = $CommitMsg
 
@@ -114,7 +114,7 @@ try {
     Write-Host "Manifests copied to $ManifestDst" -ForegroundColor Green
 
     # stage
-    Invoke-Git add "manifests\m\MindForger\MindForger\$Version"
+    Invoke-Git add "manifests\m\MartinDvorak\MindForger\$Version"
 
     # commit - try with GPG signature, fall back to unsigned
     Write-Host "Committing..." -ForegroundColor Yellow

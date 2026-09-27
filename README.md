@@ -68,7 +68,7 @@ Install:
 * [Snap](https://snapcraft.io/mindforger)
 * [Ubuntu](https://www.mindforger.com/docs/installation.html#ubuntu)
 * [Windows](https://www.mindforger.com/docs/installation.html#windows)
-* [winget](https://github.com/microsoft/winget-pkgs/tree/master/manifests/m/MindForger/MindForger)
+* [winget](https://github.com/microsoft/winget-pkgs/tree/master/manifests/m/MartinDvorak/MindForger)
 * [WSL](https://www.mindforger.com/docs/installation.html#wsl)
 
 Build:

@@ -34,6 +34,9 @@
       to SHA-512 (the key fingerprint is unchanged) as Debian Trixie apt rejects
       keys w/ SHA-1 self-signatures - please DO re-import
       the key from https://www.mindforger.com/gpgpubkey.txt
+    * Change: winget package ID is MartinDvorak.MindForger going forward
+      (winget install MartinDvorak.MindForger) - the already existing
+      community maintained package.
     * Fix: MindForger could randomly crash on exit as the async autolinking and
       associations worker thread kept running while the application was being
       torn down - the worker is newly stopped and joined on shutdown w/o any
