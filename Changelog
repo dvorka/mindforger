@@ -1,10 +1,17 @@
 2026-09-26  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.5.0 - new Notebook/Note associations (BM25), status bar w/
-      ADLMSTW diodes, new Debian PPA.
+      ADLMSTW diodes, new Debian PPA and Fedora COPR.
     * Feature: Debian 13 Trixie PPA - MindForger is newly provided for Debian 13
       Trixie in addition to Debian 12 Bookworm (Debian 11 Bullseye, 10 Buster
       and 9 Stretch PPAs are kept, but frozen) at https://www.mindforger.com/debian-ppa/
+    * Feature: Fedora COPR - MindForger is newly provided as a dnf repository
+      for all current Fedora releases (Fedora 44 and 43, x86_64 and aarch64)
+      at https://copr.fedorainfracloud.org/coprs/dvorka/mindforger/ - install
+      it using `sudo dnf copr enable dvorka/mindforger && sudo dnf install mindforger`.
+    * Change: Fedora .rpm packages are newly built natively from sources
+      (instead of converting Debian .deb packages using alien), i.e. with
+      correct Fedora libraries and dependencies.
     * Enhancement: new 3rd Note associations generation - Best Matching 25
       (BM25; TF-IDF + normalization which prevents long(er) docs from winning)
       based associations algorithm (extension of BoW): Notes are matched by whole

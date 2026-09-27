@@ -39,6 +39,8 @@ MF_LANG := "en"
 DISTRO := "bionic"
 # Debian release codename: bookworm trixie (see debian/debian-releases.conf)
 DEBIAN_RELEASE :=
+# Fedora release number: 43 44 (see fedora/fedora-releases.conf)
+FEDORA_RELEASE :=
 # MindForger version to be added/updated/removed in Debian PPA
 MF_VERSION := $(MINDFORGER_VERSION)
 # CPU cores thant can be used to build the project
@@ -355,7 +357,6 @@ releng-version-set: ## propagate lib/src/app_info.h version to all release/packa
 	sed -i "s/^version: .*/version: $(MINDFORGER_VERSION_MAJOR_MINOR).{build}/" ../appveyor.yml
 	sed -i "s/^export ARG_VERSION=.*/export ARG_VERSION=\"$(MINDFORGER_VERSION)\"/" debian/debian-make-deb.sh
 	sed -i -E "s/^mindforger \([0-9]+\.[0-9]+\.[0-9]+(-[^)]*)\)/mindforger ($(MINDFORGER_VERSION)\1)/" debian/debian/changelog
-	sed -i "s/export MFVERSION=\"[0-9.]*\"/export MFVERSION=\"$(MINDFORGER_VERSION)\"/" fedora/fedora-rpm-from-deb.sh
 	sed -i "s/^export MINDFORGER_VERSION=.*/export MINDFORGER_VERSION=\"$(MINDFORGER_VERSION)\"/" macos/env.sh
 	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" snap/snapcraft.yaml
 	sed -i -E "s|<release version=\"[^\"]+\" date=\"[^\"]+\"|<release version=\"$(MINDFORGER_VERSION)\" date=\"$$(date +%Y-%m-%d)\"|" flatpak/com.mindforger.MindForger.metainfo.xml
@@ -406,15 +407,6 @@ distro-deb: distro-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR) 
 	mkdir -vp $(MF_MAKER_WORKING_DIR)
 	cp -vf ./debian/debian-make-deb.sh $(MF_MAKER_WORKING_DIR) && cd $(MF_MAKER_WORKING_DIR) && ./debian-make-deb.sh
 	cp -vf $(MF_MAKER_WORKING_DIR)/`cd $(MF_MAKER_WORKING_DIR) && ls -d mindforger*`/mindforger_$(MINDFORGER_VERSION)-1_amd64.deb $(MINDFORGER_RELEASE_DIR)
-
-
-.PHONY: distro-rpm
-distro-rpm: ## build .rpm package on Fedora
-	@echo "IMPORTANT: this target MUST be run on Fedora!"
-	cd fedora && ./fedora-distro-setup.sh
-	@echo "Building .rpm package..."
-	cp -vf ./fedora-rpm-from-deb.sh ~/alien && cd ~/alien && sudo ./fedora-rpm-from-deb.sh $(MINDFORGER_VERSION)
-	@echo "Find .rpm in ~/alien directory"
 
 
 .PHONY: distro-dmg
@@ -488,6 +480,52 @@ distro-debian-add-new-version: ## build current MF version .debs and add them to
 
 #
 # ^ Debian
+#
+
+#
+# Fedora
+#
+# MindForger Fedora COPR @ https://copr.fedorainfracloud.org/coprs/dvorka/mindforger/
+# - COPR builds, hosts and signs the dnf repository for all supported Fedora releases
+# - Fedora releases: fedora/fedora-releases.conf
+# - .rpm packages are built locally in Docker: docker/fedora-rpm/
+# - see fedora/README.md for the one-time setup and the whole release process
+#
+# Parameters:
+#   FEDORA_RELEASE ... Fedora release number e.g. 44 (default: all supported)
+#
+
+.PHONY: distro-fedora-srpm
+distro-fedora-srpm: ## build source .rpm for COPR (in Docker)
+	./fedora/fedora-copr.sh srpm
+
+.PHONY: distro-fedora-rpm
+distro-fedora-rpm: ## build .rpm in Docker for FEDORA_RELEASE=44 (default: all supported releases)
+	./fedora/fedora-copr.sh rpm $(or $(FEDORA_RELEASE),supported)
+
+.PHONY: distro-fedora-copr-release
+distro-fedora-copr-release: ## build current MF version in COPR for all supported Fedora releases and download .rpms
+	./fedora/fedora-copr.sh release
+
+.PHONY: distro-fedora-copr-verify
+distro-fedora-copr-verify: ## install MF from COPR in Docker: FEDORA_RELEASE=44 (default: all supported releases)
+	./fedora/fedora-copr.sh verify $(or $(FEDORA_RELEASE),supported)
+
+.PHONY: distro-fedora-copr-token-check
+distro-fedora-copr-token-check: ## check validity of the COPR API token
+	./fedora/fedora-copr.sh token-check
+
+.PHONY: distro-fedora-add-new-version
+distro-fedora-add-new-version: ## build current MF version .rpms locally, then in COPR for ALL supported Fedora releases and verify
+	./fedora/fedora-copr.sh token-check
+	./fedora/fedora-copr.sh rpm supported
+	./fedora/fedora-copr.sh release
+	./fedora/fedora-copr.sh verify supported
+	@echo "DONE: MindForger $(MINDFORGER_VERSION) released to Fedora COPR"
+	@echo "NEXT: attach MF_FEDORA_RPM_DIR/copr/*.rpm (see the configuration printed above) to the GitHub release"
+
+#
+# ^ Fedora
 #
 
 
