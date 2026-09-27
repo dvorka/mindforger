@@ -497,7 +497,7 @@ distro-debian-add-new-version: ## build current MF version .debs and add them to
 #
 
 .PHONY: distro-arch-pkg
-distro-arch-pkg: ## build, namcap and install Arch package from arch/PKGBUILD in Docker (1st run builds Qt WebKit chain from AUR - hours)
+distro-arch-pkg: ## build, namcap and install Arch package from arch/PKGBUILD in Docker (1st run builds Qt WebKit chain from AUR - ~40 min)
 	./docker/arch/build-pkg.sh pkg
 
 .PHONY: distro-arch-srcinfo

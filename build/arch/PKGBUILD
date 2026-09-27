@@ -11,7 +11,7 @@ pkgdesc="Thinking notebook and Markdown IDE. Search, browse, view and edit your 
 arch=(x86_64 aarch64)
 url="https://github.com/dvorka/mindforger"
 license=(GPL-2.0-or-later)
-depends=(qt5-base qt5-webkit zlib hunspell curl glibc gcc-libs)
+depends=(qt5-base qt5-webkit zlib hunspell curl hicolor-icon-theme glibc libgcc libstdc++)
 makedepends=(git cmake qt5-tools)
 source=("git+https://github.com/dvorka/mindforger.git#tag=${pkgver}"
         "git+https://github.com/dvorka/mindforger-repository.git"

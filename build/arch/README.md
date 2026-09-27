@@ -20,8 +20,9 @@ the upstream default Qt WebEngine:
 
 * Neither `qt5-webkit` nor `qt5-webengine` are in the official Arch repositories anymore,
   both must be built from AUR on the user's machine.
-* `qt5-webkit` builds in about an hour, `qt5-webengine` (Chromium) takes several hours
-  and lots of RAM and disk.
+* the whole Qt WebKit chain builds in about 40 minutes on a 16 CPU core machine
+  (measured, see below), `qt5-webengine` (Chromium) takes several hours and lots of
+  RAM and disk.
 
 Limitations of the Qt WebKit build:
 
@@ -40,14 +41,17 @@ Installing `mindforger` from AUR builds this chain of AUR packages, in this orde
 (an AUR helper like `yay` or `paru` resolves it automatically):
 
 ```
-qt5-location    \
-qt5-sensors      |-- Qt 5 modules dropped from the official repositories
-qt5-webchannel  /
-qt5-doc         ... make dependency of qt5-webkit - downloads and configures the whole
-                    Qt 5 source tree to generate the documentation
-qt5-webkit      ... Qt WebKit
-mindforger      ... MindForger itself (a few minutes)
+qt5-location    \                                                          3.2 min
+qt5-sensors      |-- Qt 5 modules dropped from the official repositories  0.4 min
+qt5-webchannel  /                                                          0.2 min
+qt5-doc         ... make dependency of qt5-webkit - downloads (~660 MB)   15.9 min
+                    and configures the whole Qt 5 source tree
+qt5-webkit      ... Qt WebKit                                             16.5 min
+mindforger      ... MindForger itself                                      1   min
 ```
+
+Build times were measured on 16 CPU cores / 62 GB RAM (`make distro-arch-pkg`);
+expect proportionally longer on smaller machines.
 
 Everything else (`qt5-base`, `qt5-tools`, `hunspell`, `curl`, `cmake`, ...) comes from
 the official repositories.
@@ -63,12 +67,12 @@ make distro-arch-pkg
 
 The target:
 
-* builds the Qt WebKit chain from AUR on the **first** run (takes hours; the Docker
-  layers are cached, so subsequent runs take minutes)
+* builds the Qt WebKit chain from AUR on the **first** run (about 40 minutes on 16 CPU
+  cores; the Docker layers are cached, so subsequent runs take a few minutes)
 * builds MindForger using `PKGBUILD` - from the GitHub **release tag** `pkgver`,
   NOT from the local working copy, as it verifies what AUR users get
-* runs `namcap` (fails on errors), installs the package using `pacman -U` and checks
-  installed files and shared libraries
+* runs `namcap` on `PKGBUILD` and the package (fails on errors), checks package
+  content, installs the package using `pacman -U` and checks shared libraries
 * copies `mindforger-<version>-<pkgrel>-x86_64.pkg.tar.zst` to `../mindforger-arch`
 
 Docker files live in `build/docker/arch/`.

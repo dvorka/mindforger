@@ -14,8 +14,10 @@ pkgbase = mindforger
 	depends = zlib
 	depends = hunspell
 	depends = curl
+	depends = hicolor-icon-theme
 	depends = glibc
-	depends = gcc-libs
+	depends = libgcc
+	depends = libstdc++
 	source = git+https://github.com/dvorka/mindforger.git#tag=2.5.0
 	source = git+https://github.com/dvorka/mindforger-repository.git
 	source = mindforger-cmark::git+https://github.com/dvorka/cmark.git

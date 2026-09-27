@@ -18,22 +18,37 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # runs INSIDE the mindforger-arch-builder container - see build-pkg.sh.
-# expects build/arch read-only mounted @ /arch and an output dir @ /out.
+# expects build/arch read-only mounted @ /arch and writes results to ~/out,
+# from where build-pkg.sh copies them to the host using docker cp.
 #
 # usage:
-#   container-build.sh srcinfo ... write /out/.SRCINFO generated from PKGBUILD
+#   container-build.sh srcinfo ... write ~/out/.SRCINFO generated from PKGBUILD
 #   container-build.sh pkg     ... build, check (namcap) and install the package,
-#                                  copy it to /out
+#                                  copy it to ~/out
 
 set -euo pipefail
 
 ARCH_DIR=/arch
-OUT=/out
+OUT="${HOME}/out"
 WORK="${HOME}/mindforger-pkg"
 MODE="${1:-pkg}"
 
-rm -rf "${WORK}"
-mkdir -p "${WORK}"
+# namcap exits w/ 0 even if it reports errors - errors are detected in its output
+namcap_check() {
+    local TARGET="$1"
+    local NAMCAP_OUT
+
+    echo -e "\n# namcap: ${TARGET} ############################################"
+    NAMCAP_OUT="$(namcap "${TARGET}")"
+    echo "${NAMCAP_OUT}"
+    if echo "${NAMCAP_OUT}" | grep -q " E: "; then
+        echo "ERROR: namcap reported errors for ${TARGET}"
+        exit 1
+    fi
+}
+
+rm -rf "${WORK}" "${OUT}"
+mkdir -p "${WORK}" "${OUT}"
 cp "${ARCH_DIR}/PKGBUILD" "${WORK}/"
 cd "${WORK}"
 
@@ -51,32 +66,37 @@ case "${MODE}" in
 
         PKG_FILE="$(ls mindforger-[0-9]*.pkg.tar.zst)"
 
-        echo -e "\n# namcap: PKGBUILD ############################################"
-        namcap PKGBUILD || true
-        echo -e "\n# namcap: ${PKG_FILE} ############################################"
-        NAMCAP_OUT="$(namcap "${PKG_FILE}")"
-        echo "${NAMCAP_OUT}"
-        if echo "${NAMCAP_OUT}" | grep -q " E: "; then
-            echo "ERROR: namcap reported errors for ${PKG_FILE}"
-            exit 1
-        fi
+        namcap_check PKGBUILD
+        namcap_check "${PKG_FILE}"
 
-        echo -e "\n# Install and check ###########################################"
-        sudo pacman -U --noconfirm "${PKG_FILE}"
+        # package content is checked in the archive, not in the filesystem after
+        # installation, as the archlinux Docker image does NOT extract man pages
+        # and docs (NoExtract in /etc/pacman.conf) while a regular Arch does
+        echo -e "\n# Check package content #######################################"
+        PKG_CONTENT="$(bsdtar -tf "${PKG_FILE}")"
         for F in \
-            /usr/bin/mindforger \
-            /usr/share/applications/mindforger.desktop \
-            /usr/share/icons/hicolor/scalable/apps/mindforger.svg \
-            /usr/share/icons/hicolor/128x128/apps/mindforger128x128.png \
-            /usr/share/metainfo/com.mindforger.mindforger.metainfo.xml \
-            /usr/share/man/man1/mindforger.1.gz
+            usr/bin/mindforger \
+            usr/share/applications/mindforger.desktop \
+            usr/share/icons/hicolor/scalable/apps/mindforger.svg \
+            usr/share/icons/hicolor/128x128/apps/mindforger128x128.png \
+            usr/share/metainfo/com.mindforger.mindforger.metainfo.xml \
+            usr/share/man/man1/mindforger.1.gz
         do
-            if [ ! -e "${F}" ]; then
-                echo "ERROR: ${F} is not installed"
+            if ! echo "${PKG_CONTENT}" | grep -qx "${F}"; then
+                echo "ERROR: ${F} is not in ${PKG_FILE}"
                 exit 1
             fi
             echo "  ${F}"
         done
+        # documentation and stencils are copied to ~/mindforger-repository on the first start
+        if ! echo "${PKG_CONTENT}" | grep -q "^usr/share/doc/mindforger/..*[^/]$"; then
+            echo "ERROR: usr/share/doc/mindforger/ is empty in ${PKG_FILE}"
+            exit 1
+        fi
+        echo "  usr/share/doc/mindforger/ ($(echo "${PKG_CONTENT}" | grep -c "^usr/share/doc/mindforger/..*[^/]$") files)"
+
+        echo -e "\n# Install and check ###########################################"
+        sudo pacman -U --noconfirm "${PKG_FILE}"
         if ldd /usr/bin/mindforger | grep -q "not found"; then
             ldd /usr/bin/mindforger | grep "not found"
             echo "ERROR: /usr/bin/mindforger has unresolved shared libraries"
