@@ -39,6 +39,8 @@ MF_LANG := "en"
 DISTRO := "bionic"
 # Debian release codename: bookworm trixie (see debian/debian-releases.conf)
 DEBIAN_RELEASE :=
+# Fedora release number: 43 44 (see fedora/fedora-releases.conf)
+FEDORA_RELEASE :=
 # MindForger version to be added/updated/removed in Debian PPA
 MF_VERSION := $(MINDFORGER_VERSION)
 # CPU cores thant can be used to build the project
@@ -240,7 +242,7 @@ run-production: build-rc ## run MindForger on the production knowledge base
 
 
 #
-# Windows
+# DISTRIBUTION: Windows
 #
 # Targets below wrap the .bat scripts in build/windows/ (env.bat, build-*.bat,
 # run-*.bat). They only work when run on Windows (e.g. from Git Bash with GNU
@@ -355,7 +357,6 @@ releng-version-set: ## propagate lib/src/app_info.h version to all release/packa
 	sed -i "s/^version: .*/version: $(MINDFORGER_VERSION_MAJOR_MINOR).{build}/" ../appveyor.yml
 	sed -i "s/^export ARG_VERSION=.*/export ARG_VERSION=\"$(MINDFORGER_VERSION)\"/" debian/debian-make-deb.sh
 	sed -i -E "s/^mindforger \([0-9]+\.[0-9]+\.[0-9]+(-[^)]*)\)/mindforger ($(MINDFORGER_VERSION)\1)/" debian/debian/changelog
-	sed -i "s/export MFVERSION=\"[0-9.]*\"/export MFVERSION=\"$(MINDFORGER_VERSION)\"/" fedora/fedora-rpm-from-deb.sh
 	sed -i "s/^export MINDFORGER_VERSION=.*/export MINDFORGER_VERSION=\"$(MINDFORGER_VERSION)\"/" macos/env.sh
 	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" snap/snapcraft.yaml
 	sed -i -E "s|<release version=\"[^\"]+\" date=\"[^\"]+\"|<release version=\"$(MINDFORGER_VERSION)\" date=\"$$(date +%Y-%m-%d)\"|" flatpak/com.mindforger.MindForger.metainfo.xml
@@ -410,14 +411,9 @@ distro-deb: distro-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR) 
 	cp -vf $(MF_MAKER_WORKING_DIR)/`cd $(MF_MAKER_WORKING_DIR) && ls -d mindforger*`/mindforger_$(MINDFORGER_VERSION)-1_amd64.deb $(MINDFORGER_RELEASE_DIR)
 
 
-.PHONY: distro-rpm
-distro-rpm: ## build .rpm package on Fedora
-	@echo "IMPORTANT: this target MUST be run on Fedora!"
-	cd fedora && ./fedora-distro-setup.sh
-	@echo "Building .rpm package..."
-	cp -vf ./fedora-rpm-from-deb.sh ~/alien && cd ~/alien && sudo ./fedora-rpm-from-deb.sh $(MINDFORGER_VERSION)
-	@echo "Find .rpm in ~/alien directory"
-
+#
+# DISTRIBUTION: macOS
+#
 
 .PHONY: distro-dmg
 distro-dmg: ## build macOS Disk iMaGe .dmg package
@@ -426,7 +422,7 @@ distro-dmg: ## build macOS Disk iMaGe .dmg package
 
 
 #
-# Debian
+# DISTRIBUTION: Debian
 #
 # MindForger Debian PPAs @ https://www.mindforger.com/debian-ppa/<codename>/
 # - one PPA per Debian release, managed by aptly, signed by MindForger GPG key
@@ -488,12 +484,11 @@ distro-debian-add-new-version: ## build current MF version .debs and add them to
 	@echo "DONE: MindForger $(MINDFORGER_VERSION) added to supported Debian PPAs"
 	@echo "NEXT: upload MF_DEBIAN_PPA_DIR (see the configuration printed above) to https://www.mindforger.com/debian-ppa/ (see debian/README.md)"
 
-#
-# ^ Debian
-#
 
 #
-# Arch Linux: reference PKGBUILD for AUR (see arch/README.md)
+# DISTRIBUTION: Arch Linux:
+#
+# Reference PKGBUILD for AUR - see arch/README.md.
 #
 
 .PHONY: distro-arch-pkg
@@ -504,10 +499,53 @@ distro-arch-pkg: ## build, namcap and install Arch package from arch/PKGBUILD in
 distro-arch-srcinfo: ## regenerate arch/.SRCINFO from arch/PKGBUILD in Docker
 	./docker/arch/build-pkg.sh srcinfo
 
+
 #
-# ^ Arch Linux
+# DISTRIBUTION: Fedora
+#
+# MindForger Fedora COPR @ https://copr.fedorainfracloud.org/coprs/dvorka/mindforger/
+# - COPR builds, hosts and signs the dnf repository for all supported Fedora releases
+# - Fedora releases: fedora/fedora-releases.conf
+# - .rpm packages are built locally in Docker: docker/fedora-rpm/
+# - see fedora/README.md for the one-time setup and the whole release process
+#
+# Parameters:
+#   FEDORA_RELEASE ... Fedora release number e.g. 44 (default: all supported)
 #
 
+.PHONY: distro-fedora-srpm
+distro-fedora-srpm: ## build source .rpm for COPR (in Docker)
+	./fedora/fedora-copr.sh srpm
+
+.PHONY: distro-fedora-rpm
+distro-fedora-rpm: ## build .rpm in Docker for FEDORA_RELEASE=44 (default: all supported releases)
+	./fedora/fedora-copr.sh rpm $(or $(FEDORA_RELEASE),supported)
+
+.PHONY: distro-fedora-copr-release
+distro-fedora-copr-release: ## build current MF version in COPR for all supported Fedora releases and download .rpms
+	./fedora/fedora-copr.sh release
+
+.PHONY: distro-fedora-copr-verify
+distro-fedora-copr-verify: ## install MF from COPR in Docker: FEDORA_RELEASE=44 (default: all supported releases)
+	./fedora/fedora-copr.sh verify $(or $(FEDORA_RELEASE),supported)
+
+.PHONY: distro-fedora-copr-token-check
+distro-fedora-copr-token-check: ## check validity of the COPR API token
+	./fedora/fedora-copr.sh token-check
+
+.PHONY: distro-fedora-add-new-version
+distro-fedora-add-new-version: ## build current MF version .rpms locally, then in COPR for ALL supported Fedora releases and verify
+	./fedora/fedora-copr.sh token-check
+	./fedora/fedora-copr.sh rpm supported
+	./fedora/fedora-copr.sh release
+	./fedora/fedora-copr.sh verify supported
+	@echo "DONE: MindForger $(MINDFORGER_VERSION) released to Fedora COPR"
+	@echo "NEXT: attach MF_FEDORA_RPM_DIR/copr/*.rpm (see the configuration printed above) to the GitHub release"
+
+
+#
+# DISTRIBUTION: Ubuntu
+#
 
 .PHONY: distro-ubuntu-deb
 distro-ubuntu-deb: ## locally build .deb for any Ubuntu version: DISTRO=bionic
@@ -669,7 +707,7 @@ distro-flatpak-run: ## run the locally installed Flatpak
 
 
 #
-# winget (Windows Package Manager)
+# DISTRIBUTION: winget (Windows Package Manager)
 #
 # Prerequisites and full walkthrough: see build/winget/README.md
 #
@@ -686,7 +724,7 @@ distro-winget-from-release: ## look up the Windows installer on a GitHub release
 
 .PHONY: distro-winget-validate
 distro-winget-validate: ## validate generated winget manifests locally (VERSION required)
-	winget validate --manifest ../distro/winget/manifests/m/MindForger/MindForger/$(VERSION)
+	winget validate --manifest ../distro/winget/manifests/m/MartinDvorak/MindForger/$(VERSION)
 
 .PHONY: distro-winget-submit-pr
 distro-winget-submit-pr: ## copy manifests to winget-pkgs fork, commit signed, push, open PR (VERSION and WINGET_PKGS_DIR required)
@@ -696,10 +734,10 @@ distro-winget-submit-pr: ## copy manifests to winget-pkgs fork, commit signed, p
 distro-winget-hash-url: ## print SHA256 of the published Windows installer without generating manifests (VERSION required)
 	powershell.exe -NoProfile -ExecutionPolicy Bypass -File winget/sha256-from-url.ps1 -Version $(VERSION)
 
-#
-# ^ winget
-#
 
+#
+# tools
+#
 
 .PHONY: distro-all-clean
 distro-all-clean:

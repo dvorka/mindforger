@@ -35,6 +35,9 @@ cd ${SCRIPT_HOME}
 cp -vf debian/debian-make-deb.sh /home/dvorka/p/mindforger/debian
 cd /home/dvorka/p/mindforger/debian && ./debian-make-deb.sh
 
-# .rpm (SSH to running Fedora - copy there and back)
+# .rpm - built in Fedora COPR, .rpm packages for GitHub release are downloaded
+#        to MF_FEDORA_RPM_DIR/copr (see fedora/README.md)
+cd ${SCRIPT_HOME}
+make distro-fedora-add-new-version
 
 # eof

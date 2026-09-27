@@ -26,8 +26,6 @@ SEMANTIC_VERSION_FILES = [
     # ^ export ARG_VERSION="1.54.0"
     "../../build/debian/debian/changelog",
     # ^ mindforger (1.54.0-1) unstable; urgency=low
-    "../../build/fedora/fedora-rpm-from-deb.sh",
-    # ^ export MFVERSION="1.54.0"
     "../../PAD.xml",
     # ^ <Program_Version>1.54.0</Program_Version>
     "../../build/Makefile",
