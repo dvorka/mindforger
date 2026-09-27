@@ -40,7 +40,7 @@ $ProjectRoot = Resolve-Path (Join-Path $ScriptDir "..\..")
 
 $GithubOrg  = "dvorka"
 $GithubRepo = "mindforger"
-$PackageId  = "MindForger.MindForger"
+$PackageId  = "MartinDvorak.MindForger"
 
 # Inno Setup AppId from build/windows/installer/mindforger-setup.iss - keep in sync
 $AppId = "{A1A3DAE4-FD5C-4600-B75D-D8895AA99693}"
@@ -56,6 +56,8 @@ $Asset = Resolve-MindForgerReleaseAsset `
     -Version $Version -GithubOrg $GithubOrg -GithubRepo $GithubRepo
 $InstallerName = $Asset.name
 $InstallerUrl  = $Asset.browser_download_url
+# the installer upload date is the closest proxy of the release date
+$ReleaseDate   = ([datetime]$Asset.updated_at).ToString("yyyy-MM-dd")
 
 # -- Step 2: download and hash --------------------------------------------------
 
@@ -68,7 +70,7 @@ Write-Host "SHA256: $Sha256" -ForegroundColor Green
 
 # -- Step 3: prepare output directory ------------------------------------------
 
-$OutDir = Join-Path $ProjectRoot "distro\winget\manifests\m\MindForger\MindForger\$Version"
+$OutDir = Join-Path $ProjectRoot "distro\winget\manifests\m\MartinDvorak\MindForger\$Version"
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
 # UTF-8 without BOM - winget rejects files with a BOM
@@ -93,16 +95,27 @@ $InstallerYaml = @"
 # yaml-language-server: `$schema=$SchemaBaseUrl.installer.$ManifestVersion.schema.json
 PackageIdentifier: $PackageId
 PackageVersion: $Version
+InstallerLocale: en-US
 InstallerType: inno
 Scope: machine
 InstallModes:
   - interactive
   - silent
+  - silentWithProgress
+UpgradeBehavior: install
+FileExtensions:
+  - md
+ProductCode: '${AppId}_is1'
+ReleaseDate: $ReleaseDate
+AppsAndFeaturesEntries:
+  - ProductCode: '${AppId}_is1'
+ElevationRequirement: elevatesSelf
+InstallationMetadata:
+  DefaultInstallLocation: '%ProgramFiles%\MindForger'
 Installers:
   - Architecture: x64
     InstallerUrl: $InstallerUrl
     InstallerSha256: $Sha256
-    ProductCode: '${AppId}_is1'
 ManifestType: installer
 ManifestVersion: $ManifestVersion
 "@
@@ -124,7 +137,9 @@ PackageName: MindForger
 PackageUrl: https://www.mindforger.com
 License: GPL-2.0-or-later
 LicenseUrl: https://github.com/$GithubOrg/$GithubRepo/blob/master/LICENSE
+Copyright: Copyright (C) 2016-$((Get-Date).Year) Martin Dvorak
 ShortDescription: MindForger Thinking Notebook and Markdown IDE
+Moniker: mindforger
 Description: |-
   MindForger is an open, free, and privacy-respecting thinking notebook and
   Markdown IDE for personal knowledge management, note taking, and organizing

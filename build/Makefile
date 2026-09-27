@@ -668,7 +668,7 @@ distro-winget-from-release: ## look up the Windows installer on a GitHub release
 
 .PHONY: distro-winget-validate
 distro-winget-validate: ## validate generated winget manifests locally (VERSION required)
-	winget validate --manifest ../distro/winget/manifests/m/MindForger/MindForger/$(VERSION)
+	winget validate --manifest ../distro/winget/manifests/m/MartinDvorak/MindForger/$(VERSION)
 
 .PHONY: distro-winget-submit-pr
 distro-winget-submit-pr: ## copy manifests to winget-pkgs fork, commit signed, push, open PR (VERSION and WINGET_PKGS_DIR required)
