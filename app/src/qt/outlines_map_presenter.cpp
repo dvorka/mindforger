@@ -113,7 +113,7 @@ void OutlinesMapPresenter::refresh(Outline* outline, Outline::Patch* patch)
                 break;
             }
         } else {
-            model->removeAllRows();
+            model->removeAllRows(outline->getName());
             for(Note* note:outline->getNotes()) {
                 model->addNote(note);
             }

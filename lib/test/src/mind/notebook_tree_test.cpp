@@ -665,3 +665,59 @@ TEST(NotebookTreeTestCase, RelearnInvalidatesTreeCache)
     // AND: the freshly loaded tree is cached again
     EXPECT_EQ(reGotten, mind.notebookTreeGet(treeKey));
 }
+
+TEST(NotebookTreeTestCase, GetOutlinesReturnsOnlyShelvedNotebooks)
+{
+    // GIVEN a MindForger repository with 3 Notebooks - 2 of them on a shelf
+    string repositoryPath{"/tmp/mf-unit-notebook-tree-get-outlines"};
+    m8r::removeDirectoryRecursively(repositoryPath.c_str());
+    map<string,string> pathToContent{};
+    m8r::createEmptyRepository(repositoryPath, pathToContent);
+
+    m8r::Repository* repository = new m8r::Repository(
+        repositoryPath,
+        m8r::Repository::RepositoryType::MINDFORGER,
+        m8r::Repository::RepositoryMode::REPOSITORY,
+        "",
+        false);
+
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/mf-unit-notebook-tree-get-outlines-cfg.md");
+    config.setActiveRepository(
+        config.addRepository(repository), repositoryConfigRepresentation
+    );
+
+    m8r::Mind mind(config);
+    mind.learn();
+    mind.think().get();
+
+    string nameA{"Shelved A"}, nameB{"Shelved B"}, nameC{"Not shelved C"};
+    m8r::Outline* oA = mind.remind().getOutline(mind.outlineNew(&nameA));
+    m8r::Outline* oB = mind.remind().getOutline(mind.outlineNew(&nameB));
+    m8r::Outline* oC = mind.remind().getOutline(mind.outlineNew(&nameC));
+    ASSERT_NE(nullptr, oA);
+    ASSERT_NE(nullptr, oB);
+    ASSERT_NE(nullptr, oC);
+
+    set<string> existingKeys{};
+    string treeKey = m8r::NotebookTree::createNotebookTreeKey(
+        existingKeys, config.getMindPath(), FILE_PATH_SEPARATOR);
+    m8r::Outline* tree = mind.notebookTreeNew(treeKey, "Shelf");
+    mind.notebookTreeAddOutline(tree, oA);
+    mind.notebookTreeAddOutline(tree, oB);
+
+    // WHEN
+    vector<m8r::Outline*> outlines{};
+    mind.notebookTreeGetOutlines(tree, outlines);
+    vector<m8r::Outline*> noOutlines{};
+    mind.notebookTreeGetOutlines(nullptr, noOutlines);
+
+    // THEN only the shelved Notebooks are returned
+    ASSERT_EQ(2, outlines.size());
+    EXPECT_NE(outlines.end(), std::find(outlines.begin(), outlines.end(), oA));
+    EXPECT_NE(outlines.end(), std::find(outlines.begin(), outlines.end(), oB));
+    EXPECT_EQ(outlines.end(), std::find(outlines.begin(), outlines.end(), oC));
+    EXPECT_EQ(0, noOutlines.size());
+}
