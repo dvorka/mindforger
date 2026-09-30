@@ -55,22 +55,22 @@
         <translation>&amp;Uložit</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1919"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1928"/>
         <source>Empty Phrase</source>
         <translation>Prázdný výraz</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1920"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1929"/>
         <source>Phrase to search/explain/process is empty.</source>
         <translation>Výraz pro hledání/vysvětlení/zpracování je prázdný.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2058"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2067"/>
         <source>Wingman Not Available</source>
         <translation>AI parťák není dostupný</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2059"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2068"/>
         <source>Wingman provider is either not configured or initialized - see MindForger Preferences (Wingman tab).</source>
         <translation>Poskytovatel AI parťáka není nakonfigurován nebo inicializován – viz Předvolby MindForger (záložka AI parťák).</translation>
     </message>
@@ -3362,9 +3362,9 @@ Vyberte nový zdroj knihovny:</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="623"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2625"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2663"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2708"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2634"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2672"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2717"/>
         <source>Specified file path already exists!</source>
         <translation>Zadaná cesta k souboru již existuje!</translation>
     </message>
@@ -3416,34 +3416,34 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Fulltextové vyhledávání</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="970"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="981"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1006"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2443"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="979"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="990"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1015"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2452"/>
         <source>Notebook </source>
         <translation>Zápisník </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="972"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1008"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="981"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1017"/>
         <source>Notebook not found</source>
         <translation>Zápisník nenalezen</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1016"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1025"/>
         <source>Find Note by Tags in Notebook</source>
         <translation>Najít poznámku podle štítků v zápisníku</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1021"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1031"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1030"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1040"/>
         <source>Find Note by Tags</source>
         <translation>Najít poznámku podle štítků</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="984"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1077"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1146"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="993"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1086"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1155"/>
         <source>Note </source>
         <translation>Poznámka </translation>
     </message>
@@ -3453,222 +3453,222 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Exportovat paměť do CSV</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="987"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="996"/>
         <source>Thing not found</source>
         <translation>Věc nenalezena</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1079"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1148"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1088"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1157"/>
         <source>Note not found</source>
         <translation>Poznámka nenalezena</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1105"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1114"/>
         <source>Refactored Note to Notebook &apos;</source>
         <translation>Poznámka přerefaktorována na zápisník &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1107"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1116"/>
         <source>Target Notebook not found</source>
         <translation>Cílový zápisník nenalezen</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1110"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1119"/>
         <source>Refactor Note</source>
         <translation>Refaktorovat poznámku</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1110"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1119"/>
         <source>Note to be refactored not specified!</source>
         <translation>Nebyla určena poznámka k refaktorování!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1118"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1127"/>
         <source>Find Note by Name in Notebook</source>
         <translation>Najít poznámku podle názvu v zápisníku</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1124"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1133"/>
         <source>Find Note by Name</source>
         <translation>Najít poznámku podle názvu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1717"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1726"/>
         <source>image</source>
         <translation>obrázek</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1797"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1806"/>
         <source>Given path &apos;%1&apos; doesn&apos;t exist - target will not be copied, but link will be created</source>
         <translation>Zadaná cesta &apos;%1&apos; neexistuje – cíl nebude zkopírován, ale odkaz bude vytvořen</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1826"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1835"/>
         <source>Saving pasted image data to file: &apos;%1&apos;</source>
         <translation>Ukládám vložená data obrázku do souboru: &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2367"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2381"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2376"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2390"/>
         <source>Wingman Action Error</source>
         <translation>Chyba akce AI parťáka</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2337"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2346"/>
         <source>Wingman&apos;s answer appended after selected text in the Note editor.</source>
         <translation>Odpověď AI parťáka byla připojena za vybraný text v editoru poznámky.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2348"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2357"/>
         <source>Unable to append after selected text with Wingman&apos;s answer in non-edit perspective.</source>
         <translation>Nelze připojit odpověď AI parťáka za vybraný text mimo režim úprav.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2352"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2361"/>
         <source>No answer from Wingman to append after selected text - run a prompt.</source>
         <translation>Žádná odpověď AI parťáka k připojení za vybraný text – spusťte dotaz.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2362"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2371"/>
         <source>Wingman&apos;s answer replaced selected text in Notebook header.</source>
         <translation>Odpověď AI parťáka nahradila vybraný text v záhlaví zápisníku.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2368"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2377"/>
         <source>Unable to replace Notebook header text - no text selected.</source>
         <translation>Nelze nahradit text záhlaví zápisníku – není vybrán žádný text.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2376"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2385"/>
         <source>Wingman&apos;s answer replaced selected text in Note text.</source>
         <translation>Odpověď AI parťáka nahradila vybraný text v textu poznámky.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2382"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2391"/>
         <source>Unable to replace Note text - no text selected.</source>
         <translation>Nelze nahradit text poznámky – není vybrán žádný text.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2389"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2398"/>
         <source>Unable to replace selected text with Wingman&apos;s answer in non-edit perspective.</source>
         <translation>Nelze nahradit vybraný text odpovědí AI parťáka mimo režim úprav.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2393"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2402"/>
         <source>No answer from Wingman to replace selected text - run a prompt.</source>
         <translation>Žádná odpověď AI parťáka k nahrazení vybraného textu – spusťte dotaz.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2465"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2474"/>
         <source>Edit Notebook</source>
         <translation>Upravit zápisník</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2465"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2474"/>
         <source>Please open an Notebook to edit.</source>
         <translation>Otevřete prosím zápisník k úpravě.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2538"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2783"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2547"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2792"/>
         <source>New Note</source>
         <translation>Nová poznámka</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2538"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2547"/>
         <source>Failed to create new Note!</source>
         <translation>Vytvoření nové poznámky selhalo!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2551"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2554"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2560"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2563"/>
         <source>Clone Notebook</source>
         <translation>Klonovat zápisník</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2551"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2560"/>
         <source>Failed to clone Notebook!</source>
         <translation>Klonování zápisníku selhalo!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2554"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2563"/>
         <source>Please open and Notebook to be cloned.</source>
         <translation>Otevřete prosím zápisník, který chcete klonovat.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2568"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2577"/>
         <source>Home tag toggled/removed - Notebook &apos;%1&apos; is no longer home</source>
         <translation>Domovský štítek byl přepnut/odebrán – zápisník &apos;%1&apos; už není domovský</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2571"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2580"/>
         <source>Notebook &apos;%1&apos; successfully marked as home</source>
         <translation>Zápisník &apos;%1&apos; byl úspěšně nastaven jako domovský</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2576"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2585"/>
         <source>Make Notebook home</source>
         <translation>Nastavit zápisník jako domovský</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2576"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2585"/>
         <source>Notebook can be marked as home only when viewed.</source>
         <translation>Zápisník lze nastavit jako domovský pouze při jeho prohlížení.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2587"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2612"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2596"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2621"/>
         <source>Forget Notebook</source>
         <translation>Vyřadit zápisník</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3571"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3580"/>
         <source>Library already indexed - use &apos;Update library&apos; action to synchronize documents.</source>
         <translation>Knihovna je již indexována – k synchronizaci dokumentů použijte akci &apos;Aktualizovat knihovnu&apos;.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3579"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3588"/>
         <source>Unable to index documents on library path - either memory directory doesn&apos;t exist or not in MindForger workspace mode.</source>
         <translation>Nelze indexovat dokumenty na cestě knihovny – buď adresář paměti neexistuje, nebo nejste v režimu prostoru MindForger.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3616"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3625"/>
         <source>Library synchronization</source>
         <translation>Synchronizace knihovny</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3617"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3626"/>
         <source>There are no libraries - nothing to synchronize.</source>
         <translation>Nejsou žádné knihovny – není co synchronizovat.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3714"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3723"/>
         <source>Library deletion</source>
         <translation>Odstranění knihovny</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3715"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3724"/>
         <source>There are no libraries - nothing to delete.</source>
         <translation>Nejsou žádné knihovny – není co smazat.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3730"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3739"/>
         <source>Delete Library</source>
         <translation>Smazat knihovnu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3731"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3740"/>
         <source>Do you really want to delete Notebooks which represent the library documents?</source>
         <translation>Opravdu chcete smazat zápisníky reprezentující dokumenty knihovny?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4056"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4065"/>
         <source>Do you really want to forget &apos;</source>
         <translation>Opravdu chcete zapomenout &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2590"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2599"/>
         <source>&apos; Notebook?</source>
         <translation>&apos; zápisník?</translation>
     </message>
@@ -3749,430 +3749,440 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Toto není platný prostor ani soubor MindForger/Markdown.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1201"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="952"/>
+        <source>Find Notebook by Name on Shelf</source>
+        <translation>Najít zápisník podle názvu na polici</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="955"/>
+        <source>Find Notebook by Name</source>
+        <translation type="unfinished">Najít zápisník podle názvu</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1210"/>
         <source>Home Notebook not set - use menu &apos;Notebooks/Make Home&apos;</source>
         <translation>Domovský zápisník není nastaven – použijte nabídku &apos;Zápisníky/Nastavit jako domovský&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1792"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1801"/>
         <source>File copied to workspace path &apos;%1&apos;</source>
         <translation>Soubor zkopírován do prostoru &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1885"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1894"/>
         <source>Run Knowledge Tool Error</source>
         <translation>Chyba spuštění nástroje znalostí</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1886"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1895"/>
         <source>Unknown tool to run &apos;%1&apos;.</source>
         <translation>Neznámý nástroj ke spuštění &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1896"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1905"/>
         <source>Open Knowledge Tool Dialog Error</source>
         <translation>Chyba otevření dialogu nástroje znalostí</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1897"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1906"/>
         <source>Unable to construct URL to open for unknown tool &apos;%1&apos;.</source>
         <translation>Nelze sestavit URL k otevření pro neznámý nástroj &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1942"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1951"/>
         <source>HTML Note preview flickering can be eliminated by setting Math support and Diagram support to disable in Preferences menu</source>
         <translation>Blikání náhledu HTML poznámky lze odstranit vypnutím podpory matematiky a podpory diagramů v nabídce Předvolby</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2208"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2217"/>
         <source>Wingman is runnning inferences...</source>
         <translation>AI parťák provádí inferenci...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2265"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2274"/>
         <source>Wingman received an answer from the LLM provider</source>
         <translation>AI parťák obdržel odpověď od poskytovatele LLM</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2267"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2276"/>
         <source>Wingman failed to receive an answer from the LLM provider</source>
         <translation>AI parťákovi se nepodařilo obdržet odpověď od poskytovatele LLM</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2325"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2334"/>
         <source>Wingman&apos;s answer appended after selected text in the Notebook header.</source>
         <translation>Odpověď AI parťáka byla připojena za vybraný text v záhlaví zápisníku.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2329"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2338"/>
         <source>Wingman&apos;s answer appended after the cursor in the Notebook header.</source>
         <translation>Odpověď AI parťáka byla připojena za kurzor v záhlaví zápisníku.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2341"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2350"/>
         <source>Wingman&apos;s answer appended after the cursor in the Note editor.</source>
         <translation>Odpověď AI parťáka byla připojena za kurzor v editoru poznámky.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2478"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2487"/>
         <source>🔒 Notebook Write Error</source>
         <translation>🔒 Chyba zápisu zápisníku</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2479"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2488"/>
         <source>Notebook file is read-only and cannot be written:
 &apos;%1&apos; </source>
         <translation>Soubor zápisníku je pouze pro čtení a nelze do něj zapisovat:
 &apos;%1&apos; </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2588"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2597"/>
         <source>Do you really want to deprecate &apos;</source>
         <translation>Opravdu chcete deaktivovat &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2612"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2621"/>
         <source>Notebook can be forgotten only when viewed.</source>
         <translation>Zápisník lze zapomenout pouze při jeho prohlížení.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2625"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2643"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2650"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2663"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2681"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2688"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2707"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2634"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2652"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2659"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2672"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2690"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2697"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2716"/>
         <source>Export Error</source>
         <translation>Chyba exportu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2639"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2648"/>
         <source>Notebook exported to HTML file &apos;%1&apos;</source>
         <translation>Zápisník byl exportován do HTML souboru &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2644"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2682"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2653"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2691"/>
         <source>Unable to write file &apos;%1&apos;!</source>
         <translation>Nelze zapsat soubor &apos;%1&apos;!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2650"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2688"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2659"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2697"/>
         <source>Unable to find Notebook to export!</source>
         <translation>Nelze najít zápisník k exportu!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2677"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2686"/>
         <source>Notebook exported to Markdown file &apos;%1&apos;</source>
         <translation>Zápisník byl exportován do Markdown souboru &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2742"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2751"/>
         <source>Import TWiki File</source>
         <translation>Importovat soubor TWiki</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2783"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2792"/>
         <source>Open and view a Notebook to create new Note.</source>
         <translation>Otevřete a zobrazte zápisník pro vytvoření nové poznámky.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2827"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2836"/>
         <source>Edit Note</source>
         <translation>Upravit poznámku</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2827"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2955"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2836"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2964"/>
         <source>Please select a Note to edit in the Notebook.</source>
         <translation>Vyberte prosím poznámku k úpravě v zápisníku.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2845"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2901"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2854"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2910"/>
         <source>Edit Note with External Editor Error</source>
         <translation>Chyba úpravy poznámky v externím editoru</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2846"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2855"/>
         <source>External editor command is not configured in preferences (Editor tab).</source>
         <translation>Příkaz externího editoru není nastaven v předvolbách (záložka Editor).</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2871"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2954"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2880"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2963"/>
         <source>Edit Note with External Editor</source>
         <translation>Upravit poznámku v externím editoru</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2872"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2881"/>
         <source>Running command: &apos;%1&apos;</source>
         <translation>Spouštím příkaz: &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2885"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2894"/>
         <source>Running command: &apos;%1&apos;. Close external editor to return control back to MindForger.</source>
         <translation>Spouštím příkaz: &apos;%1&apos;. Zavřete externí editor pro návrat zpět do MindForger.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2993"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3002"/>
         <source>Delete Note</source>
         <translation>Smazat poznámku</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2994"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3003"/>
         <source>Do you really want to delete note &apos;</source>
         <translation>Opravdu chcete smazat poznámku &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2996"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3005"/>
         <source>&apos; along with its child notes?</source>
         <translation>&apos; včetně jejích podřízených poznámek?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3046"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3055"/>
         <source>Forget Note</source>
         <translation>Smazat poznámku</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3046"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3055"/>
         <source>Please select a Note to forget.</source>
         <translation>Vyberte prosím poznámku ke smazání.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3066"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3094"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3098"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3075"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3103"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3107"/>
         <source>Extract Note</source>
         <translation>Extrahovat poznámku</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3066"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3075"/>
         <source>Please select a text to extract.</source>
         <translation>Vyberte prosím text k extrahování.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3094"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3103"/>
         <source>Failed to extract new Note!</source>
         <translation>Extrahování nové poznámky selhalo!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3098"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3107"/>
         <source>Please select a Note, edit it and select a text to extract.</source>
         <translation>Vyberte poznámku, upravte ji a vyberte text k extrahování.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3124"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3141"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3145"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3133"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3150"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3154"/>
         <source>Clone Note</source>
         <translation>Klonovat poznámku</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3125"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3134"/>
         <source>Do you want to clone Note &apos;</source>
         <translation>Chcete klonovat poznámku &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3125"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3134"/>
         <source>&apos; including its child notes?&apos;?</source>
         <translation>&apos; včetně jejích podřízených poznámek?&apos;?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3141"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3150"/>
         <source>Failed to clone Note!</source>
         <translation>Klonování poznámky selhalo!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3145"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3154"/>
         <source>Please select a Note to be cloned.</source>
         <translation>Vyberte prosím poznámku ke klonování.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3204"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3213"/>
         <source>Moved Note &apos;%1&apos; to be the first child</source>
         <translation>Poznámka &apos;%1&apos; přesunuta na první pozici</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3207"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3243"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3279"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3315"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3216"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3252"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3288"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3324"/>
         <source>Move Note</source>
         <translation>Přesunout poznámku</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3207"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3243"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3279"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3315"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3216"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3252"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3288"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3324"/>
         <source>Please select a Note to be moved.</source>
         <translation>Vyberte prosím poznámku k přesunutí.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3240"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3249"/>
         <source>Moved up Note &apos;%1&apos;</source>
         <translation>Poznámka &apos;%1&apos; přesunuta nahoru</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3276"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3285"/>
         <source>Moved down Note &apos;%1&apos;</source>
         <translation>Poznámka &apos;%1&apos; přesunuta dolů</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3312"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3321"/>
         <source>Moved Note &apos;%1&apos; to be the last child</source>
         <translation>Poznámka &apos;%1&apos; přesunuta na poslední pozici</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3346"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3355"/>
         <source>Promoted Note &apos;%1&apos;</source>
         <translation>Poznámka &apos;%1&apos; povýšena</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3349"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3358"/>
         <source>Promote Note</source>
         <translation>Povýšit poznámku</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3349"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3358"/>
         <source>Please select a Note to be promoted.</source>
         <translation>Vyberte prosím poznámku k povýšení.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3380"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3389"/>
         <source>Demoted Note &apos;%1&apos;</source>
         <translation>Poznámce &apos;%1&apos; byla snížena úroveň</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3383"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3392"/>
         <source>Demote Note</source>
         <translation>Snížit úroveň poznámky</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3383"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3392"/>
         <source>Please select a Note to be demoted.</source>
         <translation>Vyberte prosím poznámku ke snížení úrovně.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3549"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3570"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3578"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3558"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3579"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3587"/>
         <source>Add Library Error</source>
         <translation>Chyba přidání knihovny</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3550"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3559"/>
         <source>Library directory doesn&apos;t exist!</source>
         <translation>Adresář knihovny neexistuje!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3648"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3658"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3680"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3688"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3657"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3667"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3689"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3697"/>
         <source>Library Orphans</source>
         <translation>Sirotci knihovny</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3649"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3658"/>
         <source>Found %1 library Notebooks with orphaned documents. Notebooks were tagged with &apos;library-orphan-document&apos; tag. Use scopes to filter them out.</source>
         <translation>Nalezeno %1 zápisníků knihovny se sirotčími dokumenty. Zápisníky byly označeny štítkem &apos;library-orphan-document&apos;. Pro jejich filtrování použijte rozsahy.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3659"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3668"/>
         <source>No Notebooks with orphaned documents found.</source>
         <translation>Nebyly nalezeny žádné zápisníky se sirotčími dokumenty.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3681"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3690"/>
         <source>%1 Notebooks tagged as library orphans were deprecated.</source>
         <translation>%1 zápisníků označených jako sirotci knihovny bylo deaktivováno.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3689"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3698"/>
         <source>No Notebooks with library orphan tag found.</source>
         <translation>Nebyly nalezeny žádné zápisníky se štítkem sirotka knihovny.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3871"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3880"/>
         <source>Organizer Update Error</source>
         <translation>Chyba aktualizace organizátoru</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3872"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3881"/>
         <source>Eisenhower Matrix organizer is built-in and cannot be edited - please create or update a custom organizer.</source>
         <translation>Organizátor Eisenhowerovy matice je vestavěný a nelze jej upravovat – vytvořte nebo upravte vlastní organizátor.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3899"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3908"/>
         <source>Organizer Clone Error</source>
         <translation>Chyba klonování organizátoru</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3900"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3909"/>
         <source>Eisenhower Matrix organizer is built-in and cannot be cloned - please create or update a custom organizer.</source>
         <translation>Organizátor Eisenhowerovy matice je vestavěný a nelze jej klonovat – vytvořte nebo upravte vlastní organizátor.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4055"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4064"/>
         <source>Forget Organizer</source>
         <translation>Zapomenout organizátor</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4057"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4066"/>
         <source>&apos; Organizer?</source>
         <translation>&apos; organizátor?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4068"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4077"/>
         <source>Delete Organizer</source>
         <translation>Smazat organizátor</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4069"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4078"/>
         <source>Eisenhower Matrix is built-in and cannot be deleted - only custom organizers can.</source>
         <translation>Eisenhowerova matice je vestavěná a nelze ji smazat – smazat lze pouze vlastní organizátory.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4145"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4154"/>
         <source>Delete Notebook Tree</source>
         <translation>Smazat strom zápisníků</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4146"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4155"/>
         <source>Do you really want to delete &apos;</source>
         <translation>Opravdu chcete smazat strom zápisníků &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4148"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4157"/>
         <source>&apos; Notebook tree? Notebooks organized in it will NOT be deleted.</source>
         <translation>&apos;? Zápisníky v něm uspořádané NEBUDOU smazány.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4192"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4201"/>
         <source>Notebook &apos;%1&apos; added to tree &apos;%2&apos;</source>
         <translation>Zápisník &apos;%1&apos; přidán do stromu &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4212"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4221"/>
         <source>Entry removed from Notebook tree (Notebook itself was NOT deleted)</source>
         <translation>Položka odebrána ze stromu zápisníků (samotný zápisník NEBYL smazán)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4230"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4239"/>
         <source>View Limbo</source>
         <translation>Zobrazit Limbo</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4231"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4240"/>
         <source>Limbo directory with deleted Notebooks is available in the MindForger workspace, not if a Markdown is edited or a directory with markdowns is opened.</source>
         <translation>Adresář Limbo se smazanými zápisníky je dostupný v prostoru MindForger, nikoli při úpravě souboru Markdown nebo otevření adresáře se soubory Markdown.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4352"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4361"/>
         <source>About MindForger</source>
         <translation>O aplikaci MindForger</translation>
     </message>
@@ -5511,27 +5521,31 @@ Vyberte nový zdroj knihovny:</translation>
         <translation type="vanished">Strom zápisníků</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/outlines_map_model.cpp" line="42"/>
         <source>Notebooks Shelf</source>
-        <translation>Police zápisníků</translation>
+        <translation type="vanished">Police zápisníků</translation>
     </message>
     <message>
         <location filename="../../../src/qt/outlines_map_model.cpp" line="43"/>
+        <source>Notebook Shelves</source>
+        <translation type="unfinished">Police zápisníků</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/outlines_map_model.cpp" line="44"/>
         <source>Done</source>
         <translation>Hotovo</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/outlines_map_model.cpp" line="44"/>
+        <location filename="../../../src/qt/outlines_map_model.cpp" line="45"/>
         <source>Rs</source>
         <translation>Č</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/outlines_map_model.cpp" line="45"/>
+        <location filename="../../../src/qt/outlines_map_model.cpp" line="46"/>
         <source>Ws</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/outlines_map_model.cpp" line="46"/>
+        <location filename="../../../src/qt/outlines_map_model.cpp" line="47"/>
         <source>Modified</source>
         <translation>Změněno</translation>
     </message>
