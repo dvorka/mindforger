@@ -55,22 +55,22 @@
         <translation>保存(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1919"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1928"/>
         <source>Empty Phrase</source>
         <translation>空短语</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1920"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1929"/>
         <source>Phrase to search/explain/process is empty.</source>
         <translation>要搜索/解释/处理的短语为空。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2058"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2067"/>
         <source>Wingman Not Available</source>
         <translation>AI 助手不可用</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2059"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2068"/>
         <source>Wingman provider is either not configured or initialized - see MindForger Preferences (Wingman tab).</source>
         <translation>AI 助手提供方未配置或未初始化 - 请查看 MindForger 首选项（AI 助手选项卡）。</translation>
     </message>
@@ -3406,9 +3406,9 @@ Choose new library source:</source>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="623"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2625"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2663"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2708"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2634"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2672"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2717"/>
         <source>Specified file path already exists!</source>
         <translation>指定的文件路径已存在！</translation>
     </message>
@@ -3464,34 +3464,34 @@ Choose new library source:</source>
         <translation>全文搜索</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="970"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="981"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1006"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2443"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="979"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="990"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1015"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2452"/>
         <source>Notebook </source>
         <translation>笔记本 </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="972"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1008"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="981"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1017"/>
         <source>Notebook not found</source>
         <translation>未找到笔记本</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1016"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1025"/>
         <source>Find Note by Tags in Notebook</source>
         <translation>在笔记本中按标签查找笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1021"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1031"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1030"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1040"/>
         <source>Find Note by Tags</source>
         <translation>按标签查找笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="984"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1077"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1146"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="993"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1086"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1155"/>
         <source>Note </source>
         <translation>笔记 </translation>
     </message>
@@ -3501,222 +3501,222 @@ Choose new library source:</source>
         <translation>将记忆导出为 CSV</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="987"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="996"/>
         <source>Thing not found</source>
         <translation>未找到内容</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1079"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1148"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1088"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1157"/>
         <source>Note not found</source>
         <translation>未找到笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1105"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1114"/>
         <source>Refactored Note to Notebook &apos;</source>
         <translation>已将笔记重构到笔记本 &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1107"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1116"/>
         <source>Target Notebook not found</source>
         <translation>未找到目标笔记本</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1110"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1119"/>
         <source>Refactor Note</source>
         <translation>重构笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1110"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1119"/>
         <source>Note to be refactored not specified!</source>
         <translation>未指定要重构的笔记！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1118"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1127"/>
         <source>Find Note by Name in Notebook</source>
         <translation>在笔记本中按名称查找笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1124"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1133"/>
         <source>Find Note by Name</source>
         <translation>按名称查找笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1717"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1726"/>
         <source>image</source>
         <translation>图片</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1797"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1806"/>
         <source>Given path &apos;%1&apos; doesn&apos;t exist - target will not be copied, but link will be created</source>
         <translation>给定路径 &apos;%1&apos; 不存在 - 不会复制目标，但会创建链接</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1826"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1835"/>
         <source>Saving pasted image data to file: &apos;%1&apos;</source>
         <translation>正在将粘贴的图片数据保存到文件：&apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2367"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2381"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2376"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2390"/>
         <source>Wingman Action Error</source>
         <translation>AI 助手操作错误</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2337"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2346"/>
         <source>Wingman&apos;s answer appended after selected text in the Note editor.</source>
         <translation>AI 助手的回答已追加到笔记编辑器中所选文本之后。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2348"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2357"/>
         <source>Unable to append after selected text with Wingman&apos;s answer in non-edit perspective.</source>
         <translation>在非编辑视图中无法将 AI 助手的回答追加到所选文本之后。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2352"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2361"/>
         <source>No answer from Wingman to append after selected text - run a prompt.</source>
         <translation>没有可追加到所选文本之后的 AI 助手回答 - 请先运行提示词。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2362"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2371"/>
         <source>Wingman&apos;s answer replaced selected text in Notebook header.</source>
         <translation>AI 助手的回答已替换笔记本标题中的所选文本。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2368"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2377"/>
         <source>Unable to replace Notebook header text - no text selected.</source>
         <translation>无法替换笔记本标题文本 - 未选择文本。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2376"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2385"/>
         <source>Wingman&apos;s answer replaced selected text in Note text.</source>
         <translation>AI 助手的回答已替换笔记文本中的所选文本。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2382"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2391"/>
         <source>Unable to replace Note text - no text selected.</source>
         <translation>无法替换笔记文本 - 未选择文本。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2389"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2398"/>
         <source>Unable to replace selected text with Wingman&apos;s answer in non-edit perspective.</source>
         <translation>在非编辑视图中无法用 AI 助手的回答替换所选文本。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2393"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2402"/>
         <source>No answer from Wingman to replace selected text - run a prompt.</source>
         <translation>没有可替换所选文本的 AI 助手回答 - 请先运行提示词。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2465"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2474"/>
         <source>Edit Notebook</source>
         <translation>编辑笔记本</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2465"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2474"/>
         <source>Please open an Notebook to edit.</source>
         <translation>请打开要编辑的笔记本。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2538"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2783"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2547"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2792"/>
         <source>New Note</source>
         <translation>新建笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2538"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2547"/>
         <source>Failed to create new Note!</source>
         <translation>创建新笔记失败！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2551"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2554"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2560"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2563"/>
         <source>Clone Notebook</source>
         <translation>克隆笔记本</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2551"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2560"/>
         <source>Failed to clone Notebook!</source>
         <translation>克隆笔记本失败！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2554"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2563"/>
         <source>Please open and Notebook to be cloned.</source>
         <translation>请打开要克隆的笔记本。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2568"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2577"/>
         <source>Home tag toggled/removed - Notebook &apos;%1&apos; is no longer home</source>
         <translation>已切换/移除主页标签 - 笔记本 &apos;%1&apos; 不再是主页</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2571"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2580"/>
         <source>Notebook &apos;%1&apos; successfully marked as home</source>
         <translation>已成功将笔记本 &apos;%1&apos; 标记为主页</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2576"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2585"/>
         <source>Make Notebook home</source>
         <translation>将笔记本设为主页</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2576"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2585"/>
         <source>Notebook can be marked as home only when viewed.</source>
         <translation>只有在查看笔记本时才能将其标记为主页。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2587"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2612"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2596"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2621"/>
         <source>Forget Notebook</source>
         <translation>弃用笔记本</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3571"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3580"/>
         <source>Library already indexed - use &apos;Update library&apos; action to synchronize documents.</source>
         <translation>文档库已建立索引 - 请使用“更新文档库”操作同步文档。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3579"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3588"/>
         <source>Unable to index documents on library path - either memory directory doesn&apos;t exist or not in MindForger workspace mode.</source>
         <translation>无法为文档库路径中的文档建立索引 - 记忆目录不存在，或当前不是 MindForger 工作区模式。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3616"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3625"/>
         <source>Library synchronization</source>
         <translation>文档库同步</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3617"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3626"/>
         <source>There are no libraries - nothing to synchronize.</source>
         <translation>没有文档库 - 无需同步。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3714"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3723"/>
         <source>Library deletion</source>
         <translation>文档库删除</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3715"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3724"/>
         <source>There are no libraries - nothing to delete.</source>
         <translation>没有文档库 - 无需删除。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3730"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3739"/>
         <source>Delete Library</source>
         <translation>删除文档库</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3731"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3740"/>
         <source>Do you really want to delete Notebooks which represent the library documents?</source>
         <translation>确定要删除表示文档库文档的笔记本吗？</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4056"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4065"/>
         <source>Do you really want to forget &apos;</source>
         <translation>确定要遗忘 &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2590"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2599"/>
         <source>&apos; Notebook?</source>
         <translation>&apos; 笔记本吗？</translation>
     </message>
@@ -3797,430 +3797,440 @@ Choose new library source:</source>
         <translation>这既不是有效的 MindForger/Markdown 工作区，也不是有效的文件。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1201"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="952"/>
+        <source>Find Notebook by Name on Shelf</source>
+        <translation>在书架上按名称查找笔记本</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="955"/>
+        <source>Find Notebook by Name</source>
+        <translation type="unfinished">按名称查找笔记本</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1210"/>
         <source>Home Notebook not set - use menu &apos;Notebooks/Make Home&apos;</source>
         <translation>未设置主页笔记本 - 请使用菜单“笔记本/设为主页”</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1792"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1801"/>
         <source>File copied to workspace path &apos;%1&apos;</source>
         <translation>文件已复制到工作区路径 &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1885"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1894"/>
         <source>Run Knowledge Tool Error</source>
         <translation>运行知识工具错误</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1886"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1895"/>
         <source>Unknown tool to run &apos;%1&apos;.</source>
         <translation>要运行的工具 &apos;%1&apos; 未知。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1896"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1905"/>
         <source>Open Knowledge Tool Dialog Error</source>
         <translation>打开知识工具对话框错误</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1897"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1906"/>
         <source>Unable to construct URL to open for unknown tool &apos;%1&apos;.</source>
         <translation>无法为未知工具 &apos;%1&apos; 构造要打开的 URL。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1942"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1951"/>
         <source>HTML Note preview flickering can be eliminated by setting Math support and Diagram support to disable in Preferences menu</source>
         <translation>在首选项菜单中禁用数学公式支持和图表支持，可消除 HTML 笔记预览闪烁</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2208"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2217"/>
         <source>Wingman is runnning inferences...</source>
         <translation>AI 助手正在推理...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2265"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2274"/>
         <source>Wingman received an answer from the LLM provider</source>
         <translation>AI 助手已收到 LLM 提供方的回答</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2267"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2276"/>
         <source>Wingman failed to receive an answer from the LLM provider</source>
         <translation>AI 助手未能收到 LLM 提供方的回答</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2325"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2334"/>
         <source>Wingman&apos;s answer appended after selected text in the Notebook header.</source>
         <translation>AI 助手的回答已追加到笔记本标题中所选文本之后。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2329"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2338"/>
         <source>Wingman&apos;s answer appended after the cursor in the Notebook header.</source>
         <translation>AI 助手的回答已追加到笔记本标题中光标之后。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2341"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2350"/>
         <source>Wingman&apos;s answer appended after the cursor in the Note editor.</source>
         <translation>AI 助手的回答已追加到笔记编辑器中光标之后。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2478"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2487"/>
         <source>🔒 Notebook Write Error</source>
         <translation>🔒 笔记本写入错误</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2479"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2488"/>
         <source>Notebook file is read-only and cannot be written:
 &apos;%1&apos; </source>
         <translation>笔记本文件为只读，无法写入：
 &apos;%1&apos; </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2588"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2597"/>
         <source>Do you really want to deprecate &apos;</source>
         <translation>确定要弃用 &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2612"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2621"/>
         <source>Notebook can be forgotten only when viewed.</source>
         <translation>只有在查看笔记本时才能将其遗忘。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2625"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2643"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2650"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2663"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2681"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2688"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2707"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2634"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2652"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2659"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2672"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2690"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2697"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2716"/>
         <source>Export Error</source>
         <translation>导出错误</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2639"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2648"/>
         <source>Notebook exported to HTML file &apos;%1&apos;</source>
         <translation>笔记本已导出到 HTML 文件 &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2644"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2682"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2653"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2691"/>
         <source>Unable to write file &apos;%1&apos;!</source>
         <translation>无法写入文件 &apos;%1&apos;！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2650"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2688"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2659"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2697"/>
         <source>Unable to find Notebook to export!</source>
         <translation>找不到要导出的笔记本！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2677"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2686"/>
         <source>Notebook exported to Markdown file &apos;%1&apos;</source>
         <translation>笔记本已导出到 Markdown 文件 &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2742"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2751"/>
         <source>Import TWiki File</source>
         <translation>导入 TWiki 文件</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2783"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2792"/>
         <source>Open and view a Notebook to create new Note.</source>
         <translation>请打开并查看笔记本以新建笔记。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2827"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2836"/>
         <source>Edit Note</source>
         <translation>编辑笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2827"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2955"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2836"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2964"/>
         <source>Please select a Note to edit in the Notebook.</source>
         <translation>请在笔记本中选择要编辑的笔记。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2845"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2901"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2854"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2910"/>
         <source>Edit Note with External Editor Error</source>
         <translation>使用外部编辑器编辑笔记错误</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2846"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2855"/>
         <source>External editor command is not configured in preferences (Editor tab).</source>
         <translation>未在首选项（编辑器选项卡）中配置外部编辑器命令。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2871"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2954"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2880"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2963"/>
         <source>Edit Note with External Editor</source>
         <translation>使用外部编辑器编辑笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2872"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2881"/>
         <source>Running command: &apos;%1&apos;</source>
         <translation>正在运行命令：&apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2885"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2894"/>
         <source>Running command: &apos;%1&apos;. Close external editor to return control back to MindForger.</source>
         <translation>正在运行命令：&apos;%1&apos;。关闭外部编辑器后控制权将返回 MindForger。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2993"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3002"/>
         <source>Delete Note</source>
         <translation>删除笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2994"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3003"/>
         <source>Do you really want to delete note &apos;</source>
         <translation>确定要删除笔记 &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2996"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3005"/>
         <source>&apos; along with its child notes?</source>
         <translation>&apos; 及其子笔记吗？</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3046"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3055"/>
         <source>Forget Note</source>
         <translation>删除笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3046"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3055"/>
         <source>Please select a Note to forget.</source>
         <translation>请选择要删除的笔记。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3066"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3094"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3098"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3075"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3103"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3107"/>
         <source>Extract Note</source>
         <translation>提取笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3066"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3075"/>
         <source>Please select a text to extract.</source>
         <translation>请选择要提取的文本。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3094"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3103"/>
         <source>Failed to extract new Note!</source>
         <translation>提取新笔记失败！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3098"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3107"/>
         <source>Please select a Note, edit it and select a text to extract.</source>
         <translation>请选择一个笔记，编辑它并选择要提取的文本。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3124"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3141"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3145"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3133"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3150"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3154"/>
         <source>Clone Note</source>
         <translation>克隆笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3125"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3134"/>
         <source>Do you want to clone Note &apos;</source>
         <translation>是否克隆笔记 &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3125"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3134"/>
         <source>&apos; including its child notes?&apos;?</source>
         <translation>&apos; 及其子笔记？</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3141"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3150"/>
         <source>Failed to clone Note!</source>
         <translation>克隆笔记失败！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3145"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3154"/>
         <source>Please select a Note to be cloned.</source>
         <translation>请选择要克隆的笔记。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3204"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3213"/>
         <source>Moved Note &apos;%1&apos; to be the first child</source>
         <translation>已将笔记 &apos;%1&apos; 移为第一个子项</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3207"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3243"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3279"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3315"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3216"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3252"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3288"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3324"/>
         <source>Move Note</source>
         <translation>移动笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3207"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3243"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3279"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3315"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3216"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3252"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3288"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3324"/>
         <source>Please select a Note to be moved.</source>
         <translation>请选择要移动的笔记。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3240"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3249"/>
         <source>Moved up Note &apos;%1&apos;</source>
         <translation>已上移笔记 &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3276"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3285"/>
         <source>Moved down Note &apos;%1&apos;</source>
         <translation>已下移笔记 &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3312"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3321"/>
         <source>Moved Note &apos;%1&apos; to be the last child</source>
         <translation>已将笔记 &apos;%1&apos; 移为最后一个子项</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3346"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3355"/>
         <source>Promoted Note &apos;%1&apos;</source>
         <translation>已提升笔记 &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3349"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3358"/>
         <source>Promote Note</source>
         <translation>提升笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3349"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3358"/>
         <source>Please select a Note to be promoted.</source>
         <translation>请选择要提升的笔记。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3380"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3389"/>
         <source>Demoted Note &apos;%1&apos;</source>
         <translation>已降级笔记 &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3383"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3392"/>
         <source>Demote Note</source>
         <translation>降级笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3383"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3392"/>
         <source>Please select a Note to be demoted.</source>
         <translation>请选择要降级的笔记。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3549"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3570"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3578"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3558"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3579"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3587"/>
         <source>Add Library Error</source>
         <translation>添加文档库错误</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3550"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3559"/>
         <source>Library directory doesn&apos;t exist!</source>
         <translation>文档库目录不存在！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3648"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3658"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3680"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3688"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3657"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3667"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3689"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3697"/>
         <source>Library Orphans</source>
         <translation>文档库孤立项</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3649"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3658"/>
         <source>Found %1 library Notebooks with orphaned documents. Notebooks were tagged with &apos;library-orphan-document&apos; tag. Use scopes to filter them out.</source>
         <translation>找到 %1 个包含孤立文档的文档库笔记本。这些笔记本已添加 &apos;library-orphan-document&apos; 标签。可使用范围将其过滤掉。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3659"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3668"/>
         <source>No Notebooks with orphaned documents found.</source>
         <translation>未找到包含孤立文档的笔记本。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3681"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3690"/>
         <source>%1 Notebooks tagged as library orphans were deprecated.</source>
         <translation>已弃用 %1 个标记为文档库孤立项的笔记本。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3689"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3698"/>
         <source>No Notebooks with library orphan tag found.</source>
         <translation>未找到带有文档库孤立项标签的笔记本。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3871"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3880"/>
         <source>Organizer Update Error</source>
         <translation>组织器更新错误</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3872"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3881"/>
         <source>Eisenhower Matrix organizer is built-in and cannot be edited - please create or update a custom organizer.</source>
         <translation>艾森豪威尔矩阵组织器为内置组织器，无法编辑 - 请创建或更新自定义组织器。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3899"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3908"/>
         <source>Organizer Clone Error</source>
         <translation>组织器克隆错误</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3900"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3909"/>
         <source>Eisenhower Matrix organizer is built-in and cannot be cloned - please create or update a custom organizer.</source>
         <translation>艾森豪威尔矩阵组织器为内置组织器，无法克隆 - 请创建或更新自定义组织器。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4055"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4064"/>
         <source>Forget Organizer</source>
         <translation>遗忘组织器</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4057"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4066"/>
         <source>&apos; Organizer?</source>
         <translation>&apos; 组织器吗？</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4068"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4077"/>
         <source>Delete Organizer</source>
         <translation>删除组织器</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4069"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4078"/>
         <source>Eisenhower Matrix is built-in and cannot be deleted - only custom organizers can.</source>
         <translation>艾森豪威尔矩阵为内置组织器，无法删除 - 只能删除自定义组织器。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4145"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4154"/>
         <source>Delete Notebook Tree</source>
         <translation>删除笔记本树</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4146"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4155"/>
         <source>Do you really want to delete &apos;</source>
         <translation>确定要删除 &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4148"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4157"/>
         <source>&apos; Notebook tree? Notebooks organized in it will NOT be deleted.</source>
         <translation>&apos; 笔记本树吗？其中组织的笔记本不会被删除。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4192"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4201"/>
         <source>Notebook &apos;%1&apos; added to tree &apos;%2&apos;</source>
         <translation>已将笔记本 &apos;%1&apos; 添加到树 &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4212"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4221"/>
         <source>Entry removed from Notebook tree (Notebook itself was NOT deleted)</source>
         <translation>已从笔记本树中移除条目（笔记本本身未被删除）</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4230"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4239"/>
         <source>View Limbo</source>
         <translation>查看 Limbo</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4231"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4240"/>
         <source>Limbo directory with deleted Notebooks is available in the MindForger workspace, not if a Markdown is edited or a directory with markdowns is opened.</source>
         <translation>包含已删除笔记本的 Limbo 目录仅在 MindForger 工作区中可用，编辑 Markdown 文件或打开 Markdown 目录时不可用。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="4352"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="4361"/>
         <source>About MindForger</source>
         <translation>关于 MindForger</translation>
     </message>
@@ -5559,27 +5569,31 @@ Choose new library source:</source>
         <translation type="vanished">笔记本树</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/outlines_map_model.cpp" line="42"/>
         <source>Notebooks Shelf</source>
-        <translation>笔记本书架</translation>
+        <translation type="vanished">笔记本书架</translation>
     </message>
     <message>
         <location filename="../../../src/qt/outlines_map_model.cpp" line="43"/>
+        <source>Notebook Shelves</source>
+        <translation type="unfinished">笔记本书架</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/outlines_map_model.cpp" line="44"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/outlines_map_model.cpp" line="44"/>
+        <location filename="../../../src/qt/outlines_map_model.cpp" line="45"/>
         <source>Rs</source>
         <translation>Rs</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/outlines_map_model.cpp" line="45"/>
+        <location filename="../../../src/qt/outlines_map_model.cpp" line="46"/>
         <source>Ws</source>
         <translation>Ws</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/outlines_map_model.cpp" line="46"/>
+        <location filename="../../../src/qt/outlines_map_model.cpp" line="47"/>
         <source>Modified</source>
         <translation>修改时间</translation>
     </message>

@@ -599,6 +599,12 @@ public:
      */
     void notebookTreeAddOutline(Outline* notebookTree, Outline* outlineToAdd);
     /**
+     * @brief Get Outlines organized in a Notebook tree (in the tree order).
+     *
+     * Entries whose Outline no longer exists in the Mind are skipped.
+     */
+    void notebookTreeGetOutlines(Outline* notebookTree, std::vector<Outline*>& outlines);
+    /**
      * @brief Remove an Outline from EVERY registered Notebook tree.
      *
      * Called whenever an Outline is forgotten/deleted so that no

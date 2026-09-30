@@ -1,6 +1,13 @@
 2026-..-..  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.6.0 - AUR for Arch Linux.
+    * Enhancement: Recall Notebook by Name (Ctrl-Shift-B) finds only Notebooks
+      which are on the shelf when a Notebook shelf is opened (analogous to Recall
+      Note by Name which finds only Notebook's Notes when a Notebook is opened).
+    * Enhancement: opened Notebook shelf shows the shelf name in the table header
+      (instead of generic "Notebook Shelves" title which is used for unnamed shelves).
+    * Fix: Esc leaves the command palette (CLI) and gives focus to the next component
+      in the view (previously TAB was the only way to leave it using the keyboard).
 
 2026-09-26  Martin Dvorak  <martin.dvorak@mindforger.com>
 

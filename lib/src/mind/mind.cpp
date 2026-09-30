@@ -1230,6 +1230,23 @@ void Mind::notebookTreeAddOutline(Outline* notebookTree, Outline* outlineToAdd)
     notebookTree->addNote(n, 0);
 }
 
+void Mind::notebookTreeGetOutlines(Outline* notebookTree, vector<Outline*>& outlines)
+{
+    if(!notebookTree) {
+        return;
+    }
+
+    for(Note* n:notebookTree->getNotes()) {
+        Link* oLink = n->getLinkByName(LINK_NAME_OUTLINE_KEY);
+        if(oLink) {
+            Outline* o = findOutlineByKey(oLink->getUrl());
+            if(o) {
+                outlines.push_back(o);
+            }
+        }
+    }
+}
+
 void Mind::notebookTreeRemoveOutlineFromAll(const string& outlineKey)
 {
     for(NotebookTree* t:config.getRepositoryConfiguration().getNotebookTrees()) {
