@@ -4,53 +4,53 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="200"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="206"/>
         <source>Save Note</source>
         <translation>保存笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="201"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="207"/>
         <source>Do you want to save changes?</source>
         <translation>是否保存更改？</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="208"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="214"/>
         <source>Discard changes</source>
         <translation>放弃更改</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="210"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="216"/>
         <source>&amp;Discard changes</source>
         <translation>放弃更改(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="216"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="218"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="222"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="224"/>
         <source>Autosave</source>
         <translation>自动保存</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="222"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="228"/>
         <source>Do not ask &amp; autosave</source>
         <translation>不再询问并自动保存</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="225"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="231"/>
         <source>Continue editing</source>
         <translation>继续编辑</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="227"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="233"/>
         <source>Continue &amp;editing</source>
         <translation>继续编辑(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="233"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="239"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="235"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="241"/>
         <source>&amp;Save</source>
         <translation>保存(&amp;S)</translation>
     </message>
@@ -3390,22 +3390,22 @@ Choose new library source:</source>
 <context>
     <name>m8r::MainWindowPresenter</name>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="447"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="446"/>
         <source>Hyperlink %1 clicked...</source>
         <translation>已单击超链接 %1...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="500"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="499"/>
         <source>Link target not found for relative link %1</source>
         <translation>未找到相对链接 %1 的目标</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="623"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="622"/>
         <source>New Markdown File Error</source>
         <translation>新建 Markdown 文件错误</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="623"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="622"/>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2634"/>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2672"/>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2717"/>
@@ -3413,7 +3413,7 @@ Choose new library source:</source>
         <translation>指定的文件路径已存在！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="679"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="678"/>
         <source>Cannot start sleeping - please wait until dreaming finishes and then try again</source>
         <translation>无法开始休眠 - 请等待做梦结束后再试</translation>
     </message>
@@ -3422,12 +3422,12 @@ Choose new library source:</source>
         <translation type="obsolete">Open Directory or MindForger Repository</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="833"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="832"/>
         <source>Learn Markdown File</source>
         <translation>打开 Markdown 文件</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="865"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="864"/>
         <source>Learn</source>
         <translation>打开</translation>
     </message>
@@ -3444,54 +3444,54 @@ Choose new library source:</source>
         <translation>导出</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="452"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="451"/>
         <source>Autolinked Notebooks and Notes</source>
         <translation>自动链接的笔记本和笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="887"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="886"/>
         <source>Notebook Full-text Search</source>
         <translation>笔记本全文搜索</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="892"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="891"/>
         <source>Note Full-text Search</source>
         <translation>笔记全文搜索</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="897"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="896"/>
         <source>Full-text Search</source>
         <translation>全文搜索</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="979"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="990"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1015"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="978"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="989"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1014"/>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2452"/>
         <source>Notebook </source>
         <translation>笔记本 </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="981"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1017"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="980"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1016"/>
         <source>Notebook not found</source>
         <translation>未找到笔记本</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1025"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1024"/>
         <source>Find Note by Tags in Notebook</source>
         <translation>在笔记本中按标签查找笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1030"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1040"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1029"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1039"/>
         <source>Find Note by Tags</source>
         <translation>按标签查找笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="993"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1086"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1155"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="992"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1085"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1154"/>
         <source>Note </source>
         <translation>笔记 </translation>
     </message>
@@ -3501,43 +3501,43 @@ Choose new library source:</source>
         <translation>将记忆导出为 CSV</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="996"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="995"/>
         <source>Thing not found</source>
         <translation>未找到内容</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1088"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1157"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1087"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1156"/>
         <source>Note not found</source>
         <translation>未找到笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1114"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1113"/>
         <source>Refactored Note to Notebook &apos;</source>
         <translation>已将笔记重构到笔记本 &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1116"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1115"/>
         <source>Target Notebook not found</source>
         <translation>未找到目标笔记本</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1119"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1118"/>
         <source>Refactor Note</source>
         <translation>重构笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1119"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1118"/>
         <source>Note to be refactored not specified!</source>
         <translation>未指定要重构的笔记！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1127"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1126"/>
         <source>Find Note by Name in Notebook</source>
         <translation>在笔记本中按名称查找笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1133"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1132"/>
         <source>Find Note by Name</source>
         <translation>按名称查找笔记</translation>
     </message>
@@ -3726,83 +3726,83 @@ Choose new library source:</source>
         <translation>将笔记本导出为 Markdown</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="381"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="380"/>
         <source>Cannot think - either Mind already dreaming or workspace too big</source>
         <translation>无法思考 - 心智正在做梦，或工作区过大</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="578"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="590"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="577"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="589"/>
         <source>New Workspace Error</source>
         <translation>新建工作区错误</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="579"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="578"/>
         <source>Specified workspace path already exists!</source>
         <translation>指定的工作区路径已存在！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="591"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="590"/>
         <source>Failed to create empty workspace!</source>
         <translation>创建空工作区失败！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="603"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="602"/>
         <source>ERROR: workspace created, but attempt to copy documentation and/or stencils failed</source>
         <translation>错误：工作区已创建，但复制文档和/或模板失败</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="655"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="654"/>
         <source>Cannot think - either Mind already dreaming or workspace has too many notes: %1 &gt; %2</source>
         <translation>无法思考 - 心智正在做梦，或工作区中的笔记过多：%1 &gt; %2</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="722"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="721"/>
         <source>Semantic search disabled</source>
         <translation>语义搜索已禁用</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="729"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="728"/>
         <source>Semantic search activated</source>
         <translation>语义搜索已激活</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="732"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="731"/>
         <source>Semantic search cannot be activated - missing dependencies</source>
         <translation>无法激活语义搜索 - 缺少依赖项</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="735"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="734"/>
         <source>Semantic Search</source>
         <translation>语义搜索</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="736"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="735"/>
         <source>Semantic search cannot be activated - ollama Wingman must be configured.</source>
         <translation>无法激活语义搜索 - 必须配置 ollama AI 助手。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="745"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="744"/>
         <source>Refresh semantic search index ~ text embeddings of all (modified) Notes...</source>
         <translation>刷新语义搜索索引 ~ 所有（已修改）笔记的文本嵌入...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="806"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="805"/>
         <source>Learn Directory or MindForger Workspace</source>
         <translation>学习目录或 MindForger 工作区</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="866"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="865"/>
         <source>This is neither valid MindForger/Markdown workspace nor file.</source>
         <translation>这既不是有效的 MindForger/Markdown 工作区，也不是有效的文件。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="952"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="951"/>
         <source>Find Notebook by Name on Shelf</source>
         <translation>在书架上按名称查找笔记本</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="955"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="954"/>
         <source>Find Notebook by Name</source>
         <translation type="unfinished">按名称查找笔记本</translation>
     </message>
@@ -5222,89 +5222,91 @@ Choose new library source:</source>
 <context>
     <name>m8r::OrlojPresenter</name>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="299"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="305"/>
         <source>Eisenhower Matrix: </source>
         <translation>艾森豪威尔矩阵：</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="321"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="327"/>
         <source>Kanban: </source>
         <translation>看板：</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="429"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="435"/>
         <source>Notebook Tree: &apos;%1&apos;</source>
         <translation>笔记本树：&apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="433"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="439"/>
         <source>Selected Notebook Tree not found!</source>
         <translation>未找到所选笔记本树！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="436"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="442"/>
         <source>No Notebook Tree selected!</source>
         <translation>未选择笔记本树！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="499"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="505"/>
         <source>Organizer: &apos;</source>
         <translation>组织器：&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="509"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="515"/>
         <source>Selected Organizer not found!</source>
         <translation>未找到所选组织器！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="512"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="518"/>
         <source>No Organizer selected!</source>
         <translation>未选择组织器！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="559"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="564"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="591"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="565"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="570"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="597"/>
         <source>Selected Notebook not found!</source>
         <translation>未找到所选笔记本！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="567"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="594"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="619"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="573"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="600"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="625"/>
         <source>No Notebook selected!</source>
         <translation>未选择笔记本！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="655"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="661"/>
         <source>Selected Tag not found!</source>
         <translation>未找到所选标签！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="658"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="676"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="664"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="682"/>
         <source>No Tag selected!</source>
         <translation>未选择标签！</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="709"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="715"/>
         <source>Note &apos;%1&apos;   %2</source>
         <translation>笔记 &apos;%1&apos;   %2</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1010"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1038"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1005"/>
         <source>Note </source>
         <translation>笔记 </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1012"/>
-        <source>Selected Notebook/Note not found!</source>
-        <translation>未找到所选笔记本/笔记！</translation>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1008"/>
+        <source>Notebook </source>
+        <translation type="unfinished">笔记本 </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1015"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1040"/>
+        <source>Selected Notebook/Note not found!</source>
+        <translation type="vanished">未找到所选笔记本/笔记！</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1010"/>
         <source>No Note selected!</source>
         <translation>未选择笔记！</translation>
     </message>
@@ -5650,36 +5652,86 @@ Choose new library source:</source>
     </message>
 </context>
 <context>
-    <name>m8r::RecentNotesTableModel</name>
+    <name>m8r::RecentNotesModel</name>
     <message>
-        <location filename="../../../src/qt/recent_notes_table_model.cpp" line="42"/>
+        <location filename="../../../src/qt/recent_notes_model.cpp" line="42"/>
         <source>Recent Notes</source>
         <translation>最近的笔记</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/recent_notes_table_model.cpp" line="43"/>
-        <source>Notebook</source>
-        <translation>笔记本</translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/recent_notes_table_model.cpp" line="44"/>
+        <location filename="../../../src/qt/recent_notes_model.cpp" line="43"/>
         <source>Rs</source>
         <translation>Rs</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/recent_notes_table_model.cpp" line="45"/>
+        <location filename="../../../src/qt/recent_notes_model.cpp" line="44"/>
         <source>Ws</source>
         <translation>Ws</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/recent_notes_table_model.cpp" line="46"/>
+        <location filename="../../../src/qt/recent_notes_model.cpp" line="45"/>
         <source>Read</source>
         <translation>阅读</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/recent_notes_table_model.cpp" line="47"/>
+        <location filename="../../../src/qt/recent_notes_model.cpp" line="46"/>
         <source>Modified</source>
         <translation>修改时间</translation>
+    </message>
+</context>
+<context>
+    <name>m8r::RecentNotesTableModel</name>
+    <message>
+        <source>Recent Notes</source>
+        <translation type="vanished">最近的笔记</translation>
+    </message>
+    <message>
+        <source>Notebook</source>
+        <translation type="vanished">笔记本</translation>
+    </message>
+    <message>
+        <source>Rs</source>
+        <translation type="vanished">Rs</translation>
+    </message>
+    <message>
+        <source>Ws</source>
+        <translation type="vanished">Ws</translation>
+    </message>
+    <message>
+        <source>Read</source>
+        <translation type="vanished">阅读</translation>
+    </message>
+    <message>
+        <source>Modified</source>
+        <translation type="vanished">修改时间</translation>
+    </message>
+</context>
+<context>
+    <name>m8r::RecentNotesView</name>
+    <message>
+        <location filename="../../../src/qt/recent_notes_view.cpp" line="108"/>
+        <source>Viewed or edited</source>
+        <translation>查看或编辑过的</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/recent_notes_view.cpp" line="109"/>
+        <source>Show Notes which were recently viewed or edited</source>
+        <translation>显示最近查看或编辑过的笔记</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/recent_notes_view.cpp" line="110"/>
+        <source>Edited</source>
+        <translation>编辑过的</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/recent_notes_view.cpp" line="111"/>
+        <source>Show Notes which were recently edited only</source>
+        <translation>仅显示最近编辑过的笔记</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/recent_notes_view.cpp" line="117"/>
+        <source>Show:</source>
+        <translation>显示：</translation>
     </message>
 </context>
 <context>
