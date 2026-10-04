@@ -90,6 +90,7 @@ Configuration::Configuration()
       uiOsTableSortColumn{DEFAULT_OS_TABLE_SORT_COLUMN},
       uiOsTableSortOrder{DEFAULT_OS_TABLE_SORT_ORDER},
       uiDoubleClickNoteViewToEdit{DEFAULT_CLICK_NOTE_VIEW_TO_EDIT},
+      uiRecentNotesEditedOnly{DEFAULT_RECENT_NOTES_EDITED_ONLY},
       installer(new Installer{})
 {
     // default config file path: ~/.mindforger.md
@@ -221,6 +222,7 @@ void Configuration::clear()
     uiOsTableSortColumn = DEFAULT_OS_TABLE_SORT_COLUMN;
     uiOsTableSortOrder = DEFAULT_OS_TABLE_SORT_ORDER;
     uiDoubleClickNoteViewToEdit = DEFAULT_CLICK_NOTE_VIEW_TO_EDIT;
+    uiRecentNotesEditedOnly = DEFAULT_RECENT_NOTES_EDITED_ONLY;
 }
 
 bool Configuration::hasRepositoryConfiguration() const {

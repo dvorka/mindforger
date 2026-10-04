@@ -29,7 +29,7 @@
 #include "outlines_map_view.h"
 #include "notebook_trees_table_view.h"
 #include "notes_table_view.h"
-#include "recent_notes_table_view.h"
+#include "recent_notes_view.h"
 #include "outline_view_splitter.h"
 #include "outline_header_view.h"
 #include "outline_header_edit_view.h"
@@ -69,7 +69,7 @@ private:
     OutlinesTableView* outlinesTable;
     OutlinesMapView* outlinesMap;
     NotebookTreesTableView* notebookTreesTable;
-    RecentNotesTableView* recentNotesTable;
+    RecentNotesView* recentNotes;
     OutlineViewSplitter* outlineView;
     OutlineHeaderView* outlineHeaderView;
     OutlineHeaderEditView* outlineHeaderEdit;
@@ -95,7 +95,7 @@ public:
     OutlinesMapView* getOutlinesMapTable() const { return outlinesMap; }
     OutlinesMapView* getOutlinesMap() const { return outlinesMap; }
     NotebookTreesTableView* getNotebookTreesTable() const { return notebookTreesTable; }
-    RecentNotesTableView* getRecentNotesTable() const { return recentNotesTable; }
+    RecentNotesView* getRecentNotes() const { return recentNotes; }
     OutlineViewSplitter* getOutlineView() const { return outlineView; }
     OutlineHeaderView* getOutlineHeaderView() const { return outlineHeaderView; }
     OutlineHeaderEditView* getOutlineHeaderEdit() const { return outlineHeaderEdit; }

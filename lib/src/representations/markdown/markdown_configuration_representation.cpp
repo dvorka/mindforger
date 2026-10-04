@@ -52,6 +52,7 @@ constexpr const auto CONFIG_SETTING_UI_LIVE_NOTE_PREVIEW_LABEL =  "* Live note p
 constexpr const auto CONFIG_SETTING_UI_OS_TABLE_SORT_COL_LABEL =  "* Outlines table sort column: ";
 constexpr const auto CONFIG_SETTING_UI_OS_TABLE_SORT_ORDER_LABEL =  "* Outlines table sort order: ";
 constexpr const auto CONFIG_SETTING_UI_CLICK_NOTE_VIEW_TO_EDIT_LABEL =  "* Enable double click note view to edit: ";
+constexpr const auto CONFIG_SETTING_UI_RECENT_NOTES_EDITED_ONLY_LABEL =  "* Recent notes edited only: ";
 constexpr const auto CONFIG_SETTING_UI_NERD_MENU=  "* Nerd menu: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_FONT_LABEL =  "* Editor font: ";
@@ -275,6 +276,12 @@ void MarkdownConfigurationRepresentation::configurationSection(
                             c.setUiOsTableSortOrder(true);
                         } else {
                             c.setUiOsTableSortOrder(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_RECENT_NOTES_EDITED_ONLY_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiRecentNotesEditedOnly(true);
+                        } else {
+                            c.setUiRecentNotesEditedOnly(false);
                         }
                     } else if(line->find(CONFIG_SETTING_UI_NERD_MENU) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
@@ -708,6 +715,9 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_UI_OS_TABLE_SORT_ORDER_LABEL << (c?(c->isUiOsTableSortOrder()?"ascending":"descending"):(Configuration::DEFAULT_OS_TABLE_SORT_ORDER?"ascending":"descending")) << endl <<
          "    * Order of Notebooks table sorting." << endl <<
          "    * Examples: ascending, descending" << endl <<
+         CONFIG_SETTING_UI_RECENT_NOTES_EDITED_ONLY_LABEL << (c?(c->isUiRecentNotesEditedOnly()?"yes":"no"):(Configuration::DEFAULT_RECENT_NOTES_EDITED_ONLY?"yes":"no")) << endl <<
+         "    * Show only edited notes (yes) or viewed and edited notes (no) in Recent Notes." << endl <<
+         "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_SHOW_TOOLBAR_LABEL<< (c?(c->isUiShowToolbar()?"yes":"no"):(Configuration::DEFAULT_UI_SHOW_TOOLBAR?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_NERD_MENU << (c?(c->isUiNerdTargetAudience()?"yes":"no"):(Configuration::DEFAULT_UI_NERD_MENU?"yes":"no")) << endl <<

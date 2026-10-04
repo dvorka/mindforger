@@ -46,8 +46,8 @@ OrlojView::OrlojView(QWidget* parent)
     notebookTreesTable = new NotebookTreesTableView(this);
     addWidget(notebookTreesTable);
 
-    recentNotesTable = new RecentNotesTableView(this);
-    addWidget(recentNotesTable);
+    recentNotes = new RecentNotesView(this);
+    addWidget(recentNotes);
 
     navigator = new NavigatorView(this);
     addWidget(navigator);
@@ -151,7 +151,7 @@ void OrlojView::showFacetOutlinesDetail()
 
 void OrlojView::showFacetRecentNotes()
 {
-    QSet<QWidget*> v; v << recentNotesTable;
+    QSet<QWidget*> v; v << recentNotes;
     hideChildren(v);
 }
 

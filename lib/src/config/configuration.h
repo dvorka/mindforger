@@ -360,6 +360,7 @@ public:
     static constexpr const int DEFAULT_OS_TABLE_SORT_COLUMN = 7;
     static constexpr const bool DEFAULT_OS_TABLE_SORT_ORDER = false;
     static constexpr const bool DEFAULT_CLICK_NOTE_VIEW_TO_EDIT = true;
+    static constexpr const bool DEFAULT_RECENT_NOTES_EDITED_ONLY = false;
 
     static constexpr int EDITOR_MAX_AUTOCOMPLETE_LINES = 1000;
 
@@ -460,6 +461,7 @@ private:
     int uiOsTableSortColumn;
     bool uiOsTableSortOrder; // true if ascending, else descending
     bool uiDoubleClickNoteViewToEdit;
+    bool uiRecentNotesEditedOnly; // true if edited Ns only, else viewed or edited Ns
 
     // organizers
     std::vector<Organizer*> organizers;
@@ -785,6 +787,8 @@ public:
     void setUiOsTableSortOrder(const bool ascending) { this->uiOsTableSortOrder = ascending; }
     bool isUiDoubleClickNoteViewToEdit() const { return this->uiDoubleClickNoteViewToEdit; }
     void setUiDoubleClickNoteViewToEdit(bool enable) { this->uiDoubleClickNoteViewToEdit = enable; }
+    bool isUiRecentNotesEditedOnly() const { return this->uiRecentNotesEditedOnly; }
+    void setUiRecentNotesEditedOnly(bool editedOnly) { this->uiRecentNotesEditedOnly = editedOnly; }
 };
 
 } // namespace

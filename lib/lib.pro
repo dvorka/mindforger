@@ -132,6 +132,7 @@ SOURCES += \
     src/model/kanban.cpp \
     src/model/organizer.cpp \
     src/model/notebook_tree.cpp \
+    src/model/recent_notes.cpp \
     src/persistence/configuration_persistence.cpp \
     src/persistence/persistence.cpp \
     src/representations/markdown/markdown_document.cpp \
@@ -247,6 +248,7 @@ HEADERS += \
     src/model/kanban.h \
     src/model/organizer.h \
     src/model/notebook_tree.h \
+    src/model/recent_notes.h \
     src/persistence/configuration_persistence.h \
     src/representations/markdown/markdown_document.h \
     src/representations/html/html_document.h \

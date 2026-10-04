@@ -347,6 +347,37 @@ TEST(ConfigurationTestCase, UiLocaleSaveAndLoad)
     c.setUiLocale(backupLocale);
 }
 
+TEST(ConfigurationTestCase, RecentNotesEditedOnlySaveAndLoad)
+{
+    // GIVEN
+    string configPath{"/tmp/cfg-recent-notes-edited-only-save-and-load.md"};
+    m8r::MarkdownConfigurationRepresentation configRepresentation{};
+    m8r::Configuration& c = m8r::Configuration::getInstance();
+    string backupConfigPath = c.getConfigFilePath();
+    bool backupEditedOnly = c.isUiRecentNotesEditedOnly();
+    c.setConfigFilePath(configPath);
+
+    for(bool editedOnly: {true, false}) {
+        // WHEN: mode is selected, saved and reloaded
+        c.setUiRecentNotesEditedOnly(editedOnly);
+        configRepresentation.save(c);
+        std::unique_ptr<string> asString{m8r::fileToString(c.getConfigFilePath())};
+        c.setUiRecentNotesEditedOnly(!editedOnly);
+        bool loaded = configRepresentation.load(c);
+
+        // THEN
+        EXPECT_NE(
+            std::string::npos,
+            asString.get()->find(string{"Recent notes edited only: "} + (editedOnly?"yes":"no")));
+        ASSERT_TRUE(loaded);
+        EXPECT_EQ(editedOnly, c.isUiRecentNotesEditedOnly());
+    }
+
+    // cleanup
+    c.setConfigFilePath(backupConfigPath);
+    c.setUiRecentNotesEditedOnly(backupEditedOnly);
+}
+
 TEST(ConfigurationTestCase, MathSupportBackwardCompatibleYes)
 {
     // GIVEN: a config file written in the deprecated boolean "yes"/"no" format

@@ -148,6 +148,7 @@ SOURCES += \
     ./mindforger_lib_unit_tests.cpp \
     ./mind/organizer_test.cpp \
     ./mind/notebook_tree_test.cpp \
+    ./mind/recent_notes_test.cpp \
     ./mind/outline_test.cpp \
     ./mind/filesystem_information_test.cpp \
     ./csv/csv_test.cpp \

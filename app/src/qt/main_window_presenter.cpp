@@ -320,8 +320,7 @@ void MainWindowPresenter::showInitialView()
                 } else if(!string{START_TO_TAGS}.compare(config.getStartupView())) {
                     orloj->showFacetTagCloud();
                 } else if(!string{START_TO_RECENT}.compare(config.getStartupView())) {
-                    vector<Note*> notes{};
-                    orloj->showFacetRecentNotes(mind->getAllNotes(notes));
+                    doActionViewRecentNotes();
                 } else if(!string{START_TO_EISENHOWER_MATRIX}.compare(config.getStartupView())) {
                     orloj->showFacetEisenhowerMatrix(
                          nullptr,
@@ -1161,7 +1160,8 @@ void MainWindowPresenter::handleFindNoteByName()
 void MainWindowPresenter::doActionViewRecentNotes()
 {
     vector<Note*> notes{};
-    mind->getAllNotes(notes, true, config.isRecentIncludeOs());
+    // Ns are sorted (and grouped) by the Recent Notes view based on its mode
+    mind->getAllNotes(notes, false, config.isRecentIncludeOs());
     orloj->showFacetRecentNotes(notes);
 }
 

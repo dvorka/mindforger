@@ -6,6 +6,12 @@
       Note by Name which finds only Notebook's Notes when a Notebook is opened).
     * Enhancement: opened Notebook shelf shows the shelf name in the table header
       (instead of generic "Notebook Shelves" title which is used for unnamed shelves).
+    * Enhancement: Recent Notes view shows the history (latest first) as a tree
+      where consecutive Notes from the same Notebook are grouped under the Notebook
+      (a Notebook is shown again whenever its Notes are interrupted by another
+      Notebook's Notes); Enter or double click opens the selected Notebook or Note.
+    * Enhancement: Recent Notes view toggle to show Notes which were recently
+      viewed or edited, or edited only (the choice is saved to the configuration).
     * Fix: Esc leaves the command palette (CLI) and gives focus to the next component
       in the view (previously TAB was the only way to leave it using the keyboard).
 

@@ -328,9 +328,9 @@ HEADERS += \
     src/qt/tags_table_model.h \
     src/qt/tags_table_presenter.h \
     src/qt/tags_table_view.h \
-    src/qt/recent_notes_table_model.h \
-    src/qt/recent_notes_table_presenter.h \
-    src/qt/recent_notes_table_view.h \
+    src/qt/recent_notes_model.h \
+    src/qt/recent_notes_presenter.h \
+    src/qt/recent_notes_view.h \
     src/qt/navigator_presenter.h \
     src/qt/main_toolbar_view.h \
     src/qt/dialogs/export_file_dialog.h \
@@ -455,9 +455,9 @@ SOURCES += \
     src/qt/tags_table_model.cpp \
     src/qt/tags_table_presenter.cpp \
     src/qt/tags_table_view.cpp \
-    src/qt/recent_notes_table_model.cpp \
-    src/qt/recent_notes_table_presenter.cpp \
-    src/qt/recent_notes_table_view.cpp \
+    src/qt/recent_notes_model.cpp \
+    src/qt/recent_notes_presenter.cpp \
+    src/qt/recent_notes_view.cpp \
     src/qt/navigator_presenter.cpp \
     src/qt/main_toolbar_view.cpp \
     src/qt/dialogs/export_file_dialog.cpp \
