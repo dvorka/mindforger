@@ -5519,13 +5519,9 @@ Choose new library source:</source>
         <translation type="vanished">笔记本树</translation>
     </message>
     <message>
-        <source>Notebooks Shelf</source>
-        <translation type="vanished">笔记本书架</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/outlines_map_model.cpp" line="43"/>
         <source>Notebook Shelves</source>
-        <translation type="unfinished">笔记本书架</translation>
+        <translation>笔记本书架</translation>
     </message>
     <message>
         <location filename="../../../src/qt/outlines_map_model.cpp" line="44"/>

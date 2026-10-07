@@ -5535,13 +5535,9 @@ Vyberte nový zdroj knihovny:</translation>
         <translation type="vanished">Strom zápisníků</translation>
     </message>
     <message>
-        <source>Notebooks Shelf</source>
-        <translation type="vanished">Police zápisníků</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/outlines_map_model.cpp" line="43"/>
         <source>Notebook Shelves</source>
-        <translation type="unfinished">Police zápisníků</translation>
+        <translation>Police zápisníků</translation>
     </message>
     <message>
         <location filename="../../../src/qt/outlines_map_model.cpp" line="44"/>

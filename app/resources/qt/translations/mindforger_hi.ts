@@ -5519,13 +5519,9 @@ Choose new library source:</source>
         <translation type="vanished">नोटबुक वृक्ष</translation>
     </message>
     <message>
-        <source>Notebooks Shelf</source>
-        <translation type="vanished">नोटबुक शेल्फ़</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/outlines_map_model.cpp" line="43"/>
         <source>Notebook Shelves</source>
-        <translation type="unfinished">नोटबुक शेल्फ़</translation>
+        <translation>नोटबुक शेल्फ़</translation>
     </message>
     <message>
         <location filename="../../../src/qt/outlines_map_model.cpp" line="44"/>

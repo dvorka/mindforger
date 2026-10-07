@@ -948,8 +948,9 @@ void MainWindowPresenter::doActionFindOutlineByName(const std::string& phrase)
     NotebookTree* t = orloj->getCurrentNotebookTree();
     if(t && orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
         // Notebook shelf is opened: find ONLY Notebooks which are on the shelf
+        // and visible in the active scope (exactly as they are shown on the shelf)
         findOutlineByNameDialog->setWindowTitle(tr("Find Notebook by Name on Shelf"));
-        mind->notebookTreeGetOutlines(mind->notebookTreeGet(t->getKey()), os);
+        mind->notebookTreeGetOutlines(mind->notebookTreeGet(t->getKey()), os, true);
     } else {
         findOutlineByNameDialog->setWindowTitle(tr("Find Notebook by Name"));
         os = mind->getOutlines();

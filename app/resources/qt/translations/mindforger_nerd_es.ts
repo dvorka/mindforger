@@ -5519,13 +5519,9 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation type="vanished">Árbol de cuadernos</translation>
     </message>
     <message>
-        <source>Notebooks Shelf</source>
-        <translation type="vanished">Estanterías de cuadernos</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/outlines_map_model.cpp" line="43"/>
         <source>Notebook Shelves</source>
-        <translation type="unfinished">Estanterías de cuadernos</translation>
+        <translation>Estanterías de cuadernos</translation>
     </message>
     <message>
         <location filename="../../../src/qt/outlines_map_model.cpp" line="44"/>
