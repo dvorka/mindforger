@@ -421,6 +421,14 @@ public:
 
     // composite mind scope aspect
     MindScopeAspect& getScopeAspect() { return scopeAspect; }
+    /**
+     * @brief Determine which O's Ns are visible in the active scope.
+     *
+     * N is visible if it's in scope or if it's a parent of a N which is
+     * in scope (so that the hierarchy is kept). All Ns are visible if the
+     * scope is not enabled.
+     */
+    void getNotesScopeVisibility(Outline* outline, std::vector<bool>& visibility);
 
     /*
      * (CROSS) REFERENCES - explicit associations created by the user.
@@ -601,9 +609,14 @@ public:
     /**
      * @brief Get Outlines organized in a Notebook tree (in the tree order).
      *
-     * Entries whose Outline no longer exists in the Mind are skipped.
+     * Entries whose Outline no longer exists in the Mind are skipped. If
+     * scoped, then entries hidden by the active scope are skipped as well
+     * (see getNotesScopeVisibility()).
      */
-    void notebookTreeGetOutlines(Outline* notebookTree, std::vector<Outline*>& outlines);
+    void notebookTreeGetOutlines(
+        Outline* notebookTree,
+        std::vector<Outline*>& outlines,
+        bool scoped=false);
     /**
      * @brief Remove an Outline from EVERY registered Notebook tree.
      *

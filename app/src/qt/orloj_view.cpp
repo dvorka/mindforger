@@ -22,6 +22,9 @@ namespace m8r {
 
 using namespace std;
 
+// O/N editor gets 60% of the width, the narrower child gets:
+constexpr const int NARROWER_CHILD_WIDTH_PERCENT = 40;
+
 OrlojView::OrlojView(QWidget* parent)
     : QSplitter(Qt::Horizontal, parent)
 {
@@ -46,8 +49,8 @@ OrlojView::OrlojView(QWidget* parent)
     notebookTreesTable = new NotebookTreesTableView(this);
     addWidget(notebookTreesTable);
 
-    recentNotesTable = new RecentNotesTableView(this);
-    addWidget(recentNotesTable);
+    recentNotes = new RecentNotesView(this);
+    addWidget(recentNotes);
 
     navigator = new NavigatorView(this);
     addWidget(navigator);
@@ -71,10 +74,10 @@ OrlojView::OrlojView(QWidget* parent)
     //setStyleSheet("border: 1px solid red;");
 }
 
-void OrlojView::hideChildren(const QSet<QWidget*>& visibleChildren)
+void OrlojView::hideChildren(const QSet<QWidget*>& visibleChildren, QWidget* narrowerChild)
 {
     // IMPROVE this method to be called on app window resize only
-    fiftyFifty();
+    splitWidth(narrowerChild);
 
     for(int i{}; i<count(); i++) {
         if(visibleChildren.contains(widget(i))) {
@@ -89,13 +92,14 @@ void OrlojView::hideChildren(const QSet<QWidget*>& visibleChildren)
     }
 }
 
-void OrlojView::fiftyFifty()
+void OrlojView::splitWidth(QWidget* narrowerChild)
 {
-    // 50%/50%
-    int half = size().width()/2;
+    // 50%/50% or narrower child 40% / the other child 60%
+    const int narrowerPercent = narrowerChild ? NARROWER_CHILD_WIDTH_PERCENT : 50;
+    const int width = size().width();
     QList<int> sizes{};
     for(int i{}; i<count(); i++) {
-        sizes << half;
+        sizes << width * (widget(i) == narrowerChild ? narrowerPercent : 100 - narrowerPercent) / 100;
     }
     setSizes(sizes);
 }
@@ -151,7 +155,7 @@ void OrlojView::showFacetOutlinesDetail()
 
 void OrlojView::showFacetRecentNotes()
 {
-    QSet<QWidget*> v; v << recentNotesTable;
+    QSet<QWidget*> v; v << recentNotes;
     hideChildren(v);
 }
 
@@ -182,7 +186,8 @@ void OrlojView::showFacetOutlineHeaderEdit()
             hideChildren(v);
         } else {
             QSet<QWidget*> v; v << outlineView << outlineHeaderEdit;
-            hideChildren(v);
+            // editor is wider than the outline
+            hideChildren(v, outlineView);
         }
         outlineHeaderEdit->giveEditorFocus();
     }
@@ -214,7 +219,8 @@ void OrlojView::showFacetNoteEdit()
             hideChildren(v);
         } else {
             QSet<QWidget*> v; v << outlineView << noteEdit;
-            hideChildren(v);
+            // editor is wider than the outline
+            hideChildren(v, outlineView);
         }
 
         noteEdit->giveEditorFocus();

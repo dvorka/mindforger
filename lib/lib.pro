@@ -120,6 +120,7 @@ SOURCES += \
     src/gear/async_utils.cpp \
     src/gear/math_utils.cpp \
     src/gear/grid_navigator.cpp \
+    src/gear/minimap_geometry.cpp \
     src/mind/ai/llm/wingman.cpp \
     src/mind/ai/llm/mock_wingman.cpp \
     src/mind/ai/llm/openai_wingman.cpp \
@@ -132,6 +133,7 @@ SOURCES += \
     src/model/kanban.cpp \
     src/model/organizer.cpp \
     src/model/notebook_tree.cpp \
+    src/model/recent_notes.cpp \
     src/persistence/configuration_persistence.cpp \
     src/persistence/persistence.cpp \
     src/representations/markdown/markdown_document.cpp \
@@ -235,6 +237,7 @@ HEADERS += \
     ./src/gear/async_utils.h \
     ./src/gear/math_utils.h \
     ./src/gear/grid_navigator.h \
+    ./src/gear/minimap_geometry.h \
     ./src/mind/dikw/dikw_pyramid.h \
     ./src/mind/dikw/filesystem_information.h \
     src/mind/ai/llm/wingman.h \
@@ -247,6 +250,7 @@ HEADERS += \
     src/model/kanban.h \
     src/model/organizer.h \
     src/model/notebook_tree.h \
+    src/model/recent_notes.h \
     src/persistence/configuration_persistence.h \
     src/representations/markdown/markdown_document.h \
     src/representations/html/html_document.h \

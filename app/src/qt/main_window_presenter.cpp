@@ -320,8 +320,7 @@ void MainWindowPresenter::showInitialView()
                 } else if(!string{START_TO_TAGS}.compare(config.getStartupView())) {
                     orloj->showFacetTagCloud();
                 } else if(!string{START_TO_RECENT}.compare(config.getStartupView())) {
-                    vector<Note*> notes{};
-                    orloj->showFacetRecentNotes(mind->getAllNotes(notes));
+                    doActionViewRecentNotes();
                 } else if(!string{START_TO_EISENHOWER_MATRIX}.compare(config.getStartupView())) {
                     orloj->showFacetEisenhowerMatrix(
                          nullptr,
@@ -949,8 +948,9 @@ void MainWindowPresenter::doActionFindOutlineByName(const std::string& phrase)
     NotebookTree* t = orloj->getCurrentNotebookTree();
     if(t && orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
         // Notebook shelf is opened: find ONLY Notebooks which are on the shelf
+        // and visible in the active scope (exactly as they are shown on the shelf)
         findOutlineByNameDialog->setWindowTitle(tr("Find Notebook by Name on Shelf"));
-        mind->notebookTreeGetOutlines(mind->notebookTreeGet(t->getKey()), os);
+        mind->notebookTreeGetOutlines(mind->notebookTreeGet(t->getKey()), os, true);
     } else {
         findOutlineByNameDialog->setWindowTitle(tr("Find Notebook by Name"));
         os = mind->getOutlines();
@@ -1161,7 +1161,8 @@ void MainWindowPresenter::handleFindNoteByName()
 void MainWindowPresenter::doActionViewRecentNotes()
 {
     vector<Note*> notes{};
-    mind->getAllNotes(notes, true, config.isRecentIncludeOs());
+    // Ns are sorted (and grouped) by the Recent Notes view based on its mode
+    mind->getAllNotes(notes, false, config.isRecentIncludeOs());
     orloj->showFacetRecentNotes(notes);
 }
 
