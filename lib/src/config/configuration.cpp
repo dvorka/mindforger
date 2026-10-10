@@ -69,8 +69,9 @@ Configuration::Configuration()
       uiShowBreadcrump{},
       uiViewerShowMetadata{},
       uiEditorTabWidth{DEFAULT_EDITOR_TAB_WIDTH},
-      uiEditorLineNumbers{},
+      uiEditorLineNumbers{DEFAULT_EDITOR_SHOW_LINE_NUMBERS},
       uiEditorSyntaxHighlighting{DEFAULT_EDITOR_SYNTAX_HIGHLIGHT},
+      uiEditorShowMinimap{DEFAULT_EDITOR_SHOW_MINIMAP},
       uiEditorLiveSpellCheck{DEFAULT_SPELLCHECK_LIVE},
       uiEditorSpellCheckLanguage{},
       uiEditorSpellCheckLanguages{},
@@ -192,7 +193,8 @@ void Configuration::clear()
     uiEditorSyntaxHighlighting = true;
     uiEditorLiveSpellCheck = DEFAULT_SPELLCHECK_LIVE;
     uiEditorAutocomplete = true;
-    uiEditorLineNumbers = true;
+    uiEditorLineNumbers = DEFAULT_EDITOR_SHOW_LINE_NUMBERS;
+    uiEditorShowMinimap = DEFAULT_EDITOR_SHOW_MINIMAP;
     uiEditorTabsAsSpaces = DEFAULT_EDITOR_TABS_AS_SPACES;
     uiEditorAutosave = DEFAULT_EDITOR_AUTOSAVE;
     uiEditorTabWidth = DEFAULT_EDITOR_TAB_WIDTH;

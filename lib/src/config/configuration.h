@@ -344,6 +344,8 @@ public:
     static constexpr const int DEFAULT_EDITOR_TAB_WIDTH = 4;
     static constexpr const int DEFAULT_NAVIGATOR_MAX_GRAPH_NODES = 150;
     static constexpr const bool DEFAULT_EDITOR_SYNTAX_HIGHLIGHT = true;
+    static constexpr const bool DEFAULT_EDITOR_SHOW_LINE_NUMBERS = true;
+    static constexpr const bool DEFAULT_EDITOR_SHOW_MINIMAP = true;
     static constexpr const bool DEFAULT_EDITOR_AUTOCOMPLETE = true;
     static constexpr const bool DEFAULT_EDITOR_SMART_EDITOR = true;
     static constexpr const bool DEFAULT_EDITOR_SPACE_SECTION_ESCAPING = true;
@@ -439,6 +441,7 @@ private:
     int uiEditorTabWidth;
     bool uiEditorLineNumbers; // show line numbers
     bool uiEditorSyntaxHighlighting; // toggle syntax highlighting
+    bool uiEditorShowMinimap; // show text overview strip next to the editor
     bool uiEditorLiveSpellCheck;
     std::string uiEditorSpellCheckLanguage;
     // transient: available languages loaded in runtime from environment and not persisted
@@ -658,6 +661,8 @@ public:
     void setUiEditorShowLineNumbers(bool show) { uiEditorLineNumbers = show; }
     bool isUiEditorEnableSyntaxHighlighting() const { return uiEditorSyntaxHighlighting; }
     void setUiEditorEnableSyntaxHighlighting(bool enable) { uiEditorSyntaxHighlighting = enable; }
+    bool isUiEditorShowMinimap() const { return uiEditorShowMinimap; }
+    void setUiEditorShowMinimap(bool show) { uiEditorShowMinimap = show; }
     bool isUiEditorLiveSpellCheck() const { return uiEditorLiveSpellCheck; }
     void setUiEditorLiveSpellCheck(bool enable) { uiEditorLiveSpellCheck= enable; }
     std::string getUiEditorSpellCheckDefaultLanguage() const {

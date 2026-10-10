@@ -15,6 +15,15 @@
     * Enhancement: Associations panel bars are colored by the association score -
       green for strong (100-66%), orange for medium (65-33%) and red for weak
       (32-0%) associations (previously all bars had the theme highlight color).
+    * Enhancement: editor minimap - narrow strip on the right side of Note and
+      Notebook editors shows the overview of the edited text in syntax highlighting
+      colors w/ the visible part of the text marked; click jumps to the text,
+      drag scrolls the editor (Preferences > Editor > show minimap; the minimap
+      is hidden in narrow editors).
+    * Enhancement: editor line numbers can be hidden (Preferences > Editor > show
+      line numbers) - editor can show nothing, line numbers, minimap or both.
+    * Enhancement: Note and Notebook editor is wider than the Notebook outline
+      shown next to it - the outline/editor ratio is 40%/60% (instead of 50%/50%).
     * Fix: Esc leaves the command palette (CLI) and gives focus to the next component
       in the view (previously TAB was the only way to leave it using the keyboard).
     * Fix: time scope keeps the first Note of a Notebook visible if it's a parent

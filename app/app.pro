@@ -268,6 +268,7 @@ HEADERS += \
     ./src/qt/widgets/edit_tags_panel.h \
     ./src/qt/widgets/labeled_edit_line_panel.h \
     ./src/qt/widgets/line_number_panel.h \
+    ./src/qt/widgets/minimap_panel.h \
     ./src/qt/dialogs/outline_header_edit_dialog.h \
     ./src/qt/widgets/urgency_combo_box.h \
     ./src/qt/widgets/importance_combo_box.h \
@@ -399,6 +400,7 @@ SOURCES += \
     ./src/qt/widgets/edit_tags_panel.cpp \
     ./src/qt/widgets/labeled_edit_line_panel.cpp \
     ./src/qt/widgets/line_number_panel.cpp \
+    ./src/qt/widgets/minimap_panel.cpp \
     ./src/qt/dialogs/outline_header_edit_dialog.cpp \
     ./src/qt/widgets/urgency_combo_box.cpp \
     ./src/qt/widgets/importance_combo_box.cpp \

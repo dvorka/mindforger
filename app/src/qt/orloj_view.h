@@ -190,14 +190,19 @@ public:
 private:
     /**
      * @brief Hide all children except listed ones.
+     *
+     * @param narrowerChild visible child which gets narrower part of the width
+     *                      (e.g. outline next to the editor), nullptr for 50%/50%.
      */
-    void hideChildren(const QSet<QWidget*>& visibleChildren);
+    void hideChildren(const QSet<QWidget*>& visibleChildren, QWidget* narrowerChild=nullptr);
 
     /**
-     * @brief Application window may be resized - this method to be called
+     * @brief Split width among children 50%/50% or 40%/60% if narrower child is set.
+     *
+     * Application window may be resized - this method to be called
      * on resize/regularly.
      */
-    void fiftyFifty();
+    void splitWidth(QWidget* narrowerChild);
 };
 
 }

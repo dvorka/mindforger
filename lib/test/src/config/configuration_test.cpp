@@ -378,6 +378,48 @@ TEST(ConfigurationTestCase, RecentNotesEditedOnlySaveAndLoad)
     c.setUiRecentNotesEditedOnly(backupEditedOnly);
 }
 
+TEST(ConfigurationTestCase, EditorLineNumbersAndMinimapSaveAndLoad)
+{
+    // GIVEN
+    string configPath{"/tmp/cfg-editor-line-numbers-and-minimap-save-and-load.md"};
+    m8r::MarkdownConfigurationRepresentation configRepresentation{};
+    m8r::Configuration& c = m8r::Configuration::getInstance();
+    string backupConfigPath = c.getConfigFilePath();
+    bool backupShowLineNumbers = c.isUiEditorShowLineNumbers();
+    bool backupShowMinimap = c.isUiEditorShowMinimap();
+    c.setConfigFilePath(configPath);
+
+    // nothing, line numbers only, minimap only and both
+    for(bool showLineNumbers: {false, true}) {
+        for(bool showMinimap: {false, true}) {
+            // WHEN: panels are toggled, saved and reloaded
+            c.setUiEditorShowLineNumbers(showLineNumbers);
+            c.setUiEditorShowMinimap(showMinimap);
+            configRepresentation.save(c);
+            std::unique_ptr<string> asString{m8r::fileToString(c.getConfigFilePath())};
+            c.setUiEditorShowLineNumbers(!showLineNumbers);
+            c.setUiEditorShowMinimap(!showMinimap);
+            bool loaded = configRepresentation.load(c);
+
+            // THEN
+            EXPECT_NE(
+                std::string::npos,
+                asString.get()->find(string{"Editor line numbers: "} + (showLineNumbers?"yes":"no")));
+            EXPECT_NE(
+                std::string::npos,
+                asString.get()->find(string{"Editor minimap: "} + (showMinimap?"yes":"no")));
+            ASSERT_TRUE(loaded);
+            EXPECT_EQ(showLineNumbers, c.isUiEditorShowLineNumbers());
+            EXPECT_EQ(showMinimap, c.isUiEditorShowMinimap());
+        }
+    }
+
+    // cleanup
+    c.setConfigFilePath(backupConfigPath);
+    c.setUiEditorShowLineNumbers(backupShowLineNumbers);
+    c.setUiEditorShowMinimap(backupShowMinimap);
+}
+
 TEST(ConfigurationTestCase, MathSupportBackwardCompatibleYes)
 {
     // GIVEN: a config file written in the deprecated boolean "yes"/"no" format
