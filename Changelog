@@ -1,6 +1,12 @@
 2026-..-..  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.6.0 - AUR for Arch Linux.
+    * Feature: Find Note by Metadata (Ctrl-Shift-M) shows Notes in a table w/
+      name, Notebook, size (text bytes), reads, writes, created and modified
+      columns which can be sorted using the header e.g. to find the Note w/
+      the longest text or the oldest Notes; Enter or double click opens the Note
+      (only the opened Notebook's Notes w/o Notebook column are shown when
+      a Notebook is opened).
 
 2026-09-26  Martin Dvorak  <martin.dvorak@mindforger.com>
 

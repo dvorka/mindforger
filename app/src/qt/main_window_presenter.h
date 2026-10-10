@@ -49,6 +49,7 @@
 #include "dialogs/find_outline_by_name_dialog.h"
 #include "dialogs/find_outline_by_tag_dialog.h"
 #include "dialogs/find_note_by_name_dialog.h"
+#include "dialogs/find_note_by_metadata_dialog.h"
 #include "dialogs/find_note_by_tag_dialog.h"
 #include "dialogs/refactor_note_to_outline_dialog.h"
 #include "dialogs/scope_dialog.h"
@@ -137,6 +138,7 @@ private:
     FindOutlineByNameDialog* findThingByNameDialog;
     FindOutlineByNameDialog* findOutlineForNotebookTreeDialog;
     FindNoteByNameDialog* findNoteByNameDialog;
+    FindNoteByMetadataDialog* findNoteByMetadataDialog;
     FindOutlineByTagDialog* findOutlineByTagDialog;
     FindNoteByTagDialog* findNoteByTagDialog;
     RefactorNoteToOutlineDialog* refactorNoteToOutlineDialog;
@@ -228,6 +230,8 @@ public slots:
     void handleFindThingByName();
     void doActionFindNoteByName();
     void handleFindNoteByName();
+    void doActionFindNoteByMetadata();
+    void handleFindNoteByMetadata();
     void doActionFindOutlineByTag(const std::string& tag="");
     void handleFindOutlineByTag();
     void doActionFindNoteByTag();
@@ -419,6 +423,17 @@ private:
     void copyLinkOrImageToRepository(const std::string& srcPath, QString& path);
 
     void statusInfoPreviewFlickering();
+
+    /**
+     * @brief Get Notes to be searched by Find Note by... dialogs.
+     *
+     * @return opened Notebook which scopes the search to its Notes, nullptr if all Notes are searched.
+     */
+    Outline* getFindNotesScope(std::vector<Note*>& notes);
+    /**
+     * @brief Show Note chosen in a Find Note by... dialog.
+     */
+    void showFoundNote(Note* note);
 };
 
 }

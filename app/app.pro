@@ -262,6 +262,7 @@ HEADERS += \
     ./src/qt/dialogs/fts_dialog.h \
     ./src/qt/dialogs/find_outline_by_name_dialog.h \
     ./src/qt/dialogs/find_note_by_name_dialog.h \
+    ./src/qt/dialogs/find_note_by_metadata_dialog.h \
     ./src/qt/dialogs/note_edit_dialog.h \
     ./src/qt/dialogs/emojis_dialog.h \
     ./src/qt/dialogs/configuration_dialog.h \
@@ -393,6 +394,7 @@ SOURCES += \
     ./src/qt/dialogs/fts_dialog.cpp \
     ./src/qt/dialogs/find_outline_by_name_dialog.cpp \
     ./src/qt/dialogs/find_note_by_name_dialog.cpp \
+    ./src/qt/dialogs/find_note_by_metadata_dialog.cpp \
     ./src/qt/dialogs/note_edit_dialog.cpp \
     ./src/qt/dialogs/emojis_dialog.cpp \
     ./src/qt/dialogs/configuration_dialog.cpp \
