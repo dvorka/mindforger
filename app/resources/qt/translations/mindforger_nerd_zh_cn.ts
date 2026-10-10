@@ -345,14 +345,6 @@ Choose new library source:</source>
         <translation>AI 助手帮助</translation>
     </message>
     <message>
-        <source>&lt;html&gt;Use the following commands:&lt;pre&gt;&lt;br&gt;? ... help&lt;br&gt;/ ... find&lt;br&gt;@ ... knowledge recherche&lt;br&gt;&gt; ... run a command&lt;br&gt;&amp;nbsp;&amp;nbsp;... or full-text search phrase&lt;/pre&gt;&lt;br&gt;Examples:&lt;pre&gt;&lt;br&gt;/ find notebook by tag TODO&lt;br&gt;@arxiv LLM&lt;br&gt;&gt; emojis&lt;/pre&gt;</source>
-        <translation type="vanished">&lt;html&gt;可使用以下命令：&lt;pre&gt;&lt;br&gt;? ... 帮助&lt;br&gt;/ ... 查找&lt;br&gt;@ ... 知识检索&lt;br&gt;&gt; ... 运行命令&lt;br&gt;&amp;nbsp;&amp;nbsp;... 或全文搜索短语&lt;/pre&gt;&lt;br&gt;示例：&lt;pre&gt;&lt;br&gt;/ find notebook by tag TODO&lt;br&gt;@arxiv LLM&lt;br&gt;&gt; emojis&lt;/pre&gt;</translation>
-    </message>
-    <message>
-        <source>Wingman: ? for help, / search, @ knowledge, &gt; command, or type FTS phrase</source>
-        <translation type="vanished">AI 助手：? 帮助，/ 搜索，@ 知识，&gt; 命令，或输入全文搜索短语</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/cli_n_breadcrumbs_presenter.cpp" line="60"/>
         <source>&lt;html&gt;Use the following commands:&lt;pre&gt;&lt;br&gt;? ... help&lt;br&gt;/ ... find&lt;br&gt;@ ... knowledge recherche&lt;br&gt;! ... run a command&lt;/pre&gt;&lt;br&gt;Examples:&lt;pre&gt;&lt;br&gt;/ find notebook by tag TODO&lt;br&gt;@arxiv LLM&lt;br&gt;! emojis&lt;/pre&gt;</source>
         <translation>&lt;html&gt;可使用以下命令：&lt;pre&gt;&lt;br&gt;? ... 帮助&lt;br&gt;/ ... 查找&lt;br&gt;@ ... 知识检索&lt;br&gt;! ... 运行命令&lt;/pre&gt;&lt;br&gt;示例：&lt;pre&gt;&lt;br&gt;/ find notebook by tag TODO&lt;br&gt;@arxiv LLM&lt;br&gt;! emojis&lt;/pre&gt;</translation>
@@ -684,10 +676,6 @@ Choose new library source:</source>
         <translation>图表支持</translation>
     </message>
     <message>
-        <source>Diagram support</source>
-        <translation type="vanished">图表支持</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="308"/>
         <source>Viewer theme CSS</source>
         <translation>查看器主题 CSS</translation>
@@ -934,14 +922,6 @@ Choose new library source:</source>
         <translation>表情符号</translation>
     </message>
     <message>
-        <source>Click a character to insert it to the currently edited name or description:</source>
-        <translation type="vanished">单击字符，将其插入当前正在编辑的名称或描述中：</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Enter&lt;/b&gt; inserts the first character, &lt;b&gt;Ctrl+1&lt;/b&gt; to &lt;b&gt;Ctrl+9&lt;/b&gt; the numbered ones, &lt;b&gt;arrows&lt;/b&gt; move the choice and &lt;b&gt;Esc&lt;/b&gt; closes the dialog.</source>
-        <translation type="vanished">&lt;b&gt;Enter&lt;/b&gt; 插入第一个字符，&lt;b&gt;Ctrl+1&lt;/b&gt; 至 &lt;b&gt;Ctrl+9&lt;/b&gt; 插入带编号的字符，&lt;b&gt;方向键&lt;/b&gt; 移动选择，&lt;b&gt;Esc&lt;/b&gt; 关闭对话框。</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="34"/>
         <source>Type to filter, insert with Enter or Ctrl+[number]:</source>
         <translation>输入以筛选，用 Enter 或 Ctrl+[数字] 插入：</translation>
@@ -977,17 +957,9 @@ Choose new library source:</source>
         <translation>更多特殊 Unicode 字符：&lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;Unicode 表&lt;/a&gt;，&lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</translation>
     </message>
     <message>
-        <source>Type to filter the characters and then insert the one you pick to the name or description which was edited last:</source>
-        <translation type="vanished">输入以筛选字符，然后将选中的字符插入到最后编辑的名称或描述中：</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="41"/>
         <source>Emoji name or keyword like &apos;rocket&apos;</source>
         <translation>表情符号名称或关键字，例如 &apos;rocket&apos;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Enter&lt;/b&gt; inserts the first character, &lt;b&gt;Alt+1&lt;/b&gt; to &lt;b&gt;Alt+9&lt;/b&gt; the numbered ones, &lt;b&gt;arrows&lt;/b&gt; move the choice and &lt;b&gt;Esc&lt;/b&gt; closes the dialog.</source>
-        <translation type="vanished">&lt;b&gt;Enter&lt;/b&gt; 插入第一个字符，&lt;b&gt;Alt+1&lt;/b&gt; 至 &lt;b&gt;Alt+9&lt;/b&gt; 插入带编号的字符，&lt;b&gt;方向键&lt;/b&gt; 移动选择，&lt;b&gt;Esc&lt;/b&gt; 关闭对话框。</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="68"/>
@@ -995,21 +967,9 @@ Choose new library source:</source>
         <translation>关闭(&amp;C)</translation>
     </message>
     <message>
-        <source>Insert &apos;%1&apos; - Alt+%2</source>
-        <translation type="vanished">插入 &apos;%1&apos; - Alt+%2</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="162"/>
         <source>Insert &apos;%1&apos;</source>
         <translation>插入 &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>Characters: %1</source>
-        <translation type="vanished">字符：%1</translation>
-    </message>
-    <message>
-        <source>Click to insert &apos;%1&apos;</source>
-        <translation type="vanished">单击插入 &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -1789,14 +1749,6 @@ Choose new library source:</source>
         <translation>显示笔记本列表...</translation>
     </message>
     <message>
-        <source>Note&amp;books Tree</source>
-        <translation type="vanished">笔记本树(&amp;B)</translation>
-    </message>
-    <message>
-        <source>Show tree of Notebooks...</source>
-        <translation type="vanished">显示笔记本树...</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="300"/>
         <source>Notebook &amp;Shelves</source>
         <translation>笔记本书架(&amp;S)</translation>
@@ -1845,14 +1797,6 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_menu_view.cpp" line="319"/>
         <source>Open memory dwell...</source>
         <translation>打开记忆驻留...</translation>
-    </message>
-    <message>
-        <source>&amp;CLI</source>
-        <translation type="vanished">命令行(&amp;C)</translation>
-    </message>
-    <message>
-        <source>Activate command line interface...</source>
-        <translation type="vanished">激活命令行界面...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="327"/>
@@ -5260,10 +5204,6 @@ Choose new library source:</source>
         <translation type="unfinished">笔记本 </translation>
     </message>
     <message>
-        <source>Selected Notebook/Note not found!</source>
-        <translation type="vanished">未找到所选笔记本/笔记！</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/orloj_presenter.cpp" line="1010"/>
         <source>No Note selected!</source>
         <translation>未选择笔记！</translation>
@@ -5525,10 +5465,6 @@ Choose new library source:</source>
 <context>
     <name>m8r::OutlinesMapModel</name>
     <message>
-        <source>Notebooks Tree</source>
-        <translation type="vanished">笔记本树</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/outlines_map_model.cpp" line="43"/>
         <source>Notebook Shelves</source>
         <translation>笔记本书架</translation>
@@ -5631,33 +5567,6 @@ Choose new library source:</source>
         <location filename="../../../src/qt/recent_notes_model.cpp" line="46"/>
         <source>Modified</source>
         <translation>修改时间</translation>
-    </message>
-</context>
-<context>
-    <name>m8r::RecentNotesTableModel</name>
-    <message>
-        <source>Recent Notes</source>
-        <translation type="vanished">最近的笔记</translation>
-    </message>
-    <message>
-        <source>Notebook</source>
-        <translation type="vanished">笔记本</translation>
-    </message>
-    <message>
-        <source>Rs</source>
-        <translation type="vanished">Rs</translation>
-    </message>
-    <message>
-        <source>Ws</source>
-        <translation type="vanished">Ws</translation>
-    </message>
-    <message>
-        <source>Read</source>
-        <translation type="vanished">阅读</translation>
-    </message>
-    <message>
-        <source>Modified</source>
-        <translation type="vanished">修改时间</translation>
     </message>
 </context>
 <context>
@@ -6154,10 +6063,6 @@ notes. Feel free to deprecate such notebook(s) yourself.
 </context>
 <context>
     <name>main</name>
-    <message>
-        <source>MindForger CANNOT be run from text console - set DISPLAY environment variable or run MindForger from GUI.</source>
-        <translation type="vanished">MindForger 无法在文本控制台中运行 - 请设置 DISPLAY 环境变量，或在图形界面中运行 MindForger。</translation>
-    </message>
     <message>
         <location filename="../../../src/qt/mindforger.cpp" line="123"/>
         <source>MindForger CANNOT be run from text console - set DISPLAY or WAYLAND_DISPLAY environment variable or run MindForger from GUI.</source>

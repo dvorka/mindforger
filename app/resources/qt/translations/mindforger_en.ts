@@ -853,13 +853,6 @@ Choose new library source:</source>
     </message>
 </context>
 <context>
-    <name>m8r::EditNameAndButtonsPanel</name>
-    <message>
-        <source>Remember</source>
-        <translation type="obsolete">Save</translation>
-    </message>
-</context>
-<context>
     <name>m8r::EditNamePanel</name>
     <message>
         <location filename="../../../src/qt/widgets/edit_name_panel.cpp" line="29"/>
@@ -1422,21 +1415,9 @@ Choose new library source:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Learn knowledge by loading a MindForger repository or a directory with Markdown files...</source>
-        <translation type="obsolete">Open MindForger repository or a directory with Markdown files...</translation>
-    </message>
-    <message>
-        <source>Learn knowledge by loading a Markdown or MindForger file...</source>
-        <translation type="obsolete">Open a Markdown or MindForger file...</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="73"/>
         <source>&amp;Remind</source>
         <translation type="unfinished">&amp;Recent</translation>
-    </message>
-    <message>
-        <source>Re-learn recently opened MindForger repositories, Markdown repositories or files</source>
-        <translation type="obsolete">Reopen recently opened MindForger repositories, Markdown repositories or files</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="82"/>
@@ -1478,10 +1459,6 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_menu_view.cpp" line="181"/>
         <source>Retain</source>
         <translation type="unfinished">Reta&amp;in</translation>
-    </message>
-    <message>
-        <source>&amp;Adapt</source>
-        <translation type="obsolete">&amp;Preferences</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="194"/>
@@ -1529,17 +1506,9 @@ Choose new library source:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Recall Notebook by T&amp;ags</source>
-        <translation type="obsolete">Find Notebook by T&amp;ags</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="258"/>
         <source>Find Notebook by tags</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Recall Note by &amp;Tags</source>
-        <translation type="obsolete">Find Note by &amp;Tags</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="263"/>
@@ -1555,22 +1524,6 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_menu_view.cpp" line="269"/>
         <source>Find Document by name</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Recall &amp;Persons</source>
-        <translation type="obsolete">Find &amp;Persons</translation>
-    </message>
-    <message>
-        <source>Recall &amp;Locations</source>
-        <translation type="obsolete">Find &amp;Locations</translation>
-    </message>
-    <message>
-        <source>Recall Organizations</source>
-        <translation type="obsolete">Find Organizations</translation>
-    </message>
-    <message>
-        <source>Recall Other Entities</source>
-        <translation type="obsolete">Find Other Entities</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="272"/>
@@ -3365,10 +3318,6 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="678"/>
         <source>Cannot start sleeping - please wait until dreaming finishes and then try again</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Learn Directory or MindForger Repository</source>
-        <translation type="obsolete">Open Directory or MindForger Repository</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="832"/>

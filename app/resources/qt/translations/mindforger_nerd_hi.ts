@@ -345,14 +345,6 @@ Choose new library source:</source>
         <translation>AI साथी सहायता</translation>
     </message>
     <message>
-        <source>&lt;html&gt;Use the following commands:&lt;pre&gt;&lt;br&gt;? ... help&lt;br&gt;/ ... find&lt;br&gt;@ ... knowledge recherche&lt;br&gt;&gt; ... run a command&lt;br&gt;&amp;nbsp;&amp;nbsp;... or full-text search phrase&lt;/pre&gt;&lt;br&gt;Examples:&lt;pre&gt;&lt;br&gt;/ find notebook by tag TODO&lt;br&gt;@arxiv LLM&lt;br&gt;&gt; emojis&lt;/pre&gt;</source>
-        <translation type="vanished">&lt;html&gt;निम्नलिखित आदेशों का उपयोग करें:&lt;pre&gt;&lt;br&gt;? ... सहायता&lt;br&gt;/ ... खोजें&lt;br&gt;@ ... ज्ञान अनुसंधान&lt;br&gt;&gt; ... आदेश चलाएँ&lt;br&gt;&amp;nbsp;&amp;nbsp;... या पूर्ण-पाठ खोज वाक्यांश&lt;/pre&gt;&lt;br&gt;उदाहरण:&lt;pre&gt;&lt;br&gt;/ find notebook by tag TODO&lt;br&gt;@arxiv LLM&lt;br&gt;&gt; emojis&lt;/pre&gt;</translation>
-    </message>
-    <message>
-        <source>Wingman: ? for help, / search, @ knowledge, &gt; command, or type FTS phrase</source>
-        <translation type="vanished">AI साथी: ? सहायता, / खोज, @ ज्ञान, &gt; आदेश, या पूर्ण-पाठ खोज वाक्यांश लिखें</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/cli_n_breadcrumbs_presenter.cpp" line="60"/>
         <source>&lt;html&gt;Use the following commands:&lt;pre&gt;&lt;br&gt;? ... help&lt;br&gt;/ ... find&lt;br&gt;@ ... knowledge recherche&lt;br&gt;! ... run a command&lt;/pre&gt;&lt;br&gt;Examples:&lt;pre&gt;&lt;br&gt;/ find notebook by tag TODO&lt;br&gt;@arxiv LLM&lt;br&gt;! emojis&lt;/pre&gt;</source>
         <translation>&lt;html&gt;निम्नलिखित आदेशों का उपयोग करें:&lt;pre&gt;&lt;br&gt;? ... सहायता&lt;br&gt;/ ... खोजें&lt;br&gt;@ ... ज्ञान अनुसंधान&lt;br&gt;! ... आदेश चलाएँ&lt;/pre&gt;&lt;br&gt;उदाहरण:&lt;pre&gt;&lt;br&gt;/ find notebook by tag TODO&lt;br&gt;@arxiv LLM&lt;br&gt;! emojis&lt;/pre&gt;</translation>
@@ -684,10 +676,6 @@ Choose new library source:</source>
         <translation>आरेख समर्थन</translation>
     </message>
     <message>
-        <source>Diagram support</source>
-        <translation type="vanished">आरेख समर्थन</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="308"/>
         <source>Viewer theme CSS</source>
         <translation>व्यूअर थीम CSS</translation>
@@ -934,14 +922,6 @@ Choose new library source:</source>
         <translation>इमोजी</translation>
     </message>
     <message>
-        <source>Click a character to insert it to the currently edited name or description:</source>
-        <translation type="vanished">वर्तमान में संपादित नाम या विवरण में डालने के लिए किसी वर्ण पर क्लिक करें:</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Enter&lt;/b&gt; inserts the first character, &lt;b&gt;Ctrl+1&lt;/b&gt; to &lt;b&gt;Ctrl+9&lt;/b&gt; the numbered ones, &lt;b&gt;arrows&lt;/b&gt; move the choice and &lt;b&gt;Esc&lt;/b&gt; closes the dialog.</source>
-        <translation type="vanished">&lt;b&gt;Enter&lt;/b&gt; पहला वर्ण डालता है, &lt;b&gt;Ctrl+1&lt;/b&gt; से &lt;b&gt;Ctrl+9&lt;/b&gt; क्रमांकित वर्ण डालते हैं, &lt;b&gt;तीर कुंजियाँ&lt;/b&gt; चयन बदलती हैं और &lt;b&gt;Esc&lt;/b&gt; संवाद बंद करता है।</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="34"/>
         <source>Type to filter, insert with Enter or Ctrl+[number]:</source>
         <translation>छाँटने के लिए टाइप करें, Enter या Ctrl+[संख्या] से डालें:</translation>
@@ -977,17 +957,9 @@ Choose new library source:</source>
         <translation>और विशेष यूनिकोड वर्ण: &lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;यूनिकोड तालिका&lt;/a&gt;, &lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</translation>
     </message>
     <message>
-        <source>Type to filter the characters and then insert the one you pick to the name or description which was edited last:</source>
-        <translation type="vanished">वर्णों को छाँटने के लिए टाइप करें और फिर चुने हुए वर्ण को अंतिम बार संपादित किए गए नाम या विवरण में डालें:</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="41"/>
         <source>Emoji name or keyword like &apos;rocket&apos;</source>
         <translation>इमोजी का नाम या &apos;rocket&apos; जैसा कीवर्ड</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Enter&lt;/b&gt; inserts the first character, &lt;b&gt;Alt+1&lt;/b&gt; to &lt;b&gt;Alt+9&lt;/b&gt; the numbered ones, &lt;b&gt;arrows&lt;/b&gt; move the choice and &lt;b&gt;Esc&lt;/b&gt; closes the dialog.</source>
-        <translation type="vanished">&lt;b&gt;Enter&lt;/b&gt; पहला वर्ण डालता है, &lt;b&gt;Alt+1&lt;/b&gt; से &lt;b&gt;Alt+9&lt;/b&gt; क्रमांकित वर्ण डालते हैं, &lt;b&gt;तीर कुंजियाँ&lt;/b&gt; चयन बदलती हैं और &lt;b&gt;Esc&lt;/b&gt; संवाद बंद करता है।</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="68"/>
@@ -995,21 +967,9 @@ Choose new library source:</source>
         <translation>बंद करें(&amp;C)</translation>
     </message>
     <message>
-        <source>Insert &apos;%1&apos; - Alt+%2</source>
-        <translation type="vanished">&apos;%1&apos; डालें - Alt+%2</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="162"/>
         <source>Insert &apos;%1&apos;</source>
         <translation>&apos;%1&apos; डालें</translation>
-    </message>
-    <message>
-        <source>Characters: %1</source>
-        <translation type="vanished">वर्ण: %1</translation>
-    </message>
-    <message>
-        <source>Click to insert &apos;%1&apos;</source>
-        <translation type="vanished">&apos;%1&apos; डालने के लिए क्लिक करें</translation>
     </message>
 </context>
 <context>
@@ -1789,14 +1749,6 @@ Choose new library source:</source>
         <translation>नोटबुक की सूची दिखाएँ...</translation>
     </message>
     <message>
-        <source>Note&amp;books Tree</source>
-        <translation type="vanished">नोटबुक वृक्ष(&amp;B)</translation>
-    </message>
-    <message>
-        <source>Show tree of Notebooks...</source>
-        <translation type="vanished">नोटबुक का वृक्ष दिखाएँ...</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="300"/>
         <source>Notebook &amp;Shelves</source>
         <translation>नोटबुक शेल्फ़(&amp;S)</translation>
@@ -1845,14 +1797,6 @@ Choose new library source:</source>
         <location filename="../../../src/qt/main_menu_view.cpp" line="319"/>
         <source>Open memory dwell...</source>
         <translation>स्मृति ठहराव खोलें...</translation>
-    </message>
-    <message>
-        <source>&amp;CLI</source>
-        <translation type="vanished">CLI(&amp;C)</translation>
-    </message>
-    <message>
-        <source>Activate command line interface...</source>
-        <translation type="vanished">कमांड लाइन इंटरफ़ेस सक्रिय करें...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="327"/>
@@ -5260,10 +5204,6 @@ Choose new library source:</source>
         <translation type="unfinished">नोटबुक </translation>
     </message>
     <message>
-        <source>Selected Notebook/Note not found!</source>
-        <translation type="vanished">चयनित नोटबुक/नोट नहीं मिला!</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/orloj_presenter.cpp" line="1010"/>
         <source>No Note selected!</source>
         <translation>कोई नोट चयनित नहीं है!</translation>
@@ -5525,10 +5465,6 @@ Choose new library source:</source>
 <context>
     <name>m8r::OutlinesMapModel</name>
     <message>
-        <source>Notebooks Tree</source>
-        <translation type="vanished">नोटबुक वृक्ष</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/outlines_map_model.cpp" line="43"/>
         <source>Notebook Shelves</source>
         <translation>नोटबुक शेल्फ़</translation>
@@ -5631,33 +5567,6 @@ Choose new library source:</source>
         <location filename="../../../src/qt/recent_notes_model.cpp" line="46"/>
         <source>Modified</source>
         <translation>बदला गया</translation>
-    </message>
-</context>
-<context>
-    <name>m8r::RecentNotesTableModel</name>
-    <message>
-        <source>Recent Notes</source>
-        <translation type="vanished">हाल के नोट</translation>
-    </message>
-    <message>
-        <source>Notebook</source>
-        <translation type="vanished">नोटबुक</translation>
-    </message>
-    <message>
-        <source>Rs</source>
-        <translation type="vanished">Rs</translation>
-    </message>
-    <message>
-        <source>Ws</source>
-        <translation type="vanished">Ws</translation>
-    </message>
-    <message>
-        <source>Read</source>
-        <translation type="vanished">पढ़ा गया</translation>
-    </message>
-    <message>
-        <source>Modified</source>
-        <translation type="vanished">बदला गया</translation>
     </message>
 </context>
 <context>
@@ -6155,10 +6064,6 @@ notes. Feel free to deprecate such notebook(s) yourself.
 </context>
 <context>
     <name>main</name>
-    <message>
-        <source>MindForger CANNOT be run from text console - set DISPLAY environment variable or run MindForger from GUI.</source>
-        <translation type="vanished">MindForger को टेक्स्ट कंसोल से नहीं चलाया जा सकता - DISPLAY पर्यावरण चर सेट करें या MindForger को GUI से चलाएँ।</translation>
-    </message>
     <message>
         <location filename="../../../src/qt/mindforger.cpp" line="123"/>
         <source>MindForger CANNOT be run from text console - set DISPLAY or WAYLAND_DISPLAY environment variable or run MindForger from GUI.</source>

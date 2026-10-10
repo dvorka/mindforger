@@ -345,14 +345,6 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation>Ayuda del Compañero IA</translation>
     </message>
     <message>
-        <source>&lt;html&gt;Use the following commands:&lt;pre&gt;&lt;br&gt;? ... help&lt;br&gt;/ ... find&lt;br&gt;@ ... knowledge recherche&lt;br&gt;&gt; ... run a command&lt;br&gt;&amp;nbsp;&amp;nbsp;... or full-text search phrase&lt;/pre&gt;&lt;br&gt;Examples:&lt;pre&gt;&lt;br&gt;/ find notebook by tag TODO&lt;br&gt;@arxiv LLM&lt;br&gt;&gt; emojis&lt;/pre&gt;</source>
-        <translation type="vanished">&lt;html&gt;Use los siguientes comandos:&lt;pre&gt;&lt;br&gt;? ... ayuda&lt;br&gt;/ ... buscar&lt;br&gt;@ ... investigación de conocimiento&lt;br&gt;&gt; ... ejecutar un comando&lt;br&gt;&amp;nbsp;&amp;nbsp;... o frase de búsqueda de texto completo&lt;/pre&gt;&lt;br&gt;Ejemplos:&lt;pre&gt;&lt;br&gt;/ find notebook by tag TODO&lt;br&gt;@arxiv LLM&lt;br&gt;&gt; emojis&lt;/pre&gt;</translation>
-    </message>
-    <message>
-        <source>Wingman: ? for help, / search, @ knowledge, &gt; command, or type FTS phrase</source>
-        <translation type="vanished">Compañero IA: ? ayuda, / buscar, @ conocimiento, &gt; comando, o escriba una frase de búsqueda de texto completo</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/cli_n_breadcrumbs_presenter.cpp" line="60"/>
         <source>&lt;html&gt;Use the following commands:&lt;pre&gt;&lt;br&gt;? ... help&lt;br&gt;/ ... find&lt;br&gt;@ ... knowledge recherche&lt;br&gt;! ... run a command&lt;/pre&gt;&lt;br&gt;Examples:&lt;pre&gt;&lt;br&gt;/ find notebook by tag TODO&lt;br&gt;@arxiv LLM&lt;br&gt;! emojis&lt;/pre&gt;</source>
         <translation>&lt;html&gt;Use los siguientes comandos:&lt;pre&gt;&lt;br&gt;? ... ayuda&lt;br&gt;/ ... buscar&lt;br&gt;@ ... investigación de conocimiento&lt;br&gt;! ... ejecutar un comando&lt;/pre&gt;&lt;br&gt;Ejemplos:&lt;pre&gt;&lt;br&gt;/ find notebook by tag TODO&lt;br&gt;@arxiv LLM&lt;br&gt;! emojis&lt;/pre&gt;</translation>
@@ -684,10 +676,6 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation>soporte de diagramas</translation>
     </message>
     <message>
-        <source>Diagram support</source>
-        <translation type="vanished">Soporte de diagramas</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="308"/>
         <source>Viewer theme CSS</source>
         <translation>CSS del tema del visor</translation>
@@ -934,14 +922,6 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation>Emojis</translation>
     </message>
     <message>
-        <source>Click a character to insert it to the currently edited name or description:</source>
-        <translation type="vanished">Haga clic en un carácter para insertarlo en el nombre o la descripción que está editando:</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Enter&lt;/b&gt; inserts the first character, &lt;b&gt;Ctrl+1&lt;/b&gt; to &lt;b&gt;Ctrl+9&lt;/b&gt; the numbered ones, &lt;b&gt;arrows&lt;/b&gt; move the choice and &lt;b&gt;Esc&lt;/b&gt; closes the dialog.</source>
-        <translation type="vanished">&lt;b&gt;Entrar&lt;/b&gt; inserta el primer carácter, &lt;b&gt;Ctrl+1&lt;/b&gt; a &lt;b&gt;Ctrl+9&lt;/b&gt; los numerados, las &lt;b&gt;flechas&lt;/b&gt; mueven la selección y &lt;b&gt;Esc&lt;/b&gt; cierra el diálogo.</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="34"/>
         <source>Type to filter, insert with Enter or Ctrl+[number]:</source>
         <translation>Escriba para filtrar, inserte con Entrar o Ctrl+[número]:</translation>
@@ -977,17 +957,9 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation>Más caracteres Unicode especiales: &lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;Tabla Unicode&lt;/a&gt;, &lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</translation>
     </message>
     <message>
-        <source>Type to filter the characters and then insert the one you pick to the name or description which was edited last:</source>
-        <translation type="vanished">Escriba para filtrar los caracteres y luego inserte el elegido en el nombre o la descripción editados por última vez:</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="41"/>
         <source>Emoji name or keyword like &apos;rocket&apos;</source>
         <translation>Nombre de emoji o palabra clave como &apos;rocket&apos;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Enter&lt;/b&gt; inserts the first character, &lt;b&gt;Alt+1&lt;/b&gt; to &lt;b&gt;Alt+9&lt;/b&gt; the numbered ones, &lt;b&gt;arrows&lt;/b&gt; move the choice and &lt;b&gt;Esc&lt;/b&gt; closes the dialog.</source>
-        <translation type="vanished">&lt;b&gt;Entrar&lt;/b&gt; inserta el primer carácter, &lt;b&gt;Alt+1&lt;/b&gt; a &lt;b&gt;Alt+9&lt;/b&gt; los numerados, las &lt;b&gt;flechas&lt;/b&gt; mueven la selección y &lt;b&gt;Esc&lt;/b&gt; cierra el diálogo.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="68"/>
@@ -995,21 +967,9 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation>&amp;Cerrar</translation>
     </message>
     <message>
-        <source>Insert &apos;%1&apos; - Alt+%2</source>
-        <translation type="vanished">Insertar &apos;%1&apos; - Alt+%2</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="162"/>
         <source>Insert &apos;%1&apos;</source>
         <translation>Insertar &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>Characters: %1</source>
-        <translation type="vanished">Caracteres: %1</translation>
-    </message>
-    <message>
-        <source>Click to insert &apos;%1&apos;</source>
-        <translation type="vanished">Haga clic para insertar &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -1789,14 +1749,6 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation>Mostrar la lista de cuadernos...</translation>
     </message>
     <message>
-        <source>Note&amp;books Tree</source>
-        <translation type="vanished">Ár&amp;bol de cuadernos</translation>
-    </message>
-    <message>
-        <source>Show tree of Notebooks...</source>
-        <translation type="vanished">Mostrar el árbol de cuadernos...</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="300"/>
         <source>Notebook &amp;Shelves</source>
         <translation>E&amp;stanterías de cuadernos</translation>
@@ -1845,14 +1797,6 @@ Elija la nueva fuente de la biblioteca:</translation>
         <location filename="../../../src/qt/main_menu_view.cpp" line="319"/>
         <source>Open memory dwell...</source>
         <translation>Abrir la permanencia en memoria...</translation>
-    </message>
-    <message>
-        <source>&amp;CLI</source>
-        <translation type="vanished">&amp;CLI</translation>
-    </message>
-    <message>
-        <source>Activate command line interface...</source>
-        <translation type="vanished">Activar la interfaz de línea de comandos...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="327"/>
@@ -5260,10 +5204,6 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation type="unfinished">Cuaderno </translation>
     </message>
     <message>
-        <source>Selected Notebook/Note not found!</source>
-        <translation type="vanished">¡No se encontró el cuaderno/nota seleccionado!</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/orloj_presenter.cpp" line="1010"/>
         <source>No Note selected!</source>
         <translation>¡No hay ninguna nota seleccionada!</translation>
@@ -5525,10 +5465,6 @@ Elija la nueva fuente de la biblioteca:</translation>
 <context>
     <name>m8r::OutlinesMapModel</name>
     <message>
-        <source>Notebooks Tree</source>
-        <translation type="vanished">Árbol de cuadernos</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/outlines_map_model.cpp" line="43"/>
         <source>Notebook Shelves</source>
         <translation>Estanterías de cuadernos</translation>
@@ -5631,33 +5567,6 @@ Elija la nueva fuente de la biblioteca:</translation>
         <location filename="../../../src/qt/recent_notes_model.cpp" line="46"/>
         <source>Modified</source>
         <translation>Modificado</translation>
-    </message>
-</context>
-<context>
-    <name>m8r::RecentNotesTableModel</name>
-    <message>
-        <source>Recent Notes</source>
-        <translation type="vanished">Notas recientes</translation>
-    </message>
-    <message>
-        <source>Notebook</source>
-        <translation type="vanished">Cuaderno</translation>
-    </message>
-    <message>
-        <source>Rs</source>
-        <translation type="vanished">Rs</translation>
-    </message>
-    <message>
-        <source>Ws</source>
-        <translation type="vanished">Ws</translation>
-    </message>
-    <message>
-        <source>Read</source>
-        <translation type="vanished">Leído</translation>
-    </message>
-    <message>
-        <source>Modified</source>
-        <translation type="vanished">Modificado</translation>
     </message>
 </context>
 <context>
@@ -6155,10 +6064,6 @@ descartarán para proteger sus notas relacionadas. Puede descartarlos usted mism
 </context>
 <context>
     <name>main</name>
-    <message>
-        <source>MindForger CANNOT be run from text console - set DISPLAY environment variable or run MindForger from GUI.</source>
-        <translation type="vanished">MindForger NO se puede ejecutar desde una consola de texto - defina la variable de entorno DISPLAY o ejecute MindForger desde la interfaz gráfica.</translation>
-    </message>
     <message>
         <location filename="../../../src/qt/mindforger.cpp" line="123"/>
         <source>MindForger CANNOT be run from text console - set DISPLAY or WAYLAND_DISPLAY environment variable or run MindForger from GUI.</source>

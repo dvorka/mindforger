@@ -345,14 +345,6 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Nápověda AI parťáka</translation>
     </message>
     <message>
-        <source>&lt;html&gt;Use the following commands:&lt;pre&gt;&lt;br&gt;? ... help&lt;br&gt;/ ... find&lt;br&gt;@ ... knowledge recherche&lt;br&gt;&gt; ... run a command&lt;br&gt;&amp;nbsp;&amp;nbsp;... or full-text search phrase&lt;/pre&gt;&lt;br&gt;Examples:&lt;pre&gt;&lt;br&gt;/ find notebook by tag TODO&lt;br&gt;@arxiv LLM&lt;br&gt;&gt; emojis&lt;/pre&gt;</source>
-        <translation type="vanished">&lt;html&gt;Použijte následující příkazy:&lt;pre&gt;&lt;br&gt;? ... nápověda&lt;br&gt;/ ... hledat&lt;br&gt;@ ... rešerše znalostí&lt;br&gt;&gt; ... spustit příkaz&lt;br&gt;&amp;nbsp;&amp;nbsp;... nebo fulltextový vyhledávací výraz&lt;/pre&gt;&lt;br&gt;Příklady:&lt;pre&gt;&lt;br&gt;/ najít zápisník podle štítku TODO&lt;br&gt;@arxiv LLM&lt;br&gt;&gt; emoji&lt;/pre&gt;</translation>
-    </message>
-    <message>
-        <source>Wingman: ? for help, / search, @ knowledge, &gt; command, or type FTS phrase</source>
-        <translation type="vanished">AI parťák: ? nápověda, / hledání, @ znalosti, &gt; příkaz, nebo napište fulltextový výraz</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/cli_n_breadcrumbs_presenter.cpp" line="60"/>
         <source>&lt;html&gt;Use the following commands:&lt;pre&gt;&lt;br&gt;? ... help&lt;br&gt;/ ... find&lt;br&gt;@ ... knowledge recherche&lt;br&gt;! ... run a command&lt;/pre&gt;&lt;br&gt;Examples:&lt;pre&gt;&lt;br&gt;/ find notebook by tag TODO&lt;br&gt;@arxiv LLM&lt;br&gt;! emojis&lt;/pre&gt;</source>
         <translation>&lt;html&gt;Použijte následující příkazy:&lt;pre&gt;&lt;br&gt;? ... nápověda&lt;br&gt;/ ... hledání&lt;br&gt;@ ... rešerše znalostí&lt;br&gt;! ... spuštění příkazu&lt;/pre&gt;&lt;br&gt;Příklady:&lt;pre&gt;&lt;br&gt;/ find notebook by tag TODO&lt;br&gt;@arxiv LLM&lt;br&gt;! emojis&lt;/pre&gt;</translation>
@@ -694,10 +686,6 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>podpora diagramů</translation>
     </message>
     <message>
-        <source>Diagram support</source>
-        <translation type="vanished">Podpora diagramů</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="316"/>
         <source>Find Custom CSS File</source>
         <translation>Najít vlastní soubor CSS</translation>
@@ -934,14 +922,6 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Emoji</translation>
     </message>
     <message>
-        <source>Click a character to insert it to the currently edited name or description:</source>
-        <translation type="vanished">Kliknutím na znak jej vložíte do právě upravovaného názvu nebo popisu:</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Enter&lt;/b&gt; inserts the first character, &lt;b&gt;Ctrl+1&lt;/b&gt; to &lt;b&gt;Ctrl+9&lt;/b&gt; the numbered ones, &lt;b&gt;arrows&lt;/b&gt; move the choice and &lt;b&gt;Esc&lt;/b&gt; closes the dialog.</source>
-        <translation type="vanished">&lt;b&gt;Enter&lt;/b&gt; vloží první znak, &lt;b&gt;Ctrl+1&lt;/b&gt; až &lt;b&gt;Ctrl+9&lt;/b&gt; očíslované znaky, &lt;b&gt;šipky&lt;/b&gt; mění výběr a &lt;b&gt;Esc&lt;/b&gt; zavře dialog.</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="34"/>
         <source>Type to filter, insert with Enter or Ctrl+[number]:</source>
         <translation>Pište pro filtrování, vložte klávesou Enter nebo Ctrl+[číslo]:</translation>
@@ -977,17 +957,9 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Další speciální znaky Unicode: &lt;a href=&apos;https://unicode-table.com/en/&apos;&gt;Unicode Table&lt;/a&gt;, &lt;a href=&apos;https://emojipedia.org/&apos;&gt;Emojipedia&lt;/a&gt;</translation>
     </message>
     <message>
-        <source>Type to filter the characters and then insert the one you pick to the name or description which was edited last:</source>
-        <translation type="vanished">Pište pro filtrování znaků a poté vložte vybraný znak do naposledy upravovaného názvu nebo popisu:</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="41"/>
         <source>Emoji name or keyword like &apos;rocket&apos;</source>
         <translation>Název emoji nebo klíčové slovo jako &apos;rocket&apos;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Enter&lt;/b&gt; inserts the first character, &lt;b&gt;Alt+1&lt;/b&gt; to &lt;b&gt;Alt+9&lt;/b&gt; the numbered ones, &lt;b&gt;arrows&lt;/b&gt; move the choice and &lt;b&gt;Esc&lt;/b&gt; closes the dialog.</source>
-        <translation type="vanished">&lt;b&gt;Enter&lt;/b&gt; vloží první znak, &lt;b&gt;Alt+1&lt;/b&gt; až &lt;b&gt;Alt+9&lt;/b&gt; očíslované znaky, &lt;b&gt;šipky&lt;/b&gt; mění výběr a &lt;b&gt;Esc&lt;/b&gt; zavře dialog.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="68"/>
@@ -995,21 +967,9 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>&amp;Zavřít</translation>
     </message>
     <message>
-        <source>Insert &apos;%1&apos; - Alt+%2</source>
-        <translation type="vanished">Vložit &apos;%1&apos; - Alt+%2</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/emojis_dialog.cpp" line="162"/>
         <source>Insert &apos;%1&apos;</source>
         <translation>Vložit &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>Characters: %1</source>
-        <translation type="vanished">Znaků: %1</translation>
-    </message>
-    <message>
-        <source>Click to insert &apos;%1&apos;</source>
-        <translation type="vanished">Kliknutím vložíte &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -1505,10 +1465,6 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Za&amp;chovat</translation>
     </message>
     <message>
-        <source>&amp;Adapt</source>
-        <translation type="vanished">&amp;Přizpůsobit</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="194"/>
         <source>Adapt Mind by setting your preferences...</source>
         <translation>Přizpůsobit mysl nastavením vašich předvoleb...</translation>
@@ -1592,14 +1548,6 @@ Vyberte nový zdroj knihovny:</translation>
         <location filename="../../../src/qt/main_menu_view.cpp" line="298"/>
         <source>Show list of Notebooks...</source>
         <translation>Zobrazit seznam zápisníků...</translation>
-    </message>
-    <message>
-        <source>Note&amp;books Tree</source>
-        <translation type="vanished">Strom zá&amp;pisníků</translation>
-    </message>
-    <message>
-        <source>Show tree of Notebooks...</source>
-        <translation type="vanished">Zobrazit strom zápisníků...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="310"/>
@@ -2006,10 +1954,6 @@ Vyberte nový zdroj knihovny:</translation>
         <location filename="../../../src/qt/main_menu_view.cpp" line="302"/>
         <source>Show list of Notebook trees...</source>
         <translation>Zobrazit seznam stromů zápisníků...</translation>
-    </message>
-    <message>
-        <source>&amp;CLI</source>
-        <translation type="vanished">&amp;CLI</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="355"/>
@@ -2766,10 +2710,6 @@ Vyberte nový zdroj knihovny:</translation>
         <location filename="../../../src/qt/main_menu_view.cpp" line="284"/>
         <source>&amp;Home Notebook</source>
         <translation>&amp;Domovský zápisník</translation>
-    </message>
-    <message>
-        <source>Activate command line interface...</source>
-        <translation type="vanished">Aktivovat příkazový řádek...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="671"/>
@@ -5264,10 +5204,6 @@ Vyberte nový zdroj knihovny:</translation>
         <translation type="unfinished">Zápisník </translation>
     </message>
     <message>
-        <source>Selected Notebook/Note not found!</source>
-        <translation type="vanished">Vybraný zápisník/poznámka nebyly nalezeny!</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/orloj_presenter.cpp" line="1010"/>
         <source>No Note selected!</source>
         <translation>Není vybrána žádná poznámka!</translation>
@@ -5529,10 +5465,6 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::OutlinesMapModel</name>
     <message>
-        <source>Notebooks Tree</source>
-        <translation type="vanished">Strom zápisníků</translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/outlines_map_model.cpp" line="43"/>
         <source>Notebook Shelves</source>
         <translation>Police zápisníků</translation>
@@ -5635,33 +5567,6 @@ Vyberte nový zdroj knihovny:</translation>
         <location filename="../../../src/qt/recent_notes_model.cpp" line="46"/>
         <source>Modified</source>
         <translation>Změněno</translation>
-    </message>
-</context>
-<context>
-    <name>m8r::RecentNotesTableModel</name>
-    <message>
-        <source>Recent Notes</source>
-        <translation type="vanished">Nedávné poznámky</translation>
-    </message>
-    <message>
-        <source>Notebook</source>
-        <translation type="vanished">Zápisník</translation>
-    </message>
-    <message>
-        <source>Rs</source>
-        <translation type="vanished">Č</translation>
-    </message>
-    <message>
-        <source>Ws</source>
-        <translation type="vanished">Z</translation>
-    </message>
-    <message>
-        <source>Read</source>
-        <translation type="vanished">Přečteno</translation>
-    </message>
-    <message>
-        <source>Modified</source>
-        <translation type="vanished">Změněno</translation>
     </message>
 </context>
 <context>
@@ -6162,10 +6067,6 @@ s dokumentem. Takové zápisníky můžete deaktivovat sami.
 </context>
 <context>
     <name>main</name>
-    <message>
-        <source>MindForger CANNOT be run from text console - set DISPLAY environment variable or run MindForger from GUI.</source>
-        <translation type="vanished">MindForger NELZE spustit z textové konzole – nastavte proměnnou prostředí DISPLAY nebo spusťte MindForger z grafického rozhraní.</translation>
-    </message>
     <message>
         <location filename="../../../src/qt/mindforger.cpp" line="123"/>
         <source>MindForger CANNOT be run from text console - set DISPLAY or WAYLAND_DISPLAY environment variable or run MindForger from GUI.</source>
