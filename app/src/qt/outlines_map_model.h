@@ -46,11 +46,6 @@ public:
     OutlinesMapModel &operator=(const OutlinesMapModel&) = delete;
     OutlinesMapModel &operator=(const OutlinesMapModel&&) = delete;
 
-    /**
-     * @brief Remove all rows and set table header.
-     *
-     * @param title name of the shelf - generic title is used if empty.
-     */
     void removeAllRows(const std::string& title="");
     void addNote(Note* note);
     int insertNote(Note* note);

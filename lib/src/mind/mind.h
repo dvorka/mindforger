@@ -421,13 +421,7 @@ public:
 
     // composite mind scope aspect
     MindScopeAspect& getScopeAspect() { return scopeAspect; }
-    /**
-     * @brief Determine which O's Ns are visible in the active scope.
-     *
-     * N is visible if it's in scope or if it's a parent of a N which is
-     * in scope (so that the hierarchy is kept). All Ns are visible if the
-     * scope is not enabled.
-     */
+    // which O's Ns are visible in the active scope.
     void getNotesScopeVisibility(Outline* outline, std::vector<bool>& visibility);
 
     /*
@@ -609,9 +603,6 @@ public:
     /**
      * @brief Get Outlines organized in a Notebook tree (in the tree order).
      *
-     * Entries whose Outline no longer exists in the Mind are skipped. If
-     * scoped, then entries hidden by the active scope are skipped as well
-     * (see getNotesScopeVisibility()).
      */
     void notebookTreeGetOutlines(
         Outline* notebookTree,
@@ -620,17 +611,11 @@ public:
     /**
      * @brief Remove an Outline from EVERY registered Notebook tree.
      *
-     * Called whenever an Outline is forgotten/deleted so that no
-     * Notebook tree keeps a dangling reference to it.
      */
     void notebookTreeRemoveOutlineFromAll(const std::string& outlineKey);
     /**
-     * @brief Move a Notebook tree's backing file to limbo and drop it
-     * from the cache.
+     * @brief Move a Notebook tree's backing file to limbo and drop itfrom the cache.
      *
-     * Mirrors outlineForget() - the tree's own file is never left
-     * orphaned in mind/ (nor its stale Outline instance kept cached)
-     * when the tree is deleted; the Notebooks it organized are untouched.
      */
     bool notebookTreeForget(const std::string& treeKey);
 

@@ -693,7 +693,6 @@ void Outline::getNotePathToRoot(const size_t offset, std::vector<int>& parents)
     if(offset && offset<notes.size()) {
         int parentDepth = notes[offset]->getDepth()-1;
         if(parentDepth >= 0) {
-            // walk up to (and including) the first N
             for(int i=static_cast<int>(offset)-1; i>=0; i--) {
                 if(notes[i]->getDepth() == parentDepth) {
                     parents.push_back(i);

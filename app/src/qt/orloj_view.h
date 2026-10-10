@@ -198,9 +198,6 @@ private:
 
     /**
      * @brief Split width among children 50%/50% or 40%/60% if narrower child is set.
-     *
-     * Application window may be resized - this method to be called
-     * on resize/regularly.
      */
     void splitWidth(QWidget* narrowerChild);
 };
