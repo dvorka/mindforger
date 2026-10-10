@@ -1004,3 +1004,26 @@ TEST(NoteTestCase, DirectNoteChildren) {
     EXPECT_EQ("2", directChildren[1]->getName());
     EXPECT_EQ("4", directChildren[2]->getName());
 }
+
+TEST(NoteTestCase, DescriptionSize) {
+    // GIVEN Notes w/o description, w/ ASCII and w/ non-ASCII (multi-byte UTF-8) description
+    m8r::Note emptyNote{nullptr, nullptr};
+    m8r::Note asciiNote{nullptr, nullptr};
+    asciiNote.setDescription(vector<string*>{new string{"abc"}, new string{""}, new string{"de"}});
+    m8r::Note utf8Note{nullptr, nullptr};
+    // c with caron is 2 bytes in UTF-8
+    utf8Note.setDescription(vector<string*>{new string{"\xc4\x8d"}});
+
+    // WHEN sizes are computed
+    size_t emptySize = emptyNote.getDescriptionSize();
+    size_t asciiSize = asciiNote.getDescriptionSize();
+    size_t utf8Size = utf8Note.getDescriptionSize();
+
+    // THEN size is in bytes incl. new lines and matches the description as string
+    cout << "Description sizes: empty=" << emptySize << " ascii=" << asciiSize << " utf8=" << utf8Size << endl;
+    EXPECT_EQ(0u, emptySize);
+    EXPECT_EQ(8u, asciiSize);
+    EXPECT_EQ(asciiNote.getDescriptionAsString().size(), asciiSize);
+    EXPECT_EQ(3u, utf8Size);
+    EXPECT_EQ(utf8Note.getDescriptionAsString().size(), utf8Size);
+}
