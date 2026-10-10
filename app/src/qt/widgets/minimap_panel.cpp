@@ -70,17 +70,39 @@ void MinimapPanel::paintLine(
     int y,
     const QColor& textColor)
 {
+    const int lineHeight = MinimapGeometry::DEFAULT_LINE_HEIGHT;
+    const int maxX = width() - MINIMAP_PADDING;
+
     const QString text = block.text();
     const int start = line.isValid() ? line.textStart() : 0;
-    const int end = qMin(text.size(), line.isValid() ? start + line.textLength() : text.size());
+    // every character takes at least 1px - characters beyond the strip are not resolved
+    const int end = qMin(
+        qMin(text.size(), line.isValid() ? start + line.textLength() : text.size()),
+        start + qMax(0, maxX - MINIMAP_PADDING));
+    if(end <= start) {
+        return;
+    }
 #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
     const QVector<QTextLayout::FormatRange> formats = block.layout()->formats();
 #else
     const QList<QTextLayout::FormatRange> formats = block.layout()->additionalFormats();
 #endif
 
-    const int lineHeight = MinimapGeometry::DEFAULT_LINE_HEIGHT;
-    const int maxX = width() - MINIMAP_PADDING;
+    // resolve colors of the painted span once (not per character) - the last
+    // syntax highlighter format w/ the foreground wins
+    QVector<QColor> colors(end - start, textColor);
+    for(const QTextLayout::FormatRange& range:formats) {
+        if(!range.format.hasProperty(QTextFormat::ForegroundBrush)) {
+            continue;
+        }
+        const QColor rangeColor = range.format.foreground().color();
+        const int from = qMax(start, range.start);
+        const int to = qMin(end, range.start + range.length);
+        for(int i = from; i < to; ++i) {
+            colors[i - start] = rangeColor;
+        }
+    }
+
     int x = MINIMAP_PADDING;
     for(int i = start; i < end && x < maxX; ++i) {
         const QChar c = text.at(i);
@@ -93,15 +115,7 @@ void MinimapPanel::paintLine(
             continue;
         }
 
-        // the last syntax highlighter format w/ the foreground wins
-        QColor color{textColor};
-        for(const QTextLayout::FormatRange& range:formats) {
-            if(i >= range.start && i < range.start + range.length
-               && range.format.hasProperty(QTextFormat::ForegroundBrush))
-            {
-                color = range.format.foreground().color();
-            }
-        }
+        QColor color{colors[i - start]};
         color.setAlphaF(0.6);
         painter.fillRect(x, y, 1, lineHeight, color);
         ++x;
