@@ -64,7 +64,11 @@ void RecentNotes::toHistory(
 
     history.reserve(sorted.size());
     for(Note* n:sorted) {
-        history.push_back(HistoryEntry{n->getOutline(), n});
+        // Notebook descriptor (as Note) is the Notebook itself - not its Note
+        history.push_back(HistoryEntry{
+            n->getOutline(),
+            Outline::isOutlineDescriptorNote(n) ? nullptr : n
+        });
     }
 }
 

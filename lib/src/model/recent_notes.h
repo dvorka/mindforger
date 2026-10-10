@@ -71,7 +71,8 @@ public:
     /**
      * @brief Create history from Notes.
      *
-     * @param notes     Notes (any order) - Notes w/o Notebook or timestamp are skipped.
+     * @param notes     Notes (any order) - Notes w/o Notebook or timestamp are skipped,
+     *                  Notebook descriptor Notes become Notebook entries (nullptr Note).
      * @param mode      timestamp to be used to determine Note recency.
      * @param limit     max number of (most recent) Notes to keep, 0 means no limit.
      * @param history   result: (Notebook, Note) pairs ordered by recency (latest first).

@@ -103,6 +103,40 @@ TEST(RecentNotesTestCase, ToHistoryLimitAndSkipping)
     EXPECT_EQ(b1, history[1].second);
 }
 
+TEST(RecentNotesTestCase, ToHistoryNotebookDescriptors)
+{
+    // GIVEN Notes and Notebook descriptors (as Notes) - like when Notebooks are included in recent
+    m8r::Outline a{nullptr}, b{nullptr};
+    m8r::Note* a1 = createNote(&a, "A1", 0, 400);
+    m8r::Note* a2 = createNote(&a, "A2", 0, 200);
+    a.setModified(300);
+    b.setModified(500);
+    m8r::Note* aDescriptor = a.getOutlineDescriptorAsNote();
+    m8r::Note* bDescriptor = b.getOutlineDescriptorAsNote();
+    vector<m8r::Note*> notes{aDescriptor, a1, a2, bDescriptor};
+
+    // WHEN
+    vector<m8r::RecentNotes::HistoryEntry> history{};
+    m8r::RecentNotes::toHistory(notes, m8r::RecentNotes::Mode::EDITED, 0, history);
+    vector<m8r::RecentNotes::Group> groups{};
+    m8r::RecentNotes::groupConsecutive(history, groups);
+
+    // THEN descriptors are Notebook entries, so Notebooks are NOT shown as their own Notes
+    ASSERT_EQ(4u, history.size());
+    EXPECT_EQ(m8r::RecentNotes::HistoryEntry(&b, nullptr), history[0]);
+    EXPECT_EQ(m8r::RecentNotes::HistoryEntry(&a, a1), history[1]);
+    EXPECT_EQ(m8r::RecentNotes::HistoryEntry(&a, nullptr), history[2]);
+    EXPECT_EQ(m8r::RecentNotes::HistoryEntry(&a, a2), history[3]);
+
+    ASSERT_EQ(2u, groups.size());
+    EXPECT_EQ(&b, groups[0].outline);
+    EXPECT_TRUE(groups[0].notes.empty());
+    EXPECT_EQ(&a, groups[1].outline);
+    ASSERT_EQ(2u, groups[1].notes.size());
+    EXPECT_EQ(a1, groups[1].notes[0]);
+    EXPECT_EQ(a2, groups[1].notes[1]);
+}
+
 TEST(RecentNotesTestCase, GroupConsecutiveSplitsInterruptedNotebooks)
 {
     // GIVEN history where Notebook A is interrupted by Notebook B
