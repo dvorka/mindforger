@@ -44,7 +44,6 @@ QSize MinimapPanel::sizeHint() const
 
 MinimapGeometry MinimapPanel::createGeometry() const
 {
-    // editor scrollbar counts (visual) lines: value is the first visible line
     const QScrollBar* scrollBar = mdEditor->verticalScrollBar();
     const int visibleLines = scrollBar->pageStep();
 
@@ -88,8 +87,7 @@ void MinimapPanel::paintLine(
     const QList<QTextLayout::FormatRange> formats = block.layout()->additionalFormats();
 #endif
 
-    // resolve colors of the painted span once (not per character) - the last
-    // syntax highlighter format w/ the foreground wins
+    // resolve colors of the painted span once (not per character)
     QVector<QColor> colors(end - start, textColor);
     for(const QTextLayout::FormatRange& range:formats) {
         if(!range.format.hasProperty(QTextFormat::ForegroundBrush)) {
@@ -135,7 +133,7 @@ void MinimapPanel::paintEvent(QPaintEvent* event)
     QColor highlight = mdEditor->palette().color(QPalette::Highlight);
     const int currentBlock = mdEditor->textCursor().blockNumber();
 
-    // paint only the lines which fit the strip - cost doesn't grow w/ the text length
+    // paint only the lines which fit the strip
     const int firstLine = geometry.getFirstLine();
     QTextBlock block = mdEditor->document()->findBlockByLineNumber(firstLine);
     int lineInBlock = block.isValid() ? firstLine - block.firstLineNumber() : 0;

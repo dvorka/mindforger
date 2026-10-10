@@ -22,7 +22,7 @@ namespace m8r {
 
 using namespace std;
 
-// narrower child (e.g. outline next to the editor) width in % of the Orloj width
+// O/N editor gets 60% of the width, the narrower child gets:
 constexpr const int NARROWER_CHILD_WIDTH_PERCENT = 40;
 
 OrlojView::OrlojView(QWidget* parent)

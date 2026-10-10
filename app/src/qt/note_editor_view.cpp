@@ -22,7 +22,7 @@ namespace m8r {
 
 using namespace std;
 
-// editor narrower than this hides the minimap
+// auto hide minimap if the editor is narrow
 constexpr const int MINIMAP_MIN_EDITOR_WIDTH = 480;
 
 inline bool caseInsensitiveLessThan(const QString &a, const QString &b)
