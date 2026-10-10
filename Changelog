@@ -1,6 +1,33 @@
 2026-..-..  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.6.0 - AUR for Arch Linux.
+    * Enhancement: Find Notebook by Name (Ctrl-Shift-B) finds only Notebooks
+      which are on the shelf when a Notebook shelf is opened (analogous to Find
+      Note by Name which finds only Notebook's Notes when a Notebook is opened).
+    * Enhancement: opened Notebook shelf shows the shelf name in the table header
+      (instead of generic "Notebook Shelves" title which is used for unnamed shelves).
+    * Enhancement: Recent Notes view shows the history (latest first) as a tree
+      where consecutive Notes from the same Notebook are grouped under the Notebook
+      (a Notebook is shown again whenever its Notes are interrupted by another
+      Notebook's Notes); Enter or double click opens the selected Notebook or Note.
+    * Enhancement: Recent Notes view toggle to show Notes which were recently
+      viewed or edited, or edited only (the choice is saved to the configuration).
+    * Enhancement: Associations panel bars are colored by the association score -
+      green for strong (100-66%), orange for medium (65-33%) and red for weak
+      (32-0%) associations (previously all bars had the theme highlight color).
+    * Enhancement: editor minimap - narrow strip on the right side of Note and
+      Notebook editors shows the overview of the edited text in syntax highlighting
+      colors w/ the visible part of the text marked; click jumps to the text,
+      drag scrolls the editor (Preferences > Editor > show minimap; the minimap
+      is hidden in narrow editors).
+    * Enhancement: editor line numbers can be hidden (Preferences > Editor > show
+      line numbers) - editor can show nothing, line numbers, minimap or both.
+    * Enhancement: Note and Notebook editor is wider than the Notebook outline
+      shown next to it - the outline/editor ratio is 40%/60% (instead of 50%/50%).
+    * Fix: Esc leaves the command palette (CLI) and gives focus to the next component
+      in the view (previously TAB was the only way to leave it using the keyboard).
+    * Fix: time scope keeps the first Note of a Notebook visible if it's a parent
+      of a Note which is in scope (previously it was hidden which broke the hierarchy).
 
 2026-09-26  Martin Dvorak  <martin.dvorak@mindforger.com>
 

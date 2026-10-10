@@ -421,6 +421,8 @@ public:
 
     // composite mind scope aspect
     MindScopeAspect& getScopeAspect() { return scopeAspect; }
+    // which O's Ns are visible in the active scope.
+    void getNotesScopeVisibility(Outline* outline, std::vector<bool>& visibility);
 
     /*
      * (CROSS) REFERENCES - explicit associations created by the user.
@@ -599,19 +601,21 @@ public:
      */
     void notebookTreeAddOutline(Outline* notebookTree, Outline* outlineToAdd);
     /**
+     * @brief Get Outlines organized in a Notebook tree (in the tree order).
+     *
+     */
+    void notebookTreeGetOutlines(
+        Outline* notebookTree,
+        std::vector<Outline*>& outlines,
+        bool scoped=false);
+    /**
      * @brief Remove an Outline from EVERY registered Notebook tree.
      *
-     * Called whenever an Outline is forgotten/deleted so that no
-     * Notebook tree keeps a dangling reference to it.
      */
     void notebookTreeRemoveOutlineFromAll(const std::string& outlineKey);
     /**
-     * @brief Move a Notebook tree's backing file to limbo and drop it
-     * from the cache.
+     * @brief Move a Notebook tree's backing file to limbo and drop itfrom the cache.
      *
-     * Mirrors outlineForget() - the tree's own file is never left
-     * orphaned in mind/ (nor its stale Outline instance kept cached)
-     * when the tree is deleted; the Notebooks it organized are untouched.
      */
     bool notebookTreeForget(const std::string& treeKey);
 

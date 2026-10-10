@@ -665,3 +665,138 @@ TEST(NotebookTreeTestCase, RelearnInvalidatesTreeCache)
     // AND: the freshly loaded tree is cached again
     EXPECT_EQ(reGotten, mind.notebookTreeGet(treeKey));
 }
+
+TEST(NotebookTreeTestCase, GetOutlinesReturnsOnlyShelvedNotebooks)
+{
+    // GIVEN a MindForger repository with 3 Notebooks - 2 of them on a shelf
+    string repositoryPath{"/tmp/mf-unit-notebook-tree-get-outlines"};
+    m8r::removeDirectoryRecursively(repositoryPath.c_str());
+    map<string,string> pathToContent{};
+    m8r::createEmptyRepository(repositoryPath, pathToContent);
+
+    m8r::Repository* repository = new m8r::Repository(
+        repositoryPath,
+        m8r::Repository::RepositoryType::MINDFORGER,
+        m8r::Repository::RepositoryMode::REPOSITORY,
+        "",
+        false);
+
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/mf-unit-notebook-tree-get-outlines-cfg.md");
+    config.setActiveRepository(
+        config.addRepository(repository), repositoryConfigRepresentation
+    );
+
+    m8r::Mind mind(config);
+    mind.learn();
+    mind.think().get();
+
+    string nameA{"Shelved A"}, nameB{"Shelved B"}, nameC{"Not shelved C"};
+    m8r::Outline* oA = mind.remind().getOutline(mind.outlineNew(&nameA));
+    m8r::Outline* oB = mind.remind().getOutline(mind.outlineNew(&nameB));
+    m8r::Outline* oC = mind.remind().getOutline(mind.outlineNew(&nameC));
+    ASSERT_NE(nullptr, oA);
+    ASSERT_NE(nullptr, oB);
+    ASSERT_NE(nullptr, oC);
+
+    set<string> existingKeys{};
+    string treeKey = m8r::NotebookTree::createNotebookTreeKey(
+        existingKeys, config.getMindPath(), FILE_PATH_SEPARATOR);
+    m8r::Outline* tree = mind.notebookTreeNew(treeKey, "Shelf");
+    mind.notebookTreeAddOutline(tree, oA);
+    mind.notebookTreeAddOutline(tree, oB);
+
+    // WHEN
+    vector<m8r::Outline*> outlines{};
+    mind.notebookTreeGetOutlines(tree, outlines);
+    vector<m8r::Outline*> noOutlines{};
+    mind.notebookTreeGetOutlines(nullptr, noOutlines);
+
+    // THEN only the shelved Notebooks are returned
+    ASSERT_EQ(2, outlines.size());
+    EXPECT_NE(outlines.end(), std::find(outlines.begin(), outlines.end(), oA));
+    EXPECT_NE(outlines.end(), std::find(outlines.begin(), outlines.end(), oB));
+    EXPECT_EQ(outlines.end(), std::find(outlines.begin(), outlines.end(), oC));
+    EXPECT_EQ(0, noOutlines.size());
+}
+
+TEST(NotebookTreeTestCase, GetOutlinesRespectsScopeLikeShelfView)
+{
+    // GIVEN a shelf w/ 3 Notebooks: old A w/ recent child B, and old C
+    string repositoryPath{"/tmp/mf-unit-notebook-tree-get-outlines-scoped"};
+    m8r::removeDirectoryRecursively(repositoryPath.c_str());
+    map<string,string> pathToContent{};
+    m8r::createEmptyRepository(repositoryPath, pathToContent);
+
+    m8r::Repository* repository = new m8r::Repository(
+        repositoryPath,
+        m8r::Repository::RepositoryType::MINDFORGER,
+        m8r::Repository::RepositoryMode::REPOSITORY,
+        "",
+        false);
+
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/mf-unit-notebook-tree-get-outlines-scoped-cfg.md");
+    config.setActiveRepository(
+        config.addRepository(repository), repositoryConfigRepresentation
+    );
+
+    m8r::Mind mind(config);
+    mind.learn();
+    mind.think().get();
+
+    string nameA{"Old parent A"}, nameB{"Recent child B"}, nameC{"Old C"};
+    m8r::Outline* oA = mind.remind().getOutline(mind.outlineNew(&nameA));
+    m8r::Outline* oB = mind.remind().getOutline(mind.outlineNew(&nameB));
+    m8r::Outline* oC = mind.remind().getOutline(mind.outlineNew(&nameC));
+    ASSERT_NE(nullptr, oA);
+    ASSERT_NE(nullptr, oB);
+    ASSERT_NE(nullptr, oC);
+
+    set<string> existingKeys{};
+    string treeKey = m8r::NotebookTree::createNotebookTreeKey(
+        existingKeys, config.getMindPath(), FILE_PATH_SEPARATOR);
+    m8r::Outline* tree = mind.notebookTreeNew(treeKey, "Shelf");
+    // Notebooks are added to the top of the shelf ~ add them in reverse order
+    mind.notebookTreeAddOutline(tree, oC);
+    mind.notebookTreeAddOutline(tree, oB);
+    mind.notebookTreeAddOutline(tree, oA);
+    ASSERT_EQ(3, tree->getNotes().size());
+
+    time_t now = time(nullptr);
+    time_t yearAgo = now - 365*24*60*60;
+    tree->getNotes()[0]->setRead(yearAgo);
+    tree->getNotes()[1]->setDepth(1);
+    tree->getNotes()[1]->setRead(now);
+    tree->getNotes()[2]->setRead(yearAgo);
+
+    // scope is based on shelf entries, NOT on the Notebooks they refer to
+    oA->setRead(now);
+    oC->setRead(now);
+
+    // WHEN the time scope remembers just the last day
+    mind.getTimeScopeAspect().setTimeScope(m8r::TimeScope(0, 0, 1, 0, 0));
+    vector<bool> visibility{};
+    mind.getNotesScopeVisibility(tree, visibility);
+    vector<m8r::Outline*> scoped{};
+    mind.notebookTreeGetOutlines(tree, scoped, true);
+    vector<m8r::Outline*> unscoped{};
+    mind.notebookTreeGetOutlines(tree, unscoped);
+
+    // THEN recent B and its parent A are visible, while old C is hidden
+    ASSERT_TRUE(mind.getScopeAspect().isEnabled());
+    ASSERT_EQ(3, visibility.size());
+    EXPECT_TRUE(visibility[0]);
+    EXPECT_TRUE(visibility[1]);
+    EXPECT_FALSE(visibility[2]);
+
+    ASSERT_EQ(2, scoped.size());
+    EXPECT_EQ(oA, scoped[0]);
+    EXPECT_EQ(oB, scoped[1]);
+
+    ASSERT_EQ(3, unscoped.size());
+}

@@ -33,13 +33,14 @@ OutlinesMapModel::OutlinesMapModel(QObject *parent, HtmlOutlineRepresentation* h
     setRowCount(0);
 }
 
-void OutlinesMapModel::removeAllRows()
+void OutlinesMapModel::removeAllRows(const string& title)
 {
     QStandardItemModel::clear();
 
     QStringList tableHeader;
     tableHeader
-            << tr("Notebooks Shelf") // tree of Notebooks ~ mind map of Notebooks
+            // tree of Notebooks ~ mind map of Notebooks
+            << (title.empty()? tr("Notebook Shelves") : QString::fromStdString(title))
             << tr("Done")
             << tr("Rs")
             << tr("Ws")
