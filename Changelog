@@ -12,6 +12,9 @@
       Notebook's Notes); Enter or double click opens the selected Notebook or Note.
     * Enhancement: Recent Notes view toggle to show Notes which were recently
       viewed or edited, or edited only (the choice is saved to the configuration).
+    * Enhancement: Associations panel bars are colored by the association score -
+      green for strong (100-66%), orange for medium (65-33%) and red for weak
+      (32-0%) associations (previously all bars had the theme highlight color).
     * Fix: Esc leaves the command palette (CLI) and gives focus to the next component
       in the view (previously TAB was the only way to leave it using the keyboard).
     * Fix: time scope keeps the first Note of a Notebook visible if it's a parent

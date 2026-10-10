@@ -123,5 +123,13 @@ Check:
 * `man mindforger`
 
 
+## Contributors
+<a href="https://github.com/dvorka/mindforger/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=dvorka/mindforger" />
+</a>
+
+Are you interested in contributing? There are [plenty of things](https://mindforger.com/#contribute) you can do!
+
+
 ## Bugs and Feature Requests
 https://github.com/dvorka/mindforger/issues
