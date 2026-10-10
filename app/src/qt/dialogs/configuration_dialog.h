@@ -215,6 +215,8 @@ private:
     QLineEdit* externalEditorCmdEdit;
     // TODO QCheckBox* editorQuoteSectionsCheck;
     QCheckBox* editorTabsAsSpacesCheck;
+    QCheckBox* editorLineNumbersCheck;
+    QCheckBox* editorMinimapCheck;
 
     QFont editorFont;
 
