@@ -53,9 +53,13 @@ NoteEditHighlighter::NoteEditHighlighter(QPlainTextEdit* noteEditorView)
      */
 
     // regexps
-    addRegex(Bold, "\\*\\S[\\S\\s]+\\*",true);
+    // opening * must be followed and closing * preceded by non-whitespace
+    addRegex(Bold, "\\*\\S[\\S\\s]*\\S\\*",true);
     addRegex(Bolder, "\\*\\*[\\S\\s]+\\*\\*");
-    addRegex(Italic, "_[\\S\\s]+_");
+    // _ delimiters must not be inside a word (e.g. snake_case_name_), opening _ must be
+    // followed and closing _ preceded by non-whitespace; QRegExp has no lookbehind, therefore
+    // the char before opening _ is matched and only the capture group #1 is highlighted
+    addRegex(Italic, "(?:^|\\W)(_\\S(?:[\\S\\s]*\\S)?_)(?!\\w)");
     addRegex(Italicer, "__[\\S\\s]+\\__");
     addRegex(Strikethrough, "~~[\\S\\s]+\\~~");
     addRegex(Link, "\\[(:?[\\S\\s]+)\\]\\([\\S\\s]+\\)");
@@ -178,7 +182,7 @@ void NoteEditHighlighter::highlightPatterns(const QString& text)
                 setFormat(index, length, boldFormat);
                 break;
             case Italic:
-                setFormat(index, length, italicFormat);
+                setFormat(regex->pos(1), regex->cap(1).length(), italicFormat);
                 break;
             case Italicer:
                 setFormat(index, length, italicerFormat);
