@@ -26,6 +26,6 @@ fi
 
 rm -rvf build
 mkdir -v build
-cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
+cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && cmake --build .
 
 # eof
