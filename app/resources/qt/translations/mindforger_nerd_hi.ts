@@ -5544,7 +5544,7 @@ Choose new library source:</source>
 <context>
     <name>m8r::OutlineView</name>
     <message>
-        <location filename="../../../src/qt/outline_view.cpp" line="31"/>
+        <location filename="../../../src/qt/outline_view.cpp" line="34"/>
         <source>Click this Notebook name to open its Markdown preview in the right panel</source>
         <translation>दाएँ पैनल में Markdown पूर्वावलोकन खोलने के लिए इस नोटबुक के नाम पर क्लिक करें</translation>
     </message>

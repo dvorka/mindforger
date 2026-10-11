@@ -33,6 +33,10 @@
     * Fix: blurry menu and toolbar icons on Linux and macOS HiDPI displays
       (4K, Retina, scaling set by QT_SCALE_FACTOR) - icons are rendered
       in device pixels.
+    * Enhancement: light theme editor syntax highlighting newly uses vivid,
+      high contrast colors (e.g. italic text was nearly black).
+    * Fix: native theme on Linux and macOS (light mode) had no editor syntax
+      highlighting - it newly follows OS light/dark palette.
     * Fix: Find Notebook by Name (Ctrl-Shift-B) finds only Notebooks
       which are on the shelf when a Notebook shelf is opened.
     * Fix: cmark-gfm build newly requires CMake 3.5 (cmark-gfm sources are unchanged)

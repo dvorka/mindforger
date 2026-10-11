@@ -308,6 +308,33 @@ void LookAndFeels::setDarkTheme()
 }
 
 /*
+ * Editor colors readable on light backgrounds - vivid (high contrast like dark
+ * theme colors) yet distinguishable from (black) text, all of them except
+ * intentionally faint strikethrough and HTML comment have WCAG contrast
+ * ratio at least 4.5:1 on white background.
+ */
+void LookAndFeels::setLightEditorColors()
+{
+    editorBold.setRgb(0xC2,0x41,0x0C);
+    editorBolder.setRgb(0xC2,0x41,0x0C);
+    editorItalic.setRgb(0x7E,0x22,0xCE);
+    editorItalicer.setRgb(0x7E,0x22,0xCE);
+    editorStrikethrough.setRgb(0x9C,0xA3,0xAF);
+    editorLink.setRgb(0x1D,0x4E,0xD8);
+    editorList.setRgb(0x15,0x80,0x3D);
+    editorTaskDone.setRgb(0x15,0x80,0x3D);
+    editorTaskWip.setRgb(0xB4,0x53,0x09);
+    editorTaskTodo.setRgb(0xB9,0x1C,0x1C);
+    editorCodeblock.setRgb(0x0F,0x76,0x6E);
+    editorHtmlTag.setRgb(0xA2,0x1C,0xAF);
+    editorHtmlEntity.setRgb(0xA2,0x1C,0xAF);
+    editorHtmlAttrName.setRgb(0xC0,0x26,0xD3);
+    editorHtmlAttrValue.setRgb(0x6B,0x72,0x80);
+    editorHtmlComment.setRgb(0x9C,0xA3,0xAF);
+    editorError.setRgb(0xDC,0x26,0x26);
+}
+
+/*
  * Built-in light theme definition.
  */
 void LookAndFeels::setLightTheme(bool fixedFont)
@@ -320,28 +347,7 @@ void LookAndFeels::setLightTheme(bool fixedFont)
     editorLineNumbersForegroundColor = QString("#BBBBBB");
     editorLineNumbersBackgroundColor = QString("#EEEEEE");
 
-    // magenta 0xBB,0x00,0xBB
-    // cyan 0x00,0x88,0x88
-    // blue 0x00,0x00,0xFF
-    // green 0x00,0x55,0x00
-
-    editorBold.setRgb(0xFF,0x69,0x00);
-    editorBolder.setRgb(0xFF,0x69,0x00);
-    editorItalic.setRgb(0x55,0x00,0x55);
-    editorItalicer.setRgb(0x55,0x00,0x55);
-    editorStrikethrough.setRgb(0xAA,0xAA,0xAA);
-    editorLink.setRgb(0x00,0x00,0xFF);
-    editorList.setRgb(0x00,0x99,0x00);
-    editorTaskDone.setRgb(0x00,0x99,0x00);
-    editorTaskWip.setRgb(0xFF,0xA5,0x00);
-    editorTaskTodo.setRgb(0x99,0x00,0x00);
-    editorCodeblock.setRgb(0x00,0x88,0x88);
-    editorHtmlTag.setRgb(0x00,0x00,0xFF);
-    editorHtmlEntity.setRgb(0x00,0x00,0xFF);
-    editorHtmlAttrName.setRgb(0x00,0x00,0xFF);
-    editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
-    editorHtmlComment.setRgb(0xAA,0xAA,0xAA);
-    editorError.setRgb(0xFF,0x00,0x00);
+    setLightEditorColors();
 
     cliTextColor = Qt::black;
 
@@ -456,13 +462,24 @@ void LookAndFeels::setNativeTheme(bool fixedFont)
             // IMPROVE editor active line background fill (none @ macOS): NoteEditorView::highlightCurrentLine()
 
             setDarkEditorColors();
+        } else {
+            setLightEditorColors();
         }
-
+    #else
+        setLightEditorColors();
     #endif
 #else
     if(fixedFont) {
         mindforgerApplication->setFont(getFixedFont());
     }
+    #ifndef _WIN32
+        // editor colors follow OS (light/dark) palette
+        if(isPaletteLight(systemPalette)) {
+            setLightEditorColors();
+        } else {
+            setDarkEditorColors();
+        }
+    #endif
 #endif
 
 #ifdef _WIN32
