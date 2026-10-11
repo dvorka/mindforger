@@ -52,10 +52,13 @@ constexpr const auto CONFIG_SETTING_UI_LIVE_NOTE_PREVIEW_LABEL =  "* Live note p
 constexpr const auto CONFIG_SETTING_UI_OS_TABLE_SORT_COL_LABEL =  "* Outlines table sort column: ";
 constexpr const auto CONFIG_SETTING_UI_OS_TABLE_SORT_ORDER_LABEL =  "* Outlines table sort order: ";
 constexpr const auto CONFIG_SETTING_UI_CLICK_NOTE_VIEW_TO_EDIT_LABEL =  "* Enable double click note view to edit: ";
+constexpr const auto CONFIG_SETTING_UI_RECENT_NOTES_EDITED_ONLY_LABEL =  "* Recent notes edited only: ";
 constexpr const auto CONFIG_SETTING_UI_NERD_MENU=  "* Nerd menu: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_FONT_LABEL =  "* Editor font: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL =  "* Editor syntax highlighting: ";
+constexpr const auto CONFIG_SETTING_UI_EDITOR_SHOW_LINE_NUMBERS_LABEL =  "* Editor line numbers: ";
+constexpr const auto CONFIG_SETTING_UI_EDITOR_SHOW_MINIMAP_LABEL =  "* Editor minimap: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_LIVE_SPELLCHECK_LABEL =  "* Live editor spell check: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_SPELLCHECK_LANG_LABEL =  "* Spell check language: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL =  "* Editor autocomplete: ";
@@ -276,6 +279,12 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         } else {
                             c.setUiOsTableSortOrder(false);
                         }
+                    } else if(line->find(CONFIG_SETTING_UI_RECENT_NOTES_EDITED_ONLY_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiRecentNotesEditedOnly(true);
+                        } else {
+                            c.setUiRecentNotesEditedOnly(false);
+                        }
                     } else if(line->find(CONFIG_SETTING_UI_NERD_MENU) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
                             c.setUiNerdTargetAudience(true);
@@ -352,6 +361,18 @@ void MarkdownConfigurationRepresentation::configurationSection(
                             c.setUiEditorEnableSyntaxHighlighting(true);
                         } else {
                             c.setUiEditorEnableSyntaxHighlighting(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_EDITOR_SHOW_LINE_NUMBERS_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiEditorShowLineNumbers(true);
+                        } else {
+                            c.setUiEditorShowLineNumbers(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_EDITOR_SHOW_MINIMAP_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiEditorShowMinimap(true);
+                        } else {
+                            c.setUiEditorShowMinimap(false);
                         }
                     } else if(line->find(CONFIG_SETTING_UI_EDITOR_LIVE_SPELLCHECK_LABEL) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
@@ -708,6 +729,9 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_UI_OS_TABLE_SORT_ORDER_LABEL << (c?(c->isUiOsTableSortOrder()?"ascending":"descending"):(Configuration::DEFAULT_OS_TABLE_SORT_ORDER?"ascending":"descending")) << endl <<
          "    * Order of Notebooks table sorting." << endl <<
          "    * Examples: ascending, descending" << endl <<
+         CONFIG_SETTING_UI_RECENT_NOTES_EDITED_ONLY_LABEL << (c?(c->isUiRecentNotesEditedOnly()?"yes":"no"):(Configuration::DEFAULT_RECENT_NOTES_EDITED_ONLY?"yes":"no")) << endl <<
+         "    * Show only edited notes (yes) or viewed and edited notes (no) in Recent Notes." << endl <<
+         "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_SHOW_TOOLBAR_LABEL<< (c?(c->isUiShowToolbar()?"yes":"no"):(Configuration::DEFAULT_UI_SHOW_TOOLBAR?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_NERD_MENU << (c?(c->isUiNerdTargetAudience()?"yes":"no"):(Configuration::DEFAULT_UI_NERD_MENU?"yes":"no")) << endl <<
@@ -733,6 +757,12 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Set prefered spell check language in Notebook and Note description editor." << endl <<
          "    * Examples: en_US" << endl <<
          CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL << (c?(c->isUiEditorEnableSyntaxHighlighting()?"yes":"no"):(Configuration::DEFAULT_EDITOR_SYNTAX_HIGHLIGHT?"yes":"no")) << endl <<
+         "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_UI_EDITOR_SHOW_LINE_NUMBERS_LABEL << (c?(c->isUiEditorShowLineNumbers()?"yes":"no"):(Configuration::DEFAULT_EDITOR_SHOW_LINE_NUMBERS?"yes":"no")) << endl <<
+         "    * Show line numbers on the left side of the editor." << endl <<
+         "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_UI_EDITOR_SHOW_MINIMAP_LABEL << (c?(c->isUiEditorShowMinimap()?"yes":"no"):(Configuration::DEFAULT_EDITOR_SHOW_MINIMAP?"yes":"no")) << endl <<
+         "    * Show text overview (minimap) next to the editor which allows fast navigation." << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL << (c?(c->isUiEditorEnableAutocomplete()?"yes":"no"):(Configuration::DEFAULT_EDITOR_AUTOCOMPLETE?"yes":"no")) << endl <<
          "    * Enable text autocomplete." << endl <<

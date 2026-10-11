@@ -1230,6 +1230,62 @@ void Mind::notebookTreeAddOutline(Outline* notebookTree, Outline* outlineToAdd)
     notebookTree->addNote(n, 0);
 }
 
+void Mind::getNotesScopeVisibility(Outline* outline, vector<bool>& visibility)
+{
+    visibility.clear();
+    if(!outline) {
+        return;
+    }
+
+    const vector<Note*>& notes = outline->getNotes();
+    if(!scopeAspect.isEnabled()) {
+        visibility.assign(notes.size(), true);
+        return;
+    }
+
+    visibility.assign(notes.size(), false);
+    vector<int> parents{};
+    for(size_t i=0; i<notes.size(); i++) {
+        if(scopeAspect.isInScope(notes[i])) {
+            visibility[i] = true;
+            // keep N's parents visible
+            parents.clear();
+            outline->getNotePathToRoot(i, parents);
+            for(int p:parents) {
+                visibility[p] = true;
+            }
+        }
+    }
+}
+
+void Mind::notebookTreeGetOutlines(Outline* notebookTree, vector<Outline*>& outlines, bool scoped)
+{
+    if(!notebookTree) {
+        return;
+    }
+
+    vector<bool> visibility{};
+    if(scoped) {
+        getNotesScopeVisibility(notebookTree, visibility);
+    }
+
+    const vector<Note*>& notes = notebookTree->getNotes();
+    for(size_t i=0; i<notes.size(); i++) {
+        if(scoped && !visibility[i]) {
+            continue;
+        }
+
+        Note* n = notes[i];
+        Link* oLink = n->getLinkByName(LINK_NAME_OUTLINE_KEY);
+        if(oLink) {
+            Outline* o = findOutlineByKey(oLink->getUrl());
+            if(o) {
+                outlines.push_back(o);
+            }
+        }
+    }
+}
+
 void Mind::notebookTreeRemoveOutlineFromAll(const string& outlineKey)
 {
     for(NotebookTree* t:config.getRepositoryConfiguration().getNotebookTrees()) {
