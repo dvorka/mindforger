@@ -103,7 +103,7 @@ Check also [packages](https://pkgs.org/search/?q=mindforger) for Linux and Unix.
 
 
 ## Documentation
-[![Basics](media/basics/mindforger-basics.png)](https://mindforger.com/#basics)
+[![Basics](media/basics/mindforger-basics.png)](https://mindforger.com/docs)
 
 Read:
 

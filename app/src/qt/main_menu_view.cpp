@@ -55,19 +55,20 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindLearnRepository->setStatusTip(
         tr("Learn knowledge by loading a MindForger workspace...")
     );
-    submenuMindLearn->addAction(actionMindLearnRepository);
     actionMindLearnDirectory = new QAction(
         tr("&Directory with Markdowns"), mainWindow
     );
     actionMindLearnDirectory->setStatusTip(
         tr("Learn knowledge by loading a directory with Markdown files...")
     );
-    submenuMindLearn->addAction(actionMindLearnDirectory);
     actionMindLearnFile = new QAction(tr("Markdown &File"), mainWindow);
     actionMindLearnFile->setStatusTip(
         tr("Learn knowledge by loading a Markdown file...")
     );
+
     submenuMindLearn->addAction(actionMindLearnFile);
+    submenuMindLearn->addAction(actionMindLearnDirectory);
+    submenuMindLearn->addAction(actionMindLearnRepository);
 
     // re-learn/remind ... recent repositories and files
     submenuMindRelearn = new RecentFilesMenu(tr("&Remind"), mainWindow);
@@ -114,7 +115,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindSemanticSearch = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Semantic Search"), mainWindow);
     actionMindSemanticSearch->setCheckable(true);
     actionMindSemanticSearch->setStatusTip(tr("Use Wingman LLM to search for similar Notes (associations) using text embeddings..."));
-    actionMindSemanticSearch->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_M));
+    // no shortcut: Ctrl+Shift+M is used by Find Note by Metadata
 #endif
 
     actionMindWingman = new QAction(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman LLM"), mainWindow);
@@ -262,6 +263,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFindNoteByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_A));
     actionFindNoteByTag->setStatusTip(tr("Find Note by tags"));
 
+    actionFindNoteByMetadata = new QAction(
+        QIcon(":/menu-icons/find.svg"), tr("Recall Note by &Metadata"), mainWindow);
+    actionFindNoteByMetadata->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_M));
+    actionFindNoteByMetadata->setStatusTip(tr("Find Note by metadata - sort Notes by size, reads, writes, created or modified"));
+
 #ifdef MF_WIP
     actionFindDocByName = new QAction(
         QIcon(":/menu-icons/find.svg"), tr("Recall Library &Doc by Name"), mainWindow);
@@ -278,6 +284,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #ifdef MF_WIP
     menuFind->addAction(actionFindDocByName);
 #endif
+    menuFind->addAction(actionFindNoteByMetadata);
 
     // menu: view
 
@@ -1176,6 +1183,7 @@ void MainMenuView::showAllMenuItems()
     actionFindOutlineByName->setEnabled(true);
     actionFindOutlineByTag->setEnabled(true);
     actionFindNoteByName->setEnabled(true);
+    actionFindNoteByMetadata->setEnabled(true);
     actionFindNoteByTag->setEnabled(true);
 #ifdef MF_WIP
     actionFindDocByName->setEnabled(true);
@@ -1462,6 +1470,7 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode, bool mfMode)
     actionFindOutlineByName->setEnabled(false);
     actionFindOutlineByTag->setEnabled(false);
     actionFindNoteByName->setEnabled(false);
+    actionFindNoteByMetadata->setEnabled(false);
     actionFindNoteByTag->setEnabled(false);
 
     menuView->setEnabled(false);
