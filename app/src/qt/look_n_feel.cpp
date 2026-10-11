@@ -237,18 +237,10 @@ void LookAndFeels::setTheme(const QString& themeName)
 }
 
 /*
- * Built-in dark theme definition.
+ * Editor colors readable on dark backgrounds.
  */
-void LookAndFeels::setDarkTheme()
+void LookAndFeels::setDarkEditorColors()
 {
-    textColor = QString("#FFF");
-    backgroundColor =  QString("#353535");
-    highlightColor = QString("#008C00"); // RGB: 0, 140, 0
-
-    editorBackgroundColor = backgroundColor;
-    editorLineNumbersForegroundColor = QString("#777777");
-    editorLineNumbersBackgroundColor = backgroundColor;
-
     editorBold.setRgb(0xFF,0xFF,0x00);
     editorBolder.setRgb(0xFF,0xFF,0x00);
     editorItalic.setRgb(0x00,0xAA,0x00);
@@ -266,6 +258,22 @@ void LookAndFeels::setDarkTheme()
     editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
     editorHtmlComment.setRgb(0x66,0x66,0x66);
     editorError.setRgb(0xFF,0x00,0x00);
+}
+
+/*
+ * Built-in dark theme definition.
+ */
+void LookAndFeels::setDarkTheme()
+{
+    textColor = QString("#FFF");
+    backgroundColor =  QString("#353535");
+    highlightColor = QString("#008C00"); // RGB: 0, 140, 0
+
+    editorBackgroundColor = backgroundColor;
+    editorLineNumbersForegroundColor = QString("#777777");
+    editorLineNumbersBackgroundColor = backgroundColor;
+
+    setDarkEditorColors();
 
     cliTextColor = Qt::green;
 
@@ -374,23 +382,7 @@ void LookAndFeels::setBlackTheme(bool fixedFont)
     editorLineNumbersForegroundColor = QString("#555555");
     editorLineNumbersBackgroundColor = QString("#353535");
 
-    editorBold.setRgb(0xFF,0xFF,0x00);
-    editorBolder.setRgb(0xFF,0xFF,0x00);
-    editorItalic.setRgb(0x00,0xAA,0x00);
-    editorItalicer.setRgb(0x00,0xAA,0x00);
-    editorStrikethrough.setRgb(0x88,0x88,0x88);
-    editorLink.setRgb(0x00,0xFF,0xFF);
-    editorList.setRgb(0x00,0x99,0x00);
-    editorTaskDone.setRgb(0x00,0x99,0x00);
-    editorTaskWip.setRgb(0xFF,0xA5,0x00);
-    editorTaskTodo.setRgb(0x99,0x00,0x00);
-    editorCodeblock.setRgb(0x99,0x99,0x99);
-    editorHtmlTag.setRgb(0xAA,0x00,0xAA);
-    editorHtmlEntity.setRgb(0xAA,0x00,0xAA);
-    editorHtmlAttrName.setRgb(0xFF,0x00,0xFF);
-    editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
-    editorHtmlComment.setRgb(0x66,0x66,0x66);
-    editorError.setRgb(0xFF,0x00,0x00);
+    setDarkEditorColors();
 
     cliTextColor = QColor(0x99,0xb1,0xff);
 
@@ -463,23 +455,7 @@ void LookAndFeels::setNativeTheme(bool fixedFont)
 
             // IMPROVE editor active line background fill (none @ macOS): NoteEditorView::highlightCurrentLine()
 
-            editorBold.setRgb(0xFF,0xFF,0x00);
-            editorBolder.setRgb(0xFF,0xFF,0x00);
-            editorItalic.setRgb(0x00,0xAA,0x00);
-            editorItalicer.setRgb(0x00,0xAA,0x00);
-            editorStrikethrough.setRgb(0x88,0x88,0x88);
-            editorLink.setRgb(0x00,0xFF,0xFF);
-            editorList.setRgb(0x00,0x99,0x00);
-            editorTaskDone.setRgb(0x00,0x99,0x00);
-            editorTaskWip.setRgb(0xFF,0xA5,0x00);
-            editorTaskTodo.setRgb(0x99,0x00,0x00);
-            editorCodeblock.setRgb(0x99,0x99,0x99);
-            editorHtmlTag.setRgb(0xAA,0x00,0xAA);
-            editorHtmlEntity.setRgb(0xAA,0x00,0xAA);
-            editorHtmlAttrName.setRgb(0xFF,0x00,0xFF);
-            editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
-            editorHtmlComment.setRgb(0x66,0x66,0x66);
-            editorError.setRgb(0xFF,0x00,0x00);
+            setDarkEditorColors();
         }
 
     #endif
@@ -510,11 +486,31 @@ void LookAndFeels::setWindowsDisabledTextColors(QPalette& palette)
 /*
  * Windows native theme colors - application palette is kept as provided by
  * the OS (accent highlight for text selection like in Notepad), item views
- * and MindForger specific widgets get Windows Explorer like colors.
+ * and MindForger specific widgets get Windows Explorer like colors. Dark
+ * (High Contrast) palettes are kept intact - Explorer colors are light only.
  */
 void LookAndFeels::setWindowsNativeColors()
 {
     palette = mindforgerApplication->palette();
+
+    textColor = palette.color(QPalette::WindowText).name();
+    backgroundColor = palette.color(QPalette::Window).name();
+
+    editorBackgroundColor = palette.color(QPalette::Base).name();
+    editorLineNumbersForegroundColor = QString("#999999");
+    editorLineNumbersBackgroundColor = backgroundColor;
+
+    cliTextColor = palette.color(QPalette::Text);
+
+    if(!isPaletteLight(palette)) {
+        // dark palette (High Contrast Black, ...) - OS colors are designed for
+        // accessibility, therefore they are kept; selection colors stay invalid
+        // so that status bar indicators use their default look
+        highlightColor = palette.color(QPalette::Highlight).name();
+        setDarkEditorColors();
+        return;
+    }
+
     setWindowsDisabledTextColors(palette);
     mindforgerApplication->setPalette(palette);
 
@@ -530,16 +526,10 @@ void LookAndFeels::setWindowsNativeColors()
     }
     QApplication::setPalette(itemViewPalette, "QAbstractItemView");
 
-    textColor = palette.color(QPalette::WindowText).name();
-    backgroundColor = palette.color(QPalette::Window).name();
     highlightColor = explorerSelection.name();
     selectionColor = explorerSelection;
     selectionTextColor = palette.color(QPalette::Text);
     selectionBorderColor.setRgb(0x99,0xD1,0xFF);
-
-    editorBackgroundColor = palette.color(QPalette::Base).name();
-    editorLineNumbersForegroundColor = QString("#999999");
-    editorLineNumbersBackgroundColor = backgroundColor;
 
     // Visual Studio light inspired syntax highlighting
     editorBold.setRgb(0xA3,0x15,0x15);
@@ -559,8 +549,6 @@ void LookAndFeels::setWindowsNativeColors()
     editorHtmlAttrValue.setRgb(0x00,0x00,0xFF);
     editorHtmlComment.setRgb(0x00,0x80,0x00);
     editorError.setRgb(0xE8,0x11,0x23);
-
-    cliTextColor = palette.color(QPalette::Text);
 }
 #endif
 

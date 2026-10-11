@@ -124,6 +124,11 @@ public:
      */
     void setDarkTheme();
 
+    /* Editor colors for dark backgrounds - shared by dark themes
+     * and dark native (OS) themes.
+     */
+    void setDarkEditorColors();
+
     /* Light theme aims to be distraction-free Kindle style
      * theme suitable for comfortable knowledge reading and
      * navigation.
