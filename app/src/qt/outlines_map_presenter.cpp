@@ -113,7 +113,7 @@ void OutlinesMapPresenter::refresh(Outline* outline, Outline::Patch* patch)
                 break;
             }
         } else {
-            model->removeAllRows();
+            model->removeAllRows(outline->getName());
             for(Note* note:outline->getNotes()) {
                 model->addNote(note);
             }
@@ -121,18 +121,10 @@ void OutlinesMapPresenter::refresh(Outline* outline, Outline::Patch* patch)
 
         // forget / time scope: hide view rows ~ there is full model, I just hide what's visible > patch should work
         if(mind->getScopeAspect().isEnabled()) {
-            vector<int> parents;
-            for(size_t i=0; i<outline->getNotesCount(); i++) {
-                if(mind->getScopeAspect().isInScope(outline->getNotes()[i])) {
-                    // N's parents
-                    parents.clear();
-                    outline->getNotePathToRoot(i, parents);
-                    if(parents.size()) {
-                        for(size_t p=0; p<parents.size(); p++) {
-                            view->showRow(parents[p]);
-                        }
-                    }
-                    // N
+            vector<bool> visibility{};
+            mind->getNotesScopeVisibility(outline, visibility);
+            for(size_t i=0; i<visibility.size(); i++) {
+                if(visibility[i]) {
                     view->showRow(i);
                 } else {
                     view->hideRow(i);

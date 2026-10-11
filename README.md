@@ -103,7 +103,7 @@ Check also [packages](https://pkgs.org/search/?q=mindforger) for Linux and Unix.
 
 
 ## Documentation
-[![Basics](media/basics/mindforger-basics.png)](https://mindforger.com/#basics)
+[![Basics](media/basics/mindforger-basics.png)](https://mindforger.com/docs)
 
 Read:
 
@@ -121,6 +121,14 @@ Watch:
 Check:
 
 * `man mindforger`
+
+
+## Contributors
+<a href="https://github.com/dvorka/mindforger/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=dvorka/mindforger" />
+</a>
+
+Are you interested in contributing? There are [plenty of things](https://mindforger.com/#contribute) you can do!
 
 
 ## Bugs and Feature Requests

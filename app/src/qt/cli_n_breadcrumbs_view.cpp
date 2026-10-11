@@ -57,8 +57,10 @@ void CliView::keyPressEvent(QKeyEvent* event)
 {
     switch(event->key()) {
     case Qt::Key_Escape:
+        // leave CLI: give focus to the next component in the view (like TAB)
+        focusNextChild();
         cliAndBreadcrumps->showBreadcrumb();
-        break;
+        return;
     default:
         break;
     }

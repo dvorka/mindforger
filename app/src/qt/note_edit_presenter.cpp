@@ -32,7 +32,6 @@ NoteEditPresenter::NoteEditPresenter(
     this->view = view;
     this->mwp = mwp;
 
-    view->setEditorShowLineNumbers(Configuration::getInstance().isUiEditorShowLineNumbers());
     view->setStatusBar(mwp->getStatusBar()->getView());
 
     noteEditDialog

@@ -69,8 +69,9 @@ Configuration::Configuration()
       uiShowBreadcrump{},
       uiViewerShowMetadata{},
       uiEditorTabWidth{DEFAULT_EDITOR_TAB_WIDTH},
-      uiEditorLineNumbers{},
+      uiEditorLineNumbers{DEFAULT_EDITOR_SHOW_LINE_NUMBERS},
       uiEditorSyntaxHighlighting{DEFAULT_EDITOR_SYNTAX_HIGHLIGHT},
+      uiEditorShowMinimap{DEFAULT_EDITOR_SHOW_MINIMAP},
       uiEditorLiveSpellCheck{DEFAULT_SPELLCHECK_LIVE},
       uiEditorSpellCheckLanguage{},
       uiEditorSpellCheckLanguages{},
@@ -90,6 +91,7 @@ Configuration::Configuration()
       uiOsTableSortColumn{DEFAULT_OS_TABLE_SORT_COLUMN},
       uiOsTableSortOrder{DEFAULT_OS_TABLE_SORT_ORDER},
       uiDoubleClickNoteViewToEdit{DEFAULT_CLICK_NOTE_VIEW_TO_EDIT},
+      uiRecentNotesEditedOnly{DEFAULT_RECENT_NOTES_EDITED_ONLY},
       installer(new Installer{})
 {
     // default config file path: ~/.mindforger.md
@@ -191,7 +193,8 @@ void Configuration::clear()
     uiEditorSyntaxHighlighting = true;
     uiEditorLiveSpellCheck = DEFAULT_SPELLCHECK_LIVE;
     uiEditorAutocomplete = true;
-    uiEditorLineNumbers = true;
+    uiEditorLineNumbers = DEFAULT_EDITOR_SHOW_LINE_NUMBERS;
+    uiEditorShowMinimap = DEFAULT_EDITOR_SHOW_MINIMAP;
     uiEditorTabsAsSpaces = DEFAULT_EDITOR_TABS_AS_SPACES;
     uiEditorAutosave = DEFAULT_EDITOR_AUTOSAVE;
     uiEditorTabWidth = DEFAULT_EDITOR_TAB_WIDTH;
@@ -221,6 +224,7 @@ void Configuration::clear()
     uiOsTableSortColumn = DEFAULT_OS_TABLE_SORT_COLUMN;
     uiOsTableSortOrder = DEFAULT_OS_TABLE_SORT_ORDER;
     uiDoubleClickNoteViewToEdit = DEFAULT_CLICK_NOTE_VIEW_TO_EDIT;
+    uiRecentNotesEditedOnly = DEFAULT_RECENT_NOTES_EDITED_ONLY;
 }
 
 bool Configuration::hasRepositoryConfiguration() const {

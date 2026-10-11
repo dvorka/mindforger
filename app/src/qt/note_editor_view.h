@@ -26,12 +26,14 @@
 #include "note_smart_editor.h"
 #include "note_edit_highlighter.h"
 #include "widgets/line_number_panel.h"
+#include "widgets/minimap_panel.h"
 #include "status_bar_view.h"
 #include "spelling/spell_checker.h"
 
 namespace m8r {
 
 class LineNumberPanel;
+class MinimapPanel;
 
 /**
  * @brief Note editor view.
@@ -62,6 +64,8 @@ private:
     NoteEditHighlighter* highlighter;
     bool showLineNumbers;
     LineNumberPanel* lineNumberPanel;
+    bool showMinimap;
+    MinimapPanel* minimapPanel;
 
     // associations
     int hitCounter;
@@ -156,16 +160,21 @@ public slots:
 public:
     void lineNumberPanelPaintEvent(QPaintEvent* event);
     int lineNumberPanelWidth();
+    int minimapPanelWidth() const;
 protected:
     void resizeEvent(QResizeEvent* event) override;
+private:
+    void layoutPanels();
 private slots:
     void highlightCurrentLine();
     void updateLineNumberPanelWidth(int newBlockCount);
     void updateLineNumberPanel(const QRect&, int);
+    void updateMinimapPanel();
 
     // configuration
 public:
     void setShowLineNumbers(bool show);
+    void setShowMinimap(bool show);
 public slots:
     void slotConfigurationUpdated();
 protected slots:

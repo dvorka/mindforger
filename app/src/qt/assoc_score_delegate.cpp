@@ -18,9 +18,11 @@
 */
 #include "assoc_score_delegate.h"
 
-#include "look_n_feel.h"
-
 namespace m8r {
+
+const QColor AssocScoreDelegate::COLOR_STRONG{0x4C, 0xAF, 0x50};
+const QColor AssocScoreDelegate::COLOR_MEDIUM{0xFF, 0x98, 0x00};
+const QColor AssocScoreDelegate::COLOR_WEAK{0xF4, 0x43, 0x36};
 
 AssocScoreDelegate::AssocScoreDelegate(QObject* parent)
     : QStyledItemDelegate(parent)
@@ -29,6 +31,16 @@ AssocScoreDelegate::AssocScoreDelegate(QObject* parent)
 
 AssocScoreDelegate::~AssocScoreDelegate()
 {
+}
+
+QColor AssocScoreDelegate::scoreColor(int percent)
+{
+    if(percent >= 66) {
+        return COLOR_STRONG;
+    } else if(percent >= 33) {
+        return COLOR_MEDIUM;
+    }
+    return COLOR_WEAK;
 }
 
 void AssocScoreDelegate::paint(
@@ -50,13 +62,11 @@ void AssocScoreDelegate::paint(
     QStyle* style = opt.widget ? opt.widget->style() : QApplication::style();
     style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, opt.widget);
 
-    // colors: theme highlight (native theme has none > palette), selected row has highlight background
+    // colors: fill by score (strong/medium/weak), selected row has highlight background
     const bool selected = opt.state & QStyle::State_Selected;
     QColor text = opt.palette.color(selected ? QPalette::HighlightedText : QPalette::Text);
-    QColor fill{LookAndFeels::getInstance().getHighlightColor()};
-    if(selected || !fill.isValid()) {
-        fill = selected ? text : opt.palette.color(QPalette::Highlight);
-    }
+    const int percent = qRound(score*100.f);
+    const QColor fill = scoreColor(percent);
     QColor track{text};
     track.setAlphaF(0.15);
     QColor number{text};
@@ -65,7 +75,7 @@ void AssocScoreDelegate::paint(
     // layout: [ bar ][ gap ][ number ]
     const int padding = 6;
     const int barHeight = 6;
-    const QString label = QString::number(qRound(score*100.f));
+    const QString label = QString::number(percent);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     const int labelWidth = opt.fontMetrics.horizontalAdvance(QStringLiteral("100"));
 #else

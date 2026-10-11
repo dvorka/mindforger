@@ -498,6 +498,8 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     //editorQuoteSectionsCheck = new QCheckBox(tr("quote sections (# in description)"), this);
     editorTabsAsSpacesCheck = new QCheckBox(tr("TABs as SPACEs"), this);
     editorAutosaveCheck = new QCheckBox(tr("autosave Note on editor close"), this);
+    editorLineNumbersCheck = new QCheckBox(tr("show line numbers"), this);
+    editorMinimapCheck = new QCheckBox(tr("show minimap"), this);
 
     editorTabWidthLabel = new QLabel(tr("TAB width")+":", this);
     editorTabWidthCombo = new QComboBox(this);
@@ -522,6 +524,8 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     editorLayout->addWidget(externalEditorCmdLabel);
     editorLayout->addWidget(externalEditorCmdEdit);
     editorLayout->addWidget(editorAutosaveCheck);
+    editorLayout->addWidget(editorLineNumbersCheck);
+    editorLayout->addWidget(editorMinimapCheck);
     //editorLayout->addWidget(editorQuoteSectionsCheck);
     QGroupBox* editorGroup = new QGroupBox{tr("Editor"), this};
     editorGroup->setLayout(editorLayout);
@@ -546,6 +550,8 @@ ConfigurationDialog::EditorTab::~EditorTab()
     delete externalEditorCmdEdit;
     //delete editorQuoteSectionsCheck;
     delete editorTabsAsSpacesCheck;
+    delete editorLineNumbersCheck;
+    delete editorMinimapCheck;
 }
 
 void ConfigurationDialog::EditorTab::refresh()
@@ -581,6 +587,8 @@ void ConfigurationDialog::EditorTab::refresh()
     //editorQuoteSectionsCheck->setChecked(config.isMarkdownQuoteSections());
     editorTabsAsSpacesCheck->setChecked(config.isUiEditorTabsAsSpaces());
     editorAutosaveCheck->setChecked(config.isUiEditorAutosave());
+    editorLineNumbersCheck->setChecked(config.isUiEditorShowLineNumbers());
+    editorMinimapCheck->setChecked(config.isUiEditorShowMinimap());
 }
 
 void ConfigurationDialog::EditorTab::save()
@@ -606,6 +614,8 @@ void ConfigurationDialog::EditorTab::save()
     //config.setMarkdownQuoteSections(editorQuoteSectionsCheck->isChecked());
     config.setUiEditorTabsAsSpaces(editorTabsAsSpacesCheck->isChecked());
     config.setUiEditorAutosave(editorAutosaveCheck->isChecked());
+    config.setUiEditorShowLineNumbers(editorLineNumbersCheck->isChecked());
+    config.setUiEditorShowMinimap(editorMinimapCheck->isChecked());
 }
 
 void ConfigurationDialog::EditorTab::getFont()

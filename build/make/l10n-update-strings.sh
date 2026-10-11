@@ -20,6 +20,12 @@
 # lupdate is run on app/app.pro - the app is the ONLY subproject w/ translatable
 # strings (TRANSLATIONS) and running it on the top level, subdirs mindforger.pro
 # only adds a 'no TS files specified' warning for the projects w/o catalogs
-cd ../.. && lupdate app/app.pro && cd build
+#
+# -no-obsolete drops strings which are no longer in the source code instead of
+# keeping them as dead 'vanished' entries (lrelease ignores them anyway). Note
+# that lupdate reads only the app.pro scopes of the current platform i.e.
+# translatable strings in macOS/Windows only sources would be dropped when run
+# on Linux - keep tr() strings out of platform specific sources.
+cd ../.. && lupdate -no-obsolete app/app.pro && cd build
 
 # eof
