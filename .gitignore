@@ -33,5 +33,6 @@ distro/debian/
 distro/fedora/
 distro/flatpak/
 distro/winget/
+distro/chocolatey/
 moc_*.cpp
 snapcraft.yaml

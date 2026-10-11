@@ -57,7 +57,7 @@ function Resolve-MindForgerReleaseAsset {
 
     Write-Host "Looking up release $Version on GitHub..." -ForegroundColor Cyan
     try {
-        $Release = Invoke-RestMethod -Uri $ApiUrl -Headers @{ "User-Agent" = "mindforger-winget-script" }
+        $Release = Invoke-RestMethod -Uri $ApiUrl -Headers @{ "User-Agent" = "mindforger-release-script" }
     } catch {
         throw "Failed to query the GitHub release API for $Version ($($_.Exception.Message)).`nCheck $ReleaseUrl"
     }
