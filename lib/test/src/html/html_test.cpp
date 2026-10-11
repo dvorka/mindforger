@@ -425,3 +425,64 @@ TEST(HtmlTestCase, DiagramSupportOnlineIsNoLongerOffered)
     EXPECT_EQ(std::string::npos, html.find("http://"));
     EXPECT_EQ(std::string::npos, html.find("https://"));
 }
+
+TEST(HtmlTestCase, NoteTitleEnd)
+{
+    // GIVEN
+    string withHeading{"<html><head></head><body><h2>Title</h2><p>text</p></body></html>"};
+    string noHeading{"<html><head></head><body><p>text</p></body></html>"};
+    string noBody{"<p>text</p>"};
+
+    // WHEN
+    size_t withHeadingIdx = m8r::HtmlOutlineRepresentation::findNoteTitleEnd(withHeading);
+    size_t noHeadingIdx = m8r::HtmlOutlineRepresentation::findNoteTitleEnd(noHeading);
+    size_t noBodyIdx = m8r::HtmlOutlineRepresentation::findNoteTitleEnd(noBody);
+
+    // THEN
+    EXPECT_EQ(withHeading.find("<p>"), withHeadingIdx);
+    EXPECT_EQ(noHeading.find("<p>"), noHeadingIdx);
+    EXPECT_EQ(noBody.size(), noBodyIdx);
+}
+
+TEST(HtmlTestCase, NoteTags)
+{
+    // GIVEN
+    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-nt.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
+    m8r::Mind mind(config);
+    m8r::HtmlColorsMock dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(),dummyColors,nullptr};
+    mind.learn();
+    mind.think().get();
+
+    ASSERT_GE(mind.remind().getOutlinesCount(), 1);
+    ASSERT_GE(mind.remind().getOutlines()[0]->getNotes().size(), 1);
+    m8r::Note* note = mind.remind().getOutlines()[0]->getNotes()[0];
+    note->addTag(mind.remind().getOntology().findOrCreateTag("mf-test-tag"));
+
+    // WHEN
+    string html{};
+    htmlRepresentation.to(note, &html);
+
+    // THEN
+    size_t titleEnd = html.find("</h", html.find("<body>"));
+    // tag name is also in heading metadata comment > look for tag rendered after title
+    size_t tagIdx = html.find("mf-test-tag&nbsp;</span>", titleEnd);
+    size_t descriptionIdx = html.find("<p>", titleEnd);
+    cout << "Title end: " << titleEnd << ", tag: " << tagIdx << ", description: " << descriptionIdx << endl;
+    ASSERT_NE(string::npos, titleEnd);
+    ASSERT_NE(string::npos, tagIdx);
+    EXPECT_EQ(string::npos, html.find("mf-test-tag&nbsp;</span>", tagIdx+1));
+    if(descriptionIdx != string::npos) {
+        EXPECT_LT(tagIdx, descriptionIdx);
+    }
+}

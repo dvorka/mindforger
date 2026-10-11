@@ -538,7 +538,47 @@ string* HtmlOutlineRepresentation::to(
     pathToDirectoryAndFile(note->getOutlineKey(), path, file);
     to(markdown, html, &path, false, yScrollTo);
     delete markdown;
+
+    // N tags (aligned with O header rendering): under N title
+    if(config.isUiHtmlTheme()) {
+        string tagsHtml{};
+        tagsToHtml(note->getTags(), tagsHtml);
+        if(!tagsHtml.empty()) {
+            tagsHtml.insert(0, "<div>");
+            tagsHtml += "</div>";
+            html->insert(findNoteTitleEnd(*html), tagsHtml);
+        }
+    }
+
     return html;
+}
+
+size_t HtmlOutlineRepresentation::findNoteTitleEnd(const string& html)
+{
+    static const string BODY{"<body>"};
+    static const string HEADING_END{"</h"};
+
+    size_t bodyIdx = html.find(BODY);
+    if(bodyIdx == string::npos) {
+        return html.size();
+    }
+    bodyIdx += BODY.size();
+
+    // first </h1> ... </h6> after <body> (note that </head> is before <body>)
+    size_t idx = html.find(HEADING_END, bodyIdx);
+    while(idx != string::npos) {
+        size_t levelIdx = idx + HEADING_END.size();
+        if(levelIdx+1 < html.size()
+           && html[levelIdx] >= '1' && html[levelIdx] <= '6'
+           && html[levelIdx+1] == '>'
+        ) {
+            return levelIdx+2;
+        }
+        idx = html.find(HEADING_END, levelIdx);
+    }
+
+    // no heading (e.g. too deep N) > tags at the beginning of the body
+    return bodyIdx;
 }
 
 } // m8r namespace

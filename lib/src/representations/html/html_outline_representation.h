@@ -153,6 +153,14 @@ public:
 
     MarkdownOutlineRepresentation& getMarkdownRepresentation() { return markdownRepresentation; }
 
+    /**
+     * @brief Find index where N title heading ends in N HTML.
+     *
+     * @return Index after the first heading closing tag in HTML body, index
+     *         after <body> if there is no heading or HTML size if there is no body.
+     */
+    static size_t findNoteTitleEnd(const std::string& html);
+
 private:
     void header(std::string& html, std::string* basePath, bool standalone, int yScrollTo);
     void footer(std::string& html);
