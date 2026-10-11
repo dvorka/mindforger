@@ -52,6 +52,7 @@ private:
     QPalette palette;
 
     QSet<QString> themeNames;
+    QString activeThemeName;
 
     int fontPointSize;
 
@@ -97,6 +98,16 @@ private:
     // CLI
     QColor cliTextColor;
 
+#ifdef _WIN32
+    // selected item (status bar indicators are styled as selected items)
+    QColor selectionColor;
+    QColor selectionTextColor;
+    QColor selectionBorderColor;
+
+    void setWindowsNativeColors();
+    static void setWindowsDisabledTextColors(QPalette& palette);
+#endif
+
 public:
     LookAndFeels(const LookAndFeels&) = delete;
     LookAndFeels(const LookAndFeels&&) = delete;
@@ -122,6 +133,18 @@ public:
     /* Set operating system native theme.
      */
     void setNativeTheme(bool fixedFont=false);
+
+    /* Monospace font used by fixed font themes - system fixed font
+     * except Windows where it is Consolas instead of Courier New.
+     */
+    static QFont getFixedFont();
+
+#ifdef _WIN32
+    /* Make pale menu icons readable on light menus.
+     */
+    void polishMenuIcons(QMenuBar* menuBar);
+    static QIcon darkenPaleIcon(const QIcon& icon);
+#endif
 
     void init(QApplication* mindforgerApplication);
     bool isThemeNative() const;
@@ -164,6 +187,13 @@ public:
 
     // CLI
     const QColor& getCliTextColor() const { return cliTextColor; }
+
+#ifdef _WIN32
+    // selection colors are defined by Windows native theme only (invalid otherwise)
+    const QColor& getSelectionColor() const { return selectionColor; }
+    const QColor& getSelectionTextColor() const { return selectionTextColor; }
+    const QColor& getSelectionBorderColor() const { return selectionBorderColor; }
+#endif
 
     // bean
     QApplication* getQApplication() const { return mindforgerApplication; }

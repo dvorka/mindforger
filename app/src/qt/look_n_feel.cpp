@@ -51,6 +51,68 @@ void LookAndFeels::init(QApplication* mindforgerApplication)
     this->mindforgerApplication = mindforgerApplication;
 }
 
+QFont LookAndFeels::getFixedFont()
+{
+    QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+#ifdef _WIN32
+    // system fixed font is Courier New on Windows, Consolas is the Windows
+    // native monospace font (shipped since Vista) designed for ClearType
+    font.setFamily("Consolas");
+#endif
+    return font;
+}
+
+#ifdef _WIN32
+/*
+ * Menu icons are pale gray (designed for dark menus) which makes them hard
+ * to read on light Windows menus - especially when a checkable item is checked
+ * and its icon is painted on the (light blue) checked item background.
+ */
+void LookAndFeels::polishMenuIcons(QMenuBar* menuBar)
+{
+    if(mindforgerApplication->palette().color(QPalette::Window).lightness() < 128) {
+        // dark menu background - icons are readable
+        return;
+    }
+
+    QSet<QAction*> actions{};
+    for(QMenu* menu: menuBar->findChildren<QMenu*>()) {
+        actions.insert(menu->menuAction());
+        for(QAction* action: menu->actions()) {
+            actions.insert(action);
+        }
+    }
+    for(QAction* action: actions) {
+        if(!action->icon().isNull()) {
+            action->setIcon(darkenPaleIcon(action->icon()));
+        }
+    }
+}
+
+QIcon LookAndFeels::darkenPaleIcon(const QIcon& icon)
+{
+    QIcon darkIcon{};
+    for(int size: {16, 20, 24, 32, 48, 64}) {
+        QImage image = icon.pixmap(QSize{size, size}).toImage()
+            .convertToFormat(QImage::Format_ARGB32);
+        for(int y=0; y<image.height(); y++) {
+            for(int x=0; x<image.width(); x++) {
+                QColor c = image.pixelColor(x, y);
+                // only light grays are darkened - colorful accents are kept
+                if(c.alpha() && c.hsvSaturation() < 40 && c.value() > 100) {
+                    c.setHsv(c.hsvHue(), c.hsvSaturation(), c.value()*45/100, c.alpha());
+                    image.setPixelColor(x, y, c);
+                }
+            }
+        }
+        image.setDevicePixelRatio(1.0);
+        // disabled mode pixmaps are generated (faded) from normal ones by Qt
+        darkIcon.addPixmap(QPixmap::fromImage(image));
+    }
+    return darkIcon;
+}
+#endif
+
 bool LookAndFeels::isThemeNameValid(const QString& themeName) const
 {
     if(!themeName.isEmpty() && themeNames.contains(themeName)) {
@@ -63,6 +125,8 @@ bool LookAndFeels::isThemeNameValid(const QString& themeName) const
 void LookAndFeels::setTheme(const QString& themeName)
 {
     MF_DEBUG("Setting MindForger Qt theme: " << themeName.toStdString() << endl);
+
+    activeThemeName = themeName;
 
     if(UI_THEME_LIGHT == themeName.toStdString()) {
         setLightTheme(false);
@@ -115,7 +179,7 @@ void LookAndFeels::setDarkTheme()
     cliTextColor = Qt::green;
 
     mindforgerApplication->setStyle(QStyleFactory::create("fusion"));
-    mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+    mindforgerApplication->setFont(getFixedFont());
 
     // Terminal green: QColor(0, 140, 0)
     // Terminal blue : QColor(42, 130, 218)
@@ -169,6 +233,9 @@ void LookAndFeels::setLightTheme(bool fixedFont)
     editorStrikethrough.setRgb(0xAA,0xAA,0xAA);
     editorLink.setRgb(0x00,0x00,0xFF);
     editorList.setRgb(0x00,0x99,0x00);
+    editorTaskDone.setRgb(0x00,0x99,0x00);
+    editorTaskWip.setRgb(0xFF,0xA5,0x00);
+    editorTaskTodo.setRgb(0x99,0x00,0x00);
     editorCodeblock.setRgb(0x00,0x88,0x88);
     editorHtmlTag.setRgb(0x00,0x00,0xFF);
     editorHtmlEntity.setRgb(0x00,0x00,0xFF);
@@ -181,7 +248,7 @@ void LookAndFeels::setLightTheme(bool fixedFont)
 
 #ifndef __APPLE__
     if(fixedFont) {
-        mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+        mindforgerApplication->setFont(getFixedFont());
     }
 #else
     Q_UNUSED(fixedFont);
@@ -195,6 +262,9 @@ void LookAndFeels::setLightTheme(bool fixedFont)
     palette.setColor(QPalette::Link, QColor(237, 118, 77));
     palette.setColor(QPalette::Highlight, QColor(237, 118, 77));
     palette.setColor(QPalette::HighlightedText, Qt::white);
+#ifdef _WIN32
+    setWindowsDisabledTextColors(palette);
+#endif
 
     mindforgerApplication->setPalette(palette);
 
@@ -220,6 +290,9 @@ void LookAndFeels::setBlackTheme(bool fixedFont)
     editorStrikethrough.setRgb(0x88,0x88,0x88);
     editorLink.setRgb(0x00,0xFF,0xFF);
     editorList.setRgb(0x00,0x99,0x00);
+    editorTaskDone.setRgb(0x00,0x99,0x00);
+    editorTaskWip.setRgb(0xFF,0xA5,0x00);
+    editorTaskTodo.setRgb(0x99,0x00,0x00);
     editorCodeblock.setRgb(0x99,0x99,0x99);
     editorHtmlTag.setRgb(0xAA,0x00,0xAA);
     editorHtmlEntity.setRgb(0xAA,0x00,0xAA);
@@ -232,7 +305,7 @@ void LookAndFeels::setBlackTheme(bool fixedFont)
 
 #ifndef __APPLE__
     if(fixedFont) {
-        mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+        mindforgerApplication->setFont(getFixedFont());
     }
 #else
     Q_UNUSED(fixedFont);
@@ -307,7 +380,8 @@ void LookAndFeels::setNativeTheme(bool fixedFont)
             editorLink.setRgb(0x00,0xFF,0xFF);
             editorList.setRgb(0x00,0x99,0x00);
             editorTaskDone.setRgb(0x00,0x99,0x00);
-            editorTaskWip.setRgb(0x99,0x00,0x00);
+            editorTaskWip.setRgb(0xFF,0xA5,0x00);
+            editorTaskTodo.setRgb(0x99,0x00,0x00);
             editorCodeblock.setRgb(0x99,0x99,0x99);
             editorHtmlTag.setRgb(0xAA,0x00,0xAA);
             editorHtmlEntity.setRgb(0xAA,0x00,0xAA);
@@ -320,20 +394,90 @@ void LookAndFeels::setNativeTheme(bool fixedFont)
     #endif
 #else
     if(fixedFont) {
-        mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+        mindforgerApplication->setFont(getFixedFont());
     }
 #endif
 
 #ifdef _WIN32
-    // white native L&F selected row is light blue and white @ light blue is NOT readable
-    palette.setColor(QPalette::HighlightedText, Qt::black);
-    mindforgerApplication->setPalette(palette);
+    setWindowsNativeColors();
 #endif
 }
 
+#ifdef _WIN32
+/*
+ * Windows GrayText (#6D6D6D) used for disabled menu (bar) items is hard
+ * to distinguish from enabled (black) items on light backgrounds.
+ */
+void LookAndFeels::setWindowsDisabledTextColors(QPalette& palette)
+{
+    const QColor disabledText{0xA0,0xA0,0xA0};
+    palette.setColor(QPalette::Disabled, QPalette::Text, disabledText);
+    palette.setColor(QPalette::Disabled, QPalette::ButtonText, disabledText);
+    palette.setColor(QPalette::Disabled, QPalette::WindowText, disabledText);
+}
+
+/*
+ * Windows native theme colors - application palette is kept as provided by
+ * the OS (accent highlight for text selection like in Notepad), item views
+ * and MindForger specific widgets get Windows Explorer like colors.
+ */
+void LookAndFeels::setWindowsNativeColors()
+{
+    palette = mindforgerApplication->palette();
+    setWindowsDisabledTextColors(palette);
+    mindforgerApplication->setPalette(palette);
+
+    // Windows 10 Explorer selection: light blue w/ black text - menus and
+    // QTreeView rows are painted this way by Windows style, however, Qt
+    // paints QTableView (Notebooks, outline tree, ...) selection using
+    // palette, therefore it is set explicitly for item views only
+    const QColor explorerSelection{0xCC,0xE8,0xFF};
+    QPalette itemViewPalette{palette};
+    for(auto group: {QPalette::Active, QPalette::Inactive}) {
+        itemViewPalette.setColor(group, QPalette::Highlight, explorerSelection);
+        itemViewPalette.setColor(group, QPalette::HighlightedText, palette.color(QPalette::Text));
+    }
+    QApplication::setPalette(itemViewPalette, "QAbstractItemView");
+
+    textColor = palette.color(QPalette::WindowText).name();
+    backgroundColor = palette.color(QPalette::Window).name();
+    highlightColor = explorerSelection.name();
+    selectionColor = explorerSelection;
+    selectionTextColor = palette.color(QPalette::Text);
+    selectionBorderColor.setRgb(0x99,0xD1,0xFF);
+
+    editorBackgroundColor = palette.color(QPalette::Base).name();
+    editorLineNumbersForegroundColor = QString("#999999");
+    editorLineNumbersBackgroundColor = backgroundColor;
+
+    // Visual Studio light inspired syntax highlighting
+    editorBold.setRgb(0xA3,0x15,0x15);
+    editorBolder.setRgb(0xA3,0x15,0x15);
+    editorItalic.setRgb(0x79,0x5E,0x26);
+    editorItalicer.setRgb(0x79,0x5E,0x26);
+    editorStrikethrough.setRgb(0xA0,0xA0,0xA0);
+    editorLink.setRgb(0x00,0x66,0xCC);
+    editorList.setRgb(0x00,0x78,0xD7);
+    editorTaskDone.setRgb(0x10,0x7C,0x10);
+    editorTaskWip.setRgb(0xCA,0x50,0x10);
+    editorTaskTodo.setRgb(0xC4,0x2B,0x1C);
+    editorCodeblock.setRgb(0x00,0x80,0x80);
+    editorHtmlTag.setRgb(0x80,0x00,0x00);
+    editorHtmlEntity.setRgb(0x80,0x00,0x00);
+    editorHtmlAttrName.setRgb(0xE5,0x00,0x00);
+    editorHtmlAttrValue.setRgb(0x00,0x00,0xFF);
+    editorHtmlComment.setRgb(0x00,0x80,0x00);
+    editorError.setRgb(0xE8,0x11,0x23);
+
+    cliTextColor = palette.color(QPalette::Text);
+}
+#endif
+
 bool LookAndFeels::isThemeNative() const
 {
-    return UI_THEME_NATIVE == config.getUiThemeName();
+    // active theme might differ from configured one (CLI option)
+    return UI_THEME_NATIVE == activeThemeName.toStdString()
+        || UI_THEME_NATIVE_WITH_FIXED_FONT == activeThemeName.toStdString();
 }
 
 std::string& LookAndFeels::getHtmlTextColor()

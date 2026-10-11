@@ -31,7 +31,7 @@ time_t RecentNotes::getTimestamp(const Note* note, Mode mode)
     }
 
     // modification does NOT update read timestamp > the latest of both
-    return std::max(note->getRead(), note->getModified());
+    return (std::max)(note->getRead(), note->getModified());
 }
 
 void RecentNotes::toHistory(
