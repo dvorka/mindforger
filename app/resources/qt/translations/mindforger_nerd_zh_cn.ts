@@ -4365,12 +4365,12 @@ Choose new library source:</source>
 <context>
     <name>m8r::NoteEditPresenter</name>
     <message>
-        <location filename="../../../src/qt/note_edit_presenter.cpp" line="116"/>
+        <location filename="../../../src/qt/note_edit_presenter.cpp" line="115"/>
         <source>Note &apos;%1&apos; successfully saved</source>
         <translation>笔记 &apos;%1&apos; 已成功保存</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_edit_presenter.cpp" line="118"/>
+        <location filename="../../../src/qt/note_edit_presenter.cpp" line="117"/>
         <source>Attempt to save data from UI to Note, but no Note is set.</source>
         <translation>尝试将界面数据保存到笔记，但未设置笔记。</translation>
     </message>
@@ -5194,17 +5194,17 @@ Choose new library source:</source>
         <translation>笔记 &apos;%1&apos;   %2</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1005"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1003"/>
         <source>Note </source>
         <translation>笔记 </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1008"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1006"/>
         <source>Notebook </source>
         <translation type="unfinished">笔记本 </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1010"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1008"/>
         <source>No Note selected!</source>
         <translation>未选择笔记！</translation>
     </message>
@@ -5319,12 +5319,12 @@ Choose new library source:</source>
 <context>
     <name>m8r::OutlineHeaderEditPresenter</name>
     <message>
-        <location filename="../../../src/qt/outline_header_edit_presenter.cpp" line="116"/>
+        <location filename="../../../src/qt/outline_header_edit_presenter.cpp" line="115"/>
         <source>Notebook &apos;%1&apos; successfully saved</source>
         <translation>笔记本 &apos;%1&apos; 已成功保存</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/outline_header_edit_presenter.cpp" line="118"/>
+        <location filename="../../../src/qt/outline_header_edit_presenter.cpp" line="117"/>
         <source>Attempt to save data from UI to Notebook, but no Notebook is set.</source>
         <translation>尝试将界面数据保存到笔记本，但未设置笔记本。</translation>
     </message>

@@ -4365,12 +4365,12 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::NoteEditPresenter</name>
     <message>
-        <location filename="../../../src/qt/note_edit_presenter.cpp" line="116"/>
+        <location filename="../../../src/qt/note_edit_presenter.cpp" line="115"/>
         <source>Note &apos;%1&apos; successfully saved</source>
         <translation>Poznámka &apos;%1&apos; byla úspěšně uložena</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_edit_presenter.cpp" line="118"/>
+        <location filename="../../../src/qt/note_edit_presenter.cpp" line="117"/>
         <source>Attempt to save data from UI to Note, but no Note is set.</source>
         <translation>Pokus o uložení dat z rozhraní do poznámky, ale žádná poznámka není nastavena.</translation>
     </message>
@@ -5194,17 +5194,17 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Poznámka &apos;%1&apos;   %2</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1005"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1003"/>
         <source>Note </source>
         <translation>Poznámka </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1008"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1006"/>
         <source>Notebook </source>
         <translation type="unfinished">Zápisník </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1010"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1008"/>
         <source>No Note selected!</source>
         <translation>Není vybrána žádná poznámka!</translation>
     </message>
@@ -5319,12 +5319,12 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::OutlineHeaderEditPresenter</name>
     <message>
-        <location filename="../../../src/qt/outline_header_edit_presenter.cpp" line="116"/>
+        <location filename="../../../src/qt/outline_header_edit_presenter.cpp" line="115"/>
         <source>Notebook &apos;%1&apos; successfully saved</source>
         <translation>Zápisník &apos;%1&apos; byl úspěšně uložen</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/outline_header_edit_presenter.cpp" line="118"/>
+        <location filename="../../../src/qt/outline_header_edit_presenter.cpp" line="117"/>
         <source>Attempt to save data from UI to Notebook, but no Notebook is set.</source>
         <translation>Pokus o uložení dat z rozhraní do zápisníku, ale žádný zápisník není nastaven.</translation>
     </message>

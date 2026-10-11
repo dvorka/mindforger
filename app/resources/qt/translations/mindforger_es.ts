@@ -4365,12 +4365,12 @@ Elija la nueva fuente de la biblioteca:</translation>
 <context>
     <name>m8r::NoteEditPresenter</name>
     <message>
-        <location filename="../../../src/qt/note_edit_presenter.cpp" line="116"/>
+        <location filename="../../../src/qt/note_edit_presenter.cpp" line="115"/>
         <source>Note &apos;%1&apos; successfully saved</source>
         <translation>La nota &apos;%1&apos; se guardó correctamente</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_edit_presenter.cpp" line="118"/>
+        <location filename="../../../src/qt/note_edit_presenter.cpp" line="117"/>
         <source>Attempt to save data from UI to Note, but no Note is set.</source>
         <translation>Intento de guardar datos de la interfaz en la nota, pero no hay ninguna nota establecida.</translation>
     </message>
@@ -5194,17 +5194,17 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation>Nota &apos;%1&apos;   %2</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1005"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1003"/>
         <source>Note </source>
         <translation>Nota </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1008"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1006"/>
         <source>Notebook </source>
         <translation type="unfinished">Cuaderno </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="1010"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="1008"/>
         <source>No Note selected!</source>
         <translation>¡No hay ninguna nota seleccionada!</translation>
     </message>
@@ -5319,12 +5319,12 @@ Elija la nueva fuente de la biblioteca:</translation>
 <context>
     <name>m8r::OutlineHeaderEditPresenter</name>
     <message>
-        <location filename="../../../src/qt/outline_header_edit_presenter.cpp" line="116"/>
+        <location filename="../../../src/qt/outline_header_edit_presenter.cpp" line="115"/>
         <source>Notebook &apos;%1&apos; successfully saved</source>
         <translation>El cuaderno &apos;%1&apos; se guardó correctamente</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/outline_header_edit_presenter.cpp" line="118"/>
+        <location filename="../../../src/qt/outline_header_edit_presenter.cpp" line="117"/>
         <source>Attempt to save data from UI to Notebook, but no Notebook is set.</source>
         <translation>Intento de guardar datos de la interfaz en el cuaderno, pero no hay ningún cuaderno establecido.</translation>
     </message>
