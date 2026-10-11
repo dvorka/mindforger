@@ -27,8 +27,12 @@
     * Enhancement: Windows - editor font is never smaller than the application
       font (from Monospace to Consolas), UI newly follows Windows display scaling
       including fractional factors.
-    * Enhancement: Windows - menu and main toolbar icons are newly darkened on light
-      menus/toolbar (native and light themes) to be readable.
+    * Enhancement: menu and main toolbar icons are newly darkened on light
+      menus/toolbar (native and light themes) on Windows, Linux and macOS
+      to be readable.
+    * Fix: blurry menu and toolbar icons on Linux and macOS HiDPI displays
+      (4K, Retina, scaling set by QT_SCALE_FACTOR) - icons are rendered
+      in device pixels.
     * Fix: Find Notebook by Name (Ctrl-Shift-B) finds only Notebooks
       which are on the shelf when a Notebook shelf is opened.
     * Fix: cmark-gfm build newly requires CMake 3.5 (cmark-gfm sources are unchanged)

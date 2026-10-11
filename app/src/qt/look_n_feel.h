@@ -50,6 +50,10 @@ private:
      * @brief Active palette.
      */
     QPalette palette;
+    /**
+     * @brief OS palette as it was before any theme was applied.
+     */
+    QPalette systemPalette;
 
     QSet<QString> themeNames;
     QString activeThemeName;
@@ -139,13 +143,11 @@ public:
      */
     static QFont getFixedFont();
 
-#ifdef _WIN32
-    /* Make pale menu icons readable on light menus.
+    /* Make pale menu and toolbar icons readable on light backgrounds.
      */
     void polishMenuIcons(QMenuBar* menuBar);
     void polishToolBarIcons(QToolBar* toolBar);
     static QIcon darkenPaleIcon(const QIcon& icon);
-#endif
 
     void init(QApplication* mindforgerApplication);
     bool isThemeNative() const;

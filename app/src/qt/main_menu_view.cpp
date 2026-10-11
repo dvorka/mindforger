@@ -1158,9 +1158,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuHelp->addSeparator();
     menuHelp->addAction(actionHelpSponsor);
 
-#ifdef _WIN32
     LookAndFeels::getInstance().polishMenuIcons(qMenuBar);
-#endif
 }
 
 MainMenuView::~MainMenuView()

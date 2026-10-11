@@ -4475,27 +4475,27 @@ Choose new library source:</source>
         <translation>वर्तनी जाँचें...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="590"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="602"/>
         <source>Exit Editor</source>
         <translation>संपादक से बाहर निकलें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="591"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="603"/>
         <source>Do you really want to exit editor without saving?</source>
         <translation>क्या आप वाकई बिना सहेजे संपादक से बाहर निकलना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1033"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1049"/>
         <source>Full-text Search Result</source>
         <translation>पूर्ण-पाठ खोज परिणाम</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1034"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1050"/>
         <source>No matching text found.</source>
         <translation>कोई मेल खाता पाठ नहीं मिला।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1181"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1197"/>
         <source>No spelling suggestions found</source>
         <translation>वर्तनी के कोई सुझाव नहीं मिले</translation>
     </message>
@@ -6157,68 +6157,68 @@ notes. Feel free to deprecate such notebook(s) yourself.
         <translation>MindForger को टेक्स्ट कंसोल से नहीं चलाया जा सकता - DISPLAY या WAYLAND_DISPLAY पर्यावरण चर सेट करें या MindForger को GUI से चलाएँ।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="221"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="234"/>
         <source>MindForger workspace or directory/file with Markdown(s) to open</source>
         <translation>खोलने के लिए MindForger वर्कस्पेस या Markdown वाली निर्देशिका/फ़ाइल</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="227"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="240"/>
         <source>Use &apos;dark&apos;, &apos;light&apos; or other GUI &lt;theme&gt;.</source>
         <translation>&apos;dark&apos;, &apos;light&apos; या अन्य GUI &lt;theme&gt; का उपयोग करें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="230"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="243"/>
         <source>theme</source>
         <translation>theme</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="234"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="247"/>
         <source>Load configuration from given &lt;file&gt;.</source>
         <translation>दी गई &lt;file&gt; से कॉन्फ़िगरेशन लोड करें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="237"/>
-        <location filename="../../../src/qt/mindforger.cpp" line="259"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="250"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="272"/>
         <source>file</source>
         <translation>file</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="244"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="257"/>
         <source>Disable WebEngine security to allow loading of images on macOS.</source>
         <translation>macOS पर छवियाँ लोड करने के लिए WebEngine सुरक्षा अक्षम करें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="250"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="263"/>
         <source>Disable WebEngine security by running single process on macOS.</source>
         <translation>macOS पर एकल प्रक्रिया चलाकर WebEngine सुरक्षा अक्षम करें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="254"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="267"/>
         <source>Disable WebEngine security by disabling sandbox on macOS.</source>
         <translation>macOS पर सैंडबॉक्स अक्षम करके WebEngine सुरक्षा अक्षम करें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="258"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="271"/>
         <source>Disable WebEngine security by user data dir specification on macOS.</source>
         <translation>macOS पर उपयोगकर्ता डेटा निर्देशिका निर्दिष्ट करके WebEngine सुरक्षा अक्षम करें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="264"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="277"/>
         <source>Disable WebEngine security via site isolation trials on macOS.</source>
         <translation>macOS पर साइट आइसोलेशन ट्रायल के ज़रिए WebEngine सुरक्षा अक्षम करें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="268"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="281"/>
         <source>Disable WebEngine security via acess file from file on macOS.</source>
         <translation>macOS पर फ़ाइल से फ़ाइल एक्सेस के ज़रिए WebEngine सुरक्षा अक्षम करें।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="348"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="361"/>
         <source>Error: Unable to find given workspace/file to open - open MindForger without parameters and create it from menu Mind/New: &apos;</source>
         <translation>त्रुटि: खोलने के लिए दिया गया वर्कस्पेस/फ़ाइल नहीं मिला - MindForger को बिना पैरामीटर के खोलें और मेनू मन/नया से इसे बनाएँ: &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="372"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="385"/>
         <source>Ignoring unknown GUI theme: &apos;</source>
         <translation>अज्ञात GUI थीम को अनदेखा किया जा रहा है: &apos;</translation>
     </message>

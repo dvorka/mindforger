@@ -49,6 +49,7 @@ LookAndFeels::~LookAndFeels()
 void LookAndFeels::init(QApplication* mindforgerApplication)
 {
     this->mindforgerApplication = mindforgerApplication;
+    this->systemPalette = mindforgerApplication->palette();
 }
 
 QFont LookAndFeels::getFixedFont()
@@ -62,15 +63,37 @@ QFont LookAndFeels::getFixedFont()
     return font;
 }
 
-#ifdef _WIN32
+/*
+ * Light (window) background is the one on which pale icons look disabled.
+ */
+static bool isPaletteLight(const QPalette& palette)
+{
+    return palette.color(QPalette::Window).lightness() >= 128;
+}
+
+static void darkenPaleIcons(const QList<QAction*>& actions)
+{
+    for(QAction* action: actions) {
+        if(!action->icon().isNull()) {
+            action->setIcon(LookAndFeels::darkenPaleIcon(action->icon()));
+        }
+    }
+}
+
 /*
  * Menu icons are pale gray (designed for dark menus) which makes them hard
- * to read on light Windows menus - especially when a checkable item is checked
+ * to read on light menus - especially when a checkable item is checked
  * and its icon is painted on the (light blue) checked item background.
  */
 void LookAndFeels::polishMenuIcons(QMenuBar* menuBar)
 {
-    if(mindforgerApplication->palette().color(QPalette::Window).lightness() < 128) {
+#ifdef __APPLE__
+    // macOS menu bar is native - menus follow OS appearance, not MindForger theme
+    const QPalette& menuPalette = systemPalette;
+#else
+    const QPalette& menuPalette = mindforgerApplication->palette();
+#endif
+    if(!isPaletteLight(menuPalette)) {
         // dark menu background - icons are readable
         return;
     }
@@ -82,11 +105,7 @@ void LookAndFeels::polishMenuIcons(QMenuBar* menuBar)
             actions.insert(action);
         }
     }
-    for(QAction* action: actions) {
-        if(!action->icon().isNull()) {
-            action->setIcon(darkenPaleIcon(action->icon()));
-        }
-    }
+    darkenPaleIcons(actions.values());
 }
 
 /*
@@ -95,24 +114,58 @@ void LookAndFeels::polishMenuIcons(QMenuBar* menuBar)
  */
 void LookAndFeels::polishToolBarIcons(QToolBar* toolBar)
 {
-    if(mindforgerApplication->palette().color(QPalette::Window).lightness() < 128) {
+    if(!isPaletteLight(mindforgerApplication->palette())) {
         // dark toolbar background - icons are readable
         return;
     }
 
-    for(QAction* action: toolBar->actions()) {
-        if(!action->icon().isNull()) {
-            action->setIcon(darkenPaleIcon(action->icon()));
-        }
-    }
+    darkenPaleIcons(toolBar->actions());
 }
 
-QIcon LookAndFeels::darkenPaleIcon(const QIcon& icon)
+/*
+ * Icon engine which darkens pale grays of the source icon on demand - pixmaps
+ * are rendered in the requested size and device pixel ratio (HiDPI displays,
+ * fractional scaling), therefore darkened icons are as crisp as the source.
+ */
+class DarkenedIconEngine : public QIconEngine
 {
-    QIcon darkIcon{};
-    for(int size: {16, 20, 24, 32, 48, 64}) {
-        QImage image = icon.pixmap(QSize{size, size}).toImage()
-            .convertToFormat(QImage::Format_ARGB32);
+private:
+    QIcon source;
+
+public:
+    explicit DarkenedIconEngine(const QIcon& source) : source(source) {}
+
+    QIconEngine* clone() const override
+    {
+        return new DarkenedIconEngine(source);
+    }
+
+    QSize actualSize(const QSize& size, QIcon::Mode mode, QIcon::State state) override
+    {
+        return source.actualSize(size, mode, state);
+    }
+
+    QPixmap pixmap(const QSize& size, QIcon::Mode mode, QIcon::State state) override
+    {
+        QString key = QString{"mf-darkened-%1-%2x%3-%4-%5"}
+            .arg(source.cacheKey())
+            .arg(size.width())
+            .arg(size.height())
+            .arg(mode)
+            .arg(state);
+        QPixmap pixmap{};
+        if(QPixmapCache::find(key, &pixmap)) {
+            return pixmap;
+        }
+
+        // size is in device pixels - source is painted (not QIcon::pixmap()-ed)
+        // to an image of this very size so that it is not scaled by DPR again
+        QImage image{size, QImage::Format_ARGB32};
+        image.fill(Qt::transparent);
+        {
+            QPainter painter{&image};
+            source.paint(&painter, QRect{QPoint{0, 0}, size}, Qt::AlignCenter, QIcon::Normal, state);
+        }
         for(int y=0; y<image.height(); y++) {
             for(int x=0; x<image.width(); x++) {
                 QColor c = image.pixelColor(x, y);
@@ -123,13 +176,33 @@ QIcon LookAndFeels::darkenPaleIcon(const QIcon& icon)
                 }
             }
         }
-        image.setDevicePixelRatio(1.0);
-        // disabled mode pixmaps are generated (faded) from normal ones by Qt
-        darkIcon.addPixmap(QPixmap::fromImage(image));
+        pixmap = QPixmap::fromImage(image);
+        if(mode != QIcon::Normal) {
+            // disabled/active/selected look is derived from the darkened icon
+            QStyleOption option{};
+            QPixmap generated = QApplication::style()->generatedIconPixmap(mode, pixmap, &option);
+            if(!generated.isNull()) {
+                pixmap = generated;
+            }
+        }
+
+        QPixmapCache::insert(key, pixmap);
+        return pixmap;
     }
-    return darkIcon;
+
+    void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) override
+    {
+        const qreal dpr = painter->device()->devicePixelRatioF();
+        QPixmap px = pixmap(rect.size()*dpr, mode, state);
+        px.setDevicePixelRatio(dpr);
+        painter->drawPixmap(rect, px);
+    }
+};
+
+QIcon LookAndFeels::darkenPaleIcon(const QIcon& icon)
+{
+    return QIcon{new DarkenedIconEngine{icon}};
 }
-#endif
 
 bool LookAndFeels::isThemeNameValid(const QString& themeName) const
 {
