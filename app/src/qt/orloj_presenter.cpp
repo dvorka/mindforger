@@ -997,11 +997,9 @@ void OrlojPresenter::slotShowSelectedRecentNote()
         Outline* outline = recentNotesPresenter->getSelectedOutline();
         if(note) {
             showFacetOutline(note->getOutline());
-            if(note->getType() != note->getOutline()->getOutlineDescriptorNoteType()) {
-                // IMPROVE make this more efficient
-                showFacetNoteView();
-                getOutlineView()->selectRowByNote(note);
-            }
+            // IMPROVE make this more efficient
+            showFacetNoteView();
+            getOutlineView()->selectRowByNote(note);
             mainPresenter->getStatusBar()->showInfo(QString(tr("Note "))+QString::fromStdString(note->getName()));
         } else if(outline) {
             showFacetOutline(outline);

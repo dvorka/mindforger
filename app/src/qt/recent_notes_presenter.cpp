@@ -30,6 +30,7 @@ RecentNotesPresenter::RecentNotesPresenter(RecentNotesView* view, HtmlOutlineRep
 
     // ensure HTML cells rendering
     HtmlDelegate* delegate = new HtmlDelegate();
+    delegate->setParent(this->view->getTree());
     this->view->getTree()->setItemDelegate(delegate);
 }
 

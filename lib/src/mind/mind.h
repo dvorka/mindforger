@@ -602,20 +602,17 @@ public:
     void notebookTreeAddOutline(Outline* notebookTree, Outline* outlineToAdd);
     /**
      * @brief Get Outlines organized in a Notebook tree (in the tree order).
-     *
      */
     void notebookTreeGetOutlines(
         Outline* notebookTree,
         std::vector<Outline*>& outlines,
         bool scoped=false);
     /**
-     * @brief Remove an Outline from EVERY registered Notebook tree.
-     *
+     * @brief Remove an Outline from EVERY registered Notebook tree on delete/forget.
      */
     void notebookTreeRemoveOutlineFromAll(const std::string& outlineKey);
     /**
-     * @brief Move a Notebook tree's backing file to limbo and drop itfrom the cache.
-     *
+     * @brief Move a Notebook tree's backing file to limbo and drop it from the cache.
      */
     bool notebookTreeForget(const std::string& treeKey);
 
