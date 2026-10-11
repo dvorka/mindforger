@@ -116,7 +116,7 @@ win32 {
     message("cmark-gfm: ensure that cmark-gfm was MANUALLY built BEFORE qmake run on Linux/macOS")
     # cmark-gfm to be built by qmake to enable clean system build for Launchpad debuild
     libcmark-gfm.target = libcmark-gfm
-    libcmark-gfm.commands = cd -L$$PWD/../deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
+    libcmark-gfm.commands = cd -L$$PWD/../deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && cmake --build .
     libcmark-gfm_clean.commands = cd -L$$PWD/../deps/cmark-gfm rm -rvf build
     QMAKE_EXTRA_TARGETS += libcmark-gfm
 

@@ -339,7 +339,7 @@ function releaseForParticularUbuntuVersion {
     # 4) build MF dependencies
     echoStep "Build MindForger library dependencies: cmark-gfm"
     rm -rf${OPT_VERBOSE} deps/cmark-gfm/build
-    cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build . --parallel ${BUILD_JOBS} && cd ../../..
+    cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && cmake --build . --parallel ${BUILD_JOBS} && cd ../../..
     echoStepDone "cmark-gfm build"
     # cmark-gfm static library:
     ls -l deps/cmark-gfm/build/src/libcmark-gfm.a

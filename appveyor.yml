@@ -61,7 +61,7 @@ before_build:
  - git submodule update
 
 build_script:
- - pushd "%M8R_HOME%\deps\cmark-gfm" && mkdir build && cd build && cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build . --config Release -- /m && cmake --build . --config Debug -- /m && popd
+ - pushd "%M8R_HOME%\deps\cmark-gfm" && mkdir build && cd build && cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && cmake --build . --config Release -- /m && cmake --build . --config Debug -- /m && popd
  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
  - cd "%M8R_HOME%" && qmake -r mindforger.pro "CONFIG+=mfnoccache" && nmake
  - windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime && "C:\Program Files (x86)\Inno Setup 5\iscc.exe" /Q /DVcRedistPath=c:\cache\vcredist_x64.exe build\windows\installer\mindforger-setup.iss
