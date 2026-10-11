@@ -721,6 +721,43 @@ distro-winget-hash-url: ## print SHA256 of the published Windows installer witho
 #
 
 
+#
+# Chocolatey
+#
+# Prerequisites and full walkthrough: see build/chocolatey/README.md
+#
+# Per-release sequence - run AFTER the GitHub release (with the Windows installer
+# asset) is live:
+#   make distro-choco-from-release VERSION=x.y.z
+#   make distro-choco-pack         VERSION=x.y.z
+#   make distro-choco-test         VERSION=x.y.z  (elevated shell, Windows Sandbox or VM)
+#   make distro-choco-push         VERSION=x.y.z
+#
+
+CHOCO_PKG_DIR := ../distro/chocolatey/mindforger/$(VERSION)
+
+.PHONY: distro-choco-from-release
+distro-choco-from-release: ## look up the Windows installer on a GitHub release, hash it, and generate Chocolatey package sources (VERSION required)
+	powershell.exe -NoProfile -ExecutionPolicy Bypass -File chocolatey/generate-from-release.ps1 -Version $(VERSION)
+
+.PHONY: distro-choco-pack
+distro-choco-pack: ## build the Chocolatey .nupkg from generated package sources (VERSION required)
+	choco pack $(CHOCO_PKG_DIR)/mindforger.nuspec --outputdirectory $(CHOCO_PKG_DIR)
+
+.PHONY: distro-choco-test
+distro-choco-test: ## install and uninstall the locally built Chocolatey package - elevated shell (VERSION required)
+	choco install mindforger --version $(VERSION) --source $(CHOCO_PKG_DIR) -y --force
+	choco uninstall mindforger -y
+
+.PHONY: distro-choco-push
+distro-choco-push: ## push the Chocolatey .nupkg to community.chocolatey.org - API key set by 'choco apikey' (VERSION required)
+	choco push $(CHOCO_PKG_DIR)/mindforger.$(VERSION).nupkg --source https://push.chocolatey.org/
+
+#
+# ^ Chocolatey
+#
+
+
 .PHONY: distro-all-clean
 distro-all-clean:
 	rm -rvf $(MINDFORGER_RELEASE_DIR)
