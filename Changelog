@@ -30,6 +30,37 @@
       line numbers) - editor can show nothing, line numbers, minimap or both.
     * Enhancement: Note and Notebook editor is wider than the Notebook outline
       shown next to it - the outline/editor ratio is 40%/60% (instead of 50%/50%).
+    * Enhancement: Windows - native theme uses the Windows palette: selected rows
+      in Notebook/Note tables and the outline tree are highlighted w/ Windows
+      Explorer light blue (consistent w/ menus) and enabled status bar ADLMSTW
+      diodes are styled the same way (previously dark accent blue w/ black text).
+    * Enhancement: Windows - native theme is the default theme of new installations
+      (dark theme remains the default on Linux and macOS).
+    * Enhancement: Windows - native theme editor has Visual Studio light inspired
+      Markdown syntax highlighting (previously no colors were used).
+    * Enhancement: Windows - editor font is never smaller than the application
+      font and Consolas is used instead of Monospace font which does not exist
+      on Windows (Consolas 10 is the default editor font of new installations).
+    * Enhancement: Windows - dark, black and fixed font themes use Consolas
+      instead of Courier New.
+    * Enhancement: Windows - UI follows Windows display scaling incl. fractional
+      factors like 125% or 150% (icons, margins and HTML preview are scaled);
+      if Markdown HTML zoom was increased to compensate missing scaling, then
+      it should be decreased (e.g. from 200% to ~130% at 150% scaling).
+    * Enhancement: Windows - menu and main toolbar icons are darkened on light
+      menus/toolbar (native and light themes), therefore icons of checked menu
+      items (Think, Autolink) are readable and toolbar icons no longer look
+      disabled.
+    * Enhancement: Windows - disabled menu items are shown in lighter gray
+      in native and light themes to be distinguishable from enabled ones.
+    * Enhancement: Windows - editor line numbers are separated from the text.
+    * Fix: light and black themes color done, in progress and todo tasks
+      in the editor (previously they were black).
+    * Fix: macOS native dark theme colors todo tasks in the editor (previously
+      they were black, i.e. invisible) and in progress tasks are orange.
+    * Fix: editor line numbers and minimap have correct background colors when
+      native theme with fixed font is used or native theme is set from command
+      line (previously the background was black).
     * Fix: Esc leaves the command palette (CLI) and gives focus to the next component
       in the view (previously TAB was the only way to leave it using the keyboard).
     * Fix: time scope keeps the first Note of a Notebook visible if it's a parent

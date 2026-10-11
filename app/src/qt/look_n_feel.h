@@ -143,6 +143,7 @@ public:
     /* Make pale menu icons readable on light menus.
      */
     void polishMenuIcons(QMenuBar* menuBar);
+    void polishToolBarIcons(QToolBar* toolBar);
     static QIcon darkenPaleIcon(const QIcon& icon);
 #endif
 

@@ -89,6 +89,24 @@ void LookAndFeels::polishMenuIcons(QMenuBar* menuBar)
     }
 }
 
+/*
+ * Toolbar icons are pale gray too - on light toolbars they look as if they
+ * were disabled.
+ */
+void LookAndFeels::polishToolBarIcons(QToolBar* toolBar)
+{
+    if(mindforgerApplication->palette().color(QPalette::Window).lightness() < 128) {
+        // dark toolbar background - icons are readable
+        return;
+    }
+
+    for(QAction* action: toolBar->actions()) {
+        if(!action->icon().isNull()) {
+            action->setIcon(darkenPaleIcon(action->icon()));
+        }
+    }
+}
+
 QIcon LookAndFeels::darkenPaleIcon(const QIcon& icon)
 {
     QIcon darkIcon{};
