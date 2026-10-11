@@ -5,7 +5,7 @@
 # MindForger upstream reference PKGBUILD for AUR - see build/arch/README.md
 
 pkgname=mindforger
-pkgver=2.5.0
+pkgver=2.6.0
 pkgrel=1
 pkgdesc="Thinking notebook and Markdown IDE. Search, browse, view and edit your Markdown files. Get as much as possible from knowledge in your remarks"
 arch=(x86_64 aarch64)
