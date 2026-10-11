@@ -46,7 +46,7 @@ public:
     OutlinesMapModel &operator=(const OutlinesMapModel&) = delete;
     OutlinesMapModel &operator=(const OutlinesMapModel&&) = delete;
 
-    void removeAllRows();
+    void removeAllRows(const std::string& title="");
     void addNote(Note* note);
     int insertNote(Note* note);
     int getRowByNote(const Note* note);

@@ -62,7 +62,6 @@ public:
         noteEditor->enableSpellCheck(true);
         noteEditor->setPlainText(QString::fromStdString(mdDescription));
     }
-    void setEditorShowLineNumbers(bool show) { noteEditor->setShowLineNumbers(show); }
     void setStatusBar(const StatusBarView* statusBar) { noteEditor->setStatusBar(statusBar); }
 
     void focusName() const { topNamePanel->focusName(); }
