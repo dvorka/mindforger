@@ -4470,27 +4470,27 @@ Choose new library source:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="602"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="606"/>
         <source>Exit Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="603"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="607"/>
         <source>Do you really want to exit editor without saving?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1049"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1053"/>
         <source>Full-text Search Result</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1050"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1054"/>
         <source>No matching text found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1197"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1201"/>
         <source>No spelling suggestions found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5618,7 +5618,7 @@ Choose new library source:</source>
 <context>
     <name>m8r::RecentFilesMenu</name>
     <message>
-        <location filename="../../../src/qt/recent_files_menu.cpp" line="101"/>
+        <location filename="../../../src/qt/recent_files_menu.cpp" line="103"/>
         <source>Clear Menu</source>
         <translation type="unfinished"></translation>
     </message>

@@ -4476,27 +4476,27 @@ Choose new library source:</source>
         <translation>检查拼写...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="602"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="606"/>
         <source>Exit Editor</source>
         <translation>退出编辑器</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="603"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="607"/>
         <source>Do you really want to exit editor without saving?</source>
         <translation>确定不保存就退出编辑器吗？</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1049"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1053"/>
         <source>Full-text Search Result</source>
         <translation>全文搜索结果</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1050"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1054"/>
         <source>No matching text found.</source>
         <translation>未找到匹配的文本。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1197"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1201"/>
         <source>No spelling suggestions found</source>
         <translation>未找到拼写建议</translation>
     </message>
@@ -5624,7 +5624,7 @@ Choose new library source:</source>
 <context>
     <name>m8r::RecentFilesMenu</name>
     <message>
-        <location filename="../../../src/qt/recent_files_menu.cpp" line="101"/>
+        <location filename="../../../src/qt/recent_files_menu.cpp" line="103"/>
         <source>Clear Menu</source>
         <translation>清除菜单</translation>
     </message>

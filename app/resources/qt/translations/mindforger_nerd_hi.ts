@@ -4475,27 +4475,27 @@ Choose new library source:</source>
         <translation>वर्तनी जाँचें...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="602"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="606"/>
         <source>Exit Editor</source>
         <translation>संपादक से बाहर निकलें</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="603"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="607"/>
         <source>Do you really want to exit editor without saving?</source>
         <translation>क्या आप वाकई बिना सहेजे संपादक से बाहर निकलना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1049"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1053"/>
         <source>Full-text Search Result</source>
         <translation>पूर्ण-पाठ खोज परिणाम</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1050"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1054"/>
         <source>No matching text found.</source>
         <translation>कोई मेल खाता पाठ नहीं मिला।</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1197"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1201"/>
         <source>No spelling suggestions found</source>
         <translation>वर्तनी के कोई सुझाव नहीं मिले</translation>
     </message>
@@ -5623,7 +5623,7 @@ Choose new library source:</source>
 <context>
     <name>m8r::RecentFilesMenu</name>
     <message>
-        <location filename="../../../src/qt/recent_files_menu.cpp" line="101"/>
+        <location filename="../../../src/qt/recent_files_menu.cpp" line="103"/>
         <source>Clear Menu</source>
         <translation>मेनू साफ़ करें</translation>
     </message>

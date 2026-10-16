@@ -4475,27 +4475,27 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation>Revisar ortografía...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="602"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="606"/>
         <source>Exit Editor</source>
         <translation>Salir del editor</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="603"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="607"/>
         <source>Do you really want to exit editor without saving?</source>
         <translation>¿Realmente desea salir del editor sin guardar?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1049"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1053"/>
         <source>Full-text Search Result</source>
         <translation>Resultado de la búsqueda de texto completo</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1050"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1054"/>
         <source>No matching text found.</source>
         <translation>No se encontró texto coincidente.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1197"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1201"/>
         <source>No spelling suggestions found</source>
         <translation>No se encontraron sugerencias ortográficas</translation>
     </message>
@@ -5623,7 +5623,7 @@ Elija la nueva fuente de la biblioteca:</translation>
 <context>
     <name>m8r::RecentFilesMenu</name>
     <message>
-        <location filename="../../../src/qt/recent_files_menu.cpp" line="101"/>
+        <location filename="../../../src/qt/recent_files_menu.cpp" line="103"/>
         <source>Clear Menu</source>
         <translation>Limpiar menú</translation>
     </message>

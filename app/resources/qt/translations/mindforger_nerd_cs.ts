@@ -4475,27 +4475,27 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Zkontrolovat pravopis...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="602"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="606"/>
         <source>Exit Editor</source>
         <translation>Ukončit editor</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="603"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="607"/>
         <source>Do you really want to exit editor without saving?</source>
         <translation>Opravdu chcete ukončit editor bez uložení?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1049"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1053"/>
         <source>Full-text Search Result</source>
         <translation>Výsledek fulltextového vyhledávání</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1050"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1054"/>
         <source>No matching text found.</source>
         <translation>Nebyl nalezen žádný odpovídající text.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1197"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1201"/>
         <source>No spelling suggestions found</source>
         <translation>Nebyly nalezeny žádné návrhy pravopisu</translation>
     </message>
@@ -5623,7 +5623,7 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::RecentFilesMenu</name>
     <message>
-        <location filename="../../../src/qt/recent_files_menu.cpp" line="101"/>
+        <location filename="../../../src/qt/recent_files_menu.cpp" line="103"/>
         <source>Clear Menu</source>
         <translation>Vymazat nabídku</translation>
     </message>
