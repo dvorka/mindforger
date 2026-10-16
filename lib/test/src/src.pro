@@ -72,6 +72,11 @@ win32 {
 }
 
 
+# Windows.h min()/max() macros break std::min()/std::max()
+win32 {
+  DEFINES += NOMINMAX
+}
+
 # zlib
 win32 {
     INCLUDEPATH += $$PWD/../../../deps/zlib-win/include

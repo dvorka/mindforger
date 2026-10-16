@@ -129,13 +129,21 @@ constexpr const auto UI_MATH_LIB_MATHJAX = "mathjax";
 constexpr const auto UI_OS_TABLE_SORT_ORDER_ASC = "ascending";
 constexpr const auto UI_OS_TABLE_SORT_ORDER_DESC = "descending";
 
-#ifdef __APPLE__
+#if defined(__APPLE__)
 constexpr const auto UI_DEFAULT_THEME = UI_THEME_DARK;
+#elif defined(_WIN32)
+// Windows: native theme (Windows palette and Segoe UI) feels like a Windows app
+constexpr const auto UI_DEFAULT_THEME = UI_THEME_NATIVE;
 #else
 constexpr const auto UI_DEFAULT_THEME = UI_THEME_DARK;
 #endif
 constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
+#ifdef _WIN32
+// Windows: Monospace font alias does not exist, Consolas is native monospace font
+constexpr const auto UI_DEFAULT_EDITOR_FONT = "Consolas,10";
+#else
 constexpr const auto UI_DEFAULT_EDITOR_FONT = "Monospace,10";
+#endif
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
 struct KnowledgeTool

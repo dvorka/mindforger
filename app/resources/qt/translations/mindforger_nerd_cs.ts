@@ -4475,27 +4475,27 @@ Vyberte nový zdroj knihovny:</translation>
         <translation>Zkontrolovat pravopis...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="590"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="606"/>
         <source>Exit Editor</source>
         <translation>Ukončit editor</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="591"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="607"/>
         <source>Do you really want to exit editor without saving?</source>
         <translation>Opravdu chcete ukončit editor bez uložení?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1033"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1053"/>
         <source>Full-text Search Result</source>
         <translation>Výsledek fulltextového vyhledávání</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1034"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1054"/>
         <source>No matching text found.</source>
         <translation>Nebyl nalezen žádný odpovídající text.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1181"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1201"/>
         <source>No spelling suggestions found</source>
         <translation>Nebyly nalezeny žádné návrhy pravopisu</translation>
     </message>
@@ -5544,7 +5544,7 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::OutlineView</name>
     <message>
-        <location filename="../../../src/qt/outline_view.cpp" line="31"/>
+        <location filename="../../../src/qt/outline_view.cpp" line="34"/>
         <source>Click this Notebook name to open its Markdown preview in the right panel</source>
         <translation>Kliknutím na název tohoto zápisníku otevřete jeho náhled Markdown v pravém panelu</translation>
     </message>
@@ -5623,7 +5623,7 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::RecentFilesMenu</name>
     <message>
-        <location filename="../../../src/qt/recent_files_menu.cpp" line="101"/>
+        <location filename="../../../src/qt/recent_files_menu.cpp" line="103"/>
         <source>Clear Menu</source>
         <translation>Vymazat nabídku</translation>
     </message>
@@ -6160,68 +6160,68 @@ s dokumentem. Takové zápisníky můžete deaktivovat sami.
         <translation>MindForger NELZE spustit z textové konzole – nastavte proměnnou prostředí DISPLAY nebo WAYLAND_DISPLAY, nebo spusťte MindForger z grafického rozhraní.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="221"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="234"/>
         <source>MindForger workspace or directory/file with Markdown(s) to open</source>
         <translation>Prostor MindForger nebo adresář/soubor se soubory Markdown k otevření</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="227"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="240"/>
         <source>Use &apos;dark&apos;, &apos;light&apos; or other GUI &lt;theme&gt;.</source>
         <translation>Použijte &apos;dark&apos;, &apos;light&apos; nebo jiné &lt;téma&gt; rozhraní.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="230"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="243"/>
         <source>theme</source>
         <translation>téma</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="234"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="247"/>
         <source>Load configuration from given &lt;file&gt;.</source>
         <translation>Načíst konfiguraci ze zadaného &lt;souboru&gt;.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="237"/>
-        <location filename="../../../src/qt/mindforger.cpp" line="259"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="250"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="272"/>
         <source>file</source>
         <translation>soubor</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="244"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="257"/>
         <source>Disable WebEngine security to allow loading of images on macOS.</source>
         <translation>Zakázat zabezpečení WebEngine, aby bylo možné načítat obrázky na macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="250"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="263"/>
         <source>Disable WebEngine security by running single process on macOS.</source>
         <translation>Zakázat zabezpečení WebEngine spuštěním jednoho procesu na macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="254"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="267"/>
         <source>Disable WebEngine security by disabling sandbox on macOS.</source>
         <translation>Zakázat zabezpečení WebEngine vypnutím sandboxu na macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="258"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="271"/>
         <source>Disable WebEngine security by user data dir specification on macOS.</source>
         <translation>Zakázat zabezpečení WebEngine zadáním adresáře uživatelských dat na macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="264"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="277"/>
         <source>Disable WebEngine security via site isolation trials on macOS.</source>
         <translation>Zakázat zabezpečení WebEngine přes zkušební izolaci webů na macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="268"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="281"/>
         <source>Disable WebEngine security via acess file from file on macOS.</source>
         <translation>Zakázat zabezpečení WebEngine přístupem k souborům ze souboru na macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="348"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="361"/>
         <source>Error: Unable to find given workspace/file to open - open MindForger without parameters and create it from menu Mind/New: &apos;</source>
         <translation>Chyba: Nelze najít zadaný prostor/soubor k otevření – spusťte MindForger bez parametrů a vytvořte jej z nabídky Mysl/Nový: &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="372"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="385"/>
         <source>Ignoring unknown GUI theme: &apos;</source>
         <translation>Ignoruji neznámé téma rozhraní: &apos;</translation>
     </message>

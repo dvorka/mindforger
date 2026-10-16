@@ -50,8 +50,13 @@ private:
      * @brief Active palette.
      */
     QPalette palette;
+    /**
+     * @brief OS palette as it was before any theme was applied.
+     */
+    QPalette systemPalette;
 
     QSet<QString> themeNames;
+    QString activeThemeName;
 
     int fontPointSize;
 
@@ -97,6 +102,17 @@ private:
     // CLI
     QColor cliTextColor;
 
+#ifdef _WIN32
+    // selected item (status bar indicators are styled as selected items)
+    QColor selectionColor;
+    QColor selectionTextColor;
+
+    void setWindowsNativeColors();
+    static void setWindowsDisabledTextColors(QPalette& palette);
+#endif
+
+    bool isMenuPaletteLight() const;
+
 public:
     LookAndFeels(const LookAndFeels&) = delete;
     LookAndFeels(const LookAndFeels&&) = delete;
@@ -108,6 +124,15 @@ public:
      * mornings when your eyes prefer less light.
      */
     void setDarkTheme();
+
+    /* Editor colors for dark backgrounds - shared by dark themes
+     * and dark native (OS) themes.
+     */
+    void setDarkEditorColors();
+    /* Editor colors for light backgrounds - shared by light themes
+     * and light native (OS) themes.
+     */
+    void setLightEditorColors();
 
     /* Light theme aims to be distraction-free Kindle style
      * theme suitable for comfortable knowledge reading and
@@ -122,6 +147,18 @@ public:
     /* Set operating system native theme.
      */
     void setNativeTheme(bool fixedFont=false);
+
+    /* Monospace font used by fixed font themes - system fixed font
+     * except Windows where it is Consolas instead of Courier New.
+     */
+    static QFont getFixedFont();
+
+    /* Make pale menu and toolbar icons readable on light backgrounds.
+     */
+    void polishMenuIcons(QMenuBar* menuBar);
+    void polishMenuIcons(QMenu* menu);
+    void polishToolBarIcons(QToolBar* toolBar);
+    static QIcon darkenPaleIcon(const QIcon& icon);
 
     void init(QApplication* mindforgerApplication);
     bool isThemeNative() const;
@@ -164,6 +201,12 @@ public:
 
     // CLI
     const QColor& getCliTextColor() const { return cliTextColor; }
+
+#ifdef _WIN32
+    // selection colors are defined by Windows native theme only (invalid otherwise)
+    const QColor& getSelectionColor() const { return selectionColor; }
+    const QColor& getSelectionTextColor() const { return selectionTextColor; }
+#endif
 
     // bean
     QApplication* getQApplication() const { return mindforgerApplication; }

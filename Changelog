@@ -1,7 +1,8 @@
 2026-10-11  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.6.0 - editor minimap, find Note by metadata, hierarchical recent notes,
-      green/orange/red associated Notes colorization, AUR for Arch Linux.
+      green/orange/red associated Notes colorization, improved Win UX,
+      AUR for Arch Linux revamp.
     * Feature: find Note by Metadata shows Notes in a table w/ name, size (text bytes),
       reads, writes, created and modified columns which can be for sorting to find
       biggest, oldest or most visited Notes.
@@ -21,12 +22,34 @@
       shown next to it - the outline/editor ratio is newly 40%/60%.
     * Enhancement: Esc leaves the command palette and gives focus to the next component
       in the view.
+    * Enhancement: Windows - native theme newly uses the Windows palette: selected rows
+      in Notebook/Note tables, outline tree, enabled status bar ADLMSTW diodes, ...
+    * Enhancement: Windows - native theme editor newly has VSCode light inspired
+      Markdown syntax highlighting.
+    * Enhancement: Windows - editor font is never smaller than the application
+      font (from Monospace to Consolas), UI newly follows Windows display scaling
+      including fractional factors.
+    * Enhancement: menu and main toolbar icons are newly darkened on light
+      menus/toolbar (native and light themes) on Windows, Linux and macOS
+      to be readable.
+    * Fix: blurry menu and toolbar icons on Linux and macOS HiDPI displays
+      (4K, Retina, scaling set by QT_SCALE_FACTOR) - icons are rendered
+      in device pixels.
+    * Enhancement: light theme editor syntax highlighting newly uses vivid,
+      high contrast colors (e.g. italic text was nearly black).
+    * Fix: native theme on Linux and macOS (light mode) had no editor syntax
+      highlighting - it newly follows OS light/dark palette.
+    * Fix: editor syntax highlighting no longer shows underscores inside words
+      (e.g. this_is_function_name_) as italic, and bold requires non-whitespace
+      before the closing * (e.g. aaa *bbb * ccc is not bold).
     * Fix: Find Notebook by Name (Ctrl-Shift-B) finds only Notebooks
       which are on the shelf when a Notebook shelf is opened.
     * Fix: cmark-gfm build newly requires CMake 3.5 (cmark-gfm sources are unchanged)
       and all maintained build scripts pass CMake 4 compatibility. MindForger could not
       be built w/ CMake 4 (e.g. on Arch Linux) as the bundled cmark-gfm required
       CMake < 3.5 which is no longer supported by CMake 4.
+    * Fix: macOS native dark theme colors todo tasks in the editor (previously
+      they were black, i.e. invisible) and in progress tasks are orange.
     * Build: Arch Linux upstream reference AUR package - PKGBUILD for
       the AUR mindforger package (Qt WebKit) is newly maintained in build/arch/
       and verified in an Arch Linux Docker container (make distro-arch-pkg).

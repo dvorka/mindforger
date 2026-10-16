@@ -178,10 +178,26 @@ void NoteEditorView::setEditorFont(std::string fontName)
     QFont editorFont;
     QString qFontName = QString::fromStdString(fontName);
     if(QString::compare(qFontName, "")==0) { // No font defined, set to default
-        editorFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+        editorFont = LookAndFeels::getFixedFont();
         Configuration::getInstance().setEditorFont(editorFont.toString().toUtf8().constData());
     } else {
         editorFont.fromString(qFontName);
+#ifdef _WIN32
+        // Monospace is a Linux font alias which is resolved to Courier New on Windows
+        if(editorFont.family() == "Monospace") {
+            editorFont.setFamily(LookAndFeels::getFixedFont().family());
+        }
+        // default editor font point size is absolute, while application font
+        // size can be increased (Windows accessibility text size), therefore
+        // default editor font is kept at least as big as the application font;
+        // font chosen by the user is always kept as is
+        if(fontName == Configuration::DEFAULT_EDITOR_FONT
+           && editorFont.pointSize() > 0
+           && editorFont.pointSize() < QApplication::font().pointSize()
+        ) {
+            editorFont.setPointSize(QApplication::font().pointSize());
+        }
+#endif
         setFont(editorFont);
     }
 
@@ -894,6 +910,10 @@ int NoteEditorView::lineNumberPanelWidth()
         }
 #if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
         int space = 3 + fontMetrics().horizontalAdvance(QLatin1Char{'9'}) * digits;
+    #ifdef _WIN32
+        // numbers are centered - extra digit width separates them from the text
+        space += fontMetrics().horizontalAdvance(QLatin1Char{'9'});
+    #endif
 #else
         int space = 3 + fontMetrics().width(QLatin1Char{'9'}) * digits;
 #endif

@@ -103,13 +103,24 @@ StatusBarView::StatusBarView(QStatusBar* qStatusBar, LookAndFeels& lookAndFeel)
         (textColor.green()*45 + windowColor.green()*55)/100,
         (textColor.blue()*45 + windowColor.blue()*55)/100
     };
+    QColor enabledTextColor{palette.color(QPalette::HighlightedText)};
+    QColor enabledBackgroundColor{palette.color(QPalette::Highlight)};
+#ifdef _WIN32
+    // Windows native theme: enabled segment looks like selected Explorer/menu
+    // item, capsule border and separators are kept neutral as they are shared
+    // by enabled and disabled segments
+    if(lookAndFeel.getSelectionColor().isValid()) {
+        enabledTextColor = lookAndFeel.getSelectionTextColor();
+        enabledBackgroundColor = lookAndFeel.getSelectionColor();
+    }
+#endif
     for(int i=0; i<INDICATOR_COUNT; i++) {
         indicatorStyles[i][false] = createIndicatorStyle(
             i, disabledTextColor, Qt::transparent, borderColor);
         indicatorStyles[i][true] = createIndicatorStyle(
             i,
-            palette.color(QPalette::HighlightedText),
-            palette.color(QPalette::Highlight),
+            enabledTextColor,
+            enabledBackgroundColor,
             borderColor);
     }
 

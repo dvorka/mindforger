@@ -27,6 +27,11 @@ win32 {
   QT += network
 }
 
+# Windows.h min()/max() macros break std::min()/std::max()
+win32 {
+  DEFINES += NOMINMAX
+}
+
 mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
 }
