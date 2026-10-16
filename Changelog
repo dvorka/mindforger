@@ -37,6 +37,9 @@
       high contrast colors (e.g. italic text was nearly black).
     * Fix: native theme on Linux and macOS (light mode) had no editor syntax
       highlighting - it newly follows OS light/dark palette.
+    * Fix: editor syntax highlighting no longer shows underscores inside words
+      (e.g. this_is_function_name_) as italic, and bold requires non-whitespace
+      before the closing * (e.g. aaa *bbb * ccc is not bold).
     * Fix: Find Notebook by Name (Ctrl-Shift-B) finds only Notebooks
       which are on the shelf when a Notebook shelf is opened.
     * Fix: cmark-gfm build newly requires CMake 3.5 (cmark-gfm sources are unchanged)
