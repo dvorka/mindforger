@@ -42,6 +42,11 @@ mfnomd2html {
   INCLUDEPATH += $$PWD/../deps/cmark-gfm/build/extensions
 }
 
+# Windows.h min()/max() macros break std::min()/std::max()
+win32 {
+  DEFINES += NOMINMAX
+}
+
 # Zlib on Windows
 win32 {
  INCLUDEPATH += $$PWD/../deps/zlib-win/include

@@ -92,7 +92,7 @@ StatusBarView::StatusBarView(QStatusBar* qStatusBar, LookAndFeels& lookAndFeel)
     const QPalette& palette = statusBar->palette();
     const QColor textColor = palette.color(QPalette::WindowText);
     const QColor windowColor = palette.color(QPalette::Window);
-    QColor borderColor{
+    const QColor borderColor{
         lookAndFeel.getEditorLineNumbersForegroundColor().isEmpty()
             ? palette.color(QPalette::Mid)
             : QColor{lookAndFeel.getEditorLineNumbersForegroundColor()}
@@ -106,11 +106,12 @@ StatusBarView::StatusBarView(QStatusBar* qStatusBar, LookAndFeels& lookAndFeel)
     QColor enabledTextColor{palette.color(QPalette::HighlightedText)};
     QColor enabledBackgroundColor{palette.color(QPalette::Highlight)};
 #ifdef _WIN32
-    // Windows native theme: segment looks like selected Explorer/menu item
+    // Windows native theme: enabled segment looks like selected Explorer/menu
+    // item, capsule border and separators are kept neutral as they are shared
+    // by enabled and disabled segments
     if(lookAndFeel.getSelectionColor().isValid()) {
         enabledTextColor = lookAndFeel.getSelectionTextColor();
         enabledBackgroundColor = lookAndFeel.getSelectionColor();
-        borderColor = lookAndFeel.getSelectionBorderColor();
     }
 #endif
     for(int i=0; i<INDICATOR_COUNT; i++) {

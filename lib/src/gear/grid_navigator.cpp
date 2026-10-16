@@ -113,7 +113,7 @@ int GridNavigator::getItemAbove(int index) const
     const int lastRowStart
         = previousStart + ((start-previousStart-1)/columns)*columns;
 
-    return (std::min)(lastRowStart+column, start-1);
+    return std::min(lastRowStart+column, start-1);
 }
 
 int GridNavigator::getItemBelow(int index) const
@@ -130,7 +130,7 @@ int GridNavigator::getItemBelow(int index) const
 
     if(rowBelowStart < end) {
         // the row below is in the same section, but it may be shorter
-        return (std::min)(rowBelowStart+column, end-1);
+        return std::min(rowBelowStart+column, end-1);
     }
     if(section+1 >= getSectionsCount()) {
         // there is nothing below the last row of the last section
@@ -138,7 +138,7 @@ int GridNavigator::getItemBelow(int index) const
     }
 
     // the next section starts a new row which may be shorter than the columns
-    return (std::min)(end+column, getSectionEnd(section+1)-1);
+    return std::min(end+column, getSectionEnd(section+1)-1);
 }
 
 } // m8r namespace

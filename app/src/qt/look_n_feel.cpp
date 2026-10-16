@@ -71,41 +71,60 @@ static bool isPaletteLight(const QPalette& palette)
     return palette.color(QPalette::Window).lightness() >= 128;
 }
 
+/*
+ * Darken icons of actions and, recursively, of their (sub)menus - action
+ * is marked as darkened so that its icon is never darkened twice (action
+ * might be shared by more menus or polished again).
+ */
 static void darkenPaleIcons(const QList<QAction*>& actions)
 {
+    static const char* DARKENED_PROPERTY = "mfIconDarkened";
+
     for(QAction* action: actions) {
-        if(!action->icon().isNull()) {
+        if(!action->icon().isNull() && !action->property(DARKENED_PROPERTY).toBool()) {
             action->setIcon(LookAndFeels::darkenPaleIcon(action->icon()));
+            action->setProperty(DARKENED_PROPERTY, true);
+        }
+        if(action->menu()) {
+            darkenPaleIcons(action->menu()->actions());
         }
     }
+}
+
+bool LookAndFeels::isMenuPaletteLight() const
+{
+#ifdef __APPLE__
+    // macOS menu bar is native - menus follow OS appearance, not MindForger theme
+    return isPaletteLight(systemPalette);
+#else
+    return isPaletteLight(mindforgerApplication->palette());
+#endif
 }
 
 /*
  * Menu icons are pale gray (designed for dark menus) which makes them hard
  * to read on light menus - especially when a checkable item is checked
  * and its icon is painted on the (light blue) checked item background.
+ *
+ * Menu tree is walked through actions (not QObject children) as menus
+ * might have a parent different from the menu bar.
  */
 void LookAndFeels::polishMenuIcons(QMenuBar* menuBar)
 {
-#ifdef __APPLE__
-    // macOS menu bar is native - menus follow OS appearance, not MindForger theme
-    const QPalette& menuPalette = systemPalette;
-#else
-    const QPalette& menuPalette = mindforgerApplication->palette();
-#endif
-    if(!isPaletteLight(menuPalette)) {
-        // dark menu background - icons are readable
-        return;
+    if(isMenuPaletteLight()) {
+        darkenPaleIcons(menuBar->actions());
     }
+}
 
-    QSet<QAction*> actions{};
-    for(QMenu* menu: menuBar->findChildren<QMenu*>()) {
-        actions.insert(menu->menuAction());
-        for(QAction* action: menu->actions()) {
-            actions.insert(action);
-        }
+/*
+ * Menus which (re)create their actions dynamically (e.g. recent files)
+ * must polish icons whenever actions are created.
+ */
+void LookAndFeels::polishMenuIcons(QMenu* menu)
+{
+    if(isMenuPaletteLight()) {
+        darkenPaleIcons(menu->actions());
     }
-    darkenPaleIcons(actions.values());
 }
 
 /*
@@ -446,44 +465,27 @@ void LookAndFeels::setBlackTheme(bool fixedFont)
 
 void LookAndFeels::setNativeTheme(bool fixedFont)
 {
-#if defined(__APPLE__)
+#ifdef __APPLE__
     Q_UNUSED(fixedFont);
-    #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-        // new(er) Qt versions detect light/dark themes, however, it does NOT set style correctly in case of dark theme:
-        // - Big Sur 11.6 + Qt 5.15.2
-        //   - bug: wrong QtTextEditor font - black, but should be white
-        //   - bug: CLI font - black, but should be green - root cause: MF changes palette to set green text > skip @ macOS
-
-        // system theme detection (quess) make sense ONLY in case of NATIVE theme (window color driven by OS)
-        MF_DEBUG("  OS theme (light/dark ~ #ececec/#323232): " << QPalette().color(QPalette::ColorRole::Window).name().toStdString() << endl);
-        if(QPalette().color(QPalette::ColorRole::Window).name().toStdString() == "#323232") {
-            MF_DEBUG("    macOS dark mode detected - PATCHING MindForger editor pallette" << endl);
-
-            // IMPROVE editor active line background fill (none @ macOS): NoteEditorView::highlightCurrentLine()
-
-            setDarkEditorColors();
-        } else {
-            setLightEditorColors();
-        }
-    #else
-        setLightEditorColors();
-    #endif
 #else
     if(fixedFont) {
         mindforgerApplication->setFont(getFixedFont());
     }
-    #ifndef _WIN32
-        // editor colors follow OS (light/dark) palette
-        if(isPaletteLight(systemPalette)) {
-            setLightEditorColors();
-        } else {
-            setDarkEditorColors();
-        }
-    #endif
 #endif
 
 #ifdef _WIN32
     setWindowsNativeColors();
+#else
+    // editor colors follow OS (light/dark) palette - macOS: Qt 5.15+ detects
+    // dark mode, however, it does NOT set editor colors correctly (Big Sur 11.6
+    // + Qt 5.15.2: black text on dark background), older Qt is light only
+    MF_DEBUG("  OS theme window color: " << systemPalette.color(QPalette::Window).name().toStdString() << endl);
+    if(isPaletteLight(systemPalette)) {
+        setLightEditorColors();
+    } else {
+        // IMPROVE editor active line background fill (none @ macOS): NoteEditorView::highlightCurrentLine()
+        setDarkEditorColors();
+    }
 #endif
 }
 
@@ -546,9 +548,8 @@ void LookAndFeels::setWindowsNativeColors()
     highlightColor = explorerSelection.name();
     selectionColor = explorerSelection;
     selectionTextColor = palette.color(QPalette::Text);
-    selectionBorderColor.setRgb(0x99,0xD1,0xFF);
 
-    // Visual Studio light inspired syntax highlighting
+    // VS Code light inspired syntax highlighting
     editorBold.setRgb(0xA3,0x15,0x15);
     editorBolder.setRgb(0xA3,0x15,0x15);
     editorItalic.setRgb(0x79,0x5E,0x26);

@@ -178,7 +178,7 @@ void NoteEditorView::setEditorFont(std::string fontName)
     QFont editorFont;
     QString qFontName = QString::fromStdString(fontName);
     if(QString::compare(qFontName, "")==0) { // No font defined, set to default
-        editorFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+        editorFont = LookAndFeels::getFixedFont();
         Configuration::getInstance().setEditorFont(editorFont.toString().toUtf8().constData());
     } else {
         editorFont.fromString(qFontName);
@@ -187,10 +187,14 @@ void NoteEditorView::setEditorFont(std::string fontName)
         if(editorFont.family() == "Monospace") {
             editorFont.setFamily(LookAndFeels::getFixedFont().family());
         }
-        // editor font point size is absolute, while application font size
-        // can be increased (Windows uses 9pt UI font by default), therefore
-        // editor font is kept at least as big as the application font
-        if(editorFont.pointSize() < QApplication::font().pointSize()) {
+        // default editor font point size is absolute, while application font
+        // size can be increased (Windows accessibility text size), therefore
+        // default editor font is kept at least as big as the application font;
+        // font chosen by the user is always kept as is
+        if(fontName == Configuration::DEFAULT_EDITOR_FONT
+           && editorFont.pointSize() > 0
+           && editorFont.pointSize() < QApplication::font().pointSize()
+        ) {
             editorFont.setPointSize(QApplication::font().pointSize());
         }
 #endif

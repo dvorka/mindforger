@@ -106,11 +106,12 @@ private:
     // selected item (status bar indicators are styled as selected items)
     QColor selectionColor;
     QColor selectionTextColor;
-    QColor selectionBorderColor;
 
     void setWindowsNativeColors();
     static void setWindowsDisabledTextColors(QPalette& palette);
 #endif
+
+    bool isMenuPaletteLight() const;
 
 public:
     LookAndFeels(const LookAndFeels&) = delete;
@@ -155,6 +156,7 @@ public:
     /* Make pale menu and toolbar icons readable on light backgrounds.
      */
     void polishMenuIcons(QMenuBar* menuBar);
+    void polishMenuIcons(QMenu* menu);
     void polishToolBarIcons(QToolBar* toolBar);
     static QIcon darkenPaleIcon(const QIcon& icon);
 
@@ -204,7 +206,6 @@ public:
     // selection colors are defined by Windows native theme only (invalid otherwise)
     const QColor& getSelectionColor() const { return selectionColor; }
     const QColor& getSelectionTextColor() const { return selectionTextColor; }
-    const QColor& getSelectionBorderColor() const { return selectionBorderColor; }
 #endif
 
     // bean
