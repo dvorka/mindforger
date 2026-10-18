@@ -176,9 +176,11 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
         //html += "\n";
 #endif
 
-        // DIAGRAMS: mermaid.js
-        // - download from: https://unpkg.com/mermaid@7.1.0/dist/
-        // - live demo: https://mermaidjs.github.io/mermaid-live-editor
+        // DIAGRAMS: mermaid.js 12.x
+        // - download from: https://cdn.jsdelivr.net/npm/mermaid@12.2.0/dist/mermaid.min.js
+        // - offline bundle is lowered for Qt WebEngine 5.15 (Chromium 83/87) using
+        //   esbuild --target=chrome83 and prefixed with polyfills (Array.at, structuredClone, ...)
+        // - live demo: https://mermaid.live
         // NOTE: interactive rendering is offline-only (no CDN option) - standalone HTML
         // export still uses the CDN since qrc:/ resources are not available outside the app
         if(standalone) {
@@ -189,6 +191,13 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
             switch(config.getUiEnableDiagramsInMd()) {
             case Configuration::JavaScriptLibSupport::OFFLINE:
                 html += "<script type=\"text/javascript\" src=\"qrc:/js/mermaid.js\"></script>";
+#ifdef DO_MF_DEBUG
+                html += "\n";
+#endif
+                // diagram theme must match the HTML theme (mermaid renders on page load)
+                html += "<script type=\"text/javascript\">mermaid.initialize({startOnLoad:true,theme:'";
+                html += string{config.getUiHtmlCssPath()} == UI_HTML_THEME_CSS_DARK ? "dark" : "default";
+                html += "'});</script>";
 #ifdef DO_MF_DEBUG
                 html += "\n";
 #endif
