@@ -80,15 +80,10 @@ StatusBarView::StatusBarView(QStatusBar* qStatusBar, LookAndFeels& lookAndFeel)
     font.setFamily(statusBar->font().family());
     font.setPointSize(lookAndFeel.getFontPointSize());
     statusBar->setFont(font);
-    // size grip is hidden when the window is maximized, which would shift
-    // the permanent widgets - it is disabled to keep the right margin fixed
-    // (window can be still resized using its borders)
+    // size grip is hidden when the window is maximized
     statusBar->setSizeGripEnabled(false);
 
-    // capsule colors are derived from the active theme: enabled segment looks
-    // like a selected item (dark ~ green, light ~ orange, black ~ blue - all w/
-    // white letter), disabled segment letter is faded; native theme does not
-    // define colors, therefore OS palette is used
+    // capsule colors are derived from the active theme
     const QPalette& palette = statusBar->palette();
     const QColor textColor = palette.color(QPalette::WindowText);
     const QColor windowColor = palette.color(QPalette::Window);
@@ -103,13 +98,22 @@ StatusBarView::StatusBarView(QStatusBar* qStatusBar, LookAndFeels& lookAndFeel)
         (textColor.green()*45 + windowColor.green()*55)/100,
         (textColor.blue()*45 + windowColor.blue()*55)/100
     };
+    QColor enabledTextColor{palette.color(QPalette::HighlightedText)};
+    QColor enabledBackgroundColor{palette.color(QPalette::Highlight)};
+#ifdef _WIN32
+    // Wind native theme
+    if(lookAndFeel.getSelectionColor().isValid()) {
+        enabledTextColor = lookAndFeel.getSelectionTextColor();
+        enabledBackgroundColor = lookAndFeel.getSelectionColor();
+    }
+#endif
     for(int i=0; i<INDICATOR_COUNT; i++) {
         indicatorStyles[i][false] = createIndicatorStyle(
             i, disabledTextColor, Qt::transparent, borderColor);
         indicatorStyles[i][true] = createIndicatorStyle(
             i,
-            palette.color(QPalette::HighlightedText),
-            palette.color(QPalette::Highlight),
+            enabledTextColor,
+            enabledBackgroundColor,
             borderColor);
     }
 

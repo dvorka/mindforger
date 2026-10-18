@@ -50,8 +50,13 @@ private:
      * @brief Active palette.
      */
     QPalette palette;
+    /**
+     * @brief OS palette backup - palette as it was before any theme was applied.
+     */
+    QPalette systemPalette;
 
     QSet<QString> themeNames;
+    QString activeThemeName;
 
     int fontPointSize;
 
@@ -97,31 +102,36 @@ private:
     // CLI
     QColor cliTextColor;
 
+#ifdef _WIN32
+    QColor selectionColor;
+    QColor selectionTextColor;
+
+    void setWindowsNativeColors();
+    static void setWindowsDisabledTextColors(QPalette& palette);
+    static void setWindowsDefaultFont();
+#endif
+
+    bool isMenuPaletteLight() const;
+
 public:
     LookAndFeels(const LookAndFeels&) = delete;
     LookAndFeels(const LookAndFeels&&) = delete;
     LookAndFeels &operator=(const LookAndFeels&) = delete;
     LookAndFeels &operator=(const LookAndFeels&&) = delete;
 
-    /* Dark theme is supposed to be terminal (dark&green)
-     * "hacker" style view suitable in the night and early
-     * mornings when your eyes prefer less light.
-     */
     void setDarkTheme();
-
-    /* Light theme aims to be distraction-free Kindle style
-     * theme suitable for comfortable knowledge reading and
-     * navigation.
-     */
+    void setDarkEditorColors();
+    void setLightEditorColors();
     void setLightTheme(bool fixedFont=false);
-
-    /* Extra (custom) theme(s)...
-     */
     void setBlackTheme(bool fixedFont=false);
-
-    /* Set operating system native theme.
-     */
     void setNativeTheme(bool fixedFont=false);
+
+    static QFont getFixedFont();
+
+    void polishMenuIcons(QMenuBar* menuBar);
+    void polishMenuIcons(QMenu* menu);
+    void polishToolBarIcons(QToolBar* toolBar);
+    static QIcon darkenPaleIcon(const QIcon& icon);
 
     void init(QApplication* mindforgerApplication);
     bool isThemeNative() const;
@@ -164,6 +174,11 @@ public:
 
     // CLI
     const QColor& getCliTextColor() const { return cliTextColor; }
+
+#ifdef _WIN32
+    const QColor& getSelectionColor() const { return selectionColor; }
+    const QColor& getSelectionTextColor() const { return selectionTextColor; }
+#endif
 
     // bean
     QApplication* getQApplication() const { return mindforgerApplication; }

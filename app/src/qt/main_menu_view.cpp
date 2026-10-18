@@ -1157,6 +1157,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuHelp->addAction(actionHelpAbout);
     menuHelp->addSeparator();
     menuHelp->addAction(actionHelpSponsor);
+
+    LookAndFeels::getInstance().polishMenuIcons(qMenuBar);
 }
 
 MainMenuView::~MainMenuView()

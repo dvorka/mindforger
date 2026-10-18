@@ -291,6 +291,40 @@ TEST(HtmlTestCase, DiagramSupportOfflineMermaidIsFixed)
     EXPECT_EQ(std::string::npos, html.find("https://cdnjs.cloudflare.com"));
 }
 
+TEST(HtmlTestCase, DiagramSupportOfflineMermaidFollowsHtmlTheme)
+{
+    // GIVEN: offline Mermaid diagrams w/ light and dark HTML themes
+    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-diagram-theme.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
+    config.setUiEnableDiagramsInMd(m8r::Configuration::JavaScriptLibSupport::OFFLINE);
+    m8r::Mind mind(config);
+    m8r::HtmlColorsMock dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(), dummyColors, nullptr};
+    mind.learn();
+    mind.think().get();
+    string markdown{"# Test\n\n<div class=\"mermaid\">\ngraph TD; A-->B;\n</div>\n"};
+
+    // WHEN
+    config.setUiHtmlCssPath(m8r::UI_HTML_THEME_CSS_DARK);
+    string darkHtml{};
+    htmlRepresentation.to(&markdown, &darkHtml);
+    config.setUiHtmlCssPath(m8r::UI_HTML_THEME_CSS_LIGHT);
+    string lightHtml{};
+    htmlRepresentation.to(&markdown, &lightHtml);
+
+    // THEN
+    EXPECT_NE(std::string::npos, darkHtml.find("mermaid.initialize({startOnLoad:true,theme:'dark'})"));
+    EXPECT_NE(std::string::npos, lightHtml.find("mermaid.initialize({startOnLoad:true,theme:'default'})"));
+}
+
 TEST(HtmlTestCase, SrcHighlightDisabledByDefault)
 {
     // GIVEN: source code syntax highlighting disabled (the default)

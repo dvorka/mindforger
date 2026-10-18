@@ -4302,7 +4302,7 @@ void MainWindowPresenter::doActionHelpMarkdown()
 void MainWindowPresenter::doActionHelpDiagrams()
 {
     QDesktopServices::openUrl(
-        QUrl{"https://mermaid-js.github.io/mermaid/#/"}
+        QUrl{"https://mermaid.ai/open-source/intro/"}
     );
 }
 
