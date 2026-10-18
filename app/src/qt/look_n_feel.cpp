@@ -50,6 +50,10 @@ void LookAndFeels::init(QApplication* mindforgerApplication)
 {
     this->mindforgerApplication = mindforgerApplication;
     this->systemPalette = mindforgerApplication->palette();
+
+#ifdef _WIN32
+    setWindowsDefaultFont();
+#endif
 }
 
 QFont LookAndFeels::getFixedFont()
@@ -490,6 +494,37 @@ void LookAndFeels::setNativeTheme(bool fixedFont)
 }
 
 #ifdef _WIN32
+/*
+ * Qt 5 takes the default application font from the long deprecated stock
+ * DEFAULT_GUI_FONT ("MS Shell Dlg 2", 8pt) which makes outline and note names,
+ * CLI, buttons, ... smaller than the menu or message box font ("Segoe UI", 9pt)
+ * which Qt obtains from Windows settings. Moreover, the stock font height is in
+ * pixels of the DPI set when the user signed in to Windows, while Qt converts it
+ * to points using the DPI of the primary screen - when display scaling is changed
+ * (e.g. 100% > 300%) without signing out, the default font shrinks by the ratio
+ * of both DPIs (to 1/3 in the example). Therefore the message box font is used
+ * as the default font - like Qt 6 does.
+ *
+ * Must be called before widgets are created.
+ */
+void LookAndFeels::setWindowsDefaultFont()
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    // without Windows message box font (desktop settings unaware app), the default
+    // font is returned i.e. it is kept
+    const QFont messageBoxFont = QApplication::font("QMessageBox");
+    MF_DEBUG(
+        "Windows default font: "
+        << QGuiApplication::font().family().toStdString() << " "
+        << QGuiApplication::font().pointSizeF() << "pt > "
+        << messageBoxFont.family().toStdString() << " "
+        << messageBoxFont.pointSizeF() << "pt" << endl);
+    // QApplication::setFont() would also drop fonts of widget classes (menu,
+    // status bar, ...) which Qt gets right
+    QGuiApplication::setFont(messageBoxFont);
+#endif
+}
+
 /*
  * Windows GrayText (#6D6D6D) used for disabled menu (bar) items is hard
  * to distinguish from enabled (black) items on light backgrounds.

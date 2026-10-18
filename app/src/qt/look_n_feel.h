@@ -109,6 +109,7 @@ private:
 
     void setWindowsNativeColors();
     static void setWindowsDisabledTextColors(QPalette& palette);
+    static void setWindowsDefaultFont();
 #endif
 
     bool isMenuPaletteLight() const;

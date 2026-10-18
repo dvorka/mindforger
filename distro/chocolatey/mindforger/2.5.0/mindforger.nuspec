@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>mindforger</id>
+    <version>2.5.0</version>
+    <title>MindForger</title>
+    <authors>Martin Dvorak</authors>
+    <owners>Martin Dvorak</owners>
+    <projectUrl>https://www.mindforger.com</projectUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/dvorka/mindforger@master/app/resources/icons/mindforger128x128.png</iconUrl>
+    <copyright>Copyright (C) 2016-2026 Martin Dvorak</copyright>
+    <licenseUrl>https://github.com/dvorka/mindforger/blob/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectSourceUrl>https://github.com/dvorka/mindforger</projectSourceUrl>
+    <packageSourceUrl>https://github.com/dvorka/mindforger/tree/master/build/chocolatey</packageSourceUrl>
+    <docsUrl>https://www.mindforger.com/docs/</docsUrl>
+    <bugTrackerUrl>https://github.com/dvorka/mindforger/issues</bugTrackerUrl>
+    <tags>markdown notes notebook knowledge-management pkm personal-wiki thinking-tool ide</tags>
+    <summary>MindForger Thinking Notebook and Markdown IDE</summary>
+    <description>MindForger is an open, free, and privacy-respecting thinking notebook and
+Markdown IDE for personal knowledge management, note taking, and organizing
+your thoughts, notes, and notebooks as plain Markdown files.</description>
+    <releaseNotes>https://github.com/dvorka/mindforger/releases/tag/2.5.0</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

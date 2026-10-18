@@ -48,6 +48,11 @@
       CMake < 3.5 which is no longer supported by CMake 4.
     * Fix: macOS native dark theme colors todo tasks in the editor (previously
       they were black, i.e. invisible) and in progress tasks are orange.
+    * Fix: Windows - application font (Notebook and Note names in tables and outline
+      tree, command palette, ADLMSTW diodes, Note name and buttons in the editor, ...)
+      is newly Windows UI font (Segoe UI 9pt like menu), it used to be smaller
+      and it was tiny when MindForger was started after display scaling had been
+      changed (e.g. 100% > 300% on 4K) without signing out.
     * Build: Arch Linux upstream reference AUR package - PKGBUILD for
       the AUR mindforger package (Qt WebKit) is newly maintained in build/arch/
       and verified in an Arch Linux Docker container (make distro-arch-pkg).
