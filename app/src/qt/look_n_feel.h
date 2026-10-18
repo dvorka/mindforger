@@ -51,7 +51,7 @@ private:
      */
     QPalette palette;
     /**
-     * @brief OS palette as it was before any theme was applied.
+     * @brief OS palette backup - palette as it was before any theme was applied.
      */
     QPalette systemPalette;
 
@@ -103,7 +103,6 @@ private:
     QColor cliTextColor;
 
 #ifdef _WIN32
-    // selected item (status bar indicators are styled as selected items)
     QColor selectionColor;
     QColor selectionTextColor;
 
@@ -120,42 +119,15 @@ public:
     LookAndFeels &operator=(const LookAndFeels&) = delete;
     LookAndFeels &operator=(const LookAndFeels&&) = delete;
 
-    /* Dark theme is supposed to be terminal (dark&green)
-     * "hacker" style view suitable in the night and early
-     * mornings when your eyes prefer less light.
-     */
     void setDarkTheme();
-
-    /* Editor colors for dark backgrounds - shared by dark themes
-     * and dark native (OS) themes.
-     */
     void setDarkEditorColors();
-    /* Editor colors for light backgrounds - shared by light themes
-     * and light native (OS) themes.
-     */
     void setLightEditorColors();
-
-    /* Light theme aims to be distraction-free Kindle style
-     * theme suitable for comfortable knowledge reading and
-     * navigation.
-     */
     void setLightTheme(bool fixedFont=false);
-
-    /* Extra (custom) theme(s)...
-     */
     void setBlackTheme(bool fixedFont=false);
-
-    /* Set operating system native theme.
-     */
     void setNativeTheme(bool fixedFont=false);
 
-    /* Monospace font used by fixed font themes - system fixed font
-     * except Windows where it is Consolas instead of Courier New.
-     */
     static QFont getFixedFont();
 
-    /* Make pale menu and toolbar icons readable on light backgrounds.
-     */
     void polishMenuIcons(QMenuBar* menuBar);
     void polishMenuIcons(QMenu* menu);
     void polishToolBarIcons(QToolBar* toolBar);
@@ -204,7 +176,6 @@ public:
     const QColor& getCliTextColor() const { return cliTextColor; }
 
 #ifdef _WIN32
-    // selection colors are defined by Windows native theme only (invalid otherwise)
     const QColor& getSelectionColor() const { return selectionColor; }
     const QColor& getSelectionTextColor() const { return selectionTextColor; }
 #endif

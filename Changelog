@@ -1,8 +1,8 @@
 2026-10-18  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.6.0 - editor minimap, find Note by metadata, hierarchical recent notes,
-      green/orange/red associated Notes colorization, improved Win UX, latest Mermaid,
-      AUR for Arch Linux revamp.
+      green/orange/red associated Notes colorization, improved Win UX, latest Mermaid
+      and AUR for Arch Linux revamp.
     * Feature: find Note by Metadata shows Notes in a table w/ name, size (text bytes),
       reads, writes, created and modified columns which can be for sorting to find
       biggest, oldest or most visited Notes.
@@ -22,8 +22,7 @@
       in the view.
     * Enhancement: Mermaid diagrams upgraded from mermaid.js 7.1.0 to 12.2.0 -
       new diagram types (mindmap, timeline, gitGraph, quadrant, ...) and syntax
-      newly work, diagrams follow dark/light HTML theme, standalone HTML export
-      upgraded from mermaid.js 8.4.8 to 12.2.0.
+      newly work, diagrams follow dark/light HTML theme.
     * Enhancement: Windows - native theme newly uses the Windows palette: selected rows
       in Notebook/Note tables, outline tree, enabled status bar ADLMSTW diodes, ...
     * Enhancement: Windows - native theme editor newly has VSCode light inspired

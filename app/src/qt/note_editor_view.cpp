@@ -189,8 +189,7 @@ void NoteEditorView::setEditorFont(std::string fontName)
         }
         // default editor font point size is absolute, while application font
         // size can be increased (Windows accessibility text size), therefore
-        // default editor font is kept at least as big as the application font;
-        // font chosen by the user is always kept as is
+        // default editor font is kept at least as big as the application font
         if(fontName == Configuration::DEFAULT_EDITOR_FONT
            && editorFont.pointSize() > 0
            && editorFont.pointSize() < QApplication::font().pointSize()
@@ -911,7 +910,7 @@ int NoteEditorView::lineNumberPanelWidth()
 #if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
         int space = 3 + fontMetrics().horizontalAdvance(QLatin1Char{'9'}) * digits;
     #ifdef _WIN32
-        // numbers are centered - extra digit width separates them from the text
+        // center numbers to separate them from the text
         space += fontMetrics().horizontalAdvance(QLatin1Char{'9'});
     #endif
 #else

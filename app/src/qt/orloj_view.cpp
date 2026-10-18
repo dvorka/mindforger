@@ -22,8 +22,7 @@ namespace m8r {
 
 using namespace std;
 
-// O/N editor gets 60% of the width, the narrower child (outline or live preview
-// viewer) gets:
+// O/N editor gets 60% of the width, the narrower child (outline or live preview) gets:
 constexpr const int NARROWER_CHILD_WIDTH_PERCENT = 40;
 
 OrlojView::OrlojView(QWidget* parent)
@@ -184,11 +183,9 @@ void OrlojView::showFacetOutlineHeaderEdit()
         if(menuView->actionEditLiveNotePreview->isChecked()) {
             outlineHeaderView->getEditPanel()->setVisible(false);
             QSet<QWidget*> v; v << outlineHeaderView << outlineHeaderEdit;
-            // editor is wider than the (live preview) viewer
             hideChildren(v, outlineHeaderView);
         } else {
             QSet<QWidget*> v; v << outlineView << outlineHeaderEdit;
-            // editor is wider than the outline
             hideChildren(v, outlineView);
         }
         outlineHeaderEdit->giveEditorFocus();

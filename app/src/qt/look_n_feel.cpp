@@ -61,7 +61,7 @@ QFont LookAndFeels::getFixedFont()
     QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
 #ifdef _WIN32
     // system fixed font is Courier New on Windows, Consolas is the Windows
-    // native monospace font (shipped since Vista) designed for ClearType
+    // native monospace font designed for ClearType
     font.setFamily("Consolas");
 #endif
     return font;
@@ -76,8 +76,8 @@ static bool isPaletteLight(const QPalette& palette)
 }
 
 /*
- * Darken icons of actions and, recursively, of their (sub)menus - action
- * is marked as darkened so that its icon is never darkened twice (action
+ * Darken icons of actions and, recursively, of their (sub)menus:
+ * action is marked as darkened so that its icon is never darkened twice (action
  * might be shared by more menus or polished again).
  */
 static void darkenPaleIcons(const QList<QAction*>& actions)
@@ -107,11 +107,8 @@ bool LookAndFeels::isMenuPaletteLight() const
 
 /*
  * Menu icons are pale gray (designed for dark menus) which makes them hard
- * to read on light menus - especially when a checkable item is checked
- * and its icon is painted on the (light blue) checked item background.
- *
- * Menu tree is walked through actions (not QObject children) as menus
- * might have a parent different from the menu bar.
+ * to read on light menus. Menu tree is walked through actions as menus might
+ * have a parent different from the menu bar.
  */
 void LookAndFeels::polishMenuIcons(QMenuBar* menuBar)
 {
@@ -121,8 +118,8 @@ void LookAndFeels::polishMenuIcons(QMenuBar* menuBar)
 }
 
 /*
- * Menus which (re)create their actions dynamically (e.g. recent files)
- * must polish icons whenever actions are created.
+ * Menus which (re)create their actions dynamically (e.g. recent files) must polish
+ * icons whenever actions are created.
  */
 void LookAndFeels::polishMenuIcons(QMenu* menu)
 {
@@ -132,13 +129,11 @@ void LookAndFeels::polishMenuIcons(QMenu* menu)
 }
 
 /*
- * Toolbar icons are pale gray too - on light toolbars they look as if they
- * were disabled.
+ * Toolbar icons are pale gray - avoid their appearing disabled on light toolbars.
  */
 void LookAndFeels::polishToolBarIcons(QToolBar* toolBar)
 {
     if(!isPaletteLight(mindforgerApplication->palette())) {
-        // dark toolbar background - icons are readable
         return;
     }
 
@@ -146,9 +141,7 @@ void LookAndFeels::polishToolBarIcons(QToolBar* toolBar)
 }
 
 /*
- * Icon engine which darkens pale grays of the source icon on demand - pixmaps
- * are rendered in the requested size and device pixel ratio (HiDPI displays,
- * fractional scaling), therefore darkened icons are as crisp as the source.
+ * Icon engine which darkens pale grays of the source icon on demand.
  */
 class DarkenedIconEngine : public QIconEngine
 {
@@ -181,8 +174,8 @@ public:
             return pixmap;
         }
 
-        // size is in device pixels - source is painted (not QIcon::pixmap()-ed)
-        // to an image of this very size so that it is not scaled by DPR again
+        // size is in device pixels - source is painted to an image of this very size
+        // so that it is not scaled by DPR again
         QImage image{size, QImage::Format_ARGB32};
         image.fill(Qt::transparent);
         {
@@ -259,9 +252,6 @@ void LookAndFeels::setTheme(const QString& themeName)
     }
 }
 
-/*
- * Editor colors readable on dark backgrounds.
- */
 void LookAndFeels::setDarkEditorColors()
 {
     editorBold.setRgb(0xFF,0xFF,0x00);
@@ -283,9 +273,6 @@ void LookAndFeels::setDarkEditorColors()
     editorError.setRgb(0xFF,0x00,0x00);
 }
 
-/*
- * Built-in dark theme definition.
- */
 void LookAndFeels::setDarkTheme()
 {
     textColor = QString("#FFF");
@@ -330,12 +317,6 @@ void LookAndFeels::setDarkTheme()
         "QMenu::item:disabled { color: #555; background: "}+backgroundColor+QString{"; }"};
 }
 
-/*
- * Editor colors readable on light backgrounds - vivid (high contrast like dark
- * theme colors) yet distinguishable from (black) text, all of them except
- * intentionally faint strikethrough and HTML comment have WCAG contrast
- * ratio at least 4.5:1 on white background.
- */
 void LookAndFeels::setLightEditorColors()
 {
     editorBold.setRgb(0xC2,0x41,0x0C);
@@ -357,9 +338,6 @@ void LookAndFeels::setLightEditorColors()
     editorError.setRgb(0xDC,0x26,0x26);
 }
 
-/*
- * Built-in light theme definition.
- */
 void LookAndFeels::setLightTheme(bool fixedFont)
 {
     textColor = QString("#000");
@@ -480,9 +458,10 @@ void LookAndFeels::setNativeTheme(bool fixedFont)
 #ifdef _WIN32
     setWindowsNativeColors();
 #else
-    // editor colors follow OS (light/dark) palette - macOS: Qt 5.15+ detects
-    // dark mode, however, it does NOT set editor colors correctly (Big Sur 11.6
-    // + Qt 5.15.2: black text on dark background), older Qt is light only
+    // editor colors follow OS (light/dark) palette
+    // - macOS: Qt 5.15+ detects dark mode, however, it does NOT set editor colors
+    //   correctly (Big Sur 11.6 + Qt 5.15.2: black text on dark background),
+    //   older Qt is light only
     MF_DEBUG("  OS theme window color: " << systemPalette.color(QPalette::Window).name().toStdString() << endl);
     if(isPaletteLight(systemPalette)) {
         setLightEditorColors();
@@ -495,22 +474,14 @@ void LookAndFeels::setNativeTheme(bool fixedFont)
 
 #ifdef _WIN32
 /*
- * Qt 5 takes the default application font from the long deprecated stock
- * DEFAULT_GUI_FONT ("MS Shell Dlg 2", 8pt) which makes outline and note names,
- * CLI, buttons, ... smaller than the menu or message box font ("Segoe UI", 9pt)
- * which Qt obtains from Windows settings. Moreover, the stock font height is in
- * pixels of the DPI set when the user signed in to Windows, while Qt converts it
- * to points using the DPI of the primary screen - when display scaling is changed
- * (e.g. 100% > 300%) without signing out, the default font shrinks by the ratio
- * of both DPIs (to 1/3 in the example). Therefore the message box font is used
- * as the default font - like Qt 6 does.
- *
- * Must be called before widgets are created.
+ * Ensures that MindForger @ Qt 5 on Win uses the right font size (of text/textarea/*)
+ * widgets even if user scales the display from 100% to a different (even high) DPI
+ * setting. This function must be called before widgets are created.
  */
 void LookAndFeels::setWindowsDefaultFont()
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    // without Windows message box font (desktop settings unaware app), the default
+    // without Win message box font (desktop settings unaware app), the default
     // font is returned i.e. it is kept
     const QFont messageBoxFont = QApplication::font("QMessageBox");
     MF_DEBUG(
@@ -519,30 +490,21 @@ void LookAndFeels::setWindowsDefaultFont()
         << QGuiApplication::font().pointSizeF() << "pt > "
         << messageBoxFont.family().toStdString() << " "
         << messageBoxFont.pointSizeF() << "pt" << endl);
-    // QApplication::setFont() would also drop fonts of widget classes (menu,
+    // QApplication::setFont() would drop fonts of widget classes (menu,
     // status bar, ...) which Qt gets right
     QGuiApplication::setFont(messageBoxFont);
 #endif
 }
 
-/*
- * Windows GrayText (#6D6D6D) used for disabled menu (bar) items is hard
- * to distinguish from enabled (black) items on light backgrounds.
- */
 void LookAndFeels::setWindowsDisabledTextColors(QPalette& palette)
 {
+    // ensure that disabled text is clearly visible on light backgrounds
     const QColor disabledText{0xA0,0xA0,0xA0};
     palette.setColor(QPalette::Disabled, QPalette::Text, disabledText);
     palette.setColor(QPalette::Disabled, QPalette::ButtonText, disabledText);
     palette.setColor(QPalette::Disabled, QPalette::WindowText, disabledText);
 }
 
-/*
- * Windows native theme colors - application palette is kept as provided by
- * the OS (accent highlight for text selection like in Notepad), item views
- * and MindForger specific widgets get Windows Explorer like colors. Dark
- * (High Contrast) palettes are kept intact - Explorer colors are light only.
- */
 void LookAndFeels::setWindowsNativeColors()
 {
     palette = mindforgerApplication->palette();
@@ -557,7 +519,7 @@ void LookAndFeels::setWindowsNativeColors()
     cliTextColor = palette.color(QPalette::Text);
 
     if(!isPaletteLight(palette)) {
-        // dark palette (High Contrast Black, ...) - OS colors are designed for
+        // dark palette (High Contrast Black, ...) - Win colors are designed for
         // accessibility, therefore they are kept; selection colors stay invalid
         // so that status bar indicators use their default look
         highlightColor = palette.color(QPalette::Highlight).name();
@@ -568,10 +530,6 @@ void LookAndFeels::setWindowsNativeColors()
     setWindowsDisabledTextColors(palette);
     mindforgerApplication->setPalette(palette);
 
-    // Windows 10 Explorer selection: light blue w/ black text - menus and
-    // QTreeView rows are painted this way by Windows style, however, Qt
-    // paints QTableView (Notebooks, outline tree, ...) selection using
-    // palette, therefore it is set explicitly for item views only
     const QColor explorerSelection{0xCC,0xE8,0xFF};
     QPalette itemViewPalette{palette};
     for(auto group: {QPalette::Active, QPalette::Inactive}) {
@@ -584,11 +542,8 @@ void LookAndFeels::setWindowsNativeColors()
     selectionColor = explorerSelection;
     selectionTextColor = palette.color(QPalette::Text);
 
-    // VS Code light inspired syntax highlighting
     editorBold.setRgb(0xA3,0x15,0x15);
     editorBolder.setRgb(0xA3,0x15,0x15);
-    // italic is purple like in the light theme - VS Code brown is hard
-    // to distinguish from (black) text
     editorItalic.setRgb(0x7E,0x22,0xCE);
     editorItalicer.setRgb(0x7E,0x22,0xCE);
     editorStrikethrough.setRgb(0xA0,0xA0,0xA0);
@@ -609,7 +564,6 @@ void LookAndFeels::setWindowsNativeColors()
 
 bool LookAndFeels::isThemeNative() const
 {
-    // active theme might differ from configured one (CLI option)
     return UI_THEME_NATIVE == activeThemeName.toStdString()
         || UI_THEME_NATIVE_WITH_FIXED_FONT == activeThemeName.toStdString();
 }

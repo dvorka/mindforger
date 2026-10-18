@@ -179,16 +179,12 @@ int main(int argc, char* argv[])
     //     ^ changes in required parameters with disable-web-security
 
 #if defined(_WIN32) && QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    // Windows: scale UI (icons, margins, pixel sizes) according to display
-    // scaling - Qt 5 scales fonts only by default; pass-through policy keeps
-    // fractional factors (125%, 150%, ...) which are common on Windows
+    // Win: scale UI according to display scaling (Qt5 scales fonts only by default)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
         Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 #endif
-    // icons are rendered in device pixels on HiDPI displays (Retina, 4K, scaling
-    // set by QT_SCALE_FACTOR, ...) - otherwise low-res pixmaps are upscaled
-    // which makes menu and toolbar icons blurry
+    // ensure nice icons by using high DPI pixmaps on HiDPI displays (Retina, 4K, QT_SCALE_FACTOR, ...)
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0) && defined(MF_QT_WEB_ENGINE)

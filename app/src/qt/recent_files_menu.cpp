@@ -104,7 +104,6 @@ void RecentFilesMenu::updateMenu()
         this,
         SLOT(clearMenu())
     );
-    // actions are recreated > their icons must be polished again
     LookAndFeels::getInstance().polishMenuIcons(this);
 
     setEnabled(!recentFiles.empty());
