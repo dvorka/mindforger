@@ -587,8 +587,10 @@ void LookAndFeels::setWindowsNativeColors()
     // VS Code light inspired syntax highlighting
     editorBold.setRgb(0xA3,0x15,0x15);
     editorBolder.setRgb(0xA3,0x15,0x15);
-    editorItalic.setRgb(0x79,0x5E,0x26);
-    editorItalicer.setRgb(0x79,0x5E,0x26);
+    // italic is purple like in the light theme - VS Code brown is hard
+    // to distinguish from (black) text
+    editorItalic.setRgb(0x7E,0x22,0xCE);
+    editorItalicer.setRgb(0x7E,0x22,0xCE);
     editorStrikethrough.setRgb(0xA0,0xA0,0xA0);
     editorLink.setRgb(0x00,0x66,0xCC);
     editorList.setRgb(0x00,0x78,0xD7);
