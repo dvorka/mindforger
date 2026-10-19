@@ -82,18 +82,18 @@ case "${MODE}" in
             usr/share/metainfo/com.mindforger.mindforger.metainfo.xml \
             usr/share/man/man1/mindforger.1.gz
         do
-            if ! echo "${PKG_CONTENT}" | grep -qx "${F}"; then
+            if ! grep -Fxq "${F}" <<< "${PKG_CONTENT}"; then
                 echo "ERROR: ${F} is not in ${PKG_FILE}"
                 exit 1
             fi
             echo "  ${F}"
         done
         # documentation and stencils are copied to ~/mindforger-repository on the first start
-        if ! echo "${PKG_CONTENT}" | grep -q "^usr/share/doc/mindforger/..*[^/]$"; then
+        if ! grep -q "^usr/share/doc/mindforger/..*[^/]$" <<< "${PKG_CONTENT}"; then
             echo "ERROR: usr/share/doc/mindforger/ is empty in ${PKG_FILE}"
             exit 1
         fi
-        echo "  usr/share/doc/mindforger/ ($(echo "${PKG_CONTENT}" | grep -c "^usr/share/doc/mindforger/..*[^/]$") files)"
+        echo "  usr/share/doc/mindforger/ ($(grep -c "^usr/share/doc/mindforger/..*[^/]$" <<< "${PKG_CONTENT}") files)"
 
         echo -e "\n# Install and check ###########################################"
         sudo pacman -U --noconfirm "${PKG_FILE}"
