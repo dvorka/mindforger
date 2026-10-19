@@ -1558,16 +1558,8 @@ unique_ptr<vector<Outline*>> Mind::findOutlineByNameFts(const string& pattern) c
 
 Outline* Mind::findOutlineByKey(const string& key) const
 {
-    if(key.size()) {
-        vector<Outline*> outlines = memory.getOutlines();
-        for(Outline* outline:outlines) {
-            if(key.compare(outline->getKey()) == 0) {
-                return outline;
-            }
-        }
-    }
-
-    return nullptr;
+    // map lookup - shelves resolve every Notebook on the shelf by its key
+    return key.size() ? memory.getOutline(key) : nullptr;
 }
 
 void Mind::initWingman()

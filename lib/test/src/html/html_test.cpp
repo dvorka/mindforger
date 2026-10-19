@@ -478,6 +478,31 @@ TEST(HtmlTestCase, NoteTitleEnd)
     EXPECT_EQ(noBody.size(), noBodyIdx);
 }
 
+TEST(HtmlTestCase, NoteTitleEndOnlyAtTheStartOfTheBody)
+{
+    // GIVEN a too deep Note (title is a paragraph) w/ an HTML heading in the description,
+    //       and Note titles w/ whitespace and attributes as rendered by cmark-gfm
+    string deepNote{"<html><head></head><body><p>####### Deep</p><h3>Inner</h3><p>text</p></body></html>"};
+    string whitespace{"<html><head></head><body>\n<h6>Title</h6>\n<p>text</p></body></html>"};
+    string attributes{"<html><head></head><body><h1 id=\"t\">Title</h1><p>text</p></body></html>"};
+    string notHeading{"<html><head></head><body><hr/><h2>Title</h2><p>text</p></body></html>"};
+    string emptyBody{"<html><head></head><body>"};
+
+    // WHEN
+    size_t deepNoteIdx = m8r::HtmlOutlineRepresentation::findNoteTitleEnd(deepNote);
+    size_t whitespaceIdx = m8r::HtmlOutlineRepresentation::findNoteTitleEnd(whitespace);
+    size_t attributesIdx = m8r::HtmlOutlineRepresentation::findNoteTitleEnd(attributes);
+    size_t notHeadingIdx = m8r::HtmlOutlineRepresentation::findNoteTitleEnd(notHeading);
+    size_t emptyBodyIdx = m8r::HtmlOutlineRepresentation::findNoteTitleEnd(emptyBody);
+
+    // THEN tags go after the title heading, or to the start of the body if there is none
+    EXPECT_EQ(deepNote.find("<p>"), deepNoteIdx);
+    EXPECT_EQ(whitespace.find("\n<p>"), whitespaceIdx);
+    EXPECT_EQ(attributes.find("<p>"), attributesIdx);
+    EXPECT_EQ(notHeading.find("<hr/>"), notHeadingIdx);
+    EXPECT_EQ(emptyBody.size(), emptyBodyIdx);
+}
+
 TEST(HtmlTestCase, NoteTags)
 {
     // GIVEN

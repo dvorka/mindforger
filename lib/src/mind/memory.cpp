@@ -362,7 +362,7 @@ string Memory::createLimboKey(const string* name)
     return persistence->createFileName(config.getLimboPath(), name, File::EXTENSION_MD_MD);
 }
 
-Outline* Memory::getOutline(const string& key)
+Outline* Memory::getOutline(const string& key) const
 {
     map<string,Outline*>::const_iterator entry = outlinesMap.find(key);
     if(entry == outlinesMap.end()) {

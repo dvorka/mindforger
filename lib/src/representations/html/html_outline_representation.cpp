@@ -565,7 +565,7 @@ string* HtmlOutlineRepresentation::to(
 size_t HtmlOutlineRepresentation::findNoteTitleEnd(const string& html)
 {
     static const string BODY{"<body>"};
-    static const string HEADING_END{"</h"};
+    static const string WHITESPACE{" \t\r\n"};
 
     size_t bodyIdx = html.find(BODY);
     if(bodyIdx == string::npos) {
@@ -573,20 +573,23 @@ size_t HtmlOutlineRepresentation::findNoteTitleEnd(const string& html)
     }
     bodyIdx += BODY.size();
 
-    // first </h1> ... </h6> after <body> (note that </head> is before <body>)
-    size_t idx = html.find(HEADING_END, bodyIdx);
-    while(idx != string::npos) {
-        size_t levelIdx = idx + HEADING_END.size();
-        if(levelIdx+1 < html.size()
-           && html[levelIdx] >= '1' && html[levelIdx] <= '6'
-           && html[levelIdx+1] == '>'
-        ) {
-            return levelIdx+2;
+    // only <h1> ... <h6> at the start of the body is N title - too deep N title
+    // is a paragraph and a heading in N description must not be mistaken for it
+    const size_t titleIdx = html.find_first_not_of(WHITESPACE, bodyIdx);
+    if(titleIdx != string::npos
+       && titleIdx+3 < html.size()
+       && html.compare(titleIdx, 2, "<h") == 0
+       && html[titleIdx+2] >= '1' && html[titleIdx+2] <= '6'
+       && (html[titleIdx+3] == '>' || WHITESPACE.find(html[titleIdx+3]) != string::npos)
+    ) {
+        const string headingEnd{string{"</h"} + html[titleIdx+2] + ">"};
+        const size_t idx = html.find(headingEnd, titleIdx);
+        if(idx != string::npos) {
+            return idx + headingEnd.size();
         }
-        idx = html.find(HEADING_END, levelIdx);
     }
 
-    // no heading (e.g. too deep N) > tags at the beginning of the body
+    // no title heading (e.g. too deep N) > tags at the beginning of the body
     return bodyIdx;
 }
 

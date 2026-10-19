@@ -722,6 +722,53 @@ TEST(NotebookTreeTestCase, GetOutlinesReturnsOnlyShelvedNotebooks)
     EXPECT_EQ(0, noOutlines.size());
 }
 
+TEST(NotebookTreeTestCase, FindOutlineByKey)
+{
+    // GIVEN a MindForger repository with 2 Notebooks
+    string repositoryPath{"/tmp/mf-unit-notebook-tree-find-by-key"};
+    m8r::removeDirectoryRecursively(repositoryPath.c_str());
+    map<string,string> pathToContent{};
+    m8r::createEmptyRepository(repositoryPath, pathToContent);
+
+    m8r::Repository* repository = new m8r::Repository(
+        repositoryPath,
+        m8r::Repository::RepositoryType::MINDFORGER,
+        m8r::Repository::RepositoryMode::REPOSITORY,
+        "",
+        false);
+
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/mf-unit-notebook-tree-find-by-key-cfg.md");
+    config.setActiveRepository(
+        config.addRepository(repository), repositoryConfigRepresentation
+    );
+
+    m8r::Mind mind(config);
+    mind.learn();
+    mind.think().get();
+
+    string nameA{"Notebook A"}, nameB{"Notebook B"};
+    string keyA = mind.outlineNew(&nameA);
+    string keyB = mind.outlineNew(&nameB);
+
+    // WHEN existing, missing and empty keys are resolved
+    m8r::Outline* oA = mind.findOutlineByKey(keyA);
+    m8r::Outline* oB = mind.findOutlineByKey(keyB);
+    m8r::Outline* missing = mind.findOutlineByKey(repositoryPath + "/memory/missing.md");
+    m8r::Outline* empty = mind.findOutlineByKey("");
+
+    // THEN existing Notebooks are found by their key, others are not
+    ASSERT_NE(nullptr, oA);
+    ASSERT_NE(nullptr, oB);
+    EXPECT_EQ(keyA, oA->getKey());
+    EXPECT_EQ(keyB, oB->getKey());
+    EXPECT_EQ(nameA, oA->getName());
+    EXPECT_EQ(nullptr, missing);
+    EXPECT_EQ(nullptr, empty);
+}
+
 TEST(NotebookTreeTestCase, GetOutlinesRespectsScopeLikeShelfView)
 {
     // GIVEN a shelf w/ 3 Notebooks: old A w/ recent child B, and old C
