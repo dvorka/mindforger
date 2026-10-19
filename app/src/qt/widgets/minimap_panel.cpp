@@ -182,9 +182,11 @@ void MinimapPanel::mousePressEvent(QMouseEvent* event)
         // grab the viewport rectangle where it was clicked
         dragOffset = y - top;
     } else {
-        // jump so that the clicked line is in the middle of the viewport
-        dragOffset = geometry.getViewportHeight() / 2;
-        scrollEditorTo(y - dragOffset);
+        // jump so that the clicked line is in the middle of the viewport - the strip
+        // shows just a part of a long text i.e. the clicked line is not the drag position
+        mdEditor->verticalScrollBar()->setValue(geometry.getFirstVisibleLineCenteredAt(y));
+        // the strip scrolled w/ the editor - continue dragging from the new viewport
+        dragOffset = y - createGeometry().getViewportTop();
     }
     event->accept();
 }

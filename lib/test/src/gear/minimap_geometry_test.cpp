@@ -179,3 +179,43 @@ TEST(MinimapGeometryTestCase, FirstVisibleLineForViewportTop)
     ASSERT_EQ(0, above);
     ASSERT_EQ(980, below);
 }
+
+TEST(MinimapGeometryTestCase, FirstVisibleLineCenteredAtLongText)
+{
+    // GIVEN a long text w/ the editor in the middle i.e. the strip shows lines 450-549
+    MinimapGeometry geometry{};
+    geometry.update(LONG_TOTAL, LONG_VISIBLE, 490, STRIP_HEIGHT);
+
+    // WHEN a line above the viewport rectangle is clicked
+    const int clickedLine = geometry.getLineAt(20);
+    const int firstVisibleLine = geometry.getFirstVisibleLineCenteredAt(20);
+
+    // THEN the clicked line is in the middle of the editor (not the drag position)
+    cout << "Clicked line: " << clickedLine << " first visible line: " << firstVisibleLine << endl;
+    ASSERT_EQ(460, clickedLine);
+    ASSERT_EQ(450, firstVisibleLine);
+    ASSERT_NE(geometry.getFirstVisibleLineFor(20 - geometry.getViewportHeight()/2), firstVisibleLine);
+}
+
+TEST(MinimapGeometryTestCase, FirstVisibleLineCenteredAtClamped)
+{
+    // GIVEN a long text scrolled to the top and a text which fits the strip
+    MinimapGeometry longGeometry{};
+    longGeometry.update(LONG_TOTAL, LONG_VISIBLE, 0, STRIP_HEIGHT);
+    MinimapGeometry shortGeometry{};
+    shortGeometry.update(50, LONG_VISIBLE, 0, STRIP_HEIGHT);
+    MinimapGeometry emptyGeometry{};
+    emptyGeometry.update(0, LONG_VISIBLE, 0, STRIP_HEIGHT);
+
+    // WHEN lines at the top, bottom and beyond the strip are clicked
+    const int longTop = longGeometry.getFirstVisibleLineCenteredAt(0);
+    const int shortMiddle = shortGeometry.getFirstVisibleLineCenteredAt(50);
+    const int shortBottom = shortGeometry.getFirstVisibleLineCenteredAt(1000);
+    const int empty = emptyGeometry.getFirstVisibleLineCenteredAt(50);
+
+    // THEN the editor does not scroll out of the text
+    ASSERT_EQ(0, longTop);
+    ASSERT_EQ(15, shortMiddle);
+    ASSERT_EQ(30, shortBottom);
+    ASSERT_EQ(0, empty);
+}

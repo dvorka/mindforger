@@ -84,6 +84,14 @@ public:
      */
     int getFirstVisibleLineFor(int viewportTopPx) const;
 
+    /**
+     * @brief Get the first visible editor line for which the line shown
+     * at the given y coordinate is in the middle of the editor.
+     *
+     * @return line clamped so that the editor does not scroll out of the text.
+     */
+    int getFirstVisibleLineCenteredAt(int y) const;
+
 private:
     int lineHeightPx;
     int totalLines;

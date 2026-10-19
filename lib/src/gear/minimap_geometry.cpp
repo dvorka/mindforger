@@ -109,4 +109,10 @@ int MinimapGeometry::getFirstVisibleLineFor(int viewportTopPx) const
     return static_cast<int>(min(static_cast<long long>(maxFirstVisibleLine), line));
 }
 
+int MinimapGeometry::getFirstVisibleLineCenteredAt(int y) const
+{
+    const int line = getLineAt(y) - visibleLines / 2;
+    return max(0, min(line, getMaxFirstVisibleLine()));
+}
+
 } // m8r namespace
