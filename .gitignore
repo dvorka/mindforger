@@ -29,6 +29,7 @@ compile_commands.json
 deps/cmark-gfm
 deps/cmark-gfm
 deps/mitie
+distro/chocolatey/
 distro/debian/
 distro/fedora/
 distro/flatpak/

@@ -34,7 +34,7 @@ NoteNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     nameLabel = new QLabel(tr("Name")+":", this),
     nameEdit = new QLineEdit(tr("Note"), this);
 
-    emojisButton = new QPushButton(tr("&Emojis"), this);
+    emojisButton = new QPushButton(tr("Emo&jis"), this);
 
     // moving edit tags to this position changes TAB ORDER ~ it's selected as 2nd field
     editTagsGroup = new EditTagsPanel{MfWidgetMode::CREATE_MODE, ontology, this};

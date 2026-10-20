@@ -225,7 +225,7 @@ public:
      * Get outline including AST - if Outline contains only name/description/metadata,
      * then AST is loaded and full outline returned.
      */
-    Outline* getOutline(const std::string &key);
+    Outline* getOutline(const std::string &key) const;
 
     /**
      * @brief Get Ns of all outlines.

@@ -291,6 +291,40 @@ TEST(HtmlTestCase, DiagramSupportOfflineMermaidIsFixed)
     EXPECT_EQ(std::string::npos, html.find("https://cdnjs.cloudflare.com"));
 }
 
+TEST(HtmlTestCase, DiagramSupportOfflineMermaidFollowsHtmlTheme)
+{
+    // GIVEN: offline Mermaid diagrams w/ light and dark HTML themes
+    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-diagram-theme.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
+    config.setUiEnableDiagramsInMd(m8r::Configuration::JavaScriptLibSupport::OFFLINE);
+    m8r::Mind mind(config);
+    m8r::HtmlColorsMock dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(), dummyColors, nullptr};
+    mind.learn();
+    mind.think().get();
+    string markdown{"# Test\n\n<div class=\"mermaid\">\ngraph TD; A-->B;\n</div>\n"};
+
+    // WHEN
+    config.setUiHtmlCssPath(m8r::UI_HTML_THEME_CSS_DARK);
+    string darkHtml{};
+    htmlRepresentation.to(&markdown, &darkHtml);
+    config.setUiHtmlCssPath(m8r::UI_HTML_THEME_CSS_LIGHT);
+    string lightHtml{};
+    htmlRepresentation.to(&markdown, &lightHtml);
+
+    // THEN
+    EXPECT_NE(std::string::npos, darkHtml.find("mermaid.initialize({startOnLoad:true,theme:'dark'})"));
+    EXPECT_NE(std::string::npos, lightHtml.find("mermaid.initialize({startOnLoad:true,theme:'default'})"));
+}
+
 TEST(HtmlTestCase, SrcHighlightDisabledByDefault)
 {
     // GIVEN: source code syntax highlighting disabled (the default)
@@ -424,4 +458,90 @@ TEST(HtmlTestCase, DiagramSupportOnlineIsNoLongerOffered)
     EXPECT_EQ(std::string::npos, html.find("mermaid.js"));
     EXPECT_EQ(std::string::npos, html.find("http://"));
     EXPECT_EQ(std::string::npos, html.find("https://"));
+}
+
+TEST(HtmlTestCase, NoteTitleEnd)
+{
+    // GIVEN
+    string withHeading{"<html><head></head><body><h2>Title</h2><p>text</p></body></html>"};
+    string noHeading{"<html><head></head><body><p>text</p></body></html>"};
+    string noBody{"<p>text</p>"};
+
+    // WHEN
+    size_t withHeadingIdx = m8r::HtmlOutlineRepresentation::findNoteTitleEnd(withHeading);
+    size_t noHeadingIdx = m8r::HtmlOutlineRepresentation::findNoteTitleEnd(noHeading);
+    size_t noBodyIdx = m8r::HtmlOutlineRepresentation::findNoteTitleEnd(noBody);
+
+    // THEN
+    EXPECT_EQ(withHeading.find("<p>"), withHeadingIdx);
+    EXPECT_EQ(noHeading.find("<p>"), noHeadingIdx);
+    EXPECT_EQ(noBody.size(), noBodyIdx);
+}
+
+TEST(HtmlTestCase, NoteTitleEndOnlyAtTheStartOfTheBody)
+{
+    // GIVEN a too deep Note (title is a paragraph) w/ an HTML heading in the description,
+    //       and Note titles w/ whitespace and attributes as rendered by cmark-gfm
+    string deepNote{"<html><head></head><body><p>####### Deep</p><h3>Inner</h3><p>text</p></body></html>"};
+    string whitespace{"<html><head></head><body>\n<h6>Title</h6>\n<p>text</p></body></html>"};
+    string attributes{"<html><head></head><body><h1 id=\"t\">Title</h1><p>text</p></body></html>"};
+    string notHeading{"<html><head></head><body><hr/><h2>Title</h2><p>text</p></body></html>"};
+    string emptyBody{"<html><head></head><body>"};
+
+    // WHEN
+    size_t deepNoteIdx = m8r::HtmlOutlineRepresentation::findNoteTitleEnd(deepNote);
+    size_t whitespaceIdx = m8r::HtmlOutlineRepresentation::findNoteTitleEnd(whitespace);
+    size_t attributesIdx = m8r::HtmlOutlineRepresentation::findNoteTitleEnd(attributes);
+    size_t notHeadingIdx = m8r::HtmlOutlineRepresentation::findNoteTitleEnd(notHeading);
+    size_t emptyBodyIdx = m8r::HtmlOutlineRepresentation::findNoteTitleEnd(emptyBody);
+
+    // THEN tags go after the title heading, or to the start of the body if there is none
+    EXPECT_EQ(deepNote.find("<p>"), deepNoteIdx);
+    EXPECT_EQ(whitespace.find("\n<p>"), whitespaceIdx);
+    EXPECT_EQ(attributes.find("<p>"), attributesIdx);
+    EXPECT_EQ(notHeading.find("<hr/>"), notHeadingIdx);
+    EXPECT_EQ(emptyBody.size(), emptyBodyIdx);
+}
+
+TEST(HtmlTestCase, NoteTags)
+{
+    // GIVEN
+    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-nt.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
+    m8r::Mind mind(config);
+    m8r::HtmlColorsMock dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(),dummyColors,nullptr};
+    mind.learn();
+    mind.think().get();
+
+    ASSERT_GE(mind.remind().getOutlinesCount(), 1);
+    ASSERT_GE(mind.remind().getOutlines()[0]->getNotes().size(), 1);
+    m8r::Note* note = mind.remind().getOutlines()[0]->getNotes()[0];
+    note->addTag(mind.remind().getOntology().findOrCreateTag("mf-test-tag"));
+
+    // WHEN
+    string html{};
+    htmlRepresentation.to(note, &html);
+
+    // THEN
+    size_t titleEnd = html.find("</h", html.find("<body>"));
+    // tag name is also in heading metadata comment > look for tag rendered after title
+    size_t tagIdx = html.find("mf-test-tag&nbsp;</span>", titleEnd);
+    size_t descriptionIdx = html.find("<p>", titleEnd);
+    cout << "Title end: " << titleEnd << ", tag: " << tagIdx << ", description: " << descriptionIdx << endl;
+    ASSERT_NE(string::npos, titleEnd);
+    ASSERT_NE(string::npos, tagIdx);
+    EXPECT_EQ(string::npos, html.find("mf-test-tag&nbsp;</span>", tagIdx+1));
+    if(descriptionIdx != string::npos) {
+        EXPECT_LT(tagIdx, descriptionIdx);
+    }
 }

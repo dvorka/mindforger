@@ -49,6 +49,175 @@ LookAndFeels::~LookAndFeels()
 void LookAndFeels::init(QApplication* mindforgerApplication)
 {
     this->mindforgerApplication = mindforgerApplication;
+    this->systemPalette = mindforgerApplication->palette();
+
+#ifdef _WIN32
+    setWindowsDefaultFont();
+#endif
+}
+
+QFont LookAndFeels::getFixedFont()
+{
+    QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+#ifdef _WIN32
+    // system fixed font is Courier New on Windows, Consolas is the Windows
+    // native monospace font designed for ClearType
+    font.setFamily("Consolas");
+#endif
+    return font;
+}
+
+/*
+ * Light (window) background is the one on which pale icons look disabled.
+ */
+static bool isPaletteLight(const QPalette& palette)
+{
+    return palette.color(QPalette::Window).lightness() >= 128;
+}
+
+/*
+ * Darken icons of actions and, recursively, of their (sub)menus:
+ * action is marked as darkened so that its icon is never darkened twice (action
+ * might be shared by more menus or polished again).
+ */
+static void darkenPaleIcons(const QList<QAction*>& actions)
+{
+    static const char* DARKENED_PROPERTY = "mfIconDarkened";
+
+    for(QAction* action: actions) {
+        if(!action->icon().isNull() && !action->property(DARKENED_PROPERTY).toBool()) {
+            action->setIcon(LookAndFeels::darkenPaleIcon(action->icon()));
+            action->setProperty(DARKENED_PROPERTY, true);
+        }
+        if(action->menu()) {
+            darkenPaleIcons(action->menu()->actions());
+        }
+    }
+}
+
+bool LookAndFeels::isMenuPaletteLight() const
+{
+#ifdef __APPLE__
+    // macOS menu bar is native - menus follow OS appearance, not MindForger theme
+    return isPaletteLight(systemPalette);
+#else
+    return isPaletteLight(mindforgerApplication->palette());
+#endif
+}
+
+/*
+ * Menu icons are pale gray (designed for dark menus) which makes them hard
+ * to read on light menus. Menu tree is walked through actions as menus might
+ * have a parent different from the menu bar.
+ */
+void LookAndFeels::polishMenuIcons(QMenuBar* menuBar)
+{
+    if(isMenuPaletteLight()) {
+        darkenPaleIcons(menuBar->actions());
+    }
+}
+
+/*
+ * Menus which (re)create their actions dynamically (e.g. recent files) must polish
+ * icons whenever actions are created.
+ */
+void LookAndFeels::polishMenuIcons(QMenu* menu)
+{
+    if(isMenuPaletteLight()) {
+        darkenPaleIcons(menu->actions());
+    }
+}
+
+/*
+ * Toolbar icons are pale gray - avoid their appearing disabled on light toolbars.
+ */
+void LookAndFeels::polishToolBarIcons(QToolBar* toolBar)
+{
+    if(!isPaletteLight(mindforgerApplication->palette())) {
+        return;
+    }
+
+    darkenPaleIcons(toolBar->actions());
+}
+
+/*
+ * Icon engine which darkens pale grays of the source icon on demand.
+ */
+class DarkenedIconEngine : public QIconEngine
+{
+private:
+    QIcon source;
+
+public:
+    explicit DarkenedIconEngine(const QIcon& source) : source(source) {}
+
+    QIconEngine* clone() const override
+    {
+        return new DarkenedIconEngine(source);
+    }
+
+    QSize actualSize(const QSize& size, QIcon::Mode mode, QIcon::State state) override
+    {
+        return source.actualSize(size, mode, state);
+    }
+
+    QPixmap pixmap(const QSize& size, QIcon::Mode mode, QIcon::State state) override
+    {
+        QString key = QString{"mf-darkened-%1-%2x%3-%4-%5"}
+            .arg(source.cacheKey())
+            .arg(size.width())
+            .arg(size.height())
+            .arg(mode)
+            .arg(state);
+        QPixmap pixmap{};
+        if(QPixmapCache::find(key, &pixmap)) {
+            return pixmap;
+        }
+
+        // size is in device pixels - source is painted to an image of this very size
+        // so that it is not scaled by DPR again
+        QImage image{size, QImage::Format_ARGB32};
+        image.fill(Qt::transparent);
+        {
+            QPainter painter{&image};
+            source.paint(&painter, QRect{QPoint{0, 0}, size}, Qt::AlignCenter, QIcon::Normal, state);
+        }
+        for(int y=0; y<image.height(); y++) {
+            for(int x=0; x<image.width(); x++) {
+                QColor c = image.pixelColor(x, y);
+                // only light grays are darkened - colorful accents are kept
+                if(c.alpha() && c.hsvSaturation() < 40 && c.value() > 100) {
+                    c.setHsv(c.hsvHue(), c.hsvSaturation(), c.value()*45/100, c.alpha());
+                    image.setPixelColor(x, y, c);
+                }
+            }
+        }
+        pixmap = QPixmap::fromImage(image);
+        if(mode != QIcon::Normal) {
+            // disabled/active/selected look is derived from the darkened icon
+            QStyleOption option{};
+            QPixmap generated = QApplication::style()->generatedIconPixmap(mode, pixmap, &option);
+            if(!generated.isNull()) {
+                pixmap = generated;
+            }
+        }
+
+        QPixmapCache::insert(key, pixmap);
+        return pixmap;
+    }
+
+    void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) override
+    {
+        const qreal dpr = painter->device()->devicePixelRatioF();
+        QPixmap px = pixmap(rect.size()*dpr, mode, state);
+        px.setDevicePixelRatio(dpr);
+        painter->drawPixmap(rect, px);
+    }
+};
+
+QIcon LookAndFeels::darkenPaleIcon(const QIcon& icon)
+{
+    return QIcon{new DarkenedIconEngine{icon}};
 }
 
 bool LookAndFeels::isThemeNameValid(const QString& themeName) const
@@ -63,6 +232,8 @@ bool LookAndFeels::isThemeNameValid(const QString& themeName) const
 void LookAndFeels::setTheme(const QString& themeName)
 {
     MF_DEBUG("Setting MindForger Qt theme: " << themeName.toStdString() << endl);
+
+    activeThemeName = themeName;
 
     if(UI_THEME_LIGHT == themeName.toStdString()) {
         setLightTheme(false);
@@ -81,19 +252,8 @@ void LookAndFeels::setTheme(const QString& themeName)
     }
 }
 
-/*
- * Built-in dark theme definition.
- */
-void LookAndFeels::setDarkTheme()
+void LookAndFeels::setDarkEditorColors()
 {
-    textColor = QString("#FFF");
-    backgroundColor =  QString("#353535");
-    highlightColor = QString("#008C00"); // RGB: 0, 140, 0
-
-    editorBackgroundColor = backgroundColor;
-    editorLineNumbersForegroundColor = QString("#777777");
-    editorLineNumbersBackgroundColor = backgroundColor;
-
     editorBold.setRgb(0xFF,0xFF,0x00);
     editorBolder.setRgb(0xFF,0xFF,0x00);
     editorItalic.setRgb(0x00,0xAA,0x00);
@@ -105,17 +265,31 @@ void LookAndFeels::setDarkTheme()
     editorTaskWip.setRgb(0xFF,0xA5,0x00);
     editorTaskTodo.setRgb(0x99,0x00,0x00);
     editorCodeblock.setRgb(0x99,0x99,0x99);
-    editorHtmlTag.setRgb(0xAA,0x00,0xAA);
+    editorMathblock.setRgb(0xED,0x70,0x14);
+    editorHtmlTag.setRgb(0xFF,0x00,0xFF);
     editorHtmlEntity.setRgb(0xAA,0x00,0xAA);
     editorHtmlAttrName.setRgb(0xFF,0x00,0xFF);
     editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
     editorHtmlComment.setRgb(0x66,0x66,0x66);
     editorError.setRgb(0xFF,0x00,0x00);
+}
+
+void LookAndFeels::setDarkTheme()
+{
+    textColor = QString("#FFF");
+    backgroundColor =  QString("#353535");
+    highlightColor = QString("#008C00"); // RGB: 0, 140, 0
+
+    editorBackgroundColor = backgroundColor;
+    editorLineNumbersForegroundColor = QString("#777777");
+    editorLineNumbersBackgroundColor = backgroundColor;
+
+    setDarkEditorColors();
 
     cliTextColor = Qt::green;
 
     mindforgerApplication->setStyle(QStyleFactory::create("fusion"));
-    mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+    mindforgerApplication->setFont(getFixedFont());
 
     // Terminal green: QColor(0, 140, 0)
     // Terminal blue : QColor(42, 130, 218)
@@ -144,9 +318,28 @@ void LookAndFeels::setDarkTheme()
         "QMenu::item:disabled { color: #555; background: "}+backgroundColor+QString{"; }"};
 }
 
-/*
- * Built-in light theme definition.
- */
+void LookAndFeels::setLightEditorColors()
+{
+    editorBold.setRgb(0xC2,0x41,0x0C);
+    editorBolder.setRgb(0xC2,0x41,0x0C);
+    editorItalic.setRgb(0x7E,0x22,0xCE);
+    editorItalicer.setRgb(0x7E,0x22,0xCE);
+    editorStrikethrough.setRgb(0x9C,0xA3,0xAF);
+    editorLink.setRgb(0x1D,0x4E,0xD8);
+    editorList.setRgb(0x15,0x80,0x3D);
+    editorTaskDone.setRgb(0x15,0x80,0x3D);
+    editorTaskWip.setRgb(0xB4,0x53,0x09);
+    editorTaskTodo.setRgb(0xB9,0x1C,0x1C);
+    editorCodeblock.setRgb(0x0F,0x76,0x6E);
+    editorMathblock.setRgb(0xC2,0x41,0x0C); // darker MF orange ~ contrast on white
+    editorHtmlTag.setRgb(0xA2,0x1C,0xAF);
+    editorHtmlEntity.setRgb(0xA2,0x1C,0xAF);
+    editorHtmlAttrName.setRgb(0xC0,0x26,0xD3);
+    editorHtmlAttrValue.setRgb(0x6B,0x72,0x80);
+    editorHtmlComment.setRgb(0x9C,0xA3,0xAF);
+    editorError.setRgb(0xDC,0x26,0x26);
+}
+
 void LookAndFeels::setLightTheme(bool fixedFont)
 {
     textColor = QString("#000");
@@ -157,31 +350,13 @@ void LookAndFeels::setLightTheme(bool fixedFont)
     editorLineNumbersForegroundColor = QString("#BBBBBB");
     editorLineNumbersBackgroundColor = QString("#EEEEEE");
 
-    // magenta 0xBB,0x00,0xBB
-    // cyan 0x00,0x88,0x88
-    // blue 0x00,0x00,0xFF
-    // green 0x00,0x55,0x00
-
-    editorBold.setRgb(0xFF,0x69,0x00);
-    editorBolder.setRgb(0xFF,0x69,0x00);
-    editorItalic.setRgb(0x55,0x00,0x55);
-    editorItalicer.setRgb(0x55,0x00,0x55);
-    editorStrikethrough.setRgb(0xAA,0xAA,0xAA);
-    editorLink.setRgb(0x00,0x00,0xFF);
-    editorList.setRgb(0x00,0x99,0x00);
-    editorCodeblock.setRgb(0x00,0x88,0x88);
-    editorHtmlTag.setRgb(0x00,0x00,0xFF);
-    editorHtmlEntity.setRgb(0x00,0x00,0xFF);
-    editorHtmlAttrName.setRgb(0x00,0x00,0xFF);
-    editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
-    editorHtmlComment.setRgb(0xAA,0xAA,0xAA);
-    editorError.setRgb(0xFF,0x00,0x00);
+    setLightEditorColors();
 
     cliTextColor = Qt::black;
 
 #ifndef __APPLE__
     if(fixedFont) {
-        mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+        mindforgerApplication->setFont(getFixedFont());
     }
 #else
     Q_UNUSED(fixedFont);
@@ -195,6 +370,9 @@ void LookAndFeels::setLightTheme(bool fixedFont)
     palette.setColor(QPalette::Link, QColor(237, 118, 77));
     palette.setColor(QPalette::Highlight, QColor(237, 118, 77));
     palette.setColor(QPalette::HighlightedText, Qt::white);
+#ifdef _WIN32
+    setWindowsDisabledTextColors(palette);
+#endif
 
     mindforgerApplication->setPalette(palette);
 
@@ -213,26 +391,13 @@ void LookAndFeels::setBlackTheme(bool fixedFont)
     editorLineNumbersForegroundColor = QString("#555555");
     editorLineNumbersBackgroundColor = QString("#353535");
 
-    editorBold.setRgb(0xFF,0xFF,0x00);
-    editorBolder.setRgb(0xFF,0xFF,0x00);
-    editorItalic.setRgb(0x00,0xAA,0x00);
-    editorItalicer.setRgb(0x00,0xAA,0x00);
-    editorStrikethrough.setRgb(0x88,0x88,0x88);
-    editorLink.setRgb(0x00,0xFF,0xFF);
-    editorList.setRgb(0x00,0x99,0x00);
-    editorCodeblock.setRgb(0x99,0x99,0x99);
-    editorHtmlTag.setRgb(0xAA,0x00,0xAA);
-    editorHtmlEntity.setRgb(0xAA,0x00,0xAA);
-    editorHtmlAttrName.setRgb(0xFF,0x00,0xFF);
-    editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
-    editorHtmlComment.setRgb(0x66,0x66,0x66);
-    editorError.setRgb(0xFF,0x00,0x00);
+    setDarkEditorColors();
 
     cliTextColor = QColor(0x99,0xb1,0xff);
 
 #ifndef __APPLE__
     if(fixedFont) {
-        mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+        mindforgerApplication->setFont(getFixedFont());
     }
 #else
     Q_UNUSED(fixedFont);
@@ -284,56 +449,126 @@ void LookAndFeels::setBlackTheme(bool fixedFont)
 
 void LookAndFeels::setNativeTheme(bool fixedFont)
 {
-#if defined(__APPLE__)
+#ifdef __APPLE__
     Q_UNUSED(fixedFont);
-    #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-        // new(er) Qt versions detect light/dark themes, however, it does NOT set style correctly in case of dark theme:
-        // - Big Sur 11.6 + Qt 5.15.2
-        //   - bug: wrong QtTextEditor font - black, but should be white
-        //   - bug: CLI font - black, but should be green - root cause: MF changes palette to set green text > skip @ macOS
-
-        // system theme detection (quess) make sense ONLY in case of NATIVE theme (window color driven by OS)
-        MF_DEBUG("  OS theme (light/dark ~ #ececec/#323232): " << QPalette().color(QPalette::ColorRole::Window).name().toStdString() << endl);
-        if(QPalette().color(QPalette::ColorRole::Window).name().toStdString() == "#323232") {
-            MF_DEBUG("    macOS dark mode detected - PATCHING MindForger editor pallette" << endl);
-
-            // IMPROVE editor active line background fill (none @ macOS): NoteEditorView::highlightCurrentLine()
-
-            editorBold.setRgb(0xFF,0xFF,0x00);
-            editorBolder.setRgb(0xFF,0xFF,0x00);
-            editorItalic.setRgb(0x00,0xAA,0x00);
-            editorItalicer.setRgb(0x00,0xAA,0x00);
-            editorStrikethrough.setRgb(0x88,0x88,0x88);
-            editorLink.setRgb(0x00,0xFF,0xFF);
-            editorList.setRgb(0x00,0x99,0x00);
-            editorTaskDone.setRgb(0x00,0x99,0x00);
-            editorTaskWip.setRgb(0x99,0x00,0x00);
-            editorCodeblock.setRgb(0x99,0x99,0x99);
-            editorHtmlTag.setRgb(0xAA,0x00,0xAA);
-            editorHtmlEntity.setRgb(0xAA,0x00,0xAA);
-            editorHtmlAttrName.setRgb(0xFF,0x00,0xFF);
-            editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
-            editorHtmlComment.setRgb(0x66,0x66,0x66);
-            editorError.setRgb(0xFF,0x00,0x00);
-        }
-
-    #endif
 #else
     if(fixedFont) {
-        mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+        mindforgerApplication->setFont(getFixedFont());
     }
 #endif
 
 #ifdef _WIN32
-    // white native L&F selected row is light blue and white @ light blue is NOT readable
-    palette.setColor(QPalette::HighlightedText, Qt::black);
-    mindforgerApplication->setPalette(palette);
+    setWindowsNativeColors();
+#else
+    // editor colors follow OS (light/dark) palette
+    // - macOS: Qt 5.15+ detects dark mode, however, it does NOT set editor colors
+    //   correctly (Big Sur 11.6 + Qt 5.15.2: black text on dark background),
+    //   older Qt is light only
+    MF_DEBUG("  OS theme window color: " << systemPalette.color(QPalette::Window).name().toStdString() << endl);
+    if(isPaletteLight(systemPalette)) {
+        setLightEditorColors();
+    } else {
+        // IMPROVE editor active line background fill (none @ macOS): NoteEditorView::highlightCurrentLine()
+        setDarkEditorColors();
+    }
 #endif
 }
 
+#ifdef _WIN32
+/*
+ * Ensures that MindForger @ Qt 5 on Win uses the right font size (of text/textarea/*)
+ * widgets even if user scales the display from 100% to a different (even high) DPI
+ * setting. This function must be called before widgets are created.
+ */
+void LookAndFeels::setWindowsDefaultFont()
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    // without Win message box font (desktop settings unaware app), the default
+    // font is returned i.e. it is kept
+    const QFont messageBoxFont = QApplication::font("QMessageBox");
+    MF_DEBUG(
+        "Windows default font: "
+        << QGuiApplication::font().family().toStdString() << " "
+        << QGuiApplication::font().pointSizeF() << "pt > "
+        << messageBoxFont.family().toStdString() << " "
+        << messageBoxFont.pointSizeF() << "pt" << endl);
+    // QApplication::setFont() would drop fonts of widget classes (menu,
+    // status bar, ...) which Qt gets right
+    QGuiApplication::setFont(messageBoxFont);
+#endif
+}
+
+void LookAndFeels::setWindowsDisabledTextColors(QPalette& palette)
+{
+    // ensure that disabled text is clearly visible on light backgrounds
+    const QColor disabledText{0xA0,0xA0,0xA0};
+    palette.setColor(QPalette::Disabled, QPalette::Text, disabledText);
+    palette.setColor(QPalette::Disabled, QPalette::ButtonText, disabledText);
+    palette.setColor(QPalette::Disabled, QPalette::WindowText, disabledText);
+}
+
+void LookAndFeels::setWindowsNativeColors()
+{
+    palette = mindforgerApplication->palette();
+
+    textColor = palette.color(QPalette::WindowText).name();
+    backgroundColor = palette.color(QPalette::Window).name();
+
+    editorBackgroundColor = palette.color(QPalette::Base).name();
+    editorLineNumbersForegroundColor = QString("#999999");
+    editorLineNumbersBackgroundColor = backgroundColor;
+
+    cliTextColor = palette.color(QPalette::Text);
+
+    if(!isPaletteLight(palette)) {
+        // dark palette (High Contrast Black, ...) - Win colors are designed for
+        // accessibility, therefore they are kept; selection colors stay invalid
+        // so that status bar indicators use their default look
+        highlightColor = palette.color(QPalette::Highlight).name();
+        setDarkEditorColors();
+        return;
+    }
+
+    setWindowsDisabledTextColors(palette);
+    mindforgerApplication->setPalette(palette);
+
+    const QColor explorerSelection{0xCC,0xE8,0xFF};
+    QPalette itemViewPalette{palette};
+    for(auto group: {QPalette::Active, QPalette::Inactive}) {
+        itemViewPalette.setColor(group, QPalette::Highlight, explorerSelection);
+        itemViewPalette.setColor(group, QPalette::HighlightedText, palette.color(QPalette::Text));
+    }
+    QApplication::setPalette(itemViewPalette, "QAbstractItemView");
+
+    highlightColor = explorerSelection.name();
+    selectionColor = explorerSelection;
+    selectionTextColor = palette.color(QPalette::Text);
+
+    editorBold.setRgb(0xA3,0x15,0x15);
+    editorBolder.setRgb(0xA3,0x15,0x15);
+    editorItalic.setRgb(0x7E,0x22,0xCE);
+    editorItalicer.setRgb(0x7E,0x22,0xCE);
+    editorStrikethrough.setRgb(0xA0,0xA0,0xA0);
+    editorLink.setRgb(0x00,0x66,0xCC);
+    editorList.setRgb(0x00,0x78,0xD7);
+    editorTaskDone.setRgb(0x10,0x7C,0x10);
+    editorTaskWip.setRgb(0xCA,0x50,0x10);
+    editorTaskTodo.setRgb(0xC4,0x2B,0x1C);
+    editorCodeblock.setRgb(0x00,0x80,0x80);
+    editorMathblock.setRgb(0xED,0x70,0x14);
+    editorHtmlTag.setRgb(0x80,0x00,0x00);
+    editorHtmlEntity.setRgb(0x80,0x00,0x00);
+    editorHtmlAttrName.setRgb(0xE5,0x00,0x00);
+    editorHtmlAttrValue.setRgb(0x00,0x00,0xFF);
+    editorHtmlComment.setRgb(0x00,0x80,0x00);
+    editorError.setRgb(0xE8,0x11,0x23);
+}
+#endif
+
 bool LookAndFeels::isThemeNative() const
 {
-    return UI_THEME_NATIVE == config.getUiThemeName();
+    return UI_THEME_NATIVE == activeThemeName.toStdString()
+        || UI_THEME_NATIVE_WITH_FIXED_FONT == activeThemeName.toStdString();
 }
 
 std::string& LookAndFeels::getHtmlTextColor()

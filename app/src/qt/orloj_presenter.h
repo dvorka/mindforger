@@ -31,7 +31,7 @@
 #include "organizer_presenter.h"
 #include "kanban_presenter.h"
 #include "tags_table_presenter.h"
-#include "recent_notes_table_presenter.h"
+#include "recent_notes_presenter.h"
 #include "main_window_presenter.h"
 #include "outlines_table_presenter.h"
 #include "outlines_map_presenter.h"
@@ -119,7 +119,7 @@ private:
     NotebookTreesTablePresenter* notebookTreesTablePresenter;
     // the NotebookTree (registry entry) currently opened in outlinesMapPresenter, if any
     NotebookTree* currentNotebookTree;
-    RecentNotesTablePresenter* recentNotesTablePresenter;
+    RecentNotesPresenter* recentNotesPresenter;
     OutlineViewPresenter* outlineViewPresenter;
     OutlineHeaderViewPresenter* outlineHeaderViewPresenter;
     OutlineHeaderEditPresenter* outlineHeaderEditPresenter;
@@ -147,7 +147,7 @@ public:
     NotebookTreesTablePresenter* getNotebookTreesTable() const { return notebookTreesTablePresenter; }
     NotebookTree* getCurrentNotebookTree() const { return currentNotebookTree; }
     void setCurrentNotebookTree(NotebookTree* t) { currentNotebookTree = t; }
-    RecentNotesTablePresenter* getRecentNotesTable() const { return recentNotesTablePresenter; }
+    RecentNotesPresenter* getRecentNotes() const { return recentNotesPresenter; }
     OutlineViewPresenter* getOutlineView() const { return outlineViewPresenter; }
     OutlineHeaderViewPresenter* getOutlineHeaderView() const { return outlineHeaderViewPresenter; }
     OutlineHeaderEditPresenter* getOutlineHeaderEdit() const { return outlineHeaderEditPresenter; }
@@ -246,7 +246,7 @@ public slots:
     void slotShowOutlineHeader();
     void slotShowNote(const QItemSelection& selected, const QItemSelection& deselected);
     void slotShowSelectedRecentNote();
-    void slotShowRecentNote(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotRecentNotesEditedOnlyChanged(bool editedOnly);
     void slotShowSelectedTagRecallDialog();
     void slotShowTagRecallDialog(const QItemSelection& selected, const QItemSelection& deselected);
     void slotShowNavigator();

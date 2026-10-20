@@ -32,7 +32,7 @@ cd build
 echo ====================================
 echo Cmake: Generating build files
 echo ====================================
-cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF ..
+cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ..
 if "%ERRORLEVEL%" neq "0" goto :err
 
 echo ====================================

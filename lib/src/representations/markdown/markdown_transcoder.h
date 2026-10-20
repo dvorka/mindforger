@@ -26,11 +26,9 @@
 namespace m8r {
 
 // JavaScript based diagrams for HTML
-// https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.4.8/mermaid.min.js
-//   https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.4.8/mermaid.js
-// https://unpkg.com/browse/mermaid@8.4.8/
-//   https://unpkg.com/mermaid@8.4.8/dist/mermaid.js
-constexpr const auto JS_LIB_MERMAILD_URL = "https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.4.8/mermaid.js";
+// https://cdn.jsdelivr.net/npm/mermaid@12.2.0/dist/mermaid.min.js
+// - keep version in sync with the offline app/resources/qt/js/mermaid.js bundle
+constexpr const auto JS_LIB_MERMAILD_URL = "https://cdn.jsdelivr.net/npm/mermaid@12.2.0/dist/mermaid.min.js";
 
 // CSS cannot be downloaded from raw.githubusercontent.com (probably wrong content type) where it would be auto updated > www.mindforger.com hosting
 constexpr const auto EXPORT_DEFAULT_CSS_URL = "http://www.mindforger.com/support/export/css/light.css";

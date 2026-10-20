@@ -25,9 +25,10 @@ using namespace std;
 OutlineView::OutlineView(QWidget *parent)
     : QWidget(parent)
 {
-    // KISS & ONCE: show the name only - details to be rendered by Outline header view
+    // KISS & ONCE: show the name only - details to be rendered by O header view
     nameLabel = new OutlineNamePushButton{parent};
-    nameLabel->sizePolicy().setHorizontalPolicy(QSizePolicy::Maximum);
+    // name is elided to the view width to make 60%/40% layout feasible
+    nameLabel->setSizePolicy(QSizePolicy::Ignored, nameLabel->sizePolicy().verticalPolicy());
     nameLabel->setToolTip(tr("Click this Notebook name to open its Markdown preview in the right panel"));
     // make button to look like label
     nameLabel->setStyleSheet("QPushButton{ border: 0px; }");

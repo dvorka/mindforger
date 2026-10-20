@@ -27,6 +27,11 @@ win32 {
   QT += network
 }
 
+# Windows.h min()/max() macros break std::min()/std::max()
+win32 {
+  DEFINES += NOMINMAX
+}
+
 mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
 }
@@ -116,7 +121,7 @@ win32 {
     message("cmark-gfm: ensure that cmark-gfm was MANUALLY built BEFORE qmake run on Linux/macOS")
     # cmark-gfm to be built by qmake to enable clean system build for Launchpad debuild
     libcmark-gfm.target = libcmark-gfm
-    libcmark-gfm.commands = cd -L$$PWD/../deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
+    libcmark-gfm.commands = cd -L$$PWD/../deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && cmake --build .
     libcmark-gfm_clean.commands = cd -L$$PWD/../deps/cmark-gfm rm -rvf build
     QMAKE_EXTRA_TARGETS += libcmark-gfm
 
@@ -262,12 +267,14 @@ HEADERS += \
     ./src/qt/dialogs/fts_dialog.h \
     ./src/qt/dialogs/find_outline_by_name_dialog.h \
     ./src/qt/dialogs/find_note_by_name_dialog.h \
+    ./src/qt/dialogs/find_note_by_metadata_dialog.h \
     ./src/qt/dialogs/note_edit_dialog.h \
     ./src/qt/dialogs/emojis_dialog.h \
     ./src/qt/dialogs/configuration_dialog.h \
     ./src/qt/widgets/edit_tags_panel.h \
     ./src/qt/widgets/labeled_edit_line_panel.h \
     ./src/qt/widgets/line_number_panel.h \
+    ./src/qt/widgets/minimap_panel.h \
     ./src/qt/dialogs/outline_header_edit_dialog.h \
     ./src/qt/widgets/urgency_combo_box.h \
     ./src/qt/widgets/importance_combo_box.h \
@@ -328,9 +335,9 @@ HEADERS += \
     src/qt/tags_table_model.h \
     src/qt/tags_table_presenter.h \
     src/qt/tags_table_view.h \
-    src/qt/recent_notes_table_model.h \
-    src/qt/recent_notes_table_presenter.h \
-    src/qt/recent_notes_table_view.h \
+    src/qt/recent_notes_model.h \
+    src/qt/recent_notes_presenter.h \
+    src/qt/recent_notes_view.h \
     src/qt/navigator_presenter.h \
     src/qt/main_toolbar_view.h \
     src/qt/dialogs/export_file_dialog.h \
@@ -393,12 +400,14 @@ SOURCES += \
     ./src/qt/dialogs/fts_dialog.cpp \
     ./src/qt/dialogs/find_outline_by_name_dialog.cpp \
     ./src/qt/dialogs/find_note_by_name_dialog.cpp \
+    ./src/qt/dialogs/find_note_by_metadata_dialog.cpp \
     ./src/qt/dialogs/note_edit_dialog.cpp \
     ./src/qt/dialogs/emojis_dialog.cpp \
     ./src/qt/dialogs/configuration_dialog.cpp \
     ./src/qt/widgets/edit_tags_panel.cpp \
     ./src/qt/widgets/labeled_edit_line_panel.cpp \
     ./src/qt/widgets/line_number_panel.cpp \
+    ./src/qt/widgets/minimap_panel.cpp \
     ./src/qt/dialogs/outline_header_edit_dialog.cpp \
     ./src/qt/widgets/urgency_combo_box.cpp \
     ./src/qt/widgets/importance_combo_box.cpp \
@@ -455,9 +464,9 @@ SOURCES += \
     src/qt/tags_table_model.cpp \
     src/qt/tags_table_presenter.cpp \
     src/qt/tags_table_view.cpp \
-    src/qt/recent_notes_table_model.cpp \
-    src/qt/recent_notes_table_presenter.cpp \
-    src/qt/recent_notes_table_view.cpp \
+    src/qt/recent_notes_model.cpp \
+    src/qt/recent_notes_presenter.cpp \
+    src/qt/recent_notes_view.cpp \
     src/qt/navigator_presenter.cpp \
     src/qt/main_toolbar_view.cpp \
     src/qt/dialogs/export_file_dialog.cpp \

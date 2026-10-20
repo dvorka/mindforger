@@ -315,6 +315,16 @@ string Note::getDescriptionAsString(const std::string& separator) const
     return result;
 }
 
+size_t Note::getDescriptionSize() const
+{
+    size_t size{0};
+    for(const string* s:description) {
+        // line + new line
+        size += s->size() + 1;
+    }
+    return size;
+}
+
 void Note::setDescription(const vector<string*>& description)
 {
     this->description = description;

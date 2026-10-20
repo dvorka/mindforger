@@ -22,6 +22,9 @@ namespace m8r {
 
 using namespace std;
 
+// auto hide minimap if the editor is narrow
+constexpr const int MINIMAP_MIN_EDITOR_WIDTH = 480;
+
 inline bool caseInsensitiveLessThan(const QString &a, const QString &b)
 {
     return a.compare(b, Qt::CaseInsensitive) < 0;
@@ -67,8 +70,12 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     enableSyntaxHighlighting = Configuration::getInstance().isUiEditorEnableSyntaxHighlighting();
     highlighter->setEnabled(enableSyntaxHighlighting);
     // line numbers
+    showLineNumbers = Configuration::getInstance().isUiEditorShowLineNumbers();
     lineNumberPanel = new LineNumberPanel{this};
     lineNumberPanel->setVisible(showLineNumbers);
+    // minimap
+    showMinimap = Configuration::getInstance().isUiEditorShowMinimap();
+    minimapPanel = new MinimapPanel{this};
     // autocomplete
     model = new QStringListModel{this};
     completer = new QCompleter{this};
@@ -89,6 +96,23 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     QObject::connect(
         this, SIGNAL(updateRequest(QRect,int)),
         this, SLOT(updateLineNumberPanel(QRect,int))
+    );
+    // minimap (not on updateRequest which is emitted also on cursor blink)
+    QObject::connect(
+        document(), SIGNAL(contentsChanged()),
+        this, SLOT(updateMinimapPanel())
+    );
+    QObject::connect(
+        this, SIGNAL(cursorPositionChanged()),
+        this, SLOT(updateMinimapPanel())
+    );
+    QObject::connect(
+        verticalScrollBar(), SIGNAL(valueChanged(int)),
+        this, SLOT(updateMinimapPanel())
+    );
+    QObject::connect(
+        verticalScrollBar(), SIGNAL(rangeChanged(int,int)),
+        this, SLOT(updateMinimapPanel())
     );
     // current line highlight
     QObject::connect(
@@ -122,6 +146,13 @@ void NoteEditorView::setShowLineNumbers(bool show)
 {
     showLineNumbers = show;
     lineNumberPanel->setVisible(showLineNumbers);
+    layoutPanels();
+}
+
+void NoteEditorView::setShowMinimap(bool show)
+{
+    showMinimap = show;
+    layoutPanels();
 }
 
 void NoteEditorView::setEditorTabWidth(int tabWidth)
@@ -147,10 +178,25 @@ void NoteEditorView::setEditorFont(std::string fontName)
     QFont editorFont;
     QString qFontName = QString::fromStdString(fontName);
     if(QString::compare(qFontName, "")==0) { // No font defined, set to default
-        editorFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+        editorFont = LookAndFeels::getFixedFont();
         Configuration::getInstance().setEditorFont(editorFont.toString().toUtf8().constData());
     } else {
         editorFont.fromString(qFontName);
+#ifdef _WIN32
+        // Monospace is a Linux font alias which is resolved to Courier New on Windows
+        if(editorFont.family() == "Monospace") {
+            editorFont.setFamily(LookAndFeels::getFixedFont().family());
+        }
+        // default editor font point size is absolute, while application font
+        // size can be increased (Windows accessibility text size), therefore
+        // default editor font is kept at least as big as the application font
+        if(fontName == Configuration::DEFAULT_EDITOR_FONT
+           && editorFont.pointSize() > 0
+           && editorFont.pointSize() < QApplication::font().pointSize()
+        ) {
+            editorFont.setPointSize(QApplication::font().pointSize());
+        }
+#endif
         setFont(editorFont);
     }
 
@@ -164,6 +210,9 @@ void NoteEditorView::slotConfigurationUpdated()
     setEditorTabWidth(Configuration::getInstance().getUiEditorTabWidth());
     setEditorTabsAsSpacesPolicy(Configuration::getInstance().isUiEditorTabsAsSpaces());
     setEditorFont(Configuration::getInstance().getEditorFont());
+
+    setShowLineNumbers(Configuration::getInstance().isUiEditorShowLineNumbers());
+    setShowMinimap(Configuration::getInstance().isUiEditorShowMinimap());
 }
 
 /**
@@ -860,6 +909,10 @@ int NoteEditorView::lineNumberPanelWidth()
         }
 #if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
         int space = 3 + fontMetrics().horizontalAdvance(QLatin1Char{'9'}) * digits;
+    #ifdef _WIN32
+        // center numbers to separate them from the text
+        space += fontMetrics().horizontalAdvance(QLatin1Char{'9'});
+    #endif
 #else
         int space = 3 + fontMetrics().width(QLatin1Char{'9'}) * digits;
 #endif
@@ -874,7 +927,7 @@ void NoteEditorView::updateLineNumberPanelWidth(int newBlockCount)
     UNUSED_ARG(newBlockCount);
 
     // IMPROVE comment to parameter and ignore macro
-    setViewportMargins(lineNumberPanelWidth(), 0, 0, 0);
+    setViewportMargins(lineNumberPanelWidth(), 0, minimapPanelWidth(), 0);
 }
 
 void NoteEditorView::updateLineNumberPanel(const QRect& r, int deltaY)
@@ -895,8 +948,44 @@ void NoteEditorView::updateLineNumberPanel(const QRect& r, int deltaY)
 void NoteEditorView::resizeEvent(QResizeEvent* e)
 {
     QPlainTextEdit::resizeEvent(e);
+    layoutPanels();
+}
+
+void NoteEditorView::layoutPanels()
+{
+    // minimap visibility depends on the editor width - margins must follow it
+    updateLineNumberPanelWidth(0);
+
     QRect contents = contentsRect();
     lineNumberPanel->setGeometry(QRect(contents.left(), contents.top(), lineNumberPanelWidth(), contents.height()));
+
+    const int minimapWidth = minimapPanelWidth();
+    minimapPanel->setVisible(minimapWidth > 0);
+    if(minimapWidth > 0) {
+        // minimap is between the text and the vertical scrollbar
+        const int right = viewport()->geometry().right();
+        minimapPanel->setGeometry(QRect(right + 1, contents.top(), minimapWidth, contents.height()));
+    }
+}
+
+/*
+ * Minimap panel
+ */
+
+int NoteEditorView::minimapPanelWidth() const
+{
+    // hide the minimap in narrow editors so that there is enough space for the text
+    if(showMinimap && width() >= MINIMAP_MIN_EDITOR_WIDTH) {
+        return MinimapPanel::WIDTH;
+    }
+    return 0;
+}
+
+void NoteEditorView::updateMinimapPanel()
+{
+    if(minimapPanel->isVisible()) {
+        minimapPanel->update();
+    }
 }
 
 void NoteEditorView::lineNumberPanelPaintEvent(QPaintEvent* event)

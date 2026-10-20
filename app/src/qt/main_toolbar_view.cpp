@@ -93,6 +93,8 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
     actionHelp = addAction(
         QIcon(":/icons/help.svg"),
         "Open Documentation");
+
+    LookAndFeels::getInstance().polishToolBarIcons(this);
 }
 
 MainToolbarView::~MainToolbarView()

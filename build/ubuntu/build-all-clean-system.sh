@@ -34,7 +34,7 @@ sudo apt-get install build-essential zlib1g-dev libcurl4-gnutls-dev libhunspell-
 # deps build
 cd  ${SCRIPT_HOME}/../../deps/cmark-gfm
 mkdir build && cd build
-cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF ..
+cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ..
 cmake --build .
 
 # build

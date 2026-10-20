@@ -57,7 +57,8 @@ private:
     enum State {
         Normal=1<<0,
         InComment=1<<1,
-        InCode=1<<2
+        InCode=1<<2,
+        InMath=1<<3
     };
 
     bool enabled;
@@ -113,6 +114,7 @@ private:
     void addRegex(Type type, const QString& pattern, bool minimal=true);
     void highlightPatterns(const QString& text);
     bool highlightMultilineMdCode(const QString& text);
+    bool highlightMultilineMath(const QString& text);
     void highlightMultilineHtmlComments(const QString& text);
 
     void spellCheck(const QString& text);
