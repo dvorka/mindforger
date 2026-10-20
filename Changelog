@@ -18,6 +18,7 @@
     * Enhancement: Note view shows Note tags under the Note title - aligned
       w/ Notebook description view which shows Notebook tags under the title.
     * Enhancement: editor line numbers can be hidden in Preferences.
+    * Enhancement: editor highlights multiline $$...$$ math blocks w/ own color.
     * Enhancement: Note and Notebook editor is wider than the Notebook outline
       shown next to it - the outline/editor ratio is newly 40%/60%.
     * Enhancement: Esc leaves the command palette and gives focus to the next component
