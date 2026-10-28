@@ -275,3 +275,64 @@ TEST(OutlineTestCase, DirectOutlineNoteChildren) {
     EXPECT_EQ("4", directChildren[2]->getName());
     EXPECT_EQ("6", directChildren[3]->getName());
 }
+
+TEST(OutlineTestCase, NotePathToRootIncludesFirstNote) {
+    // GIVEN O w/ Ns hierarchy where the root of the path is the FIRST N
+    string repositoryDir{"/tmp/mf-unit-repository-o-n-path-to-root"};
+    m8r::removeDirectoryRecursively(repositoryDir.c_str());
+    m8r::Installer installer{};
+    installer.createEmptyMindForgerRepository(repositoryDir);
+    string oFile{repositoryDir+"/memory/o.md"};
+    /*
+     * 0 . .
+     * . 1 .
+     * . . 2
+     * 3 . .
+     */
+    string oContent{
+        "# Outline"
+        "\nO."
+        "\n## 0"
+        "\nT0."
+        "\n### 1"
+        "\nT1."
+        "\n#### 2"
+        "\nT2."
+        "\n## 3"
+        "\nT3."
+        "\n"};
+    m8r::stringToFile(oFile,oContent);
+
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-otc-nptr.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
+    m8r::Mind mind{config};
+    mind.learn();
+    mind.think().get();
+    m8r::Outline* o = mind.remind().getOutlines().at(0);
+    ASSERT_EQ(4, o->getNotesCount());
+
+    // WHEN
+    vector<int> pathOfDeepest{};
+    o->getNotePathToRoot(2, pathOfDeepest);
+    vector<int> pathOfChild{};
+    o->getNotePathToRoot(1, pathOfChild);
+    vector<int> pathOfFirst{};
+    o->getNotePathToRoot(0, pathOfFirst);
+    vector<int> pathOfTopLevel{};
+    o->getNotePathToRoot(3, pathOfTopLevel);
+
+    // THEN
+    ASSERT_EQ(2, pathOfDeepest.size());
+    EXPECT_EQ(1, pathOfDeepest[0]);
+    EXPECT_EQ(0, pathOfDeepest[1]);
+    ASSERT_EQ(1, pathOfChild.size());
+    EXPECT_EQ(0, pathOfChild[0]);
+    EXPECT_EQ(0, pathOfFirst.size());
+    EXPECT_EQ(0, pathOfTopLevel.size());
+}

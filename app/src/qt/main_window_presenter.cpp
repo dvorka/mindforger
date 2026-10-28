@@ -72,6 +72,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     findOutlineByNameDialog = new FindOutlineByNameDialog{&view};
     findThingByNameDialog = new FindOutlineByNameDialog{&view};
     findNoteByNameDialog = new FindNoteByNameDialog{&view};
+    findNoteByMetadataDialog = new FindNoteByMetadataDialog{&view};
     findOutlineByTagDialog = new FindOutlineByTagDialog{
         mind->remind().getOntology(), &view};
     findNoteByTagDialog = new FindNoteByTagDialog{mind->remind().getOntology(), &view};
@@ -157,6 +158,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         findThingByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindThingByName()));
     QObject::connect(
         findNoteByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByName()));
+    QObject::connect(
+        findNoteByMetadataDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByMetadata()));
     QObject::connect(
         findOutlineByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByTag()));
     QObject::connect(
@@ -273,6 +276,7 @@ MainWindowPresenter::~MainWindowPresenter()
     if(findOutlineByNameDialog) delete findOutlineByNameDialog;
     if(findThingByNameDialog) delete findThingByNameDialog;
     if(findNoteByNameDialog) delete findNoteByNameDialog;
+    if(findNoteByMetadataDialog) delete findNoteByMetadataDialog;
     if(findOutlineByTagDialog) delete findOutlineByTagDialog;
     if(configDialog) delete configDialog;
     //if(findNoteByNameDialog) delete findNoteByNameDialog;
@@ -320,8 +324,7 @@ void MainWindowPresenter::showInitialView()
                 } else if(!string{START_TO_TAGS}.compare(config.getStartupView())) {
                     orloj->showFacetTagCloud();
                 } else if(!string{START_TO_RECENT}.compare(config.getStartupView())) {
-                    vector<Note*> notes{};
-                    orloj->showFacetRecentNotes(mind->getAllNotes(notes));
+                    doActionViewRecentNotes();
                 } else if(!string{START_TO_EISENHOWER_MATRIX}.compare(config.getStartupView())) {
                     orloj->showFacetEisenhowerMatrix(
                          nullptr,
@@ -945,7 +948,17 @@ void MainWindowPresenter::slotMainToolbarVisibilityChanged(bool visibility)
 void MainWindowPresenter::doActionFindOutlineByName(const std::string& phrase)
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
-    vector<Outline*> os{mind->getOutlines()};
+    vector<Outline*> os{};
+    NotebookTree* t = orloj->getCurrentNotebookTree();
+    if(t && orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        // Notebook shelf is opened: find ONLY Notebooks which are on the shelf
+        // and visible in the active scope (exactly as they are shown on the shelf)
+        findOutlineByNameDialog->setWindowTitle(tr("Find Notebook by Name on Shelf"));
+        mind->notebookTreeGetOutlines(mind->notebookTreeGet(t->getKey()), os, true);
+    } else {
+        findOutlineByNameDialog->setWindowTitle(tr("Find Notebook by Name"));
+        os = mind->getOutlines();
+    }
     Outline::sortByRead(os);
     vector<Thing*> es{os.begin(),os.end()};
 
@@ -1064,17 +1077,7 @@ void MainWindowPresenter::doSwitchFindByTagDialog(bool toFindNotesByTag)
 void MainWindowPresenter::handleFindNoteByTag()
 {
     if(findNoteByTagDialog->getChoice()) {
-        Note* choice = (Note*)findNoteByTagDialog->getChoice();
-
-        choice->incReads();
-        choice->makeDirty();
-
-        orloj->showFacetOutline(choice->getOutline());
-        orloj->getNoteView()->refresh(choice);
-        orloj->showFacetNoteView();
-        orloj->getOutlineView()->selectRowByNote(choice);
-        // IMPROVE make this more efficient
-        statusBar->showInfo(QString(tr("Note "))+QString::fromStdString(choice->getName()));
+        showFoundNote((Note*)findNoteByTagDialog->getChoice());
     } else {
         statusBar->showInfo(QString(tr("Note not found")+": ") += findNoteByNameDialog->getSearchedString());
     }
@@ -1111,48 +1114,84 @@ void MainWindowPresenter::handleRefactorNoteToOutline()
     }
 }
 
+Outline* MainWindowPresenter::getFindNotesScope(vector<Note*>& notes)
+{
+    // opened Notebook scopes the search to its Notes, otherwise all Notes are searched
+    if(orloj->isFacetActiveOutlineOrNoteView() || orloj->isFacetActiveOutlineOrNoteEdit()) {
+        Outline* scope = orloj->getOutlineView()->getCurrentOutline();
+        if(scope) {
+            notes = scope->getNotes();
+            return scope;
+        }
+    }
+
+    mind->getAllNotes(notes);
+    return nullptr;
+}
+
+void MainWindowPresenter::showFoundNote(Note* note)
+{
+    note->incReads();
+    note->makeDirty();
+
+    orloj->showFacetOutline(note->getOutline());
+    orloj->getNoteView()->refresh(note);
+    orloj->showFacetNoteView();
+    orloj->getOutlineView()->selectRowByNote(note);
+    // IMPROVE make this more efficient
+    statusBar->showInfo(QString(tr("Note "))+QString::fromStdString(note->getName()));
+}
+
 void MainWindowPresenter::doActionFindNoteByName()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
-    if(orloj->isFacetActiveOutlineOrNoteView() || orloj->isFacetActiveOutlineOrNoteEdit()) {
+    vector<Note*> allNotes{};
+    Outline* scope = getFindNotesScope(allNotes);
+    if(scope) {
         findNoteByNameDialog->setWindowTitle(tr("Find Note by Name in Notebook"));
-        findNoteByNameDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
-        vector<Note*> allNotes(findNoteByNameDialog->getScope()->getNotes());
-        Outline::sortByRead(allNotes);
-        findNoteByNameDialog->show(allNotes);
+        findNoteByNameDialog->setScope(scope);
     } else {
         findNoteByNameDialog->setWindowTitle(tr("Find Note by Name"));
         findNoteByNameDialog->clearScope();
-        vector<Note*> allNotes{};
-        mind->getAllNotes(allNotes);
-        Outline::sortByRead(allNotes);
-        findNoteByNameDialog->show(allNotes);
     }
+    Outline::sortByRead(allNotes);
+    findNoteByNameDialog->show(allNotes);
 }
 
 void MainWindowPresenter::handleFindNoteByName()
 {
     if(findNoteByNameDialog->getChoice()) {
-        Note* choice = (Note*)findNoteByNameDialog->getChoice();
-
-        choice->incReads();
-        choice->makeDirty();
-
-        orloj->showFacetOutline(choice->getOutline());
-        orloj->getNoteView()->refresh(choice);
-        orloj->showFacetNoteView();
-        orloj->getOutlineView()->selectRowByNote(choice);
-        // IMPROVE make this more efficient
-        statusBar->showInfo(QString(tr("Note "))+QString::fromStdString(choice->getName()));
+        showFoundNote((Note*)findNoteByNameDialog->getChoice());
     } else {
         statusBar->showInfo(QString(tr("Note not found")+": ") += findNoteByNameDialog->getSearchedString());
+    }
+}
+
+void MainWindowPresenter::doActionFindNoteByMetadata()
+{
+    vector<Note*> notes{};
+    const bool scoped = getFindNotesScope(notes) != nullptr;
+    if(scoped) {
+        findNoteByMetadataDialog->setWindowTitle(tr("Find Note by Metadata in Notebook"));
+    } else {
+        findNoteByMetadataDialog->setWindowTitle(tr("Find Note by Metadata"));
+    }
+    // Notebook column is useless when all Notes are from the opened Notebook
+    findNoteByMetadataDialog->show(notes, !scoped);
+}
+
+void MainWindowPresenter::handleFindNoteByMetadata()
+{
+    if(findNoteByMetadataDialog->getChoice()) {
+        showFoundNote(findNoteByMetadataDialog->getChoice());
     }
 }
 
 void MainWindowPresenter::doActionViewRecentNotes()
 {
     vector<Note*> notes{};
-    mind->getAllNotes(notes, true, config.isRecentIncludeOs());
+    // Ns are sorted (and grouped) by the Recent Notes view based on its mode
+    mind->getAllNotes(notes, false, config.isRecentIncludeOs());
     orloj->showFacetRecentNotes(notes);
 }
 
@@ -4263,7 +4302,7 @@ void MainWindowPresenter::doActionHelpMarkdown()
 void MainWindowPresenter::doActionHelpDiagrams()
 {
     QDesktopServices::openUrl(
-        QUrl{"https://mermaid-js.github.io/mermaid/#/"}
+        QUrl{"https://mermaid.ai/open-source/intro/"}
     );
 }
 

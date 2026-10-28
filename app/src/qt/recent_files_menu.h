@@ -20,6 +20,7 @@
  * - moved to M8R namespace
  * - default parent widget removed from constructor
  * - constructor takes menu title as parameter
+ * - action icons are polished by MindForger look & feel
  */
 #ifndef M8RUI_RECENT_FILES_MENU_H
 #define M8RUI_RECENT_FILES_MENU_H

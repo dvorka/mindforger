@@ -95,7 +95,8 @@
 # ########################################################################
 
 # Ubuntu version:
-# - https://wiki.ubuntu.com/Releases
+# - https://en.wikipedia.org/wiki/Ubuntu_version_history
+#   https://wiki.ubuntu.com/Releases
 # - obsolete:
 #     precise quantal saucy precise utopic vivid wily yakkety artful cosmic kinetic
 # - history (* LTS):
@@ -134,11 +135,8 @@ if [[ ${#} == 1 ]]
 then
     export UBUNTU_VERSIONS=(${1})
 else
-    export UBUNTU_VERSIONS=(jammy noble resolute)
-    # export UBUNTU_VERSIONS=(noble resolute)
+    export UBUNTU_VERSIONS=(jammy noble resolute stonking)
     # export UBUNTU_VERSIONS=(jammy)
-    # export UBUNTU_VERSIONS=(noble)
-    # export UBUNTU_VERSIONS=(resolute)
 fi
 
 # environment variables
@@ -339,7 +337,7 @@ function releaseForParticularUbuntuVersion {
     # 4) build MF dependencies
     echoStep "Build MindForger library dependencies: cmark-gfm"
     rm -rf${OPT_VERBOSE} deps/cmark-gfm/build
-    cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build . --parallel ${BUILD_JOBS} && cd ../../..
+    cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && cmake --build . --parallel ${BUILD_JOBS} && cd ../../..
     echoStepDone "cmark-gfm build"
     # cmark-gfm static library:
     ls -l deps/cmark-gfm/build/src/libcmark-gfm.a

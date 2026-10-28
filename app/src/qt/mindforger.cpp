@@ -178,6 +178,15 @@ int main(int argc, char* argv[])
     //   - https://stackoverflow.com/questions/35432749/disable-web-security-in-chrome-48
     //     ^ changes in required parameters with disable-web-security
 
+#if defined(_WIN32) && QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    // Win: scale UI according to display scaling (Qt5 scales fonts only by default)
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
+        Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+#endif
+    // ensure nice icons by using high DPI pixmaps on HiDPI displays (Retina, 4K, QT_SCALE_FACTOR, ...)
+    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0) && defined(MF_QT_WEB_ENGINE)
     char ARG_DISABLE_WEB_SECURITY[] = "--disable-web-security";
     int newArgc = argc + 1 + 1;

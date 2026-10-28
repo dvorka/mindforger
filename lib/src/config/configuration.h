@@ -129,13 +129,21 @@ constexpr const auto UI_MATH_LIB_MATHJAX = "mathjax";
 constexpr const auto UI_OS_TABLE_SORT_ORDER_ASC = "ascending";
 constexpr const auto UI_OS_TABLE_SORT_ORDER_DESC = "descending";
 
-#ifdef __APPLE__
+#if defined(__APPLE__)
 constexpr const auto UI_DEFAULT_THEME = UI_THEME_DARK;
+#elif defined(_WIN32)
+// Windows: native theme (Windows palette and Segoe UI) feels like a Windows app
+constexpr const auto UI_DEFAULT_THEME = UI_THEME_NATIVE;
 #else
 constexpr const auto UI_DEFAULT_THEME = UI_THEME_DARK;
 #endif
 constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
+#ifdef _WIN32
+// Windows: Monospace font alias does not exist, Consolas is native monospace font
+constexpr const auto UI_DEFAULT_EDITOR_FONT = "Consolas,10";
+#else
 constexpr const auto UI_DEFAULT_EDITOR_FONT = "Monospace,10";
+#endif
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
 struct KnowledgeTool
@@ -344,6 +352,8 @@ public:
     static constexpr const int DEFAULT_EDITOR_TAB_WIDTH = 4;
     static constexpr const int DEFAULT_NAVIGATOR_MAX_GRAPH_NODES = 150;
     static constexpr const bool DEFAULT_EDITOR_SYNTAX_HIGHLIGHT = true;
+    static constexpr const bool DEFAULT_EDITOR_SHOW_LINE_NUMBERS = true;
+    static constexpr const bool DEFAULT_EDITOR_SHOW_MINIMAP = true;
     static constexpr const bool DEFAULT_EDITOR_AUTOCOMPLETE = true;
     static constexpr const bool DEFAULT_EDITOR_SMART_EDITOR = true;
     static constexpr const bool DEFAULT_EDITOR_SPACE_SECTION_ESCAPING = true;
@@ -360,6 +370,7 @@ public:
     static constexpr const int DEFAULT_OS_TABLE_SORT_COLUMN = 7;
     static constexpr const bool DEFAULT_OS_TABLE_SORT_ORDER = false;
     static constexpr const bool DEFAULT_CLICK_NOTE_VIEW_TO_EDIT = true;
+    static constexpr const bool DEFAULT_RECENT_NOTES_EDITED_ONLY = false;
 
     static constexpr int EDITOR_MAX_AUTOCOMPLETE_LINES = 1000;
 
@@ -438,6 +449,7 @@ private:
     int uiEditorTabWidth;
     bool uiEditorLineNumbers; // show line numbers
     bool uiEditorSyntaxHighlighting; // toggle syntax highlighting
+    bool uiEditorShowMinimap; // show text overview strip next to the editor
     bool uiEditorLiveSpellCheck;
     std::string uiEditorSpellCheckLanguage;
     // transient: available languages loaded in runtime from environment and not persisted
@@ -460,6 +472,7 @@ private:
     int uiOsTableSortColumn;
     bool uiOsTableSortOrder; // true if ascending, else descending
     bool uiDoubleClickNoteViewToEdit;
+    bool uiRecentNotesEditedOnly; // true if edited Ns only, else viewed or edited Ns
 
     // organizers
     std::vector<Organizer*> organizers;
@@ -656,6 +669,8 @@ public:
     void setUiEditorShowLineNumbers(bool show) { uiEditorLineNumbers = show; }
     bool isUiEditorEnableSyntaxHighlighting() const { return uiEditorSyntaxHighlighting; }
     void setUiEditorEnableSyntaxHighlighting(bool enable) { uiEditorSyntaxHighlighting = enable; }
+    bool isUiEditorShowMinimap() const { return uiEditorShowMinimap; }
+    void setUiEditorShowMinimap(bool show) { uiEditorShowMinimap = show; }
     bool isUiEditorLiveSpellCheck() const { return uiEditorLiveSpellCheck; }
     void setUiEditorLiveSpellCheck(bool enable) { uiEditorLiveSpellCheck= enable; }
     std::string getUiEditorSpellCheckDefaultLanguage() const {
@@ -785,6 +800,8 @@ public:
     void setUiOsTableSortOrder(const bool ascending) { this->uiOsTableSortOrder = ascending; }
     bool isUiDoubleClickNoteViewToEdit() const { return this->uiDoubleClickNoteViewToEdit; }
     void setUiDoubleClickNoteViewToEdit(bool enable) { this->uiDoubleClickNoteViewToEdit = enable; }
+    bool isUiRecentNotesEditedOnly() const { return this->uiRecentNotesEditedOnly; }
+    void setUiRecentNotesEditedOnly(bool editedOnly) { this->uiRecentNotesEditedOnly = editedOnly; }
 };
 
 } // namespace

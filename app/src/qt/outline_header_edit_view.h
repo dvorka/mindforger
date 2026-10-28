@@ -57,7 +57,6 @@ public:
         bottomButtonsPanel->setOutline(outline);
         noteEditor->setPlainText(QString::fromStdString(mdDescription));
     }
-    void setEditorShowLineNumbers(bool show) { noteEditor->setShowLineNumbers(show); }
     void setStatusBar(const StatusBarView* statusBar) { noteEditor->setStatusBar(statusBar); }
 
     void focusName() { topNamePanel->focusName(); }

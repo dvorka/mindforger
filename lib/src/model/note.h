@@ -156,6 +156,11 @@ public:
     void setType(const NoteType* type);
     const std::vector<std::string*>& getDescription() const;
     std::string getDescriptionAsString(const std::string& separator="\n") const;
+    /**
+     * @brief Get size of the description in bytes (UTF-8) w/ new lines i.e. size
+     * of getDescriptionAsString() w/o building the string.
+     */
+    size_t getDescriptionSize() const;
     void setDescription(const std::vector<std::string*>& description);
     void moveDescription(std::vector<std::string*>& target);
     void clearDescription();

@@ -26,8 +26,9 @@ namespace m8r {
 /**
  * @brief Association score delegate.
  *
- * Paints association score as a meter - a thin rounded bar in the theme
- * highlight color w/ the rounded percentage next to it.
+ * Paints association score as a meter - a thin rounded bar w/ the rounded
+ * percentage next to it. Bar color reflects the score: green for strong
+ * (100-66%), orange for medium (65-33%) and red for weak (32-0%) associations.
  */
 class AssocScoreDelegate : public QStyledItemDelegate
 {
@@ -36,6 +37,16 @@ class AssocScoreDelegate : public QStyledItemDelegate
 public:
     // item data role which holds the score <0,1> as float
     static constexpr int ROLE_SCORE = Qt::UserRole + 2;
+
+    // bar colors for strong, medium and weak associations
+    static const QColor COLOR_STRONG;
+    static const QColor COLOR_MEDIUM;
+    static const QColor COLOR_WEAK;
+
+    /**
+     * @brief Get bar color for the rounded score percentage <0,100>.
+     */
+    static QColor scoreColor(int percent);
 
     explicit AssocScoreDelegate(QObject* parent);
     AssocScoreDelegate(const AssocScoreDelegate&) = delete;

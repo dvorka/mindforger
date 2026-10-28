@@ -34,7 +34,6 @@ OutlineHeaderEditPresenter::OutlineHeaderEditPresenter(
         = new OutlineHeaderEditDialog{mwp->getMind()->remind().getOntology(), view};
     this->view->setOutlineHeaderEditDialog(outlineHeaderEditDialog);
 
-    view->setEditorShowLineNumbers(Configuration::getInstance().isUiEditorShowLineNumbers());
     view->setStatusBar(mwp->getStatusBar()->getView());
 
     // signals

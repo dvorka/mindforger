@@ -102,14 +102,19 @@ TEST(ConfigurationTestCase, FromEnvironment)
 
 TEST(ConfigurationTestCase, SaveDefaultConfig)
 {
+    // GIVEN
     m8r::filesystem::File file{"/tmp/.mindforger.md.default"};
     m8r::MarkdownConfigurationRepresentation configRepresentation{};
+    // default theme is platform specific (Windows: native, other platforms: dark)
+    string expectedTheme{"Theme: "};
+    expectedTheme += m8r::UI_DEFAULT_THEME;
 
+    // WHEN
     configRepresentation.save(file);
 
-    // asserts
+    // THEN
     string* asString = m8r::fileToString(file.getName());
-    EXPECT_NE(std::string::npos, asString->find("Theme: dark"));
+    EXPECT_NE(std::string::npos, asString->find(expectedTheme));
     EXPECT_NE(std::string::npos, asString->find("Time scope: 0y0m0d0h0m"));
     EXPECT_NE(std::string::npos, asString->find("Editor syntax highlighting: yes"));
     EXPECT_NE(std::string::npos, asString->find("Save reads metadata: yes"));
@@ -345,6 +350,79 @@ TEST(ConfigurationTestCase, UiLocaleSaveAndLoad)
     // cleanup
     c.setConfigFilePath(backupConfigPath);
     c.setUiLocale(backupLocale);
+}
+
+TEST(ConfigurationTestCase, RecentNotesEditedOnlySaveAndLoad)
+{
+    // GIVEN
+    string configPath{"/tmp/cfg-recent-notes-edited-only-save-and-load.md"};
+    m8r::MarkdownConfigurationRepresentation configRepresentation{};
+    m8r::Configuration& c = m8r::Configuration::getInstance();
+    string backupConfigPath = c.getConfigFilePath();
+    bool backupEditedOnly = c.isUiRecentNotesEditedOnly();
+    c.setConfigFilePath(configPath);
+
+    for(bool editedOnly: {true, false}) {
+        // WHEN: mode is selected, saved and reloaded
+        c.setUiRecentNotesEditedOnly(editedOnly);
+        configRepresentation.save(c);
+        std::unique_ptr<string> asString{m8r::fileToString(c.getConfigFilePath())};
+        c.setUiRecentNotesEditedOnly(!editedOnly);
+        bool loaded = configRepresentation.load(c);
+
+        // THEN
+        EXPECT_NE(
+            std::string::npos,
+            asString.get()->find(string{"Recent notes edited only: "} + (editedOnly?"yes":"no")));
+        ASSERT_TRUE(loaded);
+        EXPECT_EQ(editedOnly, c.isUiRecentNotesEditedOnly());
+    }
+
+    // cleanup
+    c.setConfigFilePath(backupConfigPath);
+    c.setUiRecentNotesEditedOnly(backupEditedOnly);
+}
+
+TEST(ConfigurationTestCase, EditorLineNumbersAndMinimapSaveAndLoad)
+{
+    // GIVEN
+    string configPath{"/tmp/cfg-editor-line-numbers-and-minimap-save-and-load.md"};
+    m8r::MarkdownConfigurationRepresentation configRepresentation{};
+    m8r::Configuration& c = m8r::Configuration::getInstance();
+    string backupConfigPath = c.getConfigFilePath();
+    bool backupShowLineNumbers = c.isUiEditorShowLineNumbers();
+    bool backupShowMinimap = c.isUiEditorShowMinimap();
+    c.setConfigFilePath(configPath);
+
+    // nothing, line numbers only, minimap only and both
+    for(bool showLineNumbers: {false, true}) {
+        for(bool showMinimap: {false, true}) {
+            // WHEN: panels are toggled, saved and reloaded
+            c.setUiEditorShowLineNumbers(showLineNumbers);
+            c.setUiEditorShowMinimap(showMinimap);
+            configRepresentation.save(c);
+            std::unique_ptr<string> asString{m8r::fileToString(c.getConfigFilePath())};
+            c.setUiEditorShowLineNumbers(!showLineNumbers);
+            c.setUiEditorShowMinimap(!showMinimap);
+            bool loaded = configRepresentation.load(c);
+
+            // THEN
+            EXPECT_NE(
+                std::string::npos,
+                asString.get()->find(string{"Editor line numbers: "} + (showLineNumbers?"yes":"no")));
+            EXPECT_NE(
+                std::string::npos,
+                asString.get()->find(string{"Editor minimap: "} + (showMinimap?"yes":"no")));
+            ASSERT_TRUE(loaded);
+            EXPECT_EQ(showLineNumbers, c.isUiEditorShowLineNumbers());
+            EXPECT_EQ(showMinimap, c.isUiEditorShowMinimap());
+        }
+    }
+
+    // cleanup
+    c.setConfigFilePath(backupConfigPath);
+    c.setUiEditorShowLineNumbers(backupShowLineNumbers);
+    c.setUiEditorShowMinimap(backupShowMinimap);
 }
 
 TEST(ConfigurationTestCase, MathSupportBackwardCompatibleYes)

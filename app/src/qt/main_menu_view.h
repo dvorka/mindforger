@@ -101,6 +101,7 @@ public:
     QAction* actionFindFts;
     QAction* actionFindOutlineByName;
     QAction* actionFindNoteByName;
+    QAction* actionFindNoteByMetadata;
     QAction* actionFindOutlineByTag;
     QAction* actionFindNoteByTag;
 #ifdef MF_WIP

@@ -20,6 +20,8 @@
 #include <QDir>
 #include <QSettings>
 
+#include "look_n_feel.h"
+
 namespace m8r {
 
 RecentFilesMenu::RecentFilesMenu(const QString &title, QWidget* parent) :
@@ -102,6 +104,7 @@ void RecentFilesMenu::updateMenu()
         this,
         SLOT(clearMenu())
     );
+    LookAndFeels::getInstance().polishMenuIcons(this);
 
     setEnabled(!recentFiles.empty());
 }

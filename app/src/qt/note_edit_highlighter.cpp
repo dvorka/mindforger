@@ -53,9 +53,9 @@ NoteEditHighlighter::NoteEditHighlighter(QPlainTextEdit* noteEditorView)
      */
 
     // regexps
-    addRegex(Bold, "\\*\\S[\\S\\s]+\\*",true);
+    addRegex(Bold, "\\*[^\\s*](?:[\\S\\s]*\\S)?\\*",true);
     addRegex(Bolder, "\\*\\*[\\S\\s]+\\*\\*");
-    addRegex(Italic, "_[\\S\\s]+_");
+    addRegex(Italic, "(?:^|\\W)(_\\S(?:[\\S\\s]*\\S)?_)(?!\\w)");
     addRegex(Italicer, "__[\\S\\s]+\\__");
     addRegex(Strikethrough, "~~[\\S\\s]+\\~~");
     addRegex(Link, "\\[(:?[\\S\\s]+)\\]\\([\\S\\s]+\\)");
@@ -83,7 +83,7 @@ NoteEditHighlighter::NoteEditHighlighter(QPlainTextEdit* noteEditorView)
     taskWipFormat.setForeground(lookAndFeels.getEditorTaskWip());
     taskTodoFormat.setForeground(lookAndFeels.getEditorTaskTodo());
     codeBlockFormat.setForeground(lookAndFeels.getEditorCodeblock());
-    mathBlockFormat.setForeground(lookAndFeels.getEditorCodeblock());
+    mathBlockFormat.setForeground(lookAndFeels.getEditorMathblock());
 
 #if QT_VERSION > QT_VERSION_CHECK(5, 5, 0)
     bolderFormat.setFontWeight(QFont::ExtraBold);
@@ -133,8 +133,8 @@ void NoteEditHighlighter::highlightBlock(const QString& text)
         // clear format of the text
         setCurrentBlockState(Normal);
 
-        // when in MD code section, then there is no need to highlight anything
-        if(!highlightMultilineMdCode(text)) {
+        // when in MD code or math section, then there is no need to highlight anything
+        if(!highlightMultilineMdCode(text) && !highlightMultilineMath(text)) {
             // highlight patterns defined using regexps
             if(text.size()) highlightPatterns(text);
             // eventually overwrite certain formatting with *multiline(s)* like MD code or HTML comments
@@ -178,7 +178,7 @@ void NoteEditHighlighter::highlightPatterns(const QString& text)
                 setFormat(index, length, boldFormat);
                 break;
             case Italic:
-                setFormat(index, length, italicFormat);
+                setFormat(regex->pos(1), regex->cap(1).length(), italicFormat);
                 break;
             case Italicer:
                 setFormat(index, length, italicerFormat);
@@ -248,6 +248,11 @@ bool NoteEditHighlighter::highlightMultilineMdCode(const QString &text)
 {
     static const QString TOKEN("```");
 
+    // inside math block ~ math has precedence, code fence is math text
+    if(previousBlockState()!=-1 && (previousBlockState()&InMath)==InMath) {
+        return false;
+    }
+
     if(previousBlockState()!=-1 && (previousBlockState()&InCode)==InCode) {
         // already inside block
         if(!text.compare(TOKEN)) {
@@ -266,6 +271,40 @@ bool NoteEditHighlighter::highlightMultilineMdCode(const QString &text)
             // enter block ~ don't send anything
             setCurrentBlockState(currentBlockState()|InCode);
             setFormat(0, text.size(), codeBlockFormat);
+            return true;
+        } else {
+            setCurrentBlockState(Normal);
+            return false;
+        }
+    }
+}
+
+/**
+ * @brief Highlight MD multiline math and return true if the line has been formatted.
+ */
+bool NoteEditHighlighter::highlightMultilineMath(const QString &text)
+{
+    static const QString TOKEN("$$");
+
+    if(previousBlockState()!=-1 && (previousBlockState()&InMath)==InMath) {
+        // already inside block
+        setFormat(0, text.size(), mathBlockFormat);
+        if(!text.trimmed().endsWith(TOKEN)) {
+            // continue block
+            setCurrentBlockState(currentBlockState()|InMath);
+        }
+        // else finish block ~ $$ alone or at the end of the last line
+        return true;
+    } else {
+        // outside block
+        if(text.startsWith(TOKEN)) {
+            setFormat(0, text.size(), mathBlockFormat);
+            // single line $$...$$ ~ don't enter block
+            QString trimmed = text.trimmed();
+            if(trimmed.size() < 2*TOKEN.length() || !trimmed.endsWith(TOKEN)) {
+                // enter block
+                setCurrentBlockState(currentBlockState()|InMath);
+            }
             return true;
         } else {
             setCurrentBlockState(Normal);

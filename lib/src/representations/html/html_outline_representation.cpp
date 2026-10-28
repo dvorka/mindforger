@@ -176,9 +176,11 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
         //html += "\n";
 #endif
 
-        // DIAGRAMS: mermaid.js
-        // - download from: https://unpkg.com/mermaid@7.1.0/dist/
-        // - live demo: https://mermaidjs.github.io/mermaid-live-editor
+        // DIAGRAMS: mermaid.js 12.x
+        // - download from: https://cdn.jsdelivr.net/npm/mermaid@12.2.0/dist/mermaid.min.js
+        // - offline bundle is lowered for Qt WebEngine 5.15 (Chromium 83/87) using
+        //   esbuild --target=chrome83 and prefixed with polyfills (Array.at, structuredClone, ...)
+        // - live demo: https://mermaid.live
         // NOTE: interactive rendering is offline-only (no CDN option) - standalone HTML
         // export still uses the CDN since qrc:/ resources are not available outside the app
         if(standalone) {
@@ -189,6 +191,13 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
             switch(config.getUiEnableDiagramsInMd()) {
             case Configuration::JavaScriptLibSupport::OFFLINE:
                 html += "<script type=\"text/javascript\" src=\"qrc:/js/mermaid.js\"></script>";
+#ifdef DO_MF_DEBUG
+                html += "\n";
+#endif
+                // diagram theme must match the HTML theme (mermaid renders on page load)
+                html += "<script type=\"text/javascript\">mermaid.initialize({startOnLoad:true,theme:'";
+                html += string{config.getUiHtmlCssPath()} == UI_HTML_THEME_CSS_DARK ? "dark" : "default";
+                html += "'});</script>";
 #ifdef DO_MF_DEBUG
                 html += "\n";
 #endif
@@ -538,7 +547,50 @@ string* HtmlOutlineRepresentation::to(
     pathToDirectoryAndFile(note->getOutlineKey(), path, file);
     to(markdown, html, &path, false, yScrollTo);
     delete markdown;
+
+    // N tags (aligned with O header rendering): under N title
+    if(config.isUiHtmlTheme()) {
+        string tagsHtml{};
+        tagsToHtml(note->getTags(), tagsHtml);
+        if(!tagsHtml.empty()) {
+            tagsHtml.insert(0, "<div>");
+            tagsHtml += "</div>";
+            html->insert(findNoteTitleEnd(*html), tagsHtml);
+        }
+    }
+
     return html;
+}
+
+size_t HtmlOutlineRepresentation::findNoteTitleEnd(const string& html)
+{
+    static const string BODY{"<body>"};
+    static const string WHITESPACE{" \t\r\n"};
+
+    size_t bodyIdx = html.find(BODY);
+    if(bodyIdx == string::npos) {
+        return html.size();
+    }
+    bodyIdx += BODY.size();
+
+    // only <h1> ... <h6> at the start of the body is N title - too deep N title
+    // is a paragraph and a heading in N description must not be mistaken for it
+    const size_t titleIdx = html.find_first_not_of(WHITESPACE, bodyIdx);
+    if(titleIdx != string::npos
+       && titleIdx+3 < html.size()
+       && html.compare(titleIdx, 2, "<h") == 0
+       && html[titleIdx+2] >= '1' && html[titleIdx+2] <= '6'
+       && (html[titleIdx+3] == '>' || WHITESPACE.find(html[titleIdx+3]) != string::npos)
+    ) {
+        const string headingEnd{string{"</h"} + html[titleIdx+2] + ">"};
+        const size_t idx = html.find(headingEnd, titleIdx);
+        if(idx != string::npos) {
+            return idx + headingEnd.size();
+        }
+    }
+
+    // no title heading (e.g. too deep N) > tags at the beginning of the body
+    return bodyIdx;
 }
 
 } // m8r namespace
