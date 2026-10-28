@@ -868,6 +868,16 @@ expression to image and include it in Markdown.</p>
 <p>$$\lim_{x\to 0}$$</p>
 <h4 id="diagrams">Diagrams</h4>
 <p>MindForger supports <a href="https://github.com/mermaid-js/mermaid">Mermaid</a> (<a href="https://github.com/JakeSteam/Mermaid">cheatsheet</a>) to render <strong>diagrams</strong>.</p>
+<p>You can either encapsulate diagram code to the <code>``mermaid code block  or</code><div class="mermaid">`:</p>
+<div class="codehilite"><pre><span></span><code>graph TD
+D[Mermaid] --&gt; DDD{decide}
+DDD --&gt; I(div)
+I --&gt; N[no background]
+DDD --&gt; C(code block)
+C --&gt; B[background]
+</code></pre></div>
+
+<p><strong>Diagram examples</strong>:</p>
 <p>Flowchart diagram:</p>
 <div class="codehilite"><pre><span></span><code>graph TD;
     A--&gt;B;

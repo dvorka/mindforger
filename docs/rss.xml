@@ -5,8 +5,64 @@
     <link>https://www.mindforger.com/docs/blog.html</link>
     <description>News and articles about MindForger - thinking notebook and Markdown editor.</description>
     <language>en</language>
-    <lastBuildDate>Sat, 26 Sep 2026 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 28 Oct 2026 12:00:00 +0000</lastBuildDate>
     <atom:link href="https://www.mindforger.com/docs/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MindForger 2.6.0: Editor minimap, find Note by metadata, hierarchical recent Notes, latest Mermaid and better Windows UX</title>
+      <link>https://www.mindforger.com/docs/blog.html#mindforger-2-6-0--editor-minimap--find-note-by-metadata--hierarchical-recent-notes--latest-mermaid-and-better-windows-ux</link>
+      <guid isPermaLink="true">https://www.mindforger.com/docs/blog.html#mindforger-2-6-0--editor-minimap--find-note-by-metadata--hierarchical-recent-notes--latest-mermaid-and-better-windows-ux</guid>
+      <pubDate>Wed, 28 Oct 2026 12:00:00 +0000</pubDate>
+      <description><![CDATA[<p><em>2026-10-28</em> | <a href="https://github.com/dvorka/mindforger/releases/tag/2.6.0">release on GitHub</a></p>
+<p><img alt="MindForger 2.6.0" src="https://www.mindforger.com/docs/BLOG.mindforger-2-6-0.png" /></p>
+<p>This <strong>minor</strong> <a href="https://www.mindforger.com/">MindForger</a> release brings editor minimap, find Note by metadata, hierarchical recent Notes, associations colorized by score, Mermaid diagrams upgrade, beautiful Windows UX and revamped AUR package for Arch Linux:</p>
+<ul>
+<li><strong>Editor</strong><ul>
+<li>Editor minimap - narrow strip on the right side of Note and Notebook editors shows the overview of the edited text in syntax highlighting colors w/ the visible part of the text marked - click it to jump.</li>
+<li>Note and Notebook editor is wider than the Notebook outline shown next to it - the outline/editor ratio is newly 40%/60%.</li>
+<li>Editor line numbers can be hidden in Preferences.</li>
+<li>Light theme editor syntax highlighting newly uses vivid, high contrast colors (e.g. italic text was nearly black).</li>
+</ul>
+</li>
+<li><strong>Find and navigation</strong><ul>
+<li>Find Note by Metadata shows Notes in a table w/ name, size (text bytes), reads, writes, created and modified columns which can be used for sorting to find the biggest, oldest or most visited Notes.</li>
+<li>Recent Notes view shows the history as a tree where consecutive Notes from the same Notebook are grouped under the Notebook.</li>
+<li>Recent Notes view toggle to show Notes which were recently viewed or edited, or edited only.</li>
+<li>Opened Notebook shelf shows the shelf name in the table header.</li>
+<li><code>Esc</code> leaves the command palette and gives focus to the next component in the view.</li>
+</ul>
+</li>
+<li><strong>Mind inspired features</strong><ul>
+<li>Associations panel bars are colored green/orange/red by the association score.</li>
+</ul>
+</li>
+<li><strong>HTML preview</strong><ul>
+<li>Mermaid diagrams upgraded from mermaid.js 7.1.0 to 12.2.0 - new diagram types (mindmap, timeline, gitGraph, quadrant, ...) and syntax newly work, diagrams follow dark/light HTML theme.</li>
+<li>Note view shows Note tags under the Note title - aligned w/ Notebook description view which shows Notebook tags under the title.</li>
+</ul>
+</li>
+<li><strong>Windows</strong><ul>
+<li>Native theme newly uses the Windows palette: selected rows in Notebook/Note tables, outline tree, enabled status bar <code>ADLMSTW</code> diodes, ...</li>
+<li>Native theme editor newly has VSCode light inspired Markdown syntax highlighting.</li>
+<li>Editor font is never smaller than the application font (from Monospace to Consolas), UI newly follows Windows display scaling including fractional factors.</li>
+<li>Application font (Notebook and Note names in tables and outline tree, command palette, <code>ADLMSTW</code> diodes, Note name and buttons in the editor, ...) is newly Windows UI font (Segoe UI 9pt like menu) - it used to be smaller and it was tiny when MindForger was started after display scaling had been changed (e.g. 100% &gt; 300% on 4K) without signing out.</li>
+</ul>
+</li>
+<li><strong>Distributions</strong><ul>
+<li>Arch Linux - upstream reference PKGBUILD for the <a href="https://aur.archlinux.org/packages/mindforger">AUR mindforger</a> package (Qt WebKit) is newly maintained in <code>build/arch/</code> and verified in an Arch Linux Docker container.</li>
+<li>MindForger can be built w/ CMake 4 (e.g. on Arch Linux) - the bundled cmark-gfm newly requires CMake 3.5 and all maintained build scripts pass CMake 4 compatibility.</li>
+</ul>
+</li>
+<li><strong>Fixes</strong><ul>
+<li>Menu and main toolbar icons are newly darkened on light menus/toolbar (native and light themes) on Windows, Linux and macOS to be readable.</li>
+<li>Blurry menu and toolbar icons on Linux and macOS HiDPI displays (4K, Retina, scaling set by <code>QT_SCALE_FACTOR</code>) - icons are rendered in device pixels.</li>
+<li>Native theme on Linux and macOS (light mode) had no editor syntax highlighting - it newly follows OS light/dark palette.</li>
+<li>macOS native dark theme colors todo tasks in the editor (previously they were black, i.e. invisible) and in progress tasks are orange.</li>
+<li>Editor syntax highlighting no longer shows underscores inside words (e.g. <code>this_is_function_name_</code>) as italic, and bold requires non-whitespace before the closing <code>*</code> (e.g. <code>aaa *bbb * ccc</code> is not bold).</li>
+<li>Find Notebook by Name (<code>Ctrl-Shift-B</code>) finds only Notebooks which are on the shelf when a Notebook shelf is opened.</li>
+</ul>
+</li>
+</ul>]]></description>
+    </item>
     <item>
       <title>MindForger 2.5.0: 3rd generation of associations lookup and visualization, status bar w/ ADLMSTW diodes and new Debian PPA</title>
       <link>https://www.mindforger.com/docs/blog.html#mindforger-2-5-0--3rd-generation-of-associations-lookup-and-visualization--status-bar-w--adlmstw-diodes-and-new-debian-ppa</link>

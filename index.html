@@ -2314,7 +2314,7 @@
       </div>
     </div>
     <!-- https://www.w3schools.com/icons/fontawesome_icons_webapp.asp -->
-    <a href="#download" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-download"></i> Download</a>
+    <a href="#download" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-download"></i> Install</a>
     <a href="#home" class="w3-bar-item w3-button">MindForger</a>
     <a href="./docs/index.html" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-user"></i> Docs</a>
     <a href="#overview" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-sitemap"></i> Nerdview</a>
@@ -2332,7 +2332,7 @@
     <a href="#features" class="w3-bar-item w3-button" onclick="toggleFunction()">Features</a>
     <a href="#overview" class="w3-bar-item w3-button" onclick="toggleFunction()">Nerdview</a>
     <a href="#documentation" class="w3-bar-item w3-button" onclick="toggleFunction()">Doc</a>
-    <a href="#download" class="w3-bar-item w3-button" onclick="toggleFunction()">Download</a>
+    <a href="#download" class="w3-bar-item w3-button" onclick="toggleFunction()">Install</a>
   </div>
 </div>
 
@@ -2365,9 +2365,9 @@
     <div class="mfStatNote">and 170+ forks</div>
   </div>
   <div class="w3-col s4">
-    <div class="mfStatNumber">35k+</div>
+    <div class="mfStatNumber">50k+</div>
     <div class="mfStatLabel">Downloads</div>
-    <div class="mfStatNote" title="Counts GitHub release assets only - Snap, distribution packages and PPA installs are not included.">from GitHub alone</div>
+    <div class="mfStatNote" title="Counts GitHub/Ubuntu PPA/Debian PPA release assets only - Snap and distribution packages installs are not included.">GitHub/Ubuntu/Debian</div>
   </div>
 </div>
 
@@ -2897,11 +2897,10 @@
     var gen = 0;
     var started = false;
     var visible = false;
-    var hover = false;
     var userPaused = false;
 
     function paused() {
-        return userPaused || hover || !visible;
+        return userPaused || !visible;
     }
 
     function syncPaused() {
@@ -3023,16 +3022,6 @@
         go(0);
     });
 
-    el.stage.addEventListener('mouseenter', function () {
-        hover = true;
-        syncPaused();
-    });
-
-    el.stage.addEventListener('mouseleave', function () {
-        hover = false;
-        syncPaused();
-    });
-
     // ------------------------------------------------ scale the scene to the stage
 
     var mode = null;
@@ -3070,13 +3059,15 @@
             run(0);
         }
     } else {
+        // start once it is well in view, pause only when it is out of view completely
         new IntersectionObserver(function (entries) {
-            visible = entries[0].isIntersecting;
+            var e = entries[0];
+            visible = e.isIntersecting;
             syncPaused();
-            if (visible && !started) {
+            if (!started && e.intersectionRatio >= 0.35) {
                 run(0);
             }
-        }, { threshold: 0.35 }).observe(el.stage);
+        }, { threshold: [0, 0.35] }).observe(el.stage);
     }
 }());
 </script>
@@ -4596,12 +4587,13 @@
      <b>Follow</b>
      @mindforger on
      <a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger on GitHub">GitHub</a>,
-     <a href="https://x.com/mindforger" target="_blank" title="@mindforger on X">X</a>,
+     <a href="https://www.reddit.com/r/MindForger/" target="_blank" title="r/MindForger on reddit">reddit</a>,
      <!--
+     <a href="https://x.com/mindforger" target="_blank" title="@mindforger on X">X</a>,
      <a href="https://www.instagram.com/mindforger" target="_blank" title="@mindforger on Instagram">Instagram</a>,
      <a href="https://groups.google.com/forum/#!forum/mindforger" target="_blank" title="@mindforger on Google Groups">Google Groups</a>,
-     -->
      <a href="https://www.facebook.com/pages/MindForger/172099806154112" target="_blank" title="MindForger on Facebook">Facebook</a>
+     -->
      and
      <a href="https://www.youtube.com/user/MindForgerChannel" target="_blank" title="MindForger on YouTube">YouTube</a>.
    </div>
@@ -4667,6 +4659,7 @@
 
      MindForger releases:<br/>
      <br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/2.6.0" target="_blank">Editor minimap, find notes by meta, hierarchical recent notes, Win UX and AUR Arch Linux revamp (2.6.0)</a><br/>
      <a href="https://github.com/dvorka/mindforger/releases/tag/2.5.0" target="_blank">BM25 associations, status bar diodes, Debian 13 Trixie PPA (2.5.0)</a><br/>
      <a href="https://github.com/dvorka/mindforger/releases/tag/2.4.0" target="_blank">Flatpak (2.4.0)</a><br/>
      <a href="https://github.com/dvorka/mindforger/releases/tag/2.3.0" target="_blank">Notebook shelves, localization to 4 languages, lines sorting, winget packaging, Markdown export, non-ASCII links navigation (2.3.0)</a><br/>
@@ -4812,7 +4805,7 @@
 
 <div class="w3-row w3-center w3-black w3-padding-16">
   <div class="w3-section">
-    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Download</span><br>
+    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Install</span><br>
   </div>
 </div>
 
@@ -4823,15 +4816,17 @@
        <div class="mfGroupLeftText">Install:</div>
      </div>
      <div class="mfDownloadRight">
+      <div class="mf-download-button"><a href="docs/installation.html#arch-linux" target="_blank" class="mf-download-link">Arch</a></div>
+      <div class="mf-download-button"><a href="docs/installation.html#debian" target="_blank" class="mf-download-link">Debian</a></div>
+      <div class="mf-download-button"><a href="docs/installation.html#docker" target="_blank" class="mf-download-link">Docker</a></div>
+      <div class="mf-download-button"><a href="docs/installation.html#fedora" target="_blank" class="mf-download-link">Fedora</a></div>
+      <div class="mf-download-button"><a href="docs/installation.html#flatpak" target="_blank" class="mf-download-link">Flatpak</a></div>
+      <div class="mf-download-button-ii"><a href="docs/installation.html#macos" target="_blank" class="mf-download-link">macOS</a></div>
       <div class="mf-download-button"><a href="https://snapcraft.io/mindforger" target="_blank" class="mf-download-link">Snap</a></div>
       <div class="mf-download-button"><a href="docs/installation.html#ubuntu" target="_blank" class="mf-download-link">Ubuntu</a></div>
-      <div class="mf-download-button"><a href="docs/installation.html#debian" target="_blank" class="mf-download-link">Debian</a></div>
-      <div class="mf-download-button"><a href="docs/installation.html#fedora" target="_blank" class="mf-download-link">Fedora</a></div>
-      <div class="mf-download-button"><a href="docs/installation.html#arch-linux" target="_blank" class="mf-download-link">Arch</a></div>
-      <div class="mf-download-button-i"><a href="docs/installation.html#windows" target="_blank" class="mf-download-link">Windows</a></div>
+      <div class="mf-download-button-i"><a href="docs/installation.html#windows" target="_blank" class="mf-download-link">Windows installer</a></div>
+      <div class="mf-download-button-i"><a href="docs/installation.html#winget" target="_blank" class="mf-download-link">winget</a></div>
       <div class="mf-download-button-i"><a href="docs/installation.html#wsl" target="_blank" class="mf-download-link">Windows WSL</a></div>
-      <div class="mf-download-button-ii"><a href="docs/installation.html#macos" target="_blank" class="mf-download-link">macOS</a></div>
-      <div class="mf-download-button-ii"><a href="docs/installation.html#docker" target="_blank" class="mf-download-link">Docker</a></div>
      </div>
    </div>
    <div class="mfDownloadGroup">
@@ -4839,11 +4834,12 @@
        <div class="mfGroupLeftText">Download:</div>
      </div>
      <div class="mfDownloadRight">
-      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.snap</a></div>
       <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.deb</a></div>
-      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.rpm</a></div>
-      <div class="mf-download-button-i"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.exe</a></div>
       <div class="mf-download-button-ii"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.dmg</a></div>
+      <div class="mf-download-button-i"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.exe</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.flatpak</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.rpm</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.snap</a></div>
       <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.tar.gz</a></div>
      </div>
    </div>
@@ -4852,12 +4848,15 @@
        <div class="mfGroupLeftText">Build:</div>
      </div>
      <div class="mfDownloadRight">
-      <div class="mf-download-button"><a href="docs/installation.html#build-on-ubuntu" target="_blank" class="mf-download-link">Ubuntu</a></div>
       <div class="mf-download-button"><a href="docs/installation.html#build-on-debian" target="_blank" class="mf-download-link">Debian</a></div>
       <div class="mf-download-button"><a href="docs/installation.html#build-on-fedora" target="_blank" class="mf-download-link">Fedora</a></div>
+      <div class="mf-download-button"><a href="docs/installation.html#build-flatpak" target="_blank" class="mf-download-link">Flatpak</a></div>
+      <div class="mf-download-button"><a href="docs/installation.html#build-on-gentoo" target="_blank" class="mf-download-link">Gentoo</a></div>
+      <div class="mf-download-button-ii"><a href="docs/installation.html#build-on-macos" target="_blank" class="mf-download-link">macOS</a></div>
+      <div class="mf-download-button"><a href="docs/installation.html#build-snap" target="_blank" class="mf-download-link">Snap</a></div>
+      <div class="mf-download-button"><a href="docs/installation.html#build-on-ubuntu" target="_blank" class="mf-download-link">Ubuntu</a></div>
       <div class="mf-download-button-i"><a href="docs/installation.html#build-on-windows" target="_blank" class="mf-download-link">Windows</a></div>
       <div class="mf-download-button-i"><a href="docs/installation.html#build-on-wsl" target="_blank" class="mf-download-link">Windows WSL</a></div>
-      <div class="mf-download-button-ii"><a href="docs/installation.html#build-on-macos" target="_blank" class="mf-download-link">macOS</a></div>
      </div>
    </div>
    <div class="mfDownloadGroup">
@@ -4911,6 +4910,24 @@ function toggleFunction() {
         x.className = x.className.replace(" w3-show", "");
     }
 }
+
+// Rotate the main page title every 3 seconds
+(function() {
+    var titles = ["Thinking Notebook", "Markdown IDE"];
+    var index = 0;
+    var title = document.getElementById("mfPagetTitle");
+    if (!title) {
+        return;
+    }
+    setInterval(function() {
+        index = (index + 1) % titles.length;
+        title.textContent = titles[index];
+        // restart the fade-in animation
+        title.classList.remove("w3-animate-opacity");
+        void title.offsetWidth;
+        title.classList.add("w3-animate-opacity");
+    }, 3000);
+})();
 </script>
 
 </body>

@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Installation - MindForger Documentation</title>
-    <meta name="description" content="See Flatpak setup for other distributions. Log out and log in again after the first installation of Flatpak so that your desktop picks up the..." />
+    <meta name="description" content="AUR (Arch User Repository) is a community repository of build recipes (PKGBUILD files), not of binary packages. When you install a package from AUR,..." />
     <meta name="author" content="Martin.Dvorak@mindforger.com" />
     <link rel="canonical" href="https://www.mindforger.com/docs/installation.html" />
     <link rel="alternate" type="application/rss+xml" title="MindForger Blog" href="rss.xml" />
@@ -16,12 +16,12 @@
     <meta property="og:site_name" content="MindForger Documentation" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Installation - MindForger Documentation" />
-    <meta property="og:description" content="See Flatpak setup for other distributions. Log out and log in again after the first installation of Flatpak so that your desktop picks up the..." />
+    <meta property="og:description" content="AUR (Arch User Repository) is a community repository of build recipes (PKGBUILD files), not of binary packages. When you install a package from AUR,..." />
     <meta property="og:url" content="https://www.mindforger.com/docs/installation.html" />
     <meta property="og:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Installation - MindForger Documentation" />
-    <meta name="twitter:description" content="See Flatpak setup for other distributions. Log out and log in again after the first installation of Flatpak so that your desktop picks up the..." />
+    <meta name="twitter:description" content="AUR (Arch User Repository) is a community repository of build recipes (PKGBUILD files), not of binary packages. When you install a package from AUR,..." />
     <meta name="twitter:image" content="https://www.mindforger.com/docs/assets/mind-forger.png" />
     <!-- END OPEN GRAPH -->
 
@@ -208,10 +208,12 @@
 <li><a href="#snap">Snap</a></li>
 <li><a href="#ubuntu">Ubuntu</a></li>
 <li><a href="#windows">Windows</a></li>
-<li><a href="#wsl">WSL</a></li>
+<li><a href="#windows">Windows winget</a></li>
+<li><a href="#wsl">Windows WSL</a></li>
 </ul>
 <p>Build:</p>
 <ul>
+<li><a href="#build-on-arch-linux">build on Arch Linux</a></li>
 <li><a href="#build-on-debian">build on Debian</a></li>
 <li><a href="#build-on-fedora">build on Fedora</a></li>
 <li><a href="#build-on-gentoo">build on Gentoo</a></li>
@@ -247,10 +249,81 @@
 <p>Install MindForger using a package.</p>
 <p>If your operating system or distribution is not listed below, then check <a href="https://pkgs.org/search/?q=mindforger]">packages repository</a> for Linux and Unix.</p>
 <h3 id="arch-linux">Arch Linux</h3>
-<p>Install MindForger from Arch User Repository (AUR):</p>
+<p>Install MindForger on <a href="https://archlinux.org">Arch Linux</a> (and Arch based distributions
+like EndeavourOS or Manjaro):</p>
 <ul>
-<li>https://aur.archlinux.org/packages/mindforger/</li>
+<li>either from <strong>AUR</strong> - MindForger is compiled on your machine</li>
+<li>or as <a href="#flatpak">Flatpak</a> or <a href="#snap">Snap</a> - pre-built package, nothing is compiled</li>
 </ul>
+<p><strong>What is AUR?</strong></p>
+<p><a href="https://aur.archlinux.org">AUR</a> (Arch User Repository) is a community repository of
+<strong>build recipes</strong> (<code>PKGBUILD</code> files), not of binary packages. When you install a package
+from AUR, its sources are downloaded and compiled on <strong>your</strong> machine by <code>makepkg</code>,
+and the result is installed by <code>pacman</code>. AUR packages are maintained by volunteers
+and are not officially supported by Arch Linux - review the <code>PKGBUILD</code> before you
+build it.</p>
+<p>MindForger's AUR package is <a href="https://aur.archlinux.org/packages/mindforger">mindforger</a>.
+It is maintained by AUR maintainers, MindForger upstream provides the
+<a href="https://github.com/dvorka/mindforger/tree/master/build/arch">reference PKGBUILD</a> for
+every release.</p>
+<p><strong>What gets compiled</strong></p>
+<p>MindForger renders Markdown to HTML using a Qt web engine. Neither Qt WebKit nor
+Qt WebEngine are in the official Arch repositories anymore, therefore the AUR
+package uses <strong>Qt WebKit</strong> which is compiled from AUR as well:</p>
+<div class="codehilite"><pre><span></span><code>qt5-location, qt5-sensors, qt5-webchannel  ... Qt 5 modules (minutes each)
+qt5-doc      ... make dependency of qt5-webkit - downloads and configures the whole
+                 Qt 5 source tree (~660 MB download, several GB of disk)
+qt5-webkit   ... Qt WebKit (the longest step)
+mindforger   ... MindForger (a few minutes)
+</code></pre></div>
+
+<p>The first installation takes about 40 minutes on a 16 CPU core machine (measured) and
+proportionally longer on smaller machines. Upgrades of MindForger rebuild MindForger only (minutes).</p>
+<p>Qt WebKit build limitations - if they matter to you, use <a href="#flatpak">Flatpak</a> or
+<a href="#snap">Snap</a> instead:</p>
+<ul>
+<li><strong>source code syntax highlighting</strong> is not available</li>
+<li>Qt WebKit is end-of-life and gets no security fixes</li>
+</ul>
+<p><strong>Install using an AUR helper</strong></p>
+<p>An AUR helper like <a href="https://github.com/Jguer/yay">yay</a> or <a href="https://github.com/Morganamilo/paru">paru</a>
+resolves, builds and installs the whole chain automatically:</p>
+<div class="codehilite"><pre><span></span><code>yay<span class="w"> </span>-S<span class="w"> </span>mindforger
+</code></pre></div>
+
+<p><strong>Install manually using makepkg</strong></p>
+<p>Install the build tools:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>--needed<span class="w"> </span>base-devel<span class="w"> </span>git
+</code></pre></div>
+
+<p>Build and install AUR packages one after another, in this order: <code>qt5-location</code>,
+<code>qt5-sensors</code>, <code>qt5-webchannel</code>, <code>qt5-doc</code>, <code>qt5-webkit</code> and <code>mindforger</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span>P<span class="w"> </span><span class="k">in</span><span class="w"> </span>qt5-location<span class="w"> </span>qt5-sensors<span class="w"> </span>qt5-webchannel<span class="w"> </span>qt5-doc<span class="w"> </span>qt5-webkit<span class="w"> </span>mindforger
+<span class="k">do</span>
+<span class="w">    </span>git<span class="w"> </span>clone<span class="w"> </span>https://aur.archlinux.org/<span class="si">${</span><span class="nv">P</span><span class="si">}</span>.git
+<span class="w">    </span><span class="o">(</span><span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">P</span><span class="si">}</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>makepkg<span class="w"> </span>-si<span class="o">)</span>
+<span class="k">done</span>
+</code></pre></div>
+
+<p><code>makepkg -s</code> installs dependencies from the official repositories using <code>pacman</code>,
+<code>-i</code> installs the built package.</p>
+<p><strong>Run</strong></p>
+<p>Run MindForger from the application menu or from the command line:</p>
+<div class="codehilite"><pre><span></span><code>mindforger
+</code></pre></div>
+
+<p><strong>Upgrade</strong></p>
+<div class="codehilite"><pre><span></span><code>yay<span class="w"> </span>-Syu
+</code></pre></div>
+
+<p>... or, when installed manually, <code>git pull</code> in the <code>mindforger</code> directory and
+<code>makepkg -si</code> again.</p>
+<p><strong>Uninstall</strong></p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-R<span class="w"> </span>mindforger
+</code></pre></div>
+
+<p><code>~/mindforger-repository</code> and <code>~/.mindforger.md</code> are <strong>not</strong> removed - delete them
+manually if you want to get rid of them.</p>
 <h3 id="debian">Debian</h3>
 <p>Install MindForger on <a href="https://www.debian.org/">Debian</a>:</p>
 <ul>
@@ -289,12 +362,27 @@ sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> <
 <li>If <code>apt update</code> reports that the signing key <em>is not bound</em> or <em>SHA1 is not considered secure</em>, download the GPG key again (see above) - its self-signatures were refreshed to SHA-512 in 2026 (the key fingerprint <code>E3E8 520D E382 0D8C 1A72 4BB7 B72E 4F7F 24AF 591D</code> did not change).</li>
 </ul>
 <h3 id="fedora">Fedora</h3>
-<p>Install MindForger on <a href="https://getfedora.org/">Fedora</a>:</p>
+<p>Install MindForger on <a href="https://fedoraproject.org/">Fedora</a>:</p>
 <ul>
-<li><a href="https://github.com/dvorka/mindforger/releases">download RPM</a> from GitHub releases</li>
+<li>either from <strong>COPR</strong> repository</li>
+<li>or by downloading <code>.rpm</code></li>
 </ul>
-<p>Install RPM:</p>
-<div class="codehilite"><pre><span></span><code>sudo dnf install mindforger-MAJOR.MINOR.REVISION.rpm
+<p>To install MindForger from the <a href="https://copr.fedorainfracloud.org/coprs/dvorka/mindforger/">COPR</a> repository
+(for all current Fedora releases, <code>x86_64</code> and <code>aarch64</code>) enable the repository and install MindForger:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># enable MindForger COPR repository (packages are signed by the COPR key)</span>
+sudo<span class="w"> </span>dnf<span class="w"> </span>copr<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>dvorka/mindforger
+
+<span class="c1"># install MindForger</span>
+sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>mindforger
+</code></pre></div>
+
+<p>New MindForger versions are then installed with the regular system update (<code>sudo dnf upgrade</code>).</p>
+<p>Alternatively, download <code>.rpm</code> package for your Fedora release (<code>fcNN</code> in the file name) and architecture from:</p>
+<ul>
+<li><a href="https://github.com/dvorka/mindforger/releases">GitHub Releases</a> <strong>Assets</strong> section</li>
+</ul>
+<p>and install it:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>./mindforger-MAJOR.MINOR.PATCH-1.fcNN.x86_64.rpm
 </code></pre></div>
 
 <h3 id="flatpak">Flatpak</h3>
@@ -541,11 +629,46 @@ sudo apt install mindforger
 </code></pre></div>
 
 <h3 id="windows">Windows</h3>
-<p>Install MindForger using installer.</p>
+<p>Install MindForger on <a href="https://www.microsoft.com/windows">Microsoft Windows</a> (64-bit <code>x64</code>):</p>
 <ul>
-<li>Download installer executable from https://github.com/dvorka/mindforger/releases (or try <a href="https://ci.appveyor.com/project/dvorka/mindforger/build/artifacts">nightly build</a>)</li>
-<li>Run installer.</li>
+<li>either using <strong>winget</strong> package manager</li>
+<li>or by downloading and running the installer</li>
 </ul>
+<p>To install MindForger using <a href="https://learn.microsoft.com/windows/package-manager/winget/">winget</a>
+(Windows Package Manager - part of <strong>App Installer</strong> which is preinstalled on Windows 10 and 11)
+open a terminal (Command Prompt, PowerShell or Windows Terminal) and run:</p>
+<div class="codehilite"><pre><span></span><code>winget install --id MartinDvorak.MindForger --exact
+</code></pre></div>
+
+<p>MindForger is installed for all users to <code>C:\Program Files\MindForger</code> - confirm the
+administrator privileges (UAC) prompt when asked.</p>
+<p>New MindForger versions are then installed with:</p>
+<div class="codehilite"><pre><span></span><code>winget upgrade --id MartinDvorak.MindForger --exact
+</code></pre></div>
+
+<p>Useful winget commands:</p>
+<div class="codehilite"><pre><span></span><code># show MindForger package details (version, installer URL, release notes)
+winget show --id MartinDvorak.MindForger --exact
+
+# list all MindForger versions available in winget
+winget show --id MartinDvorak.MindForger --exact --versions
+
+# install a specific MindForger version
+winget install --id MartinDvorak.MindForger --exact --version 2.5.0
+
+# uninstall MindForger
+winget uninstall --id MartinDvorak.MindForger --exact
+</code></pre></div>
+
+<p>MindForger winget package manifests are maintained in the <a href="https://github.com/microsoft/winget-pkgs/tree/master/manifests/m/MartinDvorak/MindForger">microsoft/winget-pkgs</a>
+repository. The package installs the same installer as provided on GitHub Releases (see below) - a new MindForger
+version becomes available in winget once its manifest is reviewed and merged there.</p>
+<p>Alternatively, <strong>download</strong> the installer executable (<code>windows-installer-mindforger-MAJOR.MINOR.PATCH.exe</code>) from:</p>
+<ul>
+<li><a href="https://github.com/dvorka/mindforger/releases">GitHub Releases</a> <strong>Assets</strong> section</li>
+<li>or try <a href="https://ci.appveyor.com/project/dvorka/mindforger/build/artifacts">nightly build</a></li>
+</ul>
+<p>and run it.</p>
 <h3 id="wsl">WSL</h3>
 <p>Install <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">Windows Subsystem for Linux</a> (WSL) and check that you have Ubuntu 16.04 or newer:</p>
 <div class="codehilite"><pre><span></span><code>lsb_release -a
@@ -577,6 +700,53 @@ sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> <
 <div class="card mb-3"><div class="card-body">
 <h2 id="build-from-source-code">Build from source code</h2>
 <p>Build MindForger from the source code.</p>
+<h3 id="build-on-arch-linux">Build on Arch Linux</h3>
+<p>Build MindForger from the source code on <a href="https://archlinux.org">Arch Linux</a>. To
+build the AUR package instead, see <a href="#arch-linux">Arch Linux</a> installation.</p>
+<p>Install package dependencies from the official repositories:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>--needed<span class="w"> </span>base-devel<span class="w"> </span>git<span class="w"> </span>cmake<span class="w"> </span>qt5-base<span class="w"> </span>qt5-tools<span class="w"> </span>hunspell<span class="w"> </span>curl<span class="w"> </span>zlib
+</code></pre></div>
+
+<p>Install <strong>Qt WebKit</strong> from <a href="#arch-linux">AUR</a> - either using an AUR helper:</p>
+<div class="codehilite"><pre><span></span><code>yay<span class="w"> </span>-S<span class="w"> </span>qt5-webkit
+</code></pre></div>
+
+<p>... or manually using <code>makepkg</code> (see <a href="#arch-linux">Arch Linux</a> for details):</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span>P<span class="w"> </span><span class="k">in</span><span class="w"> </span>qt5-location<span class="w"> </span>qt5-sensors<span class="w"> </span>qt5-webchannel<span class="w"> </span>qt5-doc<span class="w"> </span>qt5-webkit
+<span class="k">do</span>
+<span class="w">    </span>git<span class="w"> </span>clone<span class="w"> </span>https://aur.archlinux.org/<span class="si">${</span><span class="nv">P</span><span class="si">}</span>.git
+<span class="w">    </span><span class="o">(</span><span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">P</span><span class="si">}</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>makepkg<span class="w"> </span>-si<span class="o">)</span>
+<span class="k">done</span>
+</code></pre></div>
+
+<p>Get <a href="https://github.com/dvorka/mindforger">source code</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># clone MindForger repository including its sub-modules</span>
+git<span class="w"> </span>clone<span class="w"> </span>--recurse-submodules<span class="w"> </span>https://github.com/dvorka/mindforger.git
+<span class="nb">cd</span><span class="w"> </span>mindforger
+</code></pre></div>
+
+<p>Build dependencies:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># build cmark-gfm</span>
+<span class="c1"># (the policy option is needed only for MindForger 2.5.0 and older w/ CMake 4)</span>
+cmake<span class="w"> </span>-S<span class="w"> </span>deps/cmark-gfm<span class="w"> </span>-B<span class="w"> </span>deps/cmark-gfm/build<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DCMARK_TESTS<span class="o">=</span>OFF<span class="w"> </span>-DCMARK_SHARED<span class="o">=</span>OFF<span class="w"> </span>-DCMAKE_POLICY_VERSION_MINIMUM<span class="o">=</span><span class="m">3</span>.5
+cmake<span class="w"> </span>--build<span class="w"> </span>deps/cmark-gfm/build
+</code></pre></div>
+
+<p>Compile and install from Git repository root directory:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># CONFIG+=mfwebkit builds MindForger w/ Qt WebKit</span>
+qmake<span class="w"> </span>-r<span class="w"> </span><span class="nv">CONFIG</span><span class="o">+=</span>mfwebkit<span class="w"> </span>mindforger.pro
+<span class="c1"># consider speeding up compilation by increasing the number of CPU cores to use e.g. make -j8</span>
+make
+sudo<span class="w"> </span>make<span class="w"> </span>install
+</code></pre></div>
+
+<p>Run MindForger:</p>
+<div class="codehilite"><pre><span></span><code>mindforger
+</code></pre></div>
+
+<p>On the first start MindForger creates <code>~/mindforger-repository</code> w/ documentation and
+stencils.</p>
 <h3 id="build-on-debian">Build on Debian</h3>
 <p>Build MindForger on Debian 9 (<code>stretch</code>) or later.</p>
 <p>Install package dependencies:</p>
@@ -1299,6 +1469,7 @@ repository or not - consider performance/CPU consumption vs features trade-off.<
 <a href="#windows" class="nav-link ms-3 small">Windows</a>
 <a href="#wsl" class="nav-link ms-3 small">WSL</a>
 <a href="#build-from-source-code" class="nav-link">Build from source code</a>
+<a href="#build-on-arch-linux" class="nav-link ms-3 small">Build on Arch Linux</a>
 <a href="#build-on-debian" class="nav-link ms-3 small">Build on Debian</a>
 <a href="#build-on-fedora" class="nav-link ms-3 small">Build on Fedora</a>
 <a href="#build-on-gentoo" class="nav-link ms-3 small">Build on Gentoo</a>
