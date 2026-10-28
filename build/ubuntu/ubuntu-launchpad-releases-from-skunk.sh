@@ -95,7 +95,8 @@
 # ########################################################################
 
 # Ubuntu version:
-# - https://wiki.ubuntu.com/Releases
+# - https://en.wikipedia.org/wiki/Ubuntu_version_history
+#   https://wiki.ubuntu.com/Releases
 # - obsolete:
 #     precise quantal saucy precise utopic vivid wily yakkety artful cosmic kinetic
 # - history (* LTS):
@@ -134,11 +135,8 @@ if [[ ${#} == 1 ]]
 then
     export UBUNTU_VERSIONS=(${1})
 else
-    export UBUNTU_VERSIONS=(jammy noble resolute)
-    # export UBUNTU_VERSIONS=(noble resolute)
+    export UBUNTU_VERSIONS=(jammy noble resolute stonking)
     # export UBUNTU_VERSIONS=(jammy)
-    # export UBUNTU_VERSIONS=(noble)
-    # export UBUNTU_VERSIONS=(resolute)
 fi
 
 # environment variables

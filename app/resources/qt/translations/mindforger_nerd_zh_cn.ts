@@ -4475,27 +4475,27 @@ Choose new library source:</source>
         <translation>检查拼写...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="606"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="605"/>
         <source>Exit Editor</source>
         <translation>退出编辑器</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="607"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="606"/>
         <source>Do you really want to exit editor without saving?</source>
         <translation>确定不保存就退出编辑器吗？</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1053"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1052"/>
         <source>Full-text Search Result</source>
         <translation>全文搜索结果</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1054"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1053"/>
         <source>No matching text found.</source>
         <translation>未找到匹配的文本。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1201"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1200"/>
         <source>No spelling suggestions found</source>
         <translation>未找到拼写建议</translation>
     </message>
@@ -5544,7 +5544,7 @@ Choose new library source:</source>
 <context>
     <name>m8r::OutlineView</name>
     <message>
-        <location filename="../../../src/qt/outline_view.cpp" line="34"/>
+        <location filename="../../../src/qt/outline_view.cpp" line="32"/>
         <source>Click this Notebook name to open its Markdown preview in the right panel</source>
         <translation>单击此笔记本名称，在右侧面板中打开其 Markdown 预览</translation>
     </message>
@@ -6156,68 +6156,68 @@ notes. Feel free to deprecate such notebook(s) yourself.
         <translation>MindForger 无法在文本控制台中运行 - 请设置 DISPLAY 或 WAYLAND_DISPLAY 环境变量，或在图形界面中运行 MindForger。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="234"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="230"/>
         <source>MindForger workspace or directory/file with Markdown(s) to open</source>
         <translation>要打开的 MindForger 工作区或包含 Markdown 的目录/文件</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="240"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="236"/>
         <source>Use &apos;dark&apos;, &apos;light&apos; or other GUI &lt;theme&gt;.</source>
         <translation>使用 &apos;dark&apos;、&apos;light&apos; 或其他图形界面主题 &lt;theme&gt;。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="243"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="239"/>
         <source>theme</source>
         <translation>theme</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="247"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="243"/>
         <source>Load configuration from given &lt;file&gt;.</source>
         <translation>从给定的 &lt;file&gt; 加载配置。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="250"/>
-        <location filename="../../../src/qt/mindforger.cpp" line="272"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="246"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="268"/>
         <source>file</source>
         <translation>file</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="257"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="253"/>
         <source>Disable WebEngine security to allow loading of images on macOS.</source>
         <translation>在 macOS 上禁用 WebEngine 安全机制以允许加载图片。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="263"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="259"/>
         <source>Disable WebEngine security by running single process on macOS.</source>
         <translation>在 macOS 上通过单进程运行禁用 WebEngine 安全机制。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="267"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="263"/>
         <source>Disable WebEngine security by disabling sandbox on macOS.</source>
         <translation>在 macOS 上通过禁用沙箱禁用 WebEngine 安全机制。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="271"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="267"/>
         <source>Disable WebEngine security by user data dir specification on macOS.</source>
         <translation>在 macOS 上通过指定用户数据目录禁用 WebEngine 安全机制。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="277"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="273"/>
         <source>Disable WebEngine security via site isolation trials on macOS.</source>
         <translation>在 macOS 上通过站点隔离试验禁用 WebEngine 安全机制。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="281"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="277"/>
         <source>Disable WebEngine security via acess file from file on macOS.</source>
         <translation>在 macOS 上通过允许文件访问文件禁用 WebEngine 安全机制。</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="361"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="357"/>
         <source>Error: Unable to find given workspace/file to open - open MindForger without parameters and create it from menu Mind/New: &apos;</source>
         <translation>错误：找不到要打开的给定工作区/文件 - 请不带参数启动 MindForger，并通过菜单“心智/新建”创建：&apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="385"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="381"/>
         <source>Ignoring unknown GUI theme: &apos;</source>
         <translation>忽略未知的图形界面主题：&apos;</translation>
     </message>

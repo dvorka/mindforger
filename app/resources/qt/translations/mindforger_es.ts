@@ -4475,27 +4475,27 @@ Elija la nueva fuente de la biblioteca:</translation>
         <translation>Revisar ortografía...</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="606"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="605"/>
         <source>Exit Editor</source>
         <translation>Salir del editor</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="607"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="606"/>
         <source>Do you really want to exit editor without saving?</source>
         <translation>¿Realmente desea salir del editor sin guardar?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1053"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1052"/>
         <source>Full-text Search Result</source>
         <translation>Resultado de la búsqueda de texto completo</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1054"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1053"/>
         <source>No matching text found.</source>
         <translation>No se encontró texto coincidente.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1201"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1200"/>
         <source>No spelling suggestions found</source>
         <translation>No se encontraron sugerencias ortográficas</translation>
     </message>
@@ -5544,7 +5544,7 @@ Elija la nueva fuente de la biblioteca:</translation>
 <context>
     <name>m8r::OutlineView</name>
     <message>
-        <location filename="../../../src/qt/outline_view.cpp" line="34"/>
+        <location filename="../../../src/qt/outline_view.cpp" line="32"/>
         <source>Click this Notebook name to open its Markdown preview in the right panel</source>
         <translation>Haga clic en el nombre de este cuaderno para abrir su vista previa Markdown en el panel derecho</translation>
     </message>
@@ -6157,68 +6157,68 @@ descartarán para proteger sus notas relacionadas. Puede descartarlos usted mism
         <translation>MindForger NO se puede ejecutar desde una consola de texto - defina la variable de entorno DISPLAY o WAYLAND_DISPLAY, o ejecute MindForger desde la interfaz gráfica.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="234"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="230"/>
         <source>MindForger workspace or directory/file with Markdown(s) to open</source>
         <translation>Espacio de trabajo de MindForger o directorio/archivo con Markdown(s) a abrir</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="240"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="236"/>
         <source>Use &apos;dark&apos;, &apos;light&apos; or other GUI &lt;theme&gt;.</source>
         <translation>Use &apos;dark&apos;, &apos;light&apos; u otro &lt;theme&gt; de la interfaz gráfica.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="243"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="239"/>
         <source>theme</source>
         <translation>theme</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="247"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="243"/>
         <source>Load configuration from given &lt;file&gt;.</source>
         <translation>Cargar la configuración desde el &lt;file&gt; indicado.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="250"/>
-        <location filename="../../../src/qt/mindforger.cpp" line="272"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="246"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="268"/>
         <source>file</source>
         <translation>file</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="257"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="253"/>
         <source>Disable WebEngine security to allow loading of images on macOS.</source>
         <translation>Desactivar la seguridad de WebEngine para permitir cargar imágenes en macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="263"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="259"/>
         <source>Disable WebEngine security by running single process on macOS.</source>
         <translation>Desactivar la seguridad de WebEngine ejecutando un único proceso en macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="267"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="263"/>
         <source>Disable WebEngine security by disabling sandbox on macOS.</source>
         <translation>Desactivar la seguridad de WebEngine desactivando el sandbox en macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="271"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="267"/>
         <source>Disable WebEngine security by user data dir specification on macOS.</source>
         <translation>Desactivar la seguridad de WebEngine especificando el directorio de datos de usuario en macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="277"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="273"/>
         <source>Disable WebEngine security via site isolation trials on macOS.</source>
         <translation>Desactivar la seguridad de WebEngine mediante las pruebas de aislamiento de sitios en macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="281"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="277"/>
         <source>Disable WebEngine security via acess file from file on macOS.</source>
         <translation>Desactivar la seguridad de WebEngine mediante el acceso a archivos desde archivos en macOS.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="361"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="357"/>
         <source>Error: Unable to find given workspace/file to open - open MindForger without parameters and create it from menu Mind/New: &apos;</source>
         <translation>Error: no se encuentra el espacio de trabajo/archivo indicado - abra MindForger sin parámetros y créelo desde el menú Mente/Nuevo: &apos;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="385"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="381"/>
         <source>Ignoring unknown GUI theme: &apos;</source>
         <translation>Ignorando el tema de interfaz desconocido: &apos;</translation>
     </message>

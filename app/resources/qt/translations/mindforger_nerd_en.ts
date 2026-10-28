@@ -4469,27 +4469,27 @@ Choose new library source:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="606"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="605"/>
         <source>Exit Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="607"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="606"/>
         <source>Do you really want to exit editor without saving?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1053"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1052"/>
         <source>Full-text Search Result</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1054"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1053"/>
         <source>No matching text found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="1201"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="1200"/>
         <source>No spelling suggestions found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5538,7 +5538,7 @@ Choose new library source:</source>
 <context>
     <name>m8r::OutlineView</name>
     <message>
-        <location filename="../../../src/qt/outline_view.cpp" line="34"/>
+        <location filename="../../../src/qt/outline_view.cpp" line="32"/>
         <source>Click this Notebook name to open its Markdown preview in the right panel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6143,68 +6143,68 @@ notes. Feel free to deprecate such notebook(s) yourself.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="234"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="230"/>
         <source>MindForger workspace or directory/file with Markdown(s) to open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="240"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="236"/>
         <source>Use &apos;dark&apos;, &apos;light&apos; or other GUI &lt;theme&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="243"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="239"/>
         <source>theme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="247"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="243"/>
         <source>Load configuration from given &lt;file&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="250"/>
-        <location filename="../../../src/qt/mindforger.cpp" line="272"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="246"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="268"/>
         <source>file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="257"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="253"/>
         <source>Disable WebEngine security to allow loading of images on macOS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="263"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="259"/>
         <source>Disable WebEngine security by running single process on macOS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="267"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="263"/>
         <source>Disable WebEngine security by disabling sandbox on macOS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="271"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="267"/>
         <source>Disable WebEngine security by user data dir specification on macOS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="277"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="273"/>
         <source>Disable WebEngine security via site isolation trials on macOS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="281"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="277"/>
         <source>Disable WebEngine security via acess file from file on macOS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="361"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="357"/>
         <source>Error: Unable to find given workspace/file to open - open MindForger without parameters and create it from menu Mind/New: &apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/mindforger.cpp" line="385"/>
+        <location filename="../../../src/qt/mindforger.cpp" line="381"/>
         <source>Ignoring unknown GUI theme: &apos;</source>
         <translation type="unfinished"></translation>
     </message>

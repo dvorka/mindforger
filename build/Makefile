@@ -384,6 +384,12 @@ test-lib: clean ## compile and run lib/ unit tests
 	cd make && ./test-lib-units.sh
 
 
+.PHONY: test-lib-valgrind
+test-lib-valgrind: clean ## compile and run lib/ unit tests w/ Valgrind to check memory leaks
+	@command -v valgrind > /dev/null || { echo "ERROR: Valgrind not found - install it e.g. using: sudo apt install valgrind"; exit 1; }
+	cd make && OPTION_RUN_VALGRIND=yes ./test-lib-units.sh
+
+
 .PHONY: distro-work-clean
 distro-work-clean:
 	rm -rvf $(MF_MAKER_WORKING_DIR)

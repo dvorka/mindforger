@@ -22,14 +22,16 @@
 #   precise quantal saucy precise utopic vivid wily trusty (old GCC)
 #   yakkety artful cosmic disco eoan kinetic
 # - current:
-#   trusty xenial bionic focal jammy mantic
+#   trusty xenial bionic focal jammy mantic stonking
 #
 # Distro is stored to:
 # ~/pbuilder
 #
-for DISTRO in mantic
+for DISTRO in stonking
 do
-    sudo pbuilder --create ${DISTRO}
+    # older host debootstrap may not know the distro - Ubuntu scripts are symlinks to gutsy
+    [ -e /usr/share/debootstrap/scripts/${DISTRO} ] || sudo ln -s gutsy /usr/share/debootstrap/scripts/${DISTRO}
+    sudo pbuilder --create --distribution ${DISTRO} || exit 1
     rm -vf ~/pbuilder/${DISTRO}-base.tgz
     cp /var/cache/pbuilder/base.tgz ~/pbuilder/${DISTRO}-base.tgz
 done
