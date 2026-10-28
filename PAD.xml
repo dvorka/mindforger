@@ -36,17 +36,17 @@
 		<Program_Name>MindForger</Program_Name>
 		<Program_Version>2.6.0</Program_Version>
 		<Program_Release_Month>10</Program_Release_Month>
-		<Program_Release_Day>11</Program_Release_Day>
+		<Program_Release_Day>28</Program_Release_Day>
 		<Program_Release_Year>2026</Program_Release_Year>
 		<Program_Cost_Dollars>0</Program_Cost_Dollars>
 		<Program_Cost_Other_Code>0</Program_Cost_Other_Code>
 		<Program_Cost_Other>0</Program_Cost_Other>
-		<Program_Type>Freeware</Program_Type>
+		<Program_Type>Open Source</Program_Type>
 		<Program_Release_Status>Minor Update</Program_Release_Status>
 		<Program_Install_Support>Install and Uninstall</Program_Install_Support>
 		<Program_OS_Support>Linux,Mac OS X,Win7 x64,WinOther</Program_OS_Support>
 		<Program_Language>English</Program_Language>
-		<Program_Change_Info>editor minimap, find Note by metadata, hierarchical recent notes, green/orange/red associated Notes colorization, AUR for Arch Linux.</Program_Change_Info>
+		<Program_Change_Info>Editor minimap, find Note by metadata, hierarchical recent notes, green/orange/red associated Notes colorization, AUR for Arch Linux.</Program_Change_Info>
 		<Program_Specific_Category>Education</Program_Specific_Category>
 		<Program_Category_Class>Business::Office Suites &amp; Tools</Program_Category_Class>
 		<Program_Categories />
